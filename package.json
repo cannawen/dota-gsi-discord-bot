@@ -4,5 +4,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
+  },
+  "dependencies": {
+    "dota2-gsi": "^1.0.2"
   }
 }
