@@ -1,3 +1,6 @@
+## About
+Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, rosh timers, etc.)
+
 ## Setup
 ### Enable GSI
 Steam -> Right click Dota 2 -> Properties
