@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "announce": "node test-announce.js"
   },
   "dependencies": {
-    "dota2-gsi": "^1.0.2"
+    "discord.js": "^14.7.1",
+    "dota2-gsi": "^1.0.2",
+    "dotenv": "^16.0.3"
   }
 }
