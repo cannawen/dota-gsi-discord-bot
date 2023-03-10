@@ -3,17 +3,16 @@ const Discord = require("discord.js");
 const log = require("npmlog");
 const Voice = require("@discordjs/voice");
 
-const AudioFiles = require("./AudioFiles");
 const config = require("./config");
 
 const discordClient = new Discord.Client({
-    "intents": [config.DISCORD_INTENTS],
+    intents: [131071],
 });
 
 let subscription = null;
 
 discordClient.on("ready", () => {
-    log.info("Discord Client", "Logged into discord as", discordClient.user.tag);
+    log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
     const guild = Array.from(discordClient.guilds.cache.values())
         .find((guild) => guild.name === config.HARD_CODED_GUILD_NAME);
@@ -21,17 +20,24 @@ discordClient.on("ready", () => {
         .find((channel) => channel.name === config.HARD_CODED_VOICE_CHANNEL_NAME);
 
     const connection = Voice.joinVoiceChannel({
-        "adapterCreator": channel.guild.voiceAdapterCreator,
-        "channelId":      channel.id,
-        "guildId":        channel.guild.id,
+        adapterCreator: channel.guild.voiceAdapterCreator,
+        channelId:      channel.id,
+        guildId:        channel.guild.id,
     });
 
     const player = Voice.createAudioPlayer();
+    player.on("stateChange", (oldState, newState) => {
+        if (oldState.status === newState.status) {
+            log.verbose("Discord AudioPlayerState", oldState.status);
+        } else {
+            log.verbose("Discord AudioPlayerState", "transitioned from", oldState.status, "to", newState.status);
+        }
+    });
 
     subscription = connection.subscribe(player);
 
     connection.on(Voice.VoiceConnectionStatus.Ready, () => {
-        log.info("Discord Voice Connection", "Ready to play audio!");
+        log.info("Discord VoiceConnectionState", "Ready to play audio!");
     });
 
     // Workaround story #15
@@ -44,13 +50,19 @@ discordClient.on("ready", () => {
     connection.on("stateChange", (oldState, newState) => {
         Reflect.get(oldState, "networking")?.off("stateChange", networkStateChangeHandler);
         Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
+        if (oldState.status === newState.status) {
+            log.verbose("Discord VoiceConnectionState", oldState.status);
+        } else {
+            log.verbose("Discord VoiceConnectionState", "transitioned from", oldState.status, "to", newState.status);
+        }
     });
 });
 
 discordClient.login(config.DISCORD_CLIENT_TOKEN);
 
-module.exports = (constant) => {
-    if (constant) {
-        subscription.player.play(Voice.createAudioResource(AudioFiles[constant]));
+module.exports = (audioFilePath) => {
+    if (audioFilePath) {
+        log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
+        subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
 };
