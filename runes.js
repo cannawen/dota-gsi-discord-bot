@@ -42,4 +42,4 @@ function clockHandler(time) {
     }
 }
 
-module.exports = { event: 'map:clock_time', handler: clockHandler }
+module.exports = { event: "map:clock_time", handler: clockHandler };
