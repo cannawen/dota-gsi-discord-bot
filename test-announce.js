@@ -1,3 +1,3 @@
 const announce = require('./announce');
 
-announce("hello");
+announce("BOUNTY_RUNES");
