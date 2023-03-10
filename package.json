@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "announce": "node test-announce.js"
+    "start": "node index.js"
   },
   "dependencies": {
     "@discordjs/voice": "^0.14.0",
