@@ -1,11 +1,10 @@
 require('dotenv').config();
 const AudioFiles = require('./AudioFiles')
 const Discord = require('discord.js');
-const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
 const discordClient = new Discord.Client({ intents: [131071] });
 
-const audioPlayer = createAudioPlayer();
 var subscription = null;
 
 const HARD_CODED_GUILD_NAME = "Best Dota";
@@ -23,17 +22,31 @@ discordClient.on('ready', () => {
         adapterCreator: channel.guild.voiceAdapterCreator,
     });
 
+    const player = createAudioPlayer();
+
+    subscription = connection.subscribe(player);
+
     connection.on(VoiceConnectionStatus.Ready, () => {
-        console.log('Ready to play audio!');
-        subscription = connection.subscribe(audioPlayer);
+        console.log('------- Ready to play audio!');
     });
+
+    connection.on('stateChange', (oldState, newState) => {
+        Reflect.get(oldState, 'networking')?.off('stateChange', networkStateChangeHandler); //workaround story #15
+        Reflect.get(newState, 'networking')?.on('stateChange', networkStateChangeHandler); //workaround story #15
+    });
+
 });
+
+//workaround story #15
+const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+    const newUdp = Reflect.get(newNetworkState, 'udp');
+    clearInterval(newUdp?.keepAliveInterval)
+}
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
 
 module.exports = (constant) => {
     if (constant) {
-        console.log("Playing " + AudioFiles[constant])
-        audioPlayer.play(createAudioResource(AudioFiles[constant]));
+        subscription.player.play(createAudioResource(AudioFiles[constant]));
     }
 }
