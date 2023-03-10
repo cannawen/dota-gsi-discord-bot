@@ -12,5 +12,6 @@ Steam -> Right click Dota 2 -> Properties
  - Scope: bot
  - Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
  - Create a `.env` file with `DISCORD_CLIENT_TOKEN='your bot secret'`
+ - Change the hard-coded guild & channel names in `announce.js`
 ### Start application
 `npm start`

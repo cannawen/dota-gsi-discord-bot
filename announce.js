@@ -8,26 +8,25 @@ const discordClient = new Discord.Client({ intents: [131071] });
 const audioPlayer = createAudioPlayer();
 var subscription = null;
 
+const HARD_CODED_GUILD_NAME = "Best Dota";
+const HARD_CODED_VOICE_CHANNEL_NAME = "Dota 2";
+
 discordClient.on('ready', () => {
-    console.log(`Logged in as ${discordClient.user.tag}!`);
+    console.log(`Logged into discord as ${discordClient.user.tag}!`);
 
-    discordClient.guilds
-        .fetch('1076737468948304012')
-        .then((guild) => {
-            const channel = guild.channels.cache.get('1083521037465042995');
+    const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name == HARD_CODED_GUILD_NAME);
+    const channel = Array.from(guild.channels.cache.values()).find((channel => channel.name == HARD_CODED_VOICE_CHANNEL_NAME));
 
-            const connection = joinVoiceChannel({
-                channelId: channel.id,
-                guildId: channel.guild.id,
-                adapterCreator: channel.guild.voiceAdapterCreator,
-            });
+    const connection = joinVoiceChannel({
+        channelId: channel.id,
+        guildId: channel.guild.id,
+        adapterCreator: channel.guild.voiceAdapterCreator,
+    });
 
-            connection.on(VoiceConnectionStatus.Ready, () => {
-                console.log('The connection has entered the Ready state - ready to play audio!');
-                subscription = connection.subscribe(audioPlayer);
-            });
-        })
-
+    connection.on(VoiceConnectionStatus.Ready, () => {
+        console.log('Ready to play audio!');
+        subscription = connection.subscribe(audioPlayer);
+    });
 });
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
