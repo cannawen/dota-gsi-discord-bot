@@ -14,4 +14,6 @@ Steam -> Right click Dota 2 -> Properties
  - Create a `.env` file with `DISCORD_CLIENT_TOKEN='your bot secret'`
  - Change the hard-coded guild & channel names in `announce.js`
 ### Start application
-`npm start`
+ - Make sure your `node --version` is at least v18.15.0
+ - `npm install`
+ - `npm start`
