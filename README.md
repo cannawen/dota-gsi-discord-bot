@@ -19,8 +19,17 @@ Steam -> Right click Dota 2 -> Properties
 - Change the hard-coded guild & channel names in `announce.js`
 
 ## Code Formatting
-- Using many `eslint` rules [(Tool to generate rules)](https://eslint-config.netlify.app/rules/yield-star-spacing))
-- [Instructions to auto-format on save with VS Code](https://daveceddia.com/vscode-use-eslintrc/#:~:text=Configure%20VSCode%20Settings%20to%20use%20ESLint%20for%20Formatting&text=Click%20that%20tiny%20icon%20in,paper%20with%20a%20little%20arrow.&text=The%20first%20one%20turns%20on,it%2C%20we're%20done.)
+- Using many `eslint` rules [(src)](https://eslint-config.netlify.app/rules/yield-star-spacing))
+- Add to VS Code `settings.json` to auto-format [(src 1)](https://daveceddia.com/vscode-use-eslintrc/#:~:text=Configure%20VSCode%20Settings%20to%20use%20ESLint%20for%20Formatting&text=Click%20that%20tiny%20icon%20in,paper%20with%20a%20little%20arrow.&text=The%20first%20one%20turns%20on,it%2C%20we're%20done.) [(src 2)](https://stackoverflow.com/questions/49582984/how-do-i-disable-js-file-is-a-commonjs-module-it-may-be-converted-to-an-es6)
+```
+{
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "javascript.validate.enable": false
+}
+```
 
 ## Project Management
 - See Github Projects page for project roadmap
