@@ -23,13 +23,6 @@ discordClient.on('ready', () => {
     });
 
     const player = createAudioPlayer();
-    player.on('stateChange', (oldState, newState) => {
-        if (oldState.status == newState.status) {
-            console.log(`Audio player state ${oldState.status}`);
-        } else {
-            console.log(`Audio player transitioned from ${oldState.status} to ${newState.status}`);
-        }
-    });
 
     subscription = connection.subscribe(player);
 
@@ -40,11 +33,6 @@ discordClient.on('ready', () => {
     connection.on('stateChange', (oldState, newState) => {
         Reflect.get(oldState, 'networking')?.off('stateChange', networkStateChangeHandler); //workaround story #15
         Reflect.get(newState, 'networking')?.on('stateChange', networkStateChangeHandler); //workaround story #15
-        if (oldState.status == newState.status) {
-            console.log(`Connection state ${oldState.status}`);
-        } else {
-            console.log(`Connection transitioned from ${oldState.status} to ${newState.status}`);
-        }
     });
 
 });
@@ -59,7 +47,6 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
 
 module.exports = (constant) => {
     if (constant) {
-        console.log("Playing " + AudioFiles[constant])
         subscription.player.play(createAudioResource(AudioFiles[constant]));
     }
 }
