@@ -1,6 +1,6 @@
 const Constants = require("./Constants");
 
-const LEAD_TIME = 20; // How much warning before a rune spawns
+const LEAD_TIME_WARNING_BEFORE_RUNES_SPAWN = 20;
 
 const WATER_RUNE_END_TIME = 4 * 60;
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
@@ -10,20 +10,20 @@ function pregame(time) {
     return time <= 0;
 }
 
+function riverRuneSpawning(time) {
+    return time % RIVER_RUNE_SPAWN_INTERVAL === 0;
+}
+
 function waterRuneSpawning(time) {
     return riverRuneSpawning(time) && time <= WATER_RUNE_END_TIME;
 }
 
-function riverRuneSpawning(time) {
-    return time % RIVER_RUNE_SPAWN_INTERVAL == 0;
-}
-
 function bountyRuneSpawning(time) {
-    return time % BOUNTY_RUNE_SPAWN_INTERVAL == 0;
+    return time % BOUNTY_RUNE_SPAWN_INTERVAL === 0;
 }
 
 function clockHandler(time) {
-    const effectiveTime = time + LEAD_TIME;
+    const effectiveTime = time + LEAD_TIME_WARNING_BEFORE_RUNES_SPAWN;
 
     if (pregame(effectiveTime)) {
         return;
