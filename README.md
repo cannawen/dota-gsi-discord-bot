@@ -12,12 +12,15 @@ Steam -> Right click Dota 2 -> Properties
 - General -> Launch Options -> Add `-gamestateintegration` to launch options
 - Local Files -> Browse... mkdir `game\dota\cfg\gamestate_integration\` and copy/paste `gamestate_integration_dota2-gsi.cfg` file into it 
 ### Discord bot
-- Create and add a discord bot to your server
-- See Step 1 (approximately) `https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js`
+- Create and add a discord bot to your server. [Step 1 (approximately)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 - Scope: bot
 - Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
 - Create a `.env` file with `DISCORD_CLIENT_TOKEN='your_bot_secret'`
 - Change the hard-coded guild & channel names in `announce.js`
+
+## Code Formatting
+- Using many `eslint` rules [(Tool to generate rules)](https://eslint-config.netlify.app/rules/yield-star-spacing))
+- [Instructions to auto-format on save with VS Code](https://daveceddia.com/vscode-use-eslintrc/#:~:text=Configure%20VSCode%20Settings%20to%20use%20ESLint%20for%20Formatting&text=Click%20that%20tiny%20icon%20in,paper%20with%20a%20little%20arrow.&text=The%20first%20one%20turns%20on,it%2C%20we're%20done.)
 
 ## Project Management
 - See Github Projects page for project roadmap
