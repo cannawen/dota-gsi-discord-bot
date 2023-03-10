@@ -10,6 +10,7 @@
     "discord.js": "^14.7.1",
     "dota2-gsi": "^1.0.2",
     "dotenv": "^16.0.3",
+    "ffmpeg-static": "^5.1.0",
     "libsodium-wrappers": "^0.7.11"
   }
 }
