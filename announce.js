@@ -1,52 +1,56 @@
-require('dotenv').config();
-const AudioFiles = require('./AudioFiles')
-const Discord = require('discord.js');
-const { joinVoiceChannel, VoiceConnectionStatus, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
-const discordClient = new Discord.Client({ intents: [131071] });
+const Discord = require("discord.js");
+const log = require("npmlog");
+const Voice = require("@discordjs/voice");
 
-var subscription = null;
+const AudioFiles = require("./AudioFiles");
+const config = require("./config");
 
-const HARD_CODED_GUILD_NAME = "Best Dota";
-const HARD_CODED_VOICE_CHANNEL_NAME = "Dota 2";
+const discordClient = new Discord.Client({
+    "intents": [config.DISCORD_INTENTS],
+});
 
-discordClient.on('ready', () => {
-    console.log(`Logged into discord as ${discordClient.user.tag}!`);
+let subscription = null;
 
-    const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name == HARD_CODED_GUILD_NAME);
-    const channel = Array.from(guild.channels.cache.values()).find((channel => channel.name == HARD_CODED_VOICE_CHANNEL_NAME));
+discordClient.on("ready", () => {
+    log.info("Discord Client", "Logged into discord as", discordClient.user.tag);
 
-    const connection = joinVoiceChannel({
-        channelId: channel.id,
-        guildId: channel.guild.id,
-        adapterCreator: channel.guild.voiceAdapterCreator,
+    const guild = Array.from(discordClient.guilds.cache.values())
+        .find((guild) => guild.name === config.HARD_CODED_GUILD_NAME);
+    const channel = Array.from(guild.channels.cache.values())
+        .find((channel) => channel.name === config.HARD_CODED_VOICE_CHANNEL_NAME);
+
+    const connection = Voice.joinVoiceChannel({
+        "adapterCreator": channel.guild.voiceAdapterCreator,
+        "channelId":      channel.id,
+        "guildId":        channel.guild.id,
     });
 
-    const player = createAudioPlayer();
+    const player = Voice.createAudioPlayer();
 
     subscription = connection.subscribe(player);
 
-    connection.on(VoiceConnectionStatus.Ready, () => {
-        console.log('------- Ready to play audio!');
+    connection.on(Voice.VoiceConnectionStatus.Ready, () => {
+        log.info("Discord Voice Connection", "Ready to play audio!");
     });
 
-    connection.on('stateChange', (oldState, newState) => {
-        Reflect.get(oldState, 'networking')?.off('stateChange', networkStateChangeHandler); //workaround story #15
-        Reflect.get(newState, 'networking')?.on('stateChange', networkStateChangeHandler); //workaround story #15
-    });
+    // Workaround story #15
+    function networkStateChangeHandler(_, newNetworkState) {
+        const newUdp = Reflect.get(newNetworkState, "udp");
+        clearInterval(newUdp?.keepAliveInterval);
+    }
 
+    // Workaround story #15
+    connection.on("stateChange", (oldState, newState) => {
+        Reflect.get(oldState, "networking")?.off("stateChange", networkStateChangeHandler);
+        Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
+    });
 });
 
-//workaround story #15
-const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
-    const newUdp = Reflect.get(newNetworkState, 'udp');
-    clearInterval(newUdp?.keepAliveInterval)
-}
-
-discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
+discordClient.login(config.DISCORD_CLIENT_TOKEN);
 
 module.exports = (constant) => {
     if (constant) {
-        subscription.player.play(createAudioResource(AudioFiles[constant]));
+        subscription.player.play(Voice.createAudioResource(AudioFiles[constant]));
     }
-}
+};
