@@ -38,13 +38,22 @@ discordClient.on('ready', () => {
     });
 
     connection.on('stateChange', (oldState, newState) => {
+        Reflect.get(oldState, 'networking')?.off('stateChange', networkStateChangeHandler); //workaround story #15
+        Reflect.get(newState, 'networking')?.on('stateChange', networkStateChangeHandler); //workaround story #15
         if (oldState.status == newState.status) {
             console.log(`Connection state ${oldState.status}`);
         } else {
             console.log(`Connection transitioned from ${oldState.status} to ${newState.status}`);
         }
     });
+
 });
+
+//workaround story #15
+const networkStateChangeHandler = (oldNetworkState, newNetworkState) => {
+    const newUdp = Reflect.get(newNetworkState, 'udp');
+    clearInterval(newUdp?.keepAliveInterval)
+}
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
 
