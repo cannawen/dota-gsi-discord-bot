@@ -27,7 +27,7 @@ function clockHandler(time) {
 
     if (pregame(effectiveTime)) {
         return;
-    } 
+    }
     if (waterRuneSpawning(effectiveTime)) {
         return Constants.WATER_RUNES;
     }
@@ -42,4 +42,7 @@ function clockHandler(time) {
     }
 }
 
-module.exports = { event: "map:clock_time", handler: clockHandler };
+module.exports = {
+    "event":   "map:clock_time",
+    "handler": clockHandler,
+};

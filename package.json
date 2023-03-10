@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "lint": "npx eslint . --fix",
+    "lint": "npx eslint .",
+    "fix": "npx eslint . --fix",
     "start": "node index.js"
   },
   "dependencies": {
