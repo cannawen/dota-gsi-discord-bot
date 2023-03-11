@@ -1,10 +1,13 @@
-import GSI = require("dota2-gsi");
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import Dota2_gsi = require("dota2-gsi");
 import log = require("npmlog");
 
 import announce from "./announce";
 import handler from "./runes/runes";
 
-const server = new GSI();
+const server = new Dota2_gsi();
 
 server.events.on("newclient", (client) => {
     log.info("Dota 2 GSI", "New client connection, IP address:", client.ip);

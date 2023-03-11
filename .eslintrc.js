@@ -7,7 +7,7 @@ module.exports = {
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -115,7 +115,6 @@ module.exports = {
     "block-spacing": ["warn", "always"],
     "brace-style": ["warn", "1tbs", { "allowSingleLine": false }],
     "camelcase": ["warn", { "ignoreDestructuring": false, "properties": "always" }],
-    "capitalized-comments": ["warn", "always", { "ignorePattern": "TODO", "ignoreInlineComments": false, "ignoreConsecutiveComments": false }],
     "comma-dangle": ["warn", "always-multiline"],
     "comma-spacing": ["warn", { "before": false, "after": true }],
     "comma-style": ["warn", "last"],
@@ -140,7 +139,6 @@ module.exports = {
     "max-params": ["warn", { "max": 3 }],
     "max-statements": ["warn", 10],
     "max-statements-per-line": ["warn", { "max": 1 }],
-    "multiline-comment-style": ["warn", "starred-block"],
     "new-cap": ["warn", { "newIsCap": true, "capIsNew": true, "newIsCapExceptionPattern": "", "capIsNewExceptionPattern": "", "properties": true }],
     "new-parens": "warn",
     "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 2 }],

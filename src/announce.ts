@@ -10,7 +10,7 @@ const discordClient = new Discord.Client({
     intents: [131071],
 });
 
-let subscription = null;
+let subscription : Voice.PlayerSubscription = null;
 
 discordClient.on("ready", () => {
     log.info("Discord Client", "Logged in as", discordClient.user.tag);
@@ -42,12 +42,12 @@ discordClient.on("ready", () => {
     });
 
     // Workaround story #15
-    function networkStateChangeHandler(_, newNetworkState) {
+    /* eslint-disable */
+    function networkStateChangeHandler(oldNetworkState, newNetworkState) {
         const newUdp = Reflect.get(newNetworkState, "udp");
         clearInterval(newUdp?.keepAliveInterval);
     }
 
-    // Workaround story #15
     connection.on("stateChange", (oldState, newState) => {
         Reflect.get(oldState, "networking")?.off("stateChange", networkStateChangeHandler);
         Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
@@ -57,9 +57,11 @@ discordClient.on("ready", () => {
             log.verbose("Discord VoiceConnectionState", "transitioned from", oldState.status, "to", newState.status);
         }
     });
+    /* eslint-enable */
 });
 
-discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
+discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
+    .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
 export default function announce(audioFilePath: string) {
     if (audioFilePath) {
