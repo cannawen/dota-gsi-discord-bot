@@ -122,7 +122,6 @@ module.exports = {
     "keyword-spacing": ["warn", { "before": true, "after": true }],
     "line-comment-position": ["warn", { "position": "above", "ignorePattern": "", "applyDefaultIgnorePatterns": true }],
     "linebreak-style": ["warn", "unix"],
-    "lines-around-comment": ["warn", { "beforeBlockComment": true, "afterBlockComment": false, "beforeLineComment": false, "afterLineComment": false, "allowBlockStart": false, "allowBlockEnd": false, "allowClassStart": false, "allowClassEnd": false, "allowObjectStart": false, "allowObjectEnd": false, "allowArrayStart": false, "allowArrayEnd": false, "ignorePattern": "", "applyDefaultIgnorePatterns": false }],
     "lines-between-class-members": ["warn", "always", { "exceptAfterSingleLine": false }],
     "max-depth": ["warn", 4],
     "max-len": ["warn", { "ignorePattern": "", "ignoreComments": false, "ignoreStrings": false, "ignoreUrls": false, "ignoreTemplateLiterals": false, "ignoreRegExpLiterals": false, "ignoreTrailingComments": false, "code": 120, "tabWidth": 4, "comments": 120 }],

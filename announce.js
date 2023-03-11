@@ -6,6 +6,7 @@ const Voice = require("@discordjs/voice");
 const config = require("./config");
 
 const discordClient = new Discord.Client({
+    // eslint-disable-next-line no-magic-numbers
     intents: [131071],
 });
 
