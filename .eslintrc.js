@@ -1,16 +1,26 @@
-/* eslint-disable */ 
-
 module.exports = {
     "env": {
         "commonjs": true,
         "es2021":   true,
         "node":     true,
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType":  "module",
     },
+    "ignorePatterns": ["dist/*", ".eslintrc.js"],
+    parser:        "@typescript-eslint/parser",
+    plugins:       ["@typescript-eslint"],
+    parserOptions: {
+        project:         true,
+        tsconfigRootDir: "src",
+    },
+    root: true,
     "rules": {
     "no-cond-assign": ["warn", "except-parens"],
     "no-constant-condition": ["warn", { "checkLoops": true }],
@@ -91,7 +101,6 @@ module.exports = {
     "no-undef": ["warn", { "typeof": false }],
     "no-undef-init": "warn",
     "no-undefined": "warn",
-    "no-unused-vars": ["warn", { "vars": "all", "varsIgnorePattern": "", "args": "after-used", "ignoreRestSiblings": false, "argsIgnorePattern": "", "caughtErrors": "none", "caughtErrorsIgnorePattern": "" }],
     "no-use-before-define": ["warn", { "functions": true, "classes": true, "variables": true }],
     "global-require": "warn",
     "no-mixed-requires": ["warn", { "grouping": false, "allowCall": false }],
@@ -105,7 +114,6 @@ module.exports = {
     "block-spacing": ["warn", "always"],
     "brace-style": ["warn", "1tbs", { "allowSingleLine": false }],
     "camelcase": ["warn", { "ignoreDestructuring": false, "properties": "always" }],
-    "capitalized-comments": ["warn", "always", { "ignorePattern": "TODO", "ignoreInlineComments": false, "ignoreConsecutiveComments": false }],
     "comma-dangle": ["warn", "always-multiline"],
     "comma-spacing": ["warn", { "before": false, "after": true }],
     "comma-style": ["warn", "last"],
@@ -121,7 +129,6 @@ module.exports = {
     "keyword-spacing": ["warn", { "before": true, "after": true }],
     "line-comment-position": ["warn", { "position": "above", "ignorePattern": "", "applyDefaultIgnorePatterns": true }],
     "linebreak-style": ["warn", "unix"],
-    "lines-between-class-members": ["warn", "always", { "exceptAfterSingleLine": false }],
     "max-depth": ["warn", 4],
     "max-len": ["warn", { "ignorePattern": "", "ignoreComments": false, "ignoreStrings": false, "ignoreUrls": false, "ignoreTemplateLiterals": false, "ignoreRegExpLiterals": false, "ignoreTrailingComments": false, "code": 120, "tabWidth": 4, "comments": 120 }],
     "max-lines": ["warn", { "skipBlankLines": false, "skipComments": false, "max": 300 }],
@@ -130,12 +137,10 @@ module.exports = {
     "max-params": ["warn", { "max": 3 }],
     "max-statements": ["warn", 10],
     "max-statements-per-line": ["warn", { "max": 1 }],
-    "multiline-comment-style": ["warn", "starred-block"],
     "new-cap": ["warn", { "newIsCap": true, "capIsNew": true, "newIsCapExceptionPattern": "", "capIsNewExceptionPattern": "", "properties": true }],
     "new-parens": "warn",
     "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 2 }],
     "no-array-constructor": "warn",
-    "no-bitwise": ["warn", { "int32Hint": false }],
     "no-continue": "warn",
     "no-inline-comments": "warn",
     "no-lonely-if": "warn",

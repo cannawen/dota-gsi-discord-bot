@@ -1,22 +1,22 @@
-require("dotenv").config();
-const Discord = require("discord.js");
-const log = require("npmlog");
-const Voice = require("@discordjs/voice");
+import dotenv = require("dotenv")
+import Discord = require("discord.js");
+import log = require("npmlog");
+import Voice = require("@discordjs/voice");
+
+dotenv.config();
 
 const discordClient = new Discord.Client({
     // eslint-disable-next-line no-magic-numbers
     intents: [131071],
 });
 
-let subscription = null;
+let subscription : Voice.PlayerSubscription = null;
 
 discordClient.on("ready", () => {
     log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
-    const guild = Array.from(discordClient.guilds.cache.values())
-        .find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
-    const channel = Array.from(guild.channels.cache.values())
-        .find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
+    const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
+    const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
 
     const connection = Voice.joinVoiceChannel({
         adapterCreator: channel.guild.voiceAdapterCreator,
@@ -39,13 +39,21 @@ discordClient.on("ready", () => {
         log.info("Discord VoiceConnectionState", "Ready to play audio!");
     });
 
+    connection.on("stateChange", (oldState, newState) => {
+        if (oldState.status === newState.status) {
+            log.verbose("Discord Connection", oldState.status);
+        } else {
+            log.verbose("Discord Connection", "transitioned from", oldState.status, "to", newState.status);
+        }
+    });
+
     // Workaround story #15
-    function networkStateChangeHandler(_, newNetworkState) {
+    /* eslint-disable */
+    function networkStateChangeHandler(oldNetworkState, newNetworkState) {
         const newUdp = Reflect.get(newNetworkState, "udp");
         clearInterval(newUdp?.keepAliveInterval);
     }
 
-    // Workaround story #15
     connection.on("stateChange", (oldState, newState) => {
         Reflect.get(oldState, "networking")?.off("stateChange", networkStateChangeHandler);
         Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
@@ -55,13 +63,15 @@ discordClient.on("ready", () => {
             log.verbose("Discord VoiceConnectionState", "transitioned from", oldState.status, "to", newState.status);
         }
     });
+    /* eslint-enable */
 });
 
-discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
+discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
+    .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
-module.exports = (audioFilePath) => {
+export default function announce(audioFilePath: string) {
     if (audioFilePath) {
         log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
         subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
-};
+}
