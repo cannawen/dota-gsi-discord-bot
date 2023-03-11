@@ -97,7 +97,6 @@ module.exports = {
     "no-mixed-requires": ["warn", { "grouping": false, "allowCall": false }],
     "no-new-require": "warn",
     "no-path-concat": "warn",
-    "no-process-env": "warn",
     "no-process-exit": "warn",
     "no-sync": ["warn", { "allowAtRootLevel": false }],
     "array-bracket-newline": ["warn", "consistent"],

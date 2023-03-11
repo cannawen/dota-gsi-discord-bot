@@ -15,7 +15,7 @@ Steam -> Right click Dota 2 -> Properties
 - Create and add a discord bot to your server. [Step 1 (approximately)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 - Scope: bot
 - Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
-- Create a `config.js` file with from copying `config.sample.js` and change any relevant fields
+- Create a `.env` file with from copying `.env.sample` and change any relevant fields
 
 ## Code Formatting
 - Using many `eslint` rules [(src)](https://eslint-config.netlify.app/rules/yield-star-spacing))

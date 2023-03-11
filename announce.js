@@ -1,9 +1,7 @@
-
+require("dotenv").config();
 const Discord = require("discord.js");
 const log = require("npmlog");
 const Voice = require("@discordjs/voice");
-
-const config = require("./config");
 
 const discordClient = new Discord.Client({
     // eslint-disable-next-line no-magic-numbers
@@ -16,9 +14,9 @@ discordClient.on("ready", () => {
     log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
     const guild = Array.from(discordClient.guilds.cache.values())
-        .find((guild) => guild.name === config.HARD_CODED_GUILD_NAME);
+        .find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     const channel = Array.from(guild.channels.cache.values())
-        .find((channel) => channel.name === config.HARD_CODED_VOICE_CHANNEL_NAME);
+        .find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
 
     const connection = Voice.joinVoiceChannel({
         adapterCreator: channel.guild.voiceAdapterCreator,
@@ -59,7 +57,7 @@ discordClient.on("ready", () => {
     });
 });
 
-discordClient.login(config.DISCORD_CLIENT_TOKEN);
+discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
 
 module.exports = (audioFilePath) => {
     if (audioFilePath) {
