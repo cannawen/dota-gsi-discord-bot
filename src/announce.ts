@@ -15,10 +15,8 @@ let subscription : Voice.PlayerSubscription = null;
 discordClient.on("ready", () => {
     log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
-    const guild = Array.from(discordClient.guilds.cache.values())
-        .find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
-    const channel = Array.from(guild.channels.cache.values())
-        .find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
+    const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
+    const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
 
     const connection = Voice.joinVoiceChannel({
         adapterCreator: channel.guild.voiceAdapterCreator,
@@ -39,6 +37,14 @@ discordClient.on("ready", () => {
 
     connection.on(Voice.VoiceConnectionStatus.Ready, () => {
         log.info("Discord VoiceConnectionState", "Ready to play audio!");
+    });
+
+    connection.on("stateChange", (oldState, newState) => {
+        if (oldState.status === newState.status) {
+            log.verbose("Discord Connection", oldState.status);
+        } else {
+            log.verbose("Discord Connection", "transitioned from", oldState.status, "to", newState.status);
+        }
     });
 
     // Workaround story #15

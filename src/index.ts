@@ -5,7 +5,7 @@ import Dota2_gsi = require("dota2-gsi");
 import log = require("npmlog");
 
 import announce from "./announce";
-import handler from "./runes/runes";
+import handler from "./events/runes";
 
 const server = new Dota2_gsi();
 

@@ -1,3 +1,5 @@
+import path from "node:path";
+
 /* eslint-disable no-magic-numbers*/
 const TimeConstants = {
     ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN: 15,
@@ -15,11 +17,12 @@ enum RuneId {
 }
 /* eslint-enable no-magic-numbers*/
 
+
 const AudioMapping = {
-    [RuneId.BOUNTY_RUNES | RuneId.POWER_RUNES]: "./runes/audio/bounty_and_power_runes.wav",
-    [RuneId.BOUNTY_RUNES]:                      "./runes/audio/bounty_runes.wav",
-    [RuneId.POWER_RUNES]:                       "./runes/audio/power_rune.wav",
-    [RuneId.WATER_RUNES]:                       "./runes/audio/water_runes.wav",
+    [RuneId.BOUNTY_RUNES | RuneId.POWER_RUNES]: "bounty_and_power_runes.wav",
+    [RuneId.BOUNTY_RUNES]:                      "bounty_runes.wav",
+    [RuneId.POWER_RUNES]:                       "power_rune.wav",
+    [RuneId.WATER_RUNES]:                       "water_runes.wav",
     [RuneId.NO_RUNES]:                          null,
 };
 
@@ -54,11 +57,14 @@ export default function handler(time: number): string | null {
     if (gameNotStartedYet(time)) {
         return null;
     }
-    const audioMappingKey = runeLogics
+    const audioKey = runeLogics
         .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN))
         .map((runeLogic) => runeLogic.runeId)
         .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NO_RUNES);
 
-    return AudioMapping[audioMappingKey];
-}
+    if (AudioMapping[audioKey] === null) {
+        return null;
+    }
 
+    return path.join(__dirname, "../../audio/runes", AudioMapping[audioKey]);
+}
