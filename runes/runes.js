@@ -67,7 +67,4 @@ function timeHandler(time) {
     return AudioMapping[hash(spawningRunes)];
 }
 
-module.exports = {
-    event:   "map:clock_time",
-    handler: timeHandler,
-};
+module.exports = timeHandler;

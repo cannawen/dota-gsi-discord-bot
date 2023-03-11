@@ -14,5 +14,5 @@ server.events.on("newclient", (client) => {
         log.info("Dota 2 GSI", "No auth token");
     }
 
-    client.on(runes.event, (time) => announce(runes.handler(time)));
+    client.on("map:clock_time", (time) => announce(runes(time)));
 });
