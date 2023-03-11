@@ -1,10 +1,10 @@
 /* eslint-disable no-magic-numbers*/
 const TimeConstants = {
-    BOUNTY_RUNE_SPAWN_INTERVAL:      3 * 60,
-    GAME_START_TIME:                 0,
-    HEADS_UP_TIME_BEFORE_RUNE_SPAWN: 20,
-    RIVER_RUNE_SPAWN_INTERVAL:       2 * 60,
-    WATER_RUNE_END_TIME:             4 * 60,
+    ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN: 15,
+    BOUNTY_RUNE_SPAWN_INTERVAL:              3 * 60,
+    GAME_START_TIME:                         0,
+    RIVER_RUNE_SPAWN_INTERVAL:               2 * 60,
+    WATER_RUNE_END_TIME:                     4 * 60,
 };
 
 enum RuneId {
@@ -55,7 +55,7 @@ export default function handler(time: number): string | null {
         return null;
     }
     const audioMappingKey = runeLogics
-        .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.HEADS_UP_TIME_BEFORE_RUNE_SPAWN))
+        .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN))
         .map((runeLogic) => runeLogic.runeId)
         .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NO_RUNES);
 
