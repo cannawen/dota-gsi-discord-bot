@@ -6,64 +6,59 @@ const TimeConstants = {
     RIVER_RUNE_SPAWN_INTERVAL:       2 * 60,
     WATER_RUNE_END_TIME:             4 * 60,
 };
+
+enum RuneId {
+    NO_RUNES = 0,
+    BOUNTY_RUNES = 1 << 1,
+    POWER_RUNES = 1 << 2,
+    WATER_RUNES = 1 << 3,
+}
 /* eslint-enable no-magic-numbers*/
 
-const RuneConstants = {
-    BOUNTY_RUNES: "BOUNTY_RUNES",
-    POWER_RUNES:  "POWER_RUNES",
-    WATER_RUNES:  "WATER_RUNES",
-};
-
-function hash(object) {
-    return JSON.stringify(object.sort());
-}
-
 const AudioMapping = {
-    [hash([ RuneConstants.BOUNTY_RUNES, RuneConstants.POWER_RUNES ])]: "./runes/audio/bounty_and_power_runes.wav",
-    [hash([RuneConstants.BOUNTY_RUNES])]:                              "./runes/audio/bounty_runes.wav",
-    [hash([RuneConstants.POWER_RUNES])]:                               "./runes/audio/power_rune.wav",
-    [hash([RuneConstants.WATER_RUNES])]:                               "./runes/audio/water_runes.wav",
-    [hash([])]:                                                        null,
+    [RuneId.BOUNTY_RUNES | RuneId.POWER_RUNES]: "./runes/audio/bounty_and_power_runes.wav",
+    [RuneId.BOUNTY_RUNES]:                      "./runes/audio/bounty_runes.wav",
+    [RuneId.POWER_RUNES]:                       "./runes/audio/power_rune.wav",
+    [RuneId.WATER_RUNES]:                       "./runes/audio/water_runes.wav",
+    [RuneId.NO_RUNES]:                          null,
 };
 
-function gameNotStartedYet(time) {
-    return time <= TimeConstants.GAME_START_TIME;
+class Rune {
+    runeId: RuneId;
+    spawnsAt: (time: number) => boolean;
+
+    constructor(runeId : RuneId, spawnsAt:(time: number) => boolean) {
+        this.runeId = runeId;
+        this.spawnsAt = spawnsAt;
+    }
 }
 
-function multipleOf(dividend, divisor) {
+function multipleOf(dividend: number, divisor: number) {
     // eslint-disable-next-line no-magic-numbers
     return dividend % divisor === 0;
 }
 
 /* eslint-disable max-len */
-const runeToFn = {
-    [RuneConstants.WATER_RUNES]:  (time) => multipleOf(time, TimeConstants.RIVER_RUNE_SPAWN_INTERVAL) && time <= TimeConstants.WATER_RUNE_END_TIME,
-    [RuneConstants.POWER_RUNES]:  (time) => multipleOf(time, TimeConstants.RIVER_RUNE_SPAWN_INTERVAL) && TimeConstants.WATER_RUNE_END_TIME < time,
-    [RuneConstants.BOUNTY_RUNES]: (time) => multipleOf(time, TimeConstants.BOUNTY_RUNE_SPAWN_INTERVAL),
-};
+const runeLogics = [
+    new Rune(RuneId.WATER_RUNES, (time) => multipleOf(time, TimeConstants.RIVER_RUNE_SPAWN_INTERVAL) && time <= TimeConstants.WATER_RUNE_END_TIME),
+    new Rune(RuneId.POWER_RUNES, (time) => multipleOf(time, TimeConstants.RIVER_RUNE_SPAWN_INTERVAL) && TimeConstants.WATER_RUNE_END_TIME < time),
+    new Rune(RuneId.BOUNTY_RUNES, (time) => multipleOf(time, TimeConstants.BOUNTY_RUNE_SPAWN_INTERVAL)),
+];
 /* eslint-enable max-len */
 
-/**
- * Given a time, returns which runes are spawning
- * @param {number} time game time
- * @returns {Array} array of RuneConstants that spawn at this time. May be empty array
- */
-function runeLogic(time: number): Array<unknown> {
-    return Object.keys(runeToFn).filter((constant) => runeToFn[constant](time));
+function gameNotStartedYet(time: number) {
+    return time <= TimeConstants.GAME_START_TIME;
 }
 
-/**
- *
- * @param {int} time time in seconds
- * @returns {string} name of audio file to play. May be null
- */
-export default function handler(time: number): string {
+export default function handler(time: number): string | null {
     if (gameNotStartedYet(time)) {
         return null;
     }
+    const audioMappingKey = runeLogics
+        .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.HEADS_UP_TIME_BEFORE_RUNE_SPAWN))
+        .map((runeLogic) => runeLogic.runeId)
+        .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NO_RUNES);
 
-    const spawningRunes = runeLogic(time + TimeConstants.HEADS_UP_TIME_BEFORE_RUNE_SPAWN);
-
-    return AudioMapping[hash(spawningRunes)];
+    return AudioMapping[audioMappingKey];
 }
 
