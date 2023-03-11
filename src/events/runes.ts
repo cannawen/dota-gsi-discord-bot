@@ -17,7 +17,6 @@ enum RuneId {
 }
 /* eslint-enable no-magic-numbers*/
 
-
 const AudioMapping = {
     [RuneId.BOUNTY_RUNES | RuneId.POWER_RUNES]: "bounty_and_power_runes.wav",
     [RuneId.BOUNTY_RUNES]:                      "bounty_runes.wav",

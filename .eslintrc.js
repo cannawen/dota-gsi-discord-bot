@@ -147,7 +147,7 @@ module.exports = {
     "no-mixed-operators": ["warn", { "allowSamePrecedence": true }],
     "no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
     "no-multi-assign": "warn",
-    "no-multiple-empty-lines": ["warn", { "max": 2, "maxEOF": 2, "maxBOF": 2 }],
+    "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 1, "maxBOF": 0 }],
     "no-negated-condition": "warn",
     "no-nested-ternary": "warn",
     "no-new-object": "warn",
