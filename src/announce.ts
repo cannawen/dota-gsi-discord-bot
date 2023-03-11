@@ -1,7 +1,9 @@
-require("dotenv").config();
-const Discord = require("discord.js");
-const log = require("npmlog");
-const Voice = require("@discordjs/voice");
+import dotenv = require("dotenv")
+import Discord = require("discord.js");
+import log = require("npmlog");
+import Voice = require("@discordjs/voice");
+
+dotenv.config();
 
 const discordClient = new Discord.Client({
     // eslint-disable-next-line no-magic-numbers
@@ -59,9 +61,9 @@ discordClient.on("ready", () => {
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN);
 
-module.exports = (audioFilePath) => {
+export default function announce(audioFilePath: string) {
     if (audioFilePath) {
         log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
         subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
-};
+}

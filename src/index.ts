@@ -1,8 +1,8 @@
-const GSI = require("dota2-gsi");
-const log = require("npmlog");
+import GSI = require("dota2-gsi");
+import log = require("npmlog");
 
-const announce = require("./announce");
-const runes = require("./runes/runes");
+import announce from "./announce";
+import handler from "./runes/runes";
 
 const server = new GSI();
 
@@ -14,5 +14,5 @@ server.events.on("newclient", (client) => {
         log.info("Dota 2 GSI", "No auth token");
     }
 
-    client.on("map:clock_time", (time) => announce(runes(time)));
+    client.on("map:clock_time", (time: number) => announce(handler(time)));
 });

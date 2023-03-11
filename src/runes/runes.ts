@@ -45,19 +45,19 @@ const runeToFn = {
 
 /**
  * Given a time, returns which runes are spawning
- * @param {int} time game time
+ * @param {number} time game time
  * @returns {Array} array of RuneConstants that spawn at this time. May be empty array
  */
-function runeLogic(time) {
+function runeLogic(time: number): Array<unknown> {
     return Object.keys(runeToFn).filter((constant) => runeToFn[constant](time));
 }
 
 /**
  *
  * @param {int} time time in seconds
- * @returns {String} name of audio file to play. May be null
+ * @returns {string} name of audio file to play. May be null
  */
-function timeHandler(time) {
+export default function handler(time: number): string {
     if (gameNotStartedYet(time)) {
         return null;
     }
@@ -67,4 +67,3 @@ function timeHandler(time) {
     return AudioMapping[hash(spawningRunes)];
 }
 
-module.exports = timeHandler;

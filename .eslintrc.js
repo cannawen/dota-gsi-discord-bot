@@ -1,16 +1,26 @@
-/* eslint-disable */ 
-
 module.exports = {
     "env": {
         "commonjs": true,
         "es2021":   true,
         "node":     true,
     },
-    "extends": "eslint:recommended",
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        // "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    ],
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType":  "module",
     },
+    "ignorePatterns": ["dist/*", ".eslintrc.js"],
+    parser:        "@typescript-eslint/parser",
+    plugins:       ["@typescript-eslint"],
+    parserOptions: {
+        project:         true,
+        tsconfigRootDir: "src",
+    },
+    root: true,
     "rules": {
     "no-cond-assign": ["warn", "except-parens"],
     "no-constant-condition": ["warn", { "checkLoops": true }],
