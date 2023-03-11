@@ -2,6 +2,7 @@
 Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, rosh timers, etc.)
 
 ## Start application
+- Make sure you have typescript installed `npm install -g typescript`
 - Make sure your `node --version` is at least v18.15.0
 - `npm install`
 - `npm start`
