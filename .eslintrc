@@ -177,7 +177,7 @@
         "object-property-newline": ["warn", { "allowAllPropertiesOnSameLine": false }],
         "one-var": ["warn", "never"],
         "operator-assignment": ["warn", "always"],
-        "operator-linebreak": ["warn", "none"],
+        "operator-linebreak": ["warn", "before"],
         "padded-blocks": ["warn", "never"],
         "padding-line-between-statements": "warn",
         "prefer-object-spread": "warn",

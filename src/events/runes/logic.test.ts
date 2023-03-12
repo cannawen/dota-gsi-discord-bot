@@ -12,39 +12,51 @@ function spawnsAtMinute(time: number) : number {
 }
 
 describe("rune event", () => {
-    describe("no runes", () => {
-        // test("not return audio for 0 minute rune", () => {
-        //     expect(runes(spawnsAtMinute(0))).toBeNull();
-        // });
-        test("not return audio path when runes are spawning", () => {
+    describe("before the game starts", () => {
+        test("runes do not spawn", () => {
+            expect(logic(spawnsAtMinute(-1))).toBe(Constants.RuneId.NONE);
+            expect(logic(spawnsAtMinute(-2))).toBe(Constants.RuneId.NONE);
+            expect(logic(spawnsAtMinute(-3))).toBe(Constants.RuneId.NONE);
+            expect(logic(spawnsAtMinute(-6))).toBe(Constants.RuneId.NONE);
+        });
+    });
+
+    describe("at zero minutes", () => {
+        test("spawns only bounty runes", () => {
+            expect(logic(spawnsAtMinute(0))).toBe(Constants.RuneId.BOUNTY);
+        });
+    });
+
+    describe("at non-rune spawning times after the game starts", () => {
+        test("no runes", () => {
             expect(logic(spawnsAtMinute(1))).toBe(Constants.RuneId.NONE);
             expect(logic(spawnsAtMinute(61))).toBe(Constants.RuneId.NONE);
         });
     });
 
-    describe("bounty and power runes", () => {
-        test("return bounty and power rune audio path every 6 minutes", () => {
+    describe("every 6 minutes", () => {
+        test("spawns bounty and power runes", () => {
             expect(logic(spawnsAtMinute(6))).toBe(Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
             expect(logic(spawnsAtMinute(60))).toBe(Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
         });
     });
 
-    describe("bounty runes", () => {
-        test("return bounty rune audio path every 3 minutes", () => {
+    describe("every 3 minutes", () => {
+        test("spawns bounty runes", () => {
             expect(logic(spawnsAtMinute(3))).toBe(Constants.RuneId.BOUNTY);
             expect(logic(spawnsAtMinute(63))).toBe(Constants.RuneId.BOUNTY);
         });
     });
 
-    describe("water runes", () => {
-        test("return water rune audio path every 2 minutes prior to 4 minute mark", () => {
+    describe("at 2 and 4 minutes", () => {
+        test("spawns water runes", () => {
             expect(logic(spawnsAtMinute(2))).toBe(Constants.RuneId.WATER);
             expect(logic(spawnsAtMinute(4))).toBe(Constants.RuneId.WATER);
         });
     });
 
-    describe("power rune", () => {
-        test("return power rune audio path every 2 minutes after 4 minute mark", () => {
+    describe("every 2 minutes, after 4 minutes", () => {
+        test("spawns power rune", () => {
             expect(logic(spawnsAtMinute(8))).toBe(Constants.RuneId.POWER);
             expect(logic(spawnsAtMinute(62))).toBe(Constants.RuneId.POWER);
         });
