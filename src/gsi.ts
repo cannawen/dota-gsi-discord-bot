@@ -22,6 +22,6 @@ export default function run() {
             log.info("Dota 2 GSI", "No auth token");
         }
 
-        client.on("map:clock_time", (time: number) => announce(runes.handler(time)));
+        client.on("map:clock_time", (time: number) => announce(runes(time)));
     });
 }
