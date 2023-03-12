@@ -48,6 +48,13 @@ const runeLogics = [
 ];
 /* eslint-enable max-len */
 
+function runeSpawn(time : number) : RuneId {
+    return runeLogics
+        .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN))
+        .map((runeLogic) => runeLogic.runeId)
+        .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NONE);
+}
+
 function gameNotStartedYet(time: number) {
     return time <= TimeConstants.GAME_START_TIME;
 }
@@ -56,10 +63,8 @@ function handler(time: number): string | null {
     if (gameNotStartedYet(time)) {
         return null;
     }
-    const audioKey = runeLogics
-        .filter((runeLogic) => runeLogic.spawnsAt(time + TimeConstants.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN))
-        .map((runeLogic) => runeLogic.runeId)
-        .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NONE);
+
+    const audioKey = runeSpawn(time + TimeConstants.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN);
 
     const audioFileName = AudioMapping[audioKey];
 
@@ -71,5 +76,9 @@ function handler(time: number): string | null {
 }
 
 export default {
+    // for testing
+    RuneId,
+    runeSpawn,
+    // public
     handler,
 };

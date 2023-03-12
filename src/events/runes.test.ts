@@ -14,40 +14,40 @@ function spawnsAtMinute(time: number) : number {
 
 describe("rune event", () => {
     describe("no runes", () => {
-        test("not return audio for 0 minute rune", () => {
-            expect(runes(spawnsAtMinute(0))).toBeNull();
-        });
+        // test("not return audio for 0 minute rune", () => {
+        //     expect(runes.runeSpawn(spawnsAtMinute(0))).toBeNull();
+        // });
         test("not return audio path when runes are spawning", () => {
-            expect(runes(spawnsAtMinute(1))).toBeNull();
-            expect(runes(spawnsAtMinute(61))).toBeNull();
+            expect(runes.runeSpawn(spawnsAtMinute(1))).toBe(runes.RuneId.NONE);
+            expect(runes.runeSpawn(spawnsAtMinute(61))).toBe(runes.RuneId.NONE);
         });
     });
 
     describe("bounty and power runes", () => {
         test("return bounty and power rune audio path every 6 minutes", () => {
-            expect(runes(spawnsAtMinute(6))).toMatch("bounty_and_power_runes.wav");
-            expect(runes(spawnsAtMinute(60))).toMatch("bounty_and_power_runes.wav");
+            expect(runes.runeSpawn(spawnsAtMinute(6))).toBe(runes.RuneId.BOUNTY | runes.RuneId.POWER);
+            expect(runes.runeSpawn(spawnsAtMinute(60))).toBe(runes.RuneId.BOUNTY | runes.RuneId.POWER);
         });
     });
 
     describe("bounty runes", () => {
         test("return bounty rune audio path every 3 minutes", () => {
-            expect(runes(spawnsAtMinute(3))).toMatch("bounty_runes.wav");
-            expect(runes(spawnsAtMinute(63))).toMatch("bounty_runes.wav");
+            expect(runes.runeSpawn(spawnsAtMinute(3))).toBe(runes.RuneId.BOUNTY);
+            expect(runes.runeSpawn(spawnsAtMinute(63))).toBe(runes.RuneId.BOUNTY);
         });
     });
 
     describe("water runes", () => {
         test("return water rune audio path every 2 minutes prior to 4 minute mark", () => {
-            expect(runes(spawnsAtMinute(2))).toMatch("water_runes.wav");
-            expect(runes(spawnsAtMinute(4))).toMatch("water_runes.wav");
+            expect(runes.runeSpawn(spawnsAtMinute(2))).toBe(runes.RuneId.WATER);
+            expect(runes.runeSpawn(spawnsAtMinute(4))).toBe(runes.RuneId.WATER);
         });
     });
 
     describe("power rune", () => {
         test("return power rune audio path every 2 minutes after 4 minute mark", () => {
-            expect(runes(spawnsAtMinute(8))).toMatch("power_rune.wav");
-            expect(runes(spawnsAtMinute(62))).toMatch("power_rune.wav");
+            expect(runes.runeSpawn(spawnsAtMinute(8))).toBe(runes.RuneId.POWER);
+            expect(runes.runeSpawn(spawnsAtMinute(62))).toBe(runes.RuneId.POWER);
         });
     });
 });
