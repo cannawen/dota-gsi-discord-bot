@@ -185,7 +185,7 @@
         "semi": ["warn", "always"],
         "semi-spacing": ["warn", { "before": false, "after": false }],
         "semi-style": ["warn", "last"],
-        "sort-keys": ["warn", "asc", { "caseSensitive": true, "natural": false }],
+        "sort-keys": ["warn", "asc", { "caseSensitive": false, "natural": false }],
         "sort-vars": ["warn", { "ignoreCase": false }],
         "space-before-blocks": ["warn", "always"],
         "space-before-function-paren": ["warn", { "anonymous": "always", "named": "never", "asyncArrow": "always" }],
