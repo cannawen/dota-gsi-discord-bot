@@ -1,5 +1,4 @@
 import Constants from "./Constants";
-import path from "node:path";
 import timeToRuneIdBitmap from "./logic";
 
 export default function handler(time: number): string | null {
@@ -8,7 +7,7 @@ export default function handler(time: number): string | null {
     const audioFileName = Constants.Audio[audioKey];
 
     if (audioFileName) {
-        return path.join(__dirname, "../../audio/runes", audioFileName);
+        return audioFileName;
     } else {
         return null;
     }

@@ -9,6 +9,7 @@ const d2gsi = require("dota2-gsi");
 import log = require("npmlog");
 
 import announce from "./announce";
+import path from "node:path";
 import runes from "./events/runes/runes";
 
 export default function run() {
@@ -22,6 +23,11 @@ export default function run() {
             log.info("Dota 2 GSI", "No auth token");
         }
 
-        client.on("map:clock_time", (time: number) => announce(runes(time)));
+        client.on("map:clock_time", (time: number) => {
+            const runesSpawning = runes(time);
+            if (runesSpawning) {
+                announce(path.join(__dirname, "../audio/", runesSpawning));
+            }
+        });
     });
 }
