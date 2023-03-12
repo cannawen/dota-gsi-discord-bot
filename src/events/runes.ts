@@ -61,9 +61,11 @@ export default function handler(time: number): string | null {
         .map((runeLogic) => runeLogic.runeId)
         .reduce((memo, runeConstant) => memo | runeConstant, RuneId.NO_RUNES);
 
-    if (AudioMapping[audioKey] === null) {
+    const audioFileName = AudioMapping[audioKey];
+
+    if (audioFileName) {
+        return path.join(__dirname, "../../audio/runes", audioFileName);
+    } else {
         return null;
     }
-
-    return path.join(__dirname, "../../audio/runes", AudioMapping[audioKey]);
 }

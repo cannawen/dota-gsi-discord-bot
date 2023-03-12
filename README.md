@@ -4,6 +4,8 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 ## Start application
 - `npm install`
 - `npm start`
+### Development
+- `npm run start:dev` or `npm run test:dev` for hot reloading
 
 ## Dependencies
 ### Node and Typescript

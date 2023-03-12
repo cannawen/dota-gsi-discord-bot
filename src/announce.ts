@@ -1,3 +1,6 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable max-statements */
+/* eslint-disable max-len */
 import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import log = require("npmlog");
@@ -10,13 +13,22 @@ const discordClient = new Discord.Client({
     intents: [131071],
 });
 
-let subscription : Voice.PlayerSubscription = null;
+let subscription : Voice.PlayerSubscription | null | undefined = null;
 
 discordClient.on("ready", () => {
+    if (!discordClient || !discordClient.user) {
+        return;
+    }
     log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
+    if (!guild) {
+        return;
+    }
     const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
+    if (!channel) {
+        return;
+    }
 
     const connection = Voice.joinVoiceChannel({
         adapterCreator: channel.guild.voiceAdapterCreator,
@@ -49,7 +61,7 @@ discordClient.on("ready", () => {
 
     // Workaround story #15
     /* eslint-disable */
-    function networkStateChangeHandler(oldNetworkState, newNetworkState) {
+    function networkStateChangeHandler(_oldNetworkState: any, newNetworkState: any) {
         const newUdp = Reflect.get(newNetworkState, "udp");
         clearInterval(newUdp?.keepAliveInterval);
     }
@@ -69,8 +81,8 @@ discordClient.on("ready", () => {
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
-export default function announce(audioFilePath: string) {
-    if (audioFilePath) {
+export default function announce(audioFilePath: string | null) {
+    if (audioFilePath && subscription) {
         log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
         subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
