@@ -17,6 +17,15 @@
         "plugin:jest/recommended",
         "plugin:jest/style"
     ],
+    "overrides": [
+        {
+          "files": ["src/**/*.test.ts"],
+          "rules": {
+            "no-magic-numbers": ["off"],
+            "max-lines-per-function": ["off"]
+          }
+        }
+    ],
     "rules": {
         //jest plugin rules
         "jest/no-disabled-tests": "warn",
