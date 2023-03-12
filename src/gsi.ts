@@ -9,7 +9,7 @@ const d2gsi = require("dota2-gsi");
 import log = require("npmlog");
 
 import announce from "./announce";
-import handler from "./events/runes";
+import runes from "./events/runes";
 
 export default function run() {
     const server = new d2gsi();
@@ -22,6 +22,6 @@ export default function run() {
             log.info("Dota 2 GSI", "No auth token");
         }
 
-        client.on("map:clock_time", (time: number) => announce(handler(time)));
+        client.on("map:clock_time", (time: number) => announce(runes.handler(time)));
     });
 }
