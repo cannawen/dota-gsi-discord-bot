@@ -216,7 +216,6 @@
         "prefer-const": ["error", { "ignoreReadBeforeAssign": false, "destructuring": "any" }],
         "prefer-destructuring": ["warn", { "object": true, "array":  false }],
         "prefer-spread": "warn",
-        "prefer-template": "warn",
         "rest-spread-spacing": ["warn", "never"],
         "sort-imports": ["warn", { "ignoreCase": false, "ignoreMemberSort": false }],
         "template-curly-spacing": ["warn", "never"]

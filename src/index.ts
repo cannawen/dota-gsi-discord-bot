@@ -1,15 +1,22 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const d2gsi = require("dota2-gsi");
-import gsi from "./gsi";
+import GSI = require("node-gsi");
 import log = require("npmlog");
+import timeHandler from "./events/TimeHandler";
 
-const server = new d2gsi();
-server.events.on("newclient", (client: { ip: any; auth: any; on: any; }) => {
-    log.info("Dota 2 GSI", "New client connection, IP address:", client.ip);
-    if (client.auth && client.auth.token) {
-        log.info("Dota 2 GSI", "Auth token:", client.auth.token);
-    } else {
-        log.info("Dota 2 GSI", "No auth token");
+const debug = true;
+const server = new GSI.Dota2GSIServer("/gsi", debug);
+
+server.events.on(GSI.Dota2Event.Dota2State, (event: GSI.IDota2StateEvent) => {
+    log.verbose("GSI", "New event");
+    if (event.state.map?.clockTime) {
+        timeHandler(event.state.map.clockTime);
     }
-    gsi(client);
 });
+
+server.events.on(GSI.Dota2Event.Dota2ObserverState, (event: GSI.IDota2ObserverStateEvent) => {
+    log.verbose("GSI", "New observer event!");
+    if (event.state.map?.clockTime) {
+        timeHandler(event.state.map.clockTime);
+    }
+});
+
+server.listen(9001);
