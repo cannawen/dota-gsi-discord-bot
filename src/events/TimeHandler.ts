@@ -1,7 +1,7 @@
-import runes from "./runes/runes";
-import roshan from "./roshan/roshan";
+import runes from "./runes/index";
+import stack from "./stack/index";
 
 export default function handle(time: number) {
     runes(time).execute();
-    roshan(time).execute();
+    stack(time).execute();
 }
