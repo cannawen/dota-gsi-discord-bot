@@ -1,5 +1,6 @@
 import SideEffect from "../SideEffect";
 
-export default function handler(time: number) {
+// Minimum implementation of an event
+export default function handler() {
     return new SideEffect.None();
 }

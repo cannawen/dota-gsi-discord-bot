@@ -1,5 +1,5 @@
-import logic from "./logic";
 import Constants from "./Constants";
+import logic from "./logic";
 
 /**
  *
