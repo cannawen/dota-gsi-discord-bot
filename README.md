@@ -2,6 +2,7 @@
 Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, rosh timers, etc.)
 
 ## Start application
+- Make sure your `node --version` is at least v18.15.0
 - `npm install`
 - `npm start`
 ### Development
@@ -10,10 +11,8 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 ## Dependencies
 ### Node and Typescript
 When `npm start` is run, it will first run `tsc` which will compile typescript files in the `src` directory to javascript in the `dist` directory
-- Make sure your `node --version` is at least v18.15.0
-- Install typescript `npm install -g typescript`
 ### Dota 2 Game State Integration
-Steam -> Right click Dota 2 -> Properties
+Steam Library -> Right click Dota 2 -> Properties
 - General -> Launch Options -> Add `-gamestateintegration` to launch options
 - Local Files -> Browse... mkdir `game\dota\cfg\gamestate_integration\` and copy/paste `gamestate_integration_dota2-gsi.cfg` file into it 
 ### Discord
