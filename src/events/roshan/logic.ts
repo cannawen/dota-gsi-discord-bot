@@ -7,17 +7,7 @@ enum RoshState {
 
 const currentRoshState = RoshState.ALIVE;
 
-function setTime(time: number) {
-    return;
-}
-
-function roshKilled() {
-    return;
-}
-
 export default {
     currentRoshState,
-    roshKilled,
     RoshState,
-    setTime,
 };
