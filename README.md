@@ -1,5 +1,5 @@
 ## About
-Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, rosh timers, etc.)
+Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, stack timing, etc.). Guaranteed to raise your MMR by 3154 or your money back!
 
 ## Start application
 - Make sure your `node --version` is at least v18.15.0
@@ -7,10 +7,9 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 - `npm start`
 ### Development
 - `npm run start:dev` or `npm run test:dev` for hot reloading
+- `npm run lint` to identify & fix linting issues
 
 ## Dependencies
-### Node and Typescript
-When `npm start` is run, it will first run `tsc` which will compile typescript files in the `src` directory to javascript in the `dist` directory
 ### Dota 2 Game State Integration
 Steam Library -> Right click Dota 2 -> Properties
 - General -> Launch Options -> Add `-gamestateintegration` to launch options
@@ -19,6 +18,17 @@ Steam Library -> Right click Dota 2 -> Properties
 - Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 - Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
 - Create a `.env` file with from copying `.env.sample` and change relevant values
+
+## Architecture
+### Node and Typescript
+When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `dist` directory
+### How things fit together
+- All source code in `/src`
+- `index.ts` creates a `dota2-gsi` server
+- We subscribe to GSI events (i.e. `map:clock_time`) in `gsi.ts` and call the relevant `events/*Handler.ts` (i.e. `TimeHandler`)
+- `events/*Handler.ts` forwards the GSI data to all interested events (i.e. `runes` and `stack`)
+- `events/<event>/index.ts` (i.e. `events/stack/index.ts`) returns a `SideEffect` object for the `*Handler` to `execute()`
+- `SideEffect` objects interact with state such as Discord in `announce.ts`
 
 ## Code Formatting
 - Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
@@ -37,3 +47,7 @@ Steam Library -> Right click Dota 2 -> Properties
 - See Github Projects page for project roadmap
 - Stories start in the `Icebox`, and get prioritize into `To Do`. They then flow through `In Progress` and `Done`
 - Commits are tagged with the story they correspond to
+
+## Contributing
+If you see a typo or have any ideas for a cool feature, open a github issue and let us know!
+If you know how to code, feel free to peruse our fine selection of open issues and leave a comment to stake claim on any that appeal to you
