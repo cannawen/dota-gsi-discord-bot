@@ -9,8 +9,8 @@ interface IEventHandler {
 
 }
 
-interface IEventHandlerGamePhase extends IEventHandler {
-    resetState: () => void;
+interface IEventHandlerGameState extends IEventHandler {
+    inGame: (inGame: boolean) => void;
 }
 
 interface IEventHandlerTime extends IEventHandler {
@@ -23,7 +23,7 @@ interface IEventHandlerEvents extends IEventHandler {
 
 export {
     IEventHandler,
-    IEventHandlerGamePhase,
+    IEventHandlerGameState,
     IEventHandlerTime,
     IEventHandlerEvents,
 };

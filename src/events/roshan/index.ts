@@ -1,5 +1,7 @@
 import {
-    IEventHandlerEvents, IEventHandlerGamePhase, IEventHandlerTime,
+    IEventHandlerEvents,
+    IEventHandlerGameState,
+    IEventHandlerTime,
 } from "../BaseEvent";
 import {
     SideEffectAudio,
@@ -8,7 +10,7 @@ import {
 import Constants from "./Constants";
 import logic from "./logic";
 
-export default class TimeHandlerRoshan implements IEventHandlerTime, IEventHandlerGamePhase, IEventHandlerEvents {
+export default class TimeHandlerRoshan implements IEventHandlerTime, IEventHandlerGameState, IEventHandlerEvents {
     currentTime: number | undefined;
     lastRoshanDeathTime: number | undefined;
     roshStatus: string;
@@ -17,10 +19,12 @@ export default class TimeHandlerRoshan implements IEventHandlerTime, IEventHandl
         this.roshStatus = Constants.Status.ALIVE;
     }
 
-    resetState() {
-        this.currentTime = undefined;
-        this.lastRoshanDeathTime = undefined;
-        this.roshStatus = Constants.Status.ALIVE;
+    inGame(inGame: boolean) {
+        if (!inGame) {
+            this.currentTime = undefined;
+            this.lastRoshanDeathTime = undefined;
+            this.roshStatus = Constants.Status.ALIVE;
+        }
     }
 
     handleTime(time: number) {
