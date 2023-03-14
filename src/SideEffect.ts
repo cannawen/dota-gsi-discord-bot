@@ -1,4 +1,4 @@
-import announce from "./announce";
+import discord from "./discord";
 import path from "node:path";
 
 // Abstract class? Interface? We never want to instantiate SideEffect
@@ -18,7 +18,7 @@ class SideEffectAudio extends SideEffect {
     }
 
     execute(): void {
-        announce(path.join(__dirname, "../audio/", this.filename));
+        discord.playAudio(path.join(__dirname, "../audio/", this.filename));
     }
 }
 

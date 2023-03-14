@@ -13,20 +13,24 @@ const discordClient = new Discord.Client({
     intents: [131071],
 });
 
-let subscription : Voice.PlayerSubscription | null | undefined = null;
+let subscription : Voice.PlayerSubscription | undefined;
 
 discordClient.on("ready", () => {
     if (!discordClient || !discordClient.user) {
+        log.error("Discord Client", "could not find client or user");
         return;
+    } else {
+        log.info("Discord Client", "Logged in as", discordClient.user.tag);
     }
-    log.info("Discord Client", "Logged in as", discordClient.user.tag);
 
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     if (!guild) {
+        log.error("Discord Client", "could not find guild", process.env.HARD_CODED_GUILD_NAME);
         return;
     }
     const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
     if (!channel) {
+        log.error("Discord Client", "could not find channel", process.env.HARD_CODED_VOICE_CHANNEL_NAME);
         return;
     }
 
@@ -81,9 +85,13 @@ discordClient.on("ready", () => {
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
-export default function announce(audioFilePath: string | null) {
+function playAudio(audioFilePath: string | null) {
     if (audioFilePath && subscription) {
         log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
         subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
 }
+
+export default {
+    playAudio,
+};

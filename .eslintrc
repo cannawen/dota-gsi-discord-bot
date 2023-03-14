@@ -110,7 +110,6 @@
         "require-await": "warn",
         "vars-on-top": "warn",
         "yoda": ["warn", "never"],
-        "init-declarations": ["warn", "always"],
         "no-delete-var": "warn",
         "no-undef": ["warn", { "typeof": false }],
         "no-undef-init": "warn",
