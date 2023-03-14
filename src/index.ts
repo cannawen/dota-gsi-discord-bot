@@ -1,6 +1,7 @@
 import GSI = require("node-gsi");
 import log = require("npmlog");
 
+import GSIHandlerEvent from "./events-gsi/GSIHandlerEvent";
 import GSIHandlerGameState from "./events-gsi/GSIHandlerGameState";
 import GSIHandlerTime from "./events-gsi/GSIHandlerTime";
 
@@ -8,10 +9,15 @@ const debug = false;
 const server = new GSI.Dota2GSIServer("/gsi", debug);
 const timeHandler = new GSIHandlerTime();
 const gameStateHandler = new GSIHandlerGameState();
+const eventHandler = new GSIHandlerEvent();
 
 function handle(state: GSI.IDota2State | GSI.IDota2ObserverState) {
     if (state.map?.clockTime) {
         timeHandler.currentTime(state.map.clockTime);
+    }
+
+    if (state.events) {
+        eventHandler.handle(state.events);
     }
 
     if (state.map?.gameState) {
