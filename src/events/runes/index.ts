@@ -5,7 +5,7 @@ import {
 import Constants from "./Constants";
 import {
     IEventHandlerTime,
-} from "../BaseEvent";
+} from "../IEventHandlers";
 import timeToRuneIdBitmap from "./logic";
 
 export default class EventHandlerRunes implements IEventHandlerTime {

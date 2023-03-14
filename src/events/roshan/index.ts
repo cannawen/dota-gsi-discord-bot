@@ -2,7 +2,7 @@ import {
     IEventHandlerEvents,
     IEventHandlerGameState,
     IEventHandlerTime,
-} from "../BaseEvent";
+} from "../IEventHandlers";
 import {
     SideEffectAudio,
     SideEffectNone,

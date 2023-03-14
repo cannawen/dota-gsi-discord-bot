@@ -4,7 +4,7 @@ import {
 } from "../SideEffect";
 import {
     IEventHandlerTime,
-} from "../BaseEvent";
+} from "../IEventHandlers";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
