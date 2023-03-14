@@ -19,7 +19,7 @@
     ],
     "overrides": [
         {
-          "files": ["src/**/*.test.ts"],
+          "files": ["src/**/*.test.ts", "src/**/*.Constants.ts"],
           "rules": {
             "no-magic-numbers": ["off"],
             "max-lines-per-function": ["off"]
@@ -157,7 +157,6 @@
         "no-continue": "warn",
         "no-inline-comments": "warn",
         "no-lonely-if": "warn",
-        "no-mixed-operators": ["warn", { "allowSamePrecedence": true }],
         "no-mixed-spaces-and-tabs": ["warn", "smart-tabs"],
         "no-multi-assign": "warn",
         "no-multiple-empty-lines": ["warn", { "max": 1, "maxEOF": 1, "maxBOF": 0 }],
