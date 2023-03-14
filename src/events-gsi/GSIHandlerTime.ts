@@ -10,7 +10,7 @@ const disabledEvents = [
     handler.stack,
 ];
 
-export default class TimeHandler {
+export default class GSIHandlerTime {
     time: number | undefined;
 
     currentTime(newTime: number) {

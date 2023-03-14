@@ -8,7 +8,7 @@ import {
 } from "../IEventHandlers";
 import timeToRuneIdBitmap from "./logic";
 
-export default class EventHandlerRunes implements IEventHandlerTime {
+export default class AppHandlerRunes implements IEventHandlerTime {
     handleTime(time: number) {
         if (time <= Constants.Time.GAME_START_TIME) {
             return new SideEffectNone();

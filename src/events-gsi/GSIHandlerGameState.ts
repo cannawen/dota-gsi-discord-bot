@@ -4,7 +4,7 @@ const events = [
     handler.roshan,
 ];
 
-export default class GameStateHandler {
+export default class GSIHandlerGameState {
     inGame = false;
 
     isInGame(newInGame: boolean) {

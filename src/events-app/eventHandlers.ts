@@ -1,10 +1,10 @@
-import EventHandlerRoshan from "./roshan/EventHandlerRoshan";
-import EventHandlerRunes from "./runes/EventHandlerRunes";
-import EventHandlerStack from "./stack/EventHandlerStack";
+import AppHandlerRoshan from "./roshan/AppHandlerRoshan";
+import AppHandlerRunes from "./runes/AppHandlerRunes";
+import AppHandlerStack from "./stack/AppHandlerStack";
 
-const roshan = new EventHandlerRoshan();
-const runes = new EventHandlerRunes();
-const stack = new EventHandlerStack();
+const roshan = new AppHandlerRoshan();
+const runes = new AppHandlerRunes();
+const stack = new AppHandlerStack();
 
 export default {
     roshan,
