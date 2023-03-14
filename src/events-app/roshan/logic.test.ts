@@ -16,7 +16,7 @@ describe("roshan", () => {
     });
 
     describe("was killed 8-11 minutes ago", () => {
-        test("roshan is dead", () => {
+        test("roshan is maybe alive or dead", () => {
             expect(logic(8 * 60, 0)).toBe(Constants.Status.UNKNOWN);
             expect(logic(9 * 60, 0)).toBe(Constants.Status.UNKNOWN);
             expect(logic(11 * 60 - 1, 0)).toBe(Constants.Status.UNKNOWN);
@@ -24,7 +24,7 @@ describe("roshan", () => {
     });
 
     describe("was killed 11+ minutes ago", () => {
-        test("roshan is dead", () => {
+        test("roshan is alive", () => {
             expect(logic(11 * 60, 0)).toBe(Constants.Status.ALIVE);
             expect(logic(60 * 60, 0)).toBe(Constants.Status.ALIVE);
         });
