@@ -3,13 +3,13 @@ import path from "node:path";
 
 // Abstract class? Interface? We never want to instantiate SideEffect
 // but we want to make sure all child SideEffects have an .execute
-class SideEffect {
+abstract class SideEffect {
     execute() : void {}
 }
 
-class None extends SideEffect {}
+class SideEffectNone extends SideEffect {}
 
-class Audio extends SideEffect {
+class SideEffectAudio extends SideEffect {
     filename: string;
 
     constructor(filename: string) {
@@ -22,8 +22,8 @@ class Audio extends SideEffect {
     }
 }
 
-export default {
-    Audio,
-    None,
+export {
+    SideEffectAudio,
+    SideEffectNone,
     SideEffect,
 };

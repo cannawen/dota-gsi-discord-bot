@@ -1,36 +1,49 @@
+import {
+    IEventHandlerEvents, IEventHandlerGamePhase, IEventHandlerTime,
+} from "../BaseEvent";
+import {
+    SideEffectAudio,
+    SideEffectNone,
+} from "../SideEffect";
 import Constants from "./Constants";
-import SideEffect from "../SideEffect";
 import logic from "./logic";
 
-let currentTime: number;
-let lastRoshanDeathTime: number;
-let roshStatus: string;
+export default class TimeHandlerRoshan implements IEventHandlerTime, IEventHandlerGamePhase, IEventHandlerEvents {
+    currentTime: number | undefined;
+    lastRoshanDeathTime: number | undefined;
+    roshStatus: string;
 
-function timeHandler(time: number) {
-    currentTime = time;
-    const newRoshStatus = logic(time, lastRoshanDeathTime);
-    if (newRoshStatus !== roshStatus) {
-        roshStatus = newRoshStatus;
-        switch (newRoshStatus) {
-        case Constants.Status.ALIVE:
-            return new SideEffect.Audio("rosh-alive.mp3");
-        case Constants.Status.UNKNOWN:
-            return new SideEffect.Audio("rosh-maybe.mp3");
-        default:
-            break;
+    constructor() {
+        this.roshStatus = Constants.Status.ALIVE;
+    }
+
+    resetState() {
+        this.currentTime = undefined;
+        this.lastRoshanDeathTime = undefined;
+        this.roshStatus = Constants.Status.ALIVE;
+    }
+
+    handleTime(time: number) {
+        this.currentTime = time;
+        const newRoshStatus = logic(time, this.lastRoshanDeathTime);
+        if (newRoshStatus !== this.roshStatus) {
+            this.roshStatus = newRoshStatus;
+            switch (newRoshStatus) {
+            case Constants.Status.ALIVE:
+                return new SideEffectAudio("rosh-alive.mp3");
+            case Constants.Status.UNKNOWN:
+                return new SideEffectAudio("rosh-maybe.mp3");
+            default:
+                break;
+            }
         }
+        return new SideEffectNone();
     }
-    return new SideEffect.None();
-}
 
-function eventHandler(eventType: string, time: number) {
-    if (eventType === "roshan_killed") {
-        lastRoshanDeathTime = time;
+    handleEvents(eventType: string, time: number) {
+        if (eventType === "roshan_killed") {
+            this.lastRoshanDeathTime = time;
+        }
+        return new SideEffectNone();
     }
-    return new SideEffect.None();
 }
-
-export default {
-    eventHandler,
-    timeHandler,
-};

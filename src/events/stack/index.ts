@@ -1,11 +1,19 @@
-import SideEffect from "../SideEffect";
+import {
+    SideEffectAudio,
+    SideEffectNone,
+} from "../SideEffect";
+import {
+    IEventHandlerTime,
+} from "../BaseEvent";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
-export default function handler(time: number) {
-    if (time >= 60 && (time + ADVANCED_WARNING_TIME_BEFORE_STACK_TIME) % 60 === 0) {
-        return new SideEffect.Audio("stack.wav");
-    } else {
-        return new SideEffect.None();
+export default class EventHandlerStack implements IEventHandlerTime {
+    handleTime(time: number) {
+        if (time >= 60 && (time + ADVANCED_WARNING_TIME_BEFORE_STACK_TIME) % 60 === 0) {
+            return new SideEffectAudio("stack.wav");
+        } else {
+            return new SideEffectNone();
+        }
     }
 }

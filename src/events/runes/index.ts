@@ -1,19 +1,27 @@
+import {
+    SideEffectAudio,
+    SideEffectNone,
+} from "../SideEffect";
 import Constants from "./Constants";
-import SideEffect from "../SideEffect";
+import {
+    IEventHandlerTime,
+} from "../BaseEvent";
 import timeToRuneIdBitmap from "./logic";
 
-export default function handler(time: number) {
-    if (time <= Constants.Time.GAME_START_TIME) {
-        return new SideEffect.None();
-    }
+export default class EventHandlerRunes implements IEventHandlerTime {
+    handleTime(time: number) {
+        if (time <= Constants.Time.GAME_START_TIME) {
+            return new SideEffectNone();
+        }
 
-    const audioKey = timeToRuneIdBitmap(time + Constants.Time.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN);
+        const audioKey = timeToRuneIdBitmap(time + Constants.Time.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN);
 
-    const audioFileName = Constants.Audio[audioKey];
+        const audioFileName = Constants.Audio[audioKey];
 
-    if (audioFileName) {
-        return new SideEffect.Audio(audioFileName);
-    } else {
-        return new SideEffect.None();
+        if (audioFileName) {
+            return new SideEffectAudio(audioFileName);
+        } else {
+            return new SideEffectNone();
+        }
     }
 }

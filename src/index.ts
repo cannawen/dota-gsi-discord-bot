@@ -2,7 +2,7 @@ import GSI = require("node-gsi");
 import log = require("npmlog");
 import timeHandler from "./events/TimeHandler";
 
-const debug = true;
+const debug = false;
 const server = new GSI.Dota2GSIServer("/gsi", debug);
 
 server.events.on(GSI.Dota2Event.Dota2State, (event: GSI.IDota2StateEvent) => {

@@ -1,11 +1,17 @@
-import runes from "./runes/index";
-import stack from "./stack/index";
+import handler from "./EventHandler";
 
-const allTimeEvents = [ runes, stack ];
-const disabledEvents = [stack];
+const allEvents = [
+    handler.roshan,
+    handler.runes,
+    handler.stack,
+];
+const disabledEvents = [
+    handler.roshan,
+    handler.stack,
+];
 
 export default function handle(time: number) {
-    allTimeEvents
+    allEvents
         .filter((event) => !disabledEvents.includes(event))
-        .map((event) => event(time).execute());
+        .map((event) => event.handleTime(time).execute());
 }
