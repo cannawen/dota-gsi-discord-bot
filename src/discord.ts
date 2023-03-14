@@ -3,6 +3,7 @@
 /* eslint-disable max-len */
 import dotenv = require("dotenv")
 import Discord = require("discord.js");
+import fs = require("fs");
 import log = require("npmlog");
 import Voice = require("@discordjs/voice");
 
@@ -25,10 +26,16 @@ function playNext() {
         return;
     }
 
-    const audioFilePath = audioQueue.pop();
-    if (audioFilePath) {
-        log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
-        subscription.player.play(Voice.createAudioResource(audioFilePath));
+    const audioResource = audioQueue.pop();
+    if (!audioResource) {
+        return;
+    }
+
+    if (fs.existsSync(audioResource)) {
+        log.info("Discord AudioPlayer", "Attempting to play", audioResource);
+        subscription.player.play(Voice.createAudioResource(audioResource));
+    } else {
+        log.error("Discord AudioPlayer", "Could not find file at path", audioResource);
     }
 }
 
