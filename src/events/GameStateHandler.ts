@@ -5,7 +5,12 @@ const events = [
 ];
 
 export default class GameStateHandler {
-    isInGame(inGame: boolean) {
-        events.map((event) => event.inGame(inGame));
+    inGame = false;
+
+    isInGame(newInGame: boolean) {
+        if (this.inGame !== newInGame) {
+            this.inGame = newInGame;
+            events.map((event) => event.inGame(newInGame));
+        }
     }
 }
