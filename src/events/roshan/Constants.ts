@@ -4,11 +4,12 @@ enum Status {
     UNKNOWN = "UNKNOWN",
 }
 
-const MINIMUM_RESPAWN_SECONDS = 8 * 60;
-const MAXIMUM_RESPAWN_SECONDS = 11 * 60;
+enum RespawnTime {
+    MINIMUM = 8 * 60,
+    MAXIMUM = 11 * 60,
+}
 
 export default {
-    MAXIMUM_RESPAWN_SECONDS,
-    MINIMUM_RESPAWN_SECONDS,
+    RespawnTime,
     Status,
 };

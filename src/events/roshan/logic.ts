@@ -6,9 +6,9 @@ export default function timeAndRoshDeathTimeToRoshStatus(time: number, lastRoshD
         return Constants.Status.ALIVE;
     }
     const roshHasBeenDeadFor = time - lastRoshDeathTime;
-    if (roshHasBeenDeadFor < Constants.MINIMUM_RESPAWN_SECONDS) {
+    if (roshHasBeenDeadFor < Constants.RespawnTime.MINIMUM) {
         return Constants.Status.DEAD;
-    } else if (roshHasBeenDeadFor >= Constants.MAXIMUM_RESPAWN_SECONDS) {
+    } else if (roshHasBeenDeadFor >= Constants.RespawnTime.MAXIMUM) {
         return Constants.Status.ALIVE;
     } else {
         return Constants.Status.UNKNOWN;
