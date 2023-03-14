@@ -1,6 +1,6 @@
-import EventHandlerRoshan from "./roshan/index";
-import EventHandlerRunes from "./runes/index";
-import EventHandlerStack from "./stack/index";
+import EventHandlerRoshan from "./roshan/EventHandlerRoshan";
+import EventHandlerRunes from "./runes/EventHandlerRunes";
+import EventHandlerStack from "./stack/EventHandlerStack";
 
 const roshan = new EventHandlerRoshan();
 const runes = new EventHandlerRunes();

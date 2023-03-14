@@ -10,7 +10,7 @@ import {
 import Constants from "./Constants";
 import logic from "./logic";
 
-export default class TimeHandlerRoshan implements IEventHandlerTime, IEventHandlerGameState, IEventHandlerEvents {
+export default class EventHandlerRoshan implements IEventHandlerTime, IEventHandlerGameState, IEventHandlerEvents {
     currentTime: number | undefined;
     lastRoshanDeathTime: number | undefined;
     roshStatus: string;
