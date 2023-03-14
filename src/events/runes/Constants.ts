@@ -12,7 +12,6 @@ enum RuneId {
     POWER = 1 << 2,
     WATER = 1 << 3,
 }
-/* eslint-enable no-magic-numbers*/
 
 const Audio = {
     [RuneId.BOUNTY | RuneId.POWER]: "bounty_and_power_runes.wav",
