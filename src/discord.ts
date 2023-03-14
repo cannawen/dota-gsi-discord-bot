@@ -14,6 +14,15 @@ const discordClient = new Discord.Client({
 });
 
 let subscription : Voice.PlayerSubscription | undefined;
+const audioQueue : string[] = [];
+
+function playNext() {
+    const audioFilePath = audioQueue.pop();
+    if (audioFilePath && subscription) {
+        log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
+        subscription.player.play(Voice.createAudioResource(audioFilePath));
+    }
+}
 
 discordClient.on("ready", () => {
     if (!discordClient || !discordClient.user) {
@@ -85,11 +94,9 @@ discordClient.on("ready", () => {
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
-function playAudio(audioFilePath: string | null) {
-    if (audioFilePath && subscription) {
-        log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
-        subscription.player.play(Voice.createAudioResource(audioFilePath));
-    }
+function playAudio(audioFilePath: string) {
+    audioQueue.push(audioFilePath);
+    playNext();
 }
 
 export default {
