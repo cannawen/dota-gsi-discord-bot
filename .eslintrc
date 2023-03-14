@@ -120,7 +120,6 @@
         "no-new-require": "warn",
         "no-path-concat": "warn",
         "no-process-exit": "warn",
-        "no-sync": ["warn", { "allowAtRootLevel": false }],
         "array-bracket-newline": ["warn", "consistent"],
         "array-bracket-spacing": ["warn", "always", { "singleValue": false, "objectsInArrays": false, "arraysInArrays": false }],
         "array-element-newline": ["warn", "consistent"],

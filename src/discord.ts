@@ -6,6 +6,7 @@ import Discord = require("discord.js");
 import fs = require("fs");
 import log = require("npmlog");
 import Voice = require("@discordjs/voice");
+import axios from "axios";
 
 dotenv.config();
 
@@ -35,7 +36,15 @@ function playNext() {
         log.info("Discord AudioPlayer", "Attempting to play", audioResource);
         subscription.player.play(Voice.createAudioResource(audioResource));
     } else {
-        log.error("Discord AudioPlayer", "Could not find file at path", audioResource);
+        log.info("Discord AudioPlayer", "Could not find file at path", audioResource);
+        const encodedAudio = encodeURIComponent(audioResource);
+        axios({
+            method:       "get",
+            url:          "https://translate.google.com/translate_tts?ie=UTF-8&q=" + encodedAudio + "&tl=en&client=tw-ob",
+            responseType: "stream",
+        }).then(function (response) {
+            subscription?.player.play(Voice.createAudioResource(response.data));
+        });
     }
 }
 
@@ -113,8 +122,12 @@ discordClient.on("ready", () => {
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => log.error("Discord Client", e.message));
 
-function playAudio(audioFilePath: string) {
-    audioQueue.push(audioFilePath);
+/**
+ *
+ * @param audioResource local file path or tts text
+ */
+function playAudio(audioResource: string) {
+    audioQueue.push(audioResource);
     playNext();
 }
 
