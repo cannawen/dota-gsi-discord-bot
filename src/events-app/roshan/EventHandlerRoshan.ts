@@ -6,7 +6,7 @@ import {
 import {
     SideEffectAudio,
     SideEffectNone,
-} from "../SideEffect";
+} from "../../SideEffect";
 import Constants from "./Constants";
 import logic from "./logic";
 

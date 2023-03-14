@@ -1,8 +1,8 @@
 import GSI = require("node-gsi");
 import log = require("npmlog");
 
-import GameStateHandler from "./events/GameStateHandler";
-import TimeHandler from "./events/TimeHandler";
+import GameStateHandler from "./events-gsi/GameStateHandler";
+import TimeHandler from "./events-gsi/TimeHandler";
 
 const debug = false;
 const server = new GSI.Dota2GSIServer("/gsi", debug);

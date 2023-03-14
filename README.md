@@ -24,9 +24,8 @@ Steam Library -> Right click Dota 2 -> Properties
 When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `dist` directory
 ### How things fit together
 - `index.ts` creates a `node-gsi` server
-- `events/*Handler.ts` forwards the GSI data to all interested events
-- `events/<event>/index.ts` returns a `SideEffect` object for the `*Handler` to `execute()`
-- optional `event/<event>/logic.ts` files should do all of the pure game-related logic so it's easy to test
+- `/events-gsi` is where we hook up our "app logic" to GSI callbacks
+- `/events-app` is where the bulk of our "app logic" lives. One app event can subscribe to one or more GSI callback
 - `SideEffect` objects interact with state such as Discord in `announce.ts`
 
 ## Code Formatting

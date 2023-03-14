@@ -1,7 +1,7 @@
 import {
     SideEffectAudio,
     SideEffectNone,
-} from "../SideEffect";
+} from "../../SideEffect";
 import {
     IEventHandlerTime,
 } from "../IEventHandlers";

@@ -1,6 +1,6 @@
 import {
     SideEffect,
-} from "./SideEffect";
+} from "../SideEffect";
 
 // I want to refer outside to all things that handle things
 // should I make it a base class even if the implementations don't overlap?

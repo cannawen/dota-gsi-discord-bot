@@ -1,4 +1,4 @@
-import announce from "../announce";
+import announce from "./announce";
 import path from "node:path";
 
 // Abstract class? Interface? We never want to instantiate SideEffect

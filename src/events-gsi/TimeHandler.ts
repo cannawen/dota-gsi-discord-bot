@@ -1,4 +1,4 @@
-import handler from "./EventHandler";
+import handler from "../events-app/eventHandlers";
 
 const allEvents = [
     handler.roshan,
