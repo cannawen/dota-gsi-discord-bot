@@ -12,21 +12,21 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 ## Dependencies
 ### Dota 2 Game State Integration
 Steam Library -> Right click Dota 2 -> Properties
-- General -> Launch Options -> Add `-gamestateintegration` to launch options
-- Local Files -> Browse... mkdir `game\dota\cfg\gamestate_integration\` and copy/paste `gamestate_integration_dota2-gsi.cfg` file into it 
+- -> General -> Launch Options -> Add `-gamestateintegration` to launch options
+- -> Local Files -> Browse... mkdir `game\dota\cfg\gamestate_integration\` and copy/paste `gamestate_integration_dota2-gsi.cfg` file into it 
 ### Discord
 - Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 - Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
-- Create a `.env` file with from copying `.env.sample` and change relevant values
+- Create a `.env` file with from copying `sample.env` and change relevant values
 
 ## Architecture
 ### Node and Typescript
 When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `dist` directory
 ### How things fit together
-- `index.ts` creates a `dota2-gsi` server
-- `events/*Handler.ts` forwards the GSI data to all interested events (i.e. `runes` and `stack`)
-- `events/<event>/index.ts` (i.e. `events/stack/index.ts`) returns a `SideEffect` object for the `*Handler` to `execute()`
-- note optional `event/<event>/logic.ts` files should do all of the pure game-related logic so it's easy to test
+- `index.ts` creates a `node-gsi` server
+- `events/*Handler.ts` forwards the GSI data to all interested events
+- `events/<event>/index.ts` returns a `SideEffect` object for the `*Handler` to `execute()`
+- optional `event/<event>/logic.ts` files should do all of the pure game-related logic so it's easy to test
 - `SideEffect` objects interact with state such as Discord in `announce.ts`
 
 ## Code Formatting
@@ -48,5 +48,4 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 - Commits are tagged with the story they correspond to
 
 ## Contributing
-If you see a typo or have any ideas for a cool feature, open a github issue and let us know!
-If you know how to code, feel free to peruse our fine selection of open issues and leave a comment to stake claim on any that appeal to you
+If you see a typo or have any ideas for a cool feature, open a github issue and let us know! If you know how to code, feel free to peruse our fine selection of open issues and leave a comment to stake claim on any that appeal to you
