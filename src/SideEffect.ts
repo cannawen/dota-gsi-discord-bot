@@ -9,21 +9,35 @@ abstract class SideEffect {
 
 class SideEffectNone extends SideEffect {}
 
-class SideEffectAudio extends SideEffect {
-    filename: string;
+class SideEffectTTS extends SideEffect {
+    audioResource: string;
 
-    constructor(filename: string) {
+    constructor(audioResource: string) {
         super();
-        this.filename = filename;
+        this.audioResource = audioResource;
     }
 
     execute(): void {
-        discord.playAudio(path.join(__dirname, "../audio/", this.filename));
+        discord.playAudio(this.audioResource);
+    }
+}
+
+class SideEffectAudio extends SideEffect {
+    audioResource: string;
+
+    constructor(audioResource: string) {
+        super();
+        this.audioResource = audioResource;
+    }
+
+    execute(): void {
+        discord.playAudio(path.join(__dirname, "../audio/", this.audioResource));
     }
 }
 
 export {
     SideEffectAudio,
+    SideEffectTTS,
     SideEffectNone,
     SideEffect,
 };

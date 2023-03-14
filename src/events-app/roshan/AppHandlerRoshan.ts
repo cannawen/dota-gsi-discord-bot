@@ -6,6 +6,7 @@ import {
 import {
     SideEffectAudio,
     SideEffectNone,
+    SideEffectTTS,
 } from "../../SideEffect";
 import Constants from "./Constants";
 import logic from "./logic";
@@ -29,9 +30,12 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
 
     handleTime(time: number) {
         this.currentTime = time;
+        console.log(" time " + time + " rosh state " + this.roshStatus + "last rosh death time" + this.lastRoshanDeathTime);
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
+            console.log("ROSH STATE CHANGED " + newRoshStatus);
+
             switch (newRoshStatus) {
             case Constants.Status.ALIVE:
                 return new SideEffectAudio("rosh-alive.mp3");
@@ -47,6 +51,7 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
     handleEvents(eventType: string, time: number) {
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = time;
+            return new SideEffectTTS("roshan died");
         }
         return new SideEffectNone();
     }
