@@ -17,8 +17,16 @@ let subscription : Voice.PlayerSubscription | undefined;
 const audioQueue : string[] = [];
 
 function playNext() {
+    if (!subscription) {
+        return;
+    }
+
+    if (subscription.player.state.status !== Voice.AudioPlayerStatus.Idle) {
+        return;
+    }
+
     const audioFilePath = audioQueue.pop();
-    if (audioFilePath && subscription) {
+    if (audioFilePath) {
         log.info("Discord AudioPlayer", "Attempting to play", audioFilePath);
         subscription.player.play(Voice.createAudioResource(audioFilePath));
     }
@@ -56,6 +64,10 @@ discordClient.on("ready", () => {
         } else {
             log.verbose("Discord AudioPlayerState", "transitioned from", oldState.status, "to", newState.status);
         }
+    });
+
+    player.on(Voice.AudioPlayerStatus.Idle, () => {
+        playNext();
     });
 
     subscription = connection.subscribe(player);
