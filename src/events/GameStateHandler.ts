@@ -4,6 +4,8 @@ const events = [
     handler.roshan,
 ];
 
-export default function handle(inGame: boolean) {
-    events.map((event) => event.inGame(inGame));
+export default class GameStateHandler {
+    isInGame(inGame: boolean) {
+        events.map((event) => event.inGame(inGame));
+    }
 }

@@ -10,8 +10,10 @@ const disabledEvents = [
     handler.stack,
 ];
 
-export default function handle(time: number) {
-    allEvents
-        .filter((event) => !disabledEvents.includes(event))
-        .map((event) => event.handleTime(time).execute());
+export default class TimeHandler {
+    currentTime(time: number) {
+        allEvents
+            .filter((event) => !disabledEvents.includes(event))
+            .map((event) => event.handleTime(time).execute());
+    }
 }
