@@ -1,4 +1,3 @@
-/* eslint-disable no-magic-numbers*/
 const Time = {
     ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN: 15,
     BOUNTY_RUNE_SPAWN_INTERVAL:              3 * 60,

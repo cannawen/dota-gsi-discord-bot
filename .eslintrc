@@ -19,7 +19,7 @@
     ],
     "overrides": [
         {
-          "files": ["src/**/*.test.ts", "src/**/*.Constants.ts"],
+          "files": ["*.test.ts", "Constants.ts"],
           "rules": {
             "no-magic-numbers": ["off"],
             "max-lines-per-function": ["off"]
@@ -35,6 +35,8 @@
         "jest/valid-expect": "error",
         //no-loops plugin rules
         "no-loops/no-loops": "warn",
+        //typescript
+        "@typescript-eslint/no-empty-function": "warn",
         //eslint
         "no-cond-assign": ["warn", "except-parens"],
         "no-constant-condition": ["warn", { "checkLoops": true }],
@@ -62,7 +64,6 @@
         "guard-for-in": "warn",
         "no-alert": "warn",
         "no-case-declarations": "warn",
-        "no-empty-function": "warn",
         "no-empty-pattern": "warn",
         "no-eq-null": "warn",
         "no-eval": ["warn", { "allowIndirect": false }],

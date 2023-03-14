@@ -1,14 +1,8 @@
 import Constants from "./Constants";
 import logic from "./logic";
 
-/**
- *
- * @param time time, in minutes
- * @returns time, in seconds, less the advanced warning time before rune spawn
- */
 function spawnsAtMinute(time: number) : number {
-    // eslint-disable-next-line no-extra-parens
-    return (time * 60);
+    return time * 60;
 }
 
 describe("rune event", () => {

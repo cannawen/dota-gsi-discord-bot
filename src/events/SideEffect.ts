@@ -1,8 +1,9 @@
 import announce from "../announce";
 import path from "node:path";
 
+// Abstract class? Interface? We never want to instantiate SideEffect
+// but we want to make sure all child SideEffects have an .execute
 class SideEffect {
-    // eslint-disable-next-line no-empty-function, @typescript-eslint/no-empty-function
     execute() : void {}
 }
 
