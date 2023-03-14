@@ -11,9 +11,17 @@ const disabledEvents = [
 ];
 
 export default class TimeHandler {
-    currentTime(time: number) {
-        allEvents
-            .filter((event) => !disabledEvents.includes(event))
-            .map((event) => event.handleTime(time).execute());
+    time: number | undefined;
+
+    currentTime(newTime: number) {
+        // this method may be called multiple times with the same newTime value
+        // we need debouncing so our side effects do not happen more than once
+        if (this.time !== newTime) {
+            this.time = newTime;
+
+            allEvents
+                .filter((event) => !disabledEvents.includes(event))
+                .map((event) => event.handleTime(newTime).execute());
+        }
     }
 }
