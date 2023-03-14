@@ -18,7 +18,7 @@ class SideEffectAudio extends SideEffect {
     }
 
     execute(): void {
-        announce(path.join(__dirname, "../../audio/", this.filename));
+        announce(path.join(__dirname, "../audio/", this.filename));
     }
 }
 
