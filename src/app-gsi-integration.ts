@@ -1,10 +1,10 @@
 import {
-    IGsiBaseSubscriber,
-    IGsiEventsSubscriber,
-    IGsiGameStateSubscriber,
-    IGsiTimeSubscriber,
+    isGsiEventSubscriber,
+    isGsiGameStateSubscriber,
+    isGsiTimeSubscriber,
 } from "./events-app/IGsiSubscribers";
 
+import AppHandler from "./events-app/AppHandler";
 import AppRoshanHandler from "./events-app/roshan/AppRoshanHandler";
 import AppRunesHandler from "./events-app/runes/AppRunesHandler";
 import AppStackHandler from "./events-app/stack/AppStackHandler";
@@ -19,22 +19,22 @@ const time = new GsiTimeHandler();
 
 gameState.addSubscriber(event);
 
-const appHandlers : IGsiBaseSubscriber[] = [
+const appHandlers : AppHandler[] = [
     new AppRoshanHandler(),
     new AppRunesHandler(),
     new AppStackHandler(),
 ];
 
 appHandlers
-    .map((handler) => handler as IGsiEventsSubscriber)
+    .filter(isGsiEventSubscriber)
     .map((subscriber) => event.addSubscriber(subscriber));
 
 appHandlers
-    .map((handler) => (handler as IGsiGameStateSubscriber))
+    .filter(isGsiGameStateSubscriber)
     .map((subscriber) => gameState.addSubscriber(subscriber));
 
 appHandlers
-    .map((handler) => (handler as IGsiTimeSubscriber))
+    .filter(isGsiTimeSubscriber)
     .map((subscriber) => time.addSubscriber(subscriber));
 
 export default {

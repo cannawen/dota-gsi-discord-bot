@@ -1,3 +1,4 @@
+import AppHandler from "../AppHandler";
 import Constants from "./Constants";
 import {
     IGsiTimeSubscriber,
@@ -5,7 +6,7 @@ import {
 import sideEffect from "../../SideEffect";
 import timeToRuneIdBitmap from "./logic";
 
-export default class AppRunesHandler implements IGsiTimeSubscriber {
+export default class AppRunesHandler extends AppHandler implements IGsiTimeSubscriber {
     public handleTime(time: number) {
         if (time > Constants.Time.GAME_START_TIME) {
             const audioKey = timeToRuneIdBitmap(time + Constants.Time.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN);

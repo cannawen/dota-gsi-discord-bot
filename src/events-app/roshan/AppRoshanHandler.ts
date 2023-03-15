@@ -3,11 +3,13 @@ import {
     IGsiGameStateSubscriber,
     IGsiTimeSubscriber,
 } from "../IGsiSubscribers";
+import AppHandler from "../AppHandler";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
-export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameStateSubscriber, IGsiEventsSubscriber {
+export default class AppRoshanHandler extends AppHandler
+    implements IGsiTimeSubscriber, IGsiGameStateSubscriber, IGsiEventsSubscriber {
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
 
@@ -17,6 +19,7 @@ export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameSta
     }
 
     public constructor() {
+        super();
         this.resetState();
     }
 
