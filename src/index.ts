@@ -1,7 +1,7 @@
 import GSI = require("node-gsi");
 import log = require("npmlog");
 
-import gsiEventHandlers from "./events-gsi/eventHandlers";
+import gsiEventHandlers from "./events-gsi/allGsiEvents";
 
 const debug = false;
 const server = new GSI.Dota2GSIServer("/gsi", debug);

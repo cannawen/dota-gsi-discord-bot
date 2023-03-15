@@ -1,16 +1,16 @@
-import appHandler from "../events-app/eventHandlers";
+import appHandler from "../events-app/allAppHandlers";
 import {
-    IEventHandlerTime,
-} from "../events-app/IEventHandlers";
+    IGsiTimeConsumer,
+} from "../events-app/IGsiConsumers";
 import SideEffect from "../SideEffect";
 
-const interestedHandlers: IEventHandlerTime[] = [
+const interestedHandlers: IGsiTimeConsumer[] = [
     appHandler.roshan,
     appHandler.runes,
-    // appHandler.stack,
+    // appHandler.stack, // disabled stack timer for now
 ];
 
-export default class GSIHandlerTime {
+export default class GsiTimeHandler {
     time: number | undefined;
 
     currentTime(newTime: number) {

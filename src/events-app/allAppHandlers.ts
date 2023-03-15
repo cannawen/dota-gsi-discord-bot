@@ -1,10 +1,10 @@
-import AppHandlerRoshan from "./roshan/AppHandlerRoshan";
-import AppHandlerRunes from "./runes/AppHandlerRunes";
-import AppHandlerStack from "./stack/AppHandlerStack";
+import AppRoshanHandler from "./roshan/AppRoshanHandler";
+import AppRunesHandler from "./runes/AppRunesHandler";
+import AppStackHandler from "./stack/AppStackHandler";
 
-const roshan = new AppHandlerRoshan();
-const runes = new AppHandlerRunes();
-const stack = new AppHandlerStack();
+const roshan = new AppRoshanHandler();
+const runes = new AppRunesHandler();
+const stack = new AppStackHandler();
 
 export default {
     roshan,

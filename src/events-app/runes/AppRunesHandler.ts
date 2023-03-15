@@ -1,11 +1,11 @@
-import sideEffect from "../../SideEffect";
 import Constants from "./Constants";
 import {
-    IEventHandlerTime,
-} from "../IEventHandlers";
+    IGsiTimeConsumer,
+} from "../IGsiConsumers";
+import sideEffect from "../../SideEffect";
 import timeToRuneIdBitmap from "./logic";
 
-export default class AppHandlerRunes implements IEventHandlerTime {
+export default class AppRunesHandler implements IGsiTimeConsumer {
     handleTime(time: number) {
         if (time <= Constants.Time.GAME_START_TIME) {
             return {

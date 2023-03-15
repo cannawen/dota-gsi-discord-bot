@@ -1,11 +1,11 @@
 import {
-    IEventHandlerTime,
-} from "../IEventHandlers";
+    IGsiTimeConsumer,
+} from "../IGsiConsumers";
 import sideEffect from "../../SideEffect";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
-export default class AppHandlerStack implements IEventHandlerTime {
+export default class AppStackHandler implements IGsiTimeConsumer {
     handleTime(time: number) {
         if (time >= 60 && (time + ADVANCED_WARNING_TIME_BEFORE_STACK_TIME) % 60 === 0) {
             return {

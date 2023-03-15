@@ -1,13 +1,13 @@
 import {
-    IEventHandlerEvents,
-    IEventHandlerGameState,
-    IEventHandlerTime,
-} from "../IEventHandlers";
+    IGsiEventsConsumer,
+    IGsiGameStateConsumer,
+    IGsiTimeConsumer,
+} from "../IGsiConsumers";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
-export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandlerGameState, IEventHandlerEvents {
+export default class AppRoshanHandler implements IGsiTimeConsumer, IGsiGameStateConsumer, IGsiEventsConsumer {
     currentTime: number | undefined;
     lastRoshanDeathTime: number | undefined;
     roshStatus: string;
@@ -38,12 +38,14 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
             switch (newRoshStatus) {
             case Constants.Status.ALIVE:
                 return {
-                    data: "roshan is up", // try mp3 file
+                    // try mp3 file
+                    data: "roshan is up",
                     type: sideEffect.Type.TTS,
                 };
             case Constants.Status.UNKNOWN:
                 return {
-                    data: "roshan might be up", // try mp3 file
+                    // try mp3 file
+                    data: "roshan might be up",
                     type: sideEffect.Type.TTS,
                 };
             default:
