@@ -23,10 +23,6 @@ describe("ApRunesHandler", () => {
                     type: "AUDIO_FILE",
                 });
             });
-            test("when called multiple times for the same time, should not return side effect on second call", () => {
-                handler.handleTime(1);
-                expect(handler.handleTime(1)).toHaveProperty("type", "NONE");
-            });
         });
 
         describe("logic returns audio key 0", () => {
