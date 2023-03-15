@@ -21,21 +21,9 @@ abstract class SideEffect {
     execute() : void {}
 }
 
-function create(type: Type, data: any) {
-    switch (type) {
-    case Type.AUDIO_FILE:
-        return new SideEffectAudio(data);
-    case Type.TTS:
-        return new SideEffectTTS(data);
-    case Type.NONE:
-    default:
-        return new SideEffectNone();
-    }
-}
-
 class SideEffectNone extends SideEffect {
     constructor() {
-        super(Type.NONE, undefined);
+        super(Type.NONE, null);
     }
 }
 
@@ -56,6 +44,18 @@ class SideEffectAudio extends SideEffect {
 
     execute(): void {
         discord.playAudioFile(path.join(__dirname, "../audio/", this.data as string));
+    }
+}
+
+function create(type: string, data: any) : SideEffect {
+    switch (type) {
+    case Type.AUDIO_FILE:
+        return new SideEffectAudio(data);
+    case Type.TTS:
+        return new SideEffectTTS(data);
+    case Type.NONE:
+    default:
+        return new SideEffectNone();
     }
 }
 

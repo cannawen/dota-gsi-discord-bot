@@ -1,6 +1,10 @@
 import handler from "../events-app/eventHandlers";
+import {
+    IEventHandlerGameState,
+} from "../events-app/IEventHandlers";
+import sideEffect from "../SideEffect";
 
-const events = [
+const interestedHandlers : IEventHandlerGameState[] = [
     handler.roshan,
 ];
 
@@ -10,8 +14,13 @@ export default class GSIHandlerGameState {
     isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
             this.inGame = newInGame;
-            console.log("In game?" + newInGame);
-            events.map((event) => event.inGame(newInGame));
+
+            interestedHandlers
+                .map((event) => event.inGame(newInGame))
+                .map(({
+                    data,
+                    type,
+                }) => sideEffect.create(type, data).execute());
         }
     }
 }

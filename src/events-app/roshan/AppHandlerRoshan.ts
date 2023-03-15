@@ -22,6 +22,10 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
             this.lastRoshanDeathTime = undefined;
             this.roshStatus = Constants.Status.ALIVE;
         }
+        return {
+            data: null,
+            type: sideEffect.Type.NONE,
+        };
     }
 
     handleTime(time: number) {
@@ -34,12 +38,12 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
             switch (newRoshStatus) {
             case Constants.Status.ALIVE:
                 return {
-                    data: "roshan is up",
+                    data: "roshan is up", // try mp3 file
                     type: sideEffect.Type.TTS,
                 };
             case Constants.Status.UNKNOWN:
                 return {
-                    data: "roshan might be up",
+                    data: "roshan might be up", // try mp3 file
                     type: sideEffect.Type.TTS,
                 };
             default:
@@ -47,7 +51,7 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
             }
         }
         return {
-            data: undefined,
+            data: null,
             type: sideEffect.Type.NONE,
         };
     }
@@ -57,12 +61,12 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
             this.lastRoshanDeathTime = time;
             this.roshStatus = Constants.Status.DEAD;
             return {
-                type: sideEffect.Type.TTS,
                 data: "roshan died",
+                type: sideEffect.Type.TTS,
             };
         }
         return {
-            data: undefined,
+            data: null,
             type: sideEffect.Type.NONE,
         };
     }

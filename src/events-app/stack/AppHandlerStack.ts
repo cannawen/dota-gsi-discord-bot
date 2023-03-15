@@ -14,7 +14,7 @@ export default class AppHandlerStack implements IEventHandlerTime {
             };
         } else {
             return {
-                data: undefined,
+                data: null,
                 type: sideEffect.Type.NONE,
             };
         }

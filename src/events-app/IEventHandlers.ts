@@ -6,7 +6,7 @@ interface IEventHandler {
 }
 
 interface IEventHandlerGameState extends IEventHandler {
-    inGame: (inGame: boolean) => void;
+    inGame: (inGame: boolean) => { type: string, data: any };
 }
 
 interface IEventHandlerTime extends IEventHandler {

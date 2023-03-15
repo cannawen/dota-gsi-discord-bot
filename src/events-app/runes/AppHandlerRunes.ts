@@ -9,7 +9,7 @@ export default class AppHandlerRunes implements IEventHandlerTime {
     handleTime(time: number) {
         if (time <= Constants.Time.GAME_START_TIME) {
             return {
-                data: undefined,
+                data: null,
                 type: sideEffect.Type.NONE,
             };
         }
@@ -25,7 +25,7 @@ export default class AppHandlerRunes implements IEventHandlerTime {
             };
         } else {
             return {
-                data: undefined,
+                data: null,
                 type: sideEffect.Type.NONE,
             };
         }
