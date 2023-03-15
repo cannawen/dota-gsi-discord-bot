@@ -5,10 +5,10 @@ import {
 import SideEffect from "../SideEffect";
 
 export default class GsiTimeHandler extends GsiHander {
-    subscribers : IGsiTimeSubscriber[] = [];
-    time: number | undefined;
+    protected subscribers : IGsiTimeSubscriber[] = [];
+    private time: number | undefined;
 
-    currentTime(newTime: number) {
+    public currentTime(newTime: number) {
         if (this.time !== newTime) {
             this.time = newTime;
 

@@ -3,9 +3,9 @@ import {
 } from "../events-app/IGsiConsumers";
 
 export default class GsiHander {
-    subscribers : IGsiBaseSubscriber[] = [];
+    protected subscribers : IGsiBaseSubscriber[] = [];
 
-    addSubscriber(newSubscriber: IGsiBaseSubscriber) {
+    public addSubscriber(newSubscriber: IGsiBaseSubscriber) {
         this.subscribers.push(newSubscriber);
     }
 }

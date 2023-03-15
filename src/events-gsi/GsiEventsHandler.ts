@@ -2,9 +2,9 @@ import {
     IGsiEventsSubscriber,
     IGsiGameStateSubscriber,
 } from "../events-app/IGsiConsumers";
+import GsiHander from "./GsiHandler";
 import nodeGsi from "node-gsi";
 import SideEffect from "../SideEffect";
-import GsiHander from "./GsiHandler";
 
 function sameGSIEvent(event1: nodeGsi.IEvent, event2: nodeGsi.IEvent) {
     return event1.gameTime === event2.gameTime
@@ -13,14 +13,14 @@ function sameGSIEvent(event1: nodeGsi.IEvent, event2: nodeGsi.IEvent) {
 
 // TODO remove nodeGsi.IEvent dependency by turning into plain object
 export default class GsiEventsHandler extends GsiHander implements IGsiGameStateSubscriber {
-    subscribers : IGsiEventsSubscriber[] = [];
+    protected subscribers : IGsiEventsSubscriber[] = [];
 
     // Note: right now events may overwrite each other if they have the same eventType and gameTime
     // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
     // `allEvents` contains an array of all events seen so far
-    allEvents: nodeGsi.IEvent[] = [];
+    private allEvents: nodeGsi.IEvent[] = [];
 
-    inGame(newInGame: boolean) {
+    public inGame(newInGame: boolean) {
         if (!newInGame) {
             this.allEvents = [];
         }
@@ -30,7 +30,7 @@ export default class GsiEventsHandler extends GsiHander implements IGsiGameState
         };
     }
 
-    neverSeenBefore(newEvent : nodeGsi.IEvent) : boolean {
+    private neverSeenBefore(newEvent : nodeGsi.IEvent) : boolean {
         return !this.allEvents
             .reduce(
                 (haveSeenBefore, existingEvent) => sameGSIEvent(existingEvent, newEvent) || haveSeenBefore,
@@ -38,11 +38,10 @@ export default class GsiEventsHandler extends GsiHander implements IGsiGameState
             );
     }
 
-    handle(events: nodeGsi.IEvent[]) {
+    public handle(events: nodeGsi.IEvent[]) {
         events.map((newEvent) => {
             if (this.neverSeenBefore(newEvent)) {
                 this.allEvents.push(newEvent);
-
                 this.subscribers
                     // events.gameTime start 258 seconds earlier than our map.gameTime for unknown reasons
                     .map((handler) => handler.handleEvent(newEvent.eventType, newEvent.gameTime - 258))

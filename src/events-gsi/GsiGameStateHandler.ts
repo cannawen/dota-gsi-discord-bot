@@ -5,10 +5,10 @@ import {
 import SideEffect from "../SideEffect";
 
 export default class GsiGameStateHandler extends GsiHander {
-    subscribers : IGsiGameStateSubscriber[] = [];
-    inGame = false;
+    protected subscribers : IGsiGameStateSubscriber[] = [];
+    private inGame = false;
 
-    isInGame(newInGame: boolean) {
+    public isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
             this.inGame = newInGame;
 

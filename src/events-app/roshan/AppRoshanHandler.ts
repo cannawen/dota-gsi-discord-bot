@@ -16,11 +16,11 @@ export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameSta
         this.roshStatus = Constants.Status.ALIVE;
     }
 
-    constructor() {
+    public constructor() {
         this.resetState();
     }
 
-    inGame(inGame: boolean) {
+    public inGame(inGame: boolean) {
         if (!inGame) {
             this.resetState();
         }
@@ -30,7 +30,7 @@ export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameSta
         };
     }
 
-    handleTime(time: number) {
+    public handleTime(time: number) {
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
@@ -57,7 +57,7 @@ export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameSta
         };
     }
 
-    handleEvent(eventType: string, time: number) {
+    public handleEvent(eventType: string, time: number) {
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = time;
             this.roshStatus = Constants.Status.DEAD;
