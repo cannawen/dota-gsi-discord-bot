@@ -8,9 +8,9 @@ const Time = {
 
 enum RuneId {
     NONE = 0,
-    BOUNTY = 1 << 1,
-    POWER = 1 << 2,
-    WATER = 1 << 3,
+    BOUNTY = 1,
+    POWER = 1 << 1,
+    WATER = 1 << 2,
 }
 
 const Audio = {

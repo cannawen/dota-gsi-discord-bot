@@ -37,8 +37,6 @@ export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameSta
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
-            console.log(" time " + time + " rosh state " + this.roshStatus + " last rosh death time " + this.lastRoshanDeathTime);
-
             switch (newRoshStatus) {
             case Constants.Status.ALIVE:
                 return {

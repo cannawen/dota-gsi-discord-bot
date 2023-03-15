@@ -1,5 +1,7 @@
 import AppRoshanHandler from "./AppRoshanHandler";
 
+// We are testing the logic twice, once here and once in logic.test
+// Should we mock out logic class, or remove logic tests entirely?
 describe("AppRoshanHandler", () => {
     let handler : AppRoshanHandler;
 
@@ -15,7 +17,7 @@ describe("AppRoshanHandler", () => {
             });
         });
         describe("on any different event", () => {
-            test("return no side effects", () => {
+            test("return no side effect", () => {
                 expect(handler.handleEvent("bounty_rune_pickup", 0))
                     .toHaveProperty("type", "NONE");
             });
@@ -23,7 +25,7 @@ describe("AppRoshanHandler", () => {
     });
 
     describe("IGsiGameStateSubscriber.inGame", () => {
-        test("return no side effects", () => {
+        test("return no side effect", () => {
             expect(handler.inGame(true)).toHaveProperty("type", "NONE");
             expect(handler.inGame(false)).toHaveProperty("type", "NONE");
         });
@@ -35,10 +37,10 @@ describe("AppRoshanHandler", () => {
         });
 
         describe("IGsiTimeSubscriber.handleTime", () => {
-            test("time at 0:01 should return no side effects", () => {
+            test("time at 0:01 should return no side effect", () => {
                 expect(handler.handleTime(1)).toHaveProperty("type", "NONE");
             });
-            test("time at 7:59 should return no side effects", () => {
+            test("time at 7:59 should return no side effect", () => {
                 expect(handler.handleTime(8 * 60 - 1)).toHaveProperty("type", "NONE");
             });
             test("time at 8:00 should return tts side effect that roshan might be up", () => {
@@ -62,7 +64,7 @@ describe("AppRoshanHandler", () => {
                     type: "TTS",
                 });
             });
-            test("time at 11:01 should return no side effects, assuming it has already made a 11:00 tts", () => {
+            test("time at 11:01 should return no side effect, assuming it has already made a 11:00 tts", () => {
                 handler.handleTime(11 * 60);
                 expect(handler.handleTime(11 * 60 + 1)).toHaveProperty("type", "NONE");
             });
@@ -70,7 +72,7 @@ describe("AppRoshanHandler", () => {
                 beforeEach(() => {
                     handler.handleEvent("roshan_killed", 10 * 60);
                 });
-                test("time at 11:00 should not return tts side effect roshan is up", () => {
+                test("time at 11:00 should return no side effect", () => {
                     expect(handler.handleTime(11 * 60)).toHaveProperty("type", "NONE");
                 });
                 test("time at 18:00 and 21:00 should return tts side effect", () => {
@@ -86,7 +88,7 @@ describe("AppRoshanHandler", () => {
                     handler.inGame(false);
                     handler.inGame(true);
                 });
-                test("time at 8:00 should return no side effects", () => {
+                test("time at 8:00 should return no side effect", () => {
                     expect(handler.handleTime(8 * 60)).toHaveProperty("type", "NONE");
                 });
             });
