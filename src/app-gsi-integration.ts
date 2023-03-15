@@ -27,17 +27,14 @@ const appHandlers : IGsiBaseSubscriber[] = [
 
 appHandlers
     .map((handler) => handler as IGsiEventsSubscriber)
-    .filter((handler) => Object.keys(handler).length > 0)
     .map((subscriber) => event.addSubscriber(subscriber));
 
 appHandlers
     .map((handler) => (handler as IGsiGameStateSubscriber))
-    .filter((handler) => Object.keys(handler).length > 0)
     .map((subscriber) => gameState.addSubscriber(subscriber));
 
 appHandlers
     .map((handler) => (handler as IGsiTimeSubscriber))
-    .filter((handler) => Object.keys(handler).length > 0)
     .map((subscriber) => time.addSubscriber(subscriber));
 
 export default {
