@@ -1,13 +1,13 @@
-import handler from "../events-app/eventHandlers";
+import appHandler from "../events-app/eventHandlers";
 import {
     IEventHandlerTime,
 } from "../events-app/IEventHandlers";
-import sideEffect from "../SideEffect";
+import SideEffect from "../SideEffect";
 
 const interestedHandlers: IEventHandlerTime[] = [
-    handler.roshan,
-    handler.runes,
-    // handler.stack,
+    appHandler.roshan,
+    appHandler.runes,
+    // appHandler.stack,
 ];
 
 export default class GSIHandlerTime {
@@ -22,7 +22,7 @@ export default class GSIHandlerTime {
                 .map(({
                     data,
                     type,
-                }) => sideEffect.create(type, data).execute());
+                }) => SideEffect.create(type, data).execute());
         }
     }
 }

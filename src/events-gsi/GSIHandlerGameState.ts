@@ -1,11 +1,13 @@
-import handler from "../events-app/eventHandlers";
+import appHandler from "../events-app/eventHandlers";
+import gsiHandler from "./eventHandlers";
 import {
     IEventHandlerGameState,
 } from "../events-app/IEventHandlers";
-import sideEffect from "../SideEffect";
+import SideEffect from "../SideEffect";
 
 const interestedHandlers : IEventHandlerGameState[] = [
-    handler.roshan,
+    // gsiHandler.event,
+    appHandler.roshan,
 ];
 
 export default class GSIHandlerGameState {
@@ -20,7 +22,7 @@ export default class GSIHandlerGameState {
                 .map(({
                     data,
                     type,
-                }) => sideEffect.create(type, data).execute());
+                }) => SideEffect.create(type, data).execute());
         }
     }
 }
