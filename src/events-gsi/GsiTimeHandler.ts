@@ -1,7 +1,7 @@
 import GsiHander from "./GsiHandler";
 import {
     IGsiTimeSubscriber,
-} from "../events-app/IGsiConsumers";
+} from "../events-app/IGsiSubscribers";
 import SideEffect from "../SideEffect";
 
 export default class GsiTimeHandler extends GsiHander {

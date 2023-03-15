@@ -1,7 +1,7 @@
 import Constants from "./Constants";
 import {
     IGsiTimeSubscriber,
-} from "../IGsiConsumers";
+} from "../IGsiSubscribers";
 import sideEffect from "../../SideEffect";
 import timeToRuneIdBitmap from "./logic";
 

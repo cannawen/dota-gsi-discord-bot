@@ -1,7 +1,7 @@
 import GsiHander from "./GsiHandler";
 import {
     IGsiGameStateSubscriber,
-} from "../events-app/IGsiConsumers";
+} from "../events-app/IGsiSubscribers";
 import SideEffect from "../SideEffect";
 
 export default class GsiGameStateHandler extends GsiHander {

@@ -1,6 +1,6 @@
 import {
     IGsiTimeSubscriber,
-} from "../IGsiConsumers";
+} from "../IGsiSubscribers";
 import sideEffect from "../../SideEffect";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;

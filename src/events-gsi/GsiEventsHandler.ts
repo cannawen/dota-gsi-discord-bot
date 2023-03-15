@@ -1,7 +1,7 @@
 import {
     IGsiEventsSubscriber,
     IGsiGameStateSubscriber,
-} from "../events-app/IGsiConsumers";
+} from "../events-app/IGsiSubscribers";
 import gsi from "node-gsi";
 import GsiHander from "./GsiHandler";
 import SideEffect from "../SideEffect";

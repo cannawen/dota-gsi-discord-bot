@@ -2,7 +2,7 @@ import {
     IGsiEventsSubscriber,
     IGsiGameStateSubscriber,
     IGsiTimeSubscriber,
-} from "../IGsiConsumers";
+} from "../IGsiSubscribers";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";

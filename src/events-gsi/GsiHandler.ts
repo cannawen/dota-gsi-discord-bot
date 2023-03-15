@@ -1,6 +1,6 @@
 import {
     IGsiBaseSubscriber,
-} from "../events-app/IGsiConsumers";
+} from "../events-app/IGsiSubscribers";
 
 export default class GsiHander {
     protected subscribers : IGsiBaseSubscriber[] = [];

@@ -3,7 +3,7 @@ import {
     IGsiEventsSubscriber,
     IGsiGameStateSubscriber,
     IGsiTimeSubscriber,
-} from "./events-app/IGsiConsumers";
+} from "./events-app/IGsiSubscribers";
 
 import AppRoshanHandler from "./events-app/roshan/AppRoshanHandler";
 import AppRunesHandler from "./events-app/runes/AppRunesHandler";
