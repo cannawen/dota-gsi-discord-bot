@@ -1,23 +1,18 @@
-import appHandler from "../events-app/allAppHandlers";
+import GsiHander from "./GsiHandler";
 import {
-    IGsiTimeConsumer,
+    IGsiTimeSubscriber,
 } from "../events-app/IGsiConsumers";
 import SideEffect from "../SideEffect";
 
-const interestedHandlers: IGsiTimeConsumer[] = [
-    appHandler.roshan,
-    appHandler.runes,
-    // appHandler.stack, // disabled stack timer for now
-];
-
-export default class GsiTimeHandler {
+export default class GsiTimeHandler extends GsiHander {
+    subscribers : IGsiTimeSubscriber[] = [];
     time: number | undefined;
 
     currentTime(newTime: number) {
         if (this.time !== newTime) {
             this.time = newTime;
 
-            interestedHandlers
+            this.subscribers
                 .map((handler) => handler.handleTime(newTime))
                 .map(({
                     data,

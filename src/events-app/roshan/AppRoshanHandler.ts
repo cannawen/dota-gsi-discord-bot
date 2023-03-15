@@ -1,13 +1,13 @@
 import {
-    IGsiEventsConsumer,
-    IGsiGameStateConsumer,
-    IGsiTimeConsumer,
+    IGsiEventsSubscriber,
+    IGsiGameStateSubscriber,
+    IGsiTimeSubscriber,
 } from "../IGsiConsumers";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
-export default class AppRoshanHandler implements IGsiTimeConsumer, IGsiGameStateConsumer, IGsiEventsConsumer {
+export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameStateSubscriber, IGsiEventsSubscriber {
     currentTime: number | undefined;
     lastRoshanDeathTime: number | undefined;
     roshStatus: string;

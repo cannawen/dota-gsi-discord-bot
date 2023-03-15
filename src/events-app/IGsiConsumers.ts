@@ -1,17 +1,23 @@
-interface IGsiGameStateConsumer {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface IGsiBaseSubscriber {
+
+}
+
+interface IGsiGameStateSubscriber extends IGsiBaseSubscriber {
     inGame: (inGame: boolean) => { type: string, data: any };
 }
 
-interface IGsiTimeConsumer {
+interface IGsiTimeSubscriber extends IGsiBaseSubscriber {
     handleTime: (time: number) => { type: string, data: any };
 }
 
-interface IGsiEventsConsumer {
+interface IGsiEventsSubscriber extends IGsiBaseSubscriber {
     handleEvent: (eventType: string, time: number) => { type: string, data: any };
 }
 
 export {
-    IGsiGameStateConsumer,
-    IGsiTimeConsumer,
-    IGsiEventsConsumer,
+    IGsiBaseSubscriber,
+    IGsiGameStateSubscriber,
+    IGsiTimeSubscriber,
+    IGsiEventsSubscriber,
 };

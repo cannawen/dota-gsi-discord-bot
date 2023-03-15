@@ -47,7 +47,6 @@
         "no-duplicate-case": "warn",
         "no-empty": ["warn", { "allowEmptyCatch": false }],
         "no-extra-boolean-cast": "warn",
-        "no-extra-parens": ["warn", "all"],
         "no-extra-semi": "warn",
         "no-func-assign": "warn",
         "no-invalid-regexp": "warn",

@@ -1,23 +1,18 @@
-import appHandler from "../events-app/allAppHandlers";
-import gsiHandler from "./allGsiEvents";
+import GsiHander from "./GsiHandler";
 import {
-    IGsiGameStateConsumer,
+    IGsiGameStateSubscriber,
 } from "../events-app/IGsiConsumers";
 import SideEffect from "../SideEffect";
 
-const interestedHandlers : IGsiGameStateConsumer[] = [
-    // gsiHandler.event,
-    appHandler.roshan,
-];
-
-export default class GsiGameStateHandler {
+export default class GsiGameStateHandler extends GsiHander {
+    subscribers : IGsiGameStateSubscriber[] = [];
     inGame = false;
 
     isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
             this.inGame = newInGame;
 
-            interestedHandlers
+            this.subscribers
                 .map((event) => event.inGame(newInGame))
                 .map(({
                     data,
