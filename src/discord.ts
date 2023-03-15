@@ -126,11 +126,20 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
  *
  * @param audioResource local file path or tts text
  */
-function playAudio(audioResource: string) {
-    audioQueue.push(audioResource);
+function playAudioFile(filePath: string) {
+    audioQueue.push(filePath);
+    playNext();
+}
+/**
+ *
+ * @param audioResource local file path or tts text
+ */
+function playTTS(ttsString: string) {
+    audioQueue.push(ttsString);
     playNext();
 }
 
 export default {
-    playAudio,
+    playAudioFile,
+    playTTS,
 };
