@@ -215,7 +215,7 @@
         "prefer-destructuring": ["warn", { "object": true, "array":  false }],
         "prefer-spread": "warn",
         "rest-spread-spacing": ["warn", "never"],
-        "sort-imports": ["warn", { "ignoreCase": false, "ignoreMemberSort": false }],
+        "sort-imports": ["warn", { "ignoreCase": true, "ignoreMemberSort": false }],
         "template-curly-spacing": ["warn", "never"]
     }
 }

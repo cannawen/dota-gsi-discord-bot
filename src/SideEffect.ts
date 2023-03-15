@@ -1,43 +1,65 @@
 import discord from "./discord";
 import path from "node:path";
 
+enum Type {
+    AUDIO_FILE = "AUDIO_FILE",
+    TTS = "TTS",
+    NONE = "NONE",
+}
+
 // Abstract class? Interface? We never want to instantiate SideEffect
 // but we want to make sure all child SideEffects have an .execute
 abstract class SideEffect {
+    type : Type = Type.NONE;
+    data? : string;
+
+    constructor(type: Type, data: any) {
+        this.type = type;
+        this.data = data;
+    }
+
     execute() : void {}
 }
 
-class SideEffectNone extends SideEffect {}
+function create(type: Type, data: any) {
+    switch (type) {
+    case Type.AUDIO_FILE:
+        return new SideEffectAudio(data);
+    case Type.TTS:
+        return new SideEffectTTS(data);
+    case Type.NONE:
+    default:
+        return new SideEffectNone();
+    }
+}
+
+class SideEffectNone extends SideEffect {
+    constructor() {
+        super(Type.NONE, undefined);
+    }
+}
 
 class SideEffectTTS extends SideEffect {
-    audioResource: string;
-
     constructor(audioResource: string) {
-        super();
-        this.audioResource = audioResource;
+        super(Type.TTS, audioResource);
     }
 
     execute(): void {
-        discord.playAudio(this.audioResource);
+        discord.playTTS(this.data as string);
     }
 }
 
 class SideEffectAudio extends SideEffect {
-    audioResource: string;
-
     constructor(audioResource: string) {
-        super();
-        this.audioResource = audioResource;
+        super(Type.AUDIO_FILE, audioResource);
     }
 
     execute(): void {
-        discord.playAudio(path.join(__dirname, "../audio/", this.audioResource));
+        discord.playAudioFile(path.join(__dirname, "../audio/", this.data as string));
     }
 }
 
-export {
-    SideEffectAudio,
-    SideEffectTTS,
-    SideEffectNone,
-    SideEffect,
+export default {
+    create,
+    Type,
 };

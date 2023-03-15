@@ -3,13 +3,9 @@ import {
     IEventHandlerGameState,
     IEventHandlerTime,
 } from "../IEventHandlers";
-import {
-    SideEffectAudio,
-    SideEffectNone,
-    SideEffectTTS,
-} from "../../SideEffect";
 import Constants from "./Constants";
 import logic from "./logic";
+import sideEffect from "../../SideEffect";
 
 export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandlerGameState, IEventHandlerEvents {
     currentTime: number | undefined;
@@ -30,29 +26,44 @@ export default class AppHandlerRoshan implements IEventHandlerTime, IEventHandle
 
     handleTime(time: number) {
         this.currentTime = time;
-        console.log(" time " + time + " rosh state " + this.roshStatus + "last rosh death time" + this.lastRoshanDeathTime);
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
-            console.log("ROSH STATE CHANGED " + newRoshStatus);
+            console.log(" time " + time + " rosh state " + this.roshStatus + " last rosh death time " + this.lastRoshanDeathTime);
 
             switch (newRoshStatus) {
             case Constants.Status.ALIVE:
-                return new SideEffectAudio("rosh-alive.mp3");
+                return {
+                    data: "roshan is up",
+                    type: sideEffect.Type.TTS,
+                };
             case Constants.Status.UNKNOWN:
-                return new SideEffectAudio("rosh-maybe.mp3");
+                return {
+                    data: "roshan might be up",
+                    type: sideEffect.Type.TTS,
+                };
             default:
                 break;
             }
         }
-        return new SideEffectNone();
+        return {
+            data: undefined,
+            type: sideEffect.Type.NONE,
+        };
     }
 
-    handleEvents(eventType: string, time: number) {
+    handleEvent(eventType: string, time: number) {
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = time;
-            return new SideEffectTTS("roshan died");
+            this.roshStatus = Constants.Status.DEAD;
+            return {
+                type: sideEffect.Type.TTS,
+                data: "roshan died",
+            };
         }
-        return new SideEffectNone();
+        return {
+            data: undefined,
+            type: sideEffect.Type.NONE,
+        };
     }
 }

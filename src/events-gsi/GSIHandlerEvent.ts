@@ -1,5 +1,6 @@
 import GSI = require("node-gsi");
 import handler from "../events-app/eventHandlers";
+import sideEffect from "../SideEffect";
 
 function sameGSIEvent(event1: GSI.IEvent, event2: GSI.IEvent) {
     return event1.gameTime === event2.gameTime
@@ -15,8 +16,13 @@ export default class GSIHandlerEvent {
             if (!this.allEvents.reduce((memo, existingEvent) => sameGSIEvent(existingEvent, newEvent) || memo, false)) {
                 this.allEvents.push(newEvent);
 
-                handler.roshan.handleEvents(newEvent.eventType, newEvent.gameTime).execute();
                 console.log(newEvent);
+
+                // events.gameTime start 258 seconds earlier than our map.gameTime for unknown reasons
+                const effect = handler.roshan.handleEvent(newEvent.eventType, newEvent.gameTime - 258);
+                console.log("data from event handler");
+                console.log(effect);
+                sideEffect.create(effect.type, effect.data).execute();
             }
         });
     }
