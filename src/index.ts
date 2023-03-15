@@ -1,5 +1,4 @@
 import gsi = require("node-gsi");
-import log = require("npmlog");
 import gsiHandlers from "./app-gsi-integration";
 
 const debug = false;
