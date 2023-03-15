@@ -22,7 +22,7 @@
         "eslint-plugin-jest": "^27.2.1",
         "ffmpeg-static": "^5.1.0",
         "libsodium-wrappers": "^0.7.11",
-        "node-gsi": "^0.2.1",
+        "node-gsi": "github:cannawen/node-gsi#library",
         "npmlog": "^7.0.1"
     },
     "devDependencies": {
