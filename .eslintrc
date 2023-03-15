@@ -22,7 +22,8 @@
           "files": ["*.test.ts", "Constants.ts"],
           "rules": {
             "no-magic-numbers": ["off"],
-            "max-lines-per-function": ["off"]
+            "max-lines-per-function": ["off"],
+            "max-nested-callbacks": ["off"]
           }
         }
     ],

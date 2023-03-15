@@ -8,19 +8,23 @@ import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
 export default class AppRoshanHandler implements IGsiTimeSubscriber, IGsiGameStateSubscriber, IGsiEventsSubscriber {
-    currentTime: number | undefined;
-    lastRoshanDeathTime: number | undefined;
-    roshStatus: string;
+    private currentTime: number | undefined;
+    private lastRoshanDeathTime: number | undefined;
+    private roshStatus: string | undefined;
+
+    private resetState() {
+        this.currentTime = undefined;
+        this.lastRoshanDeathTime = undefined;
+        this.roshStatus = Constants.Status.ALIVE;
+    }
 
     constructor() {
-        this.roshStatus = Constants.Status.ALIVE;
+        this.resetState();
     }
 
     inGame(inGame: boolean) {
         if (!inGame) {
-            this.currentTime = undefined;
-            this.lastRoshanDeathTime = undefined;
-            this.roshStatus = Constants.Status.ALIVE;
+            this.resetState();
         }
         return {
             data: null,

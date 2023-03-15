@@ -3,6 +3,7 @@ interface IGsiBaseSubscriber {
 
 }
 
+// Refactor to "inAGame" and "notInGame"
 interface IGsiGameStateSubscriber extends IGsiBaseSubscriber {
     inGame: (inGame: boolean) => { type: string, data: any };
 }
