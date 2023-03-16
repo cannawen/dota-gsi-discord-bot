@@ -1,3 +1,4 @@
+import colors from "@colors/colors";
 import winston from "winston";
 
 // Available levels
@@ -14,24 +15,45 @@ import winston from "winston";
 const DISCORD_LEVEL = "info";
 const GSI_LEVEL = "info";
 
+const timeFormat = winston.format.timestamp({
+    format: "YYYY-MM-DD HH:mm:ss",
+});
+
 const defaultFormatArray = [
     winston.format.colorize(),
     winston.format.splat(),
     winston.format.simple(),
     winston.format.json(),
+    timeFormat,
 ];
+
+function printFormat(info: winston.Logform.TransformableInfo) {
+    return `${info.timestamp} ${info.level}: ${info.label} ${info.message}${info.splat ? `${info.splat}` : " "}`;
+}
 
 function createTransports() {
     return [
         new winston.transports.File({
             filename: "error.log",
-            level:    "error",
+            format:   winston.format.combine(
+                timeFormat,
+                winston.format.printf((info) => colors.stripColors(printFormat(info))),
+            ),
+            level: "error",
         }),
         new winston.transports.File({
             filename: "combined.log",
+            format:   winston.format.combine(
+                timeFormat,
+                winston.format.printf((info) => colors.stripColors(printFormat(info))),
+            ),
         }),
         new winston.transports.Console({
-            format: winston.format.simple(),
+            format: winston.format.combine(
+                winston.format.simple(),
+                timeFormat,
+                winston.format.printf(printFormat)
+            ),
         }),
     ];
 }
@@ -40,8 +62,8 @@ winston.loggers.add("discord", {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   "DISCORD",
-            message: true,
+            label:   colors.blue("[DISCORD]\t"),
+            message: false,
         })
     ),
     level:      DISCORD_LEVEL,
@@ -52,8 +74,8 @@ winston.loggers.add("gsi", {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   "GSI",
-            message: true,
+            label:   colors.magenta("[GSI]\t\t"),
+            message: false,
         })
     ),
     level:      GSI_LEVEL,
