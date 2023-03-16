@@ -9,6 +9,9 @@ import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
 import Voice = require("@discordjs/voice");
+import {
+    Readable,
+} from "stream";
 
 dotenv.config();
 
@@ -37,6 +40,16 @@ function onAudioPlayerStatusIdle() {
 
 function onVoiceConnectionReady() {
     log.info("Ready to play audio!");
+}
+
+function onAudioFilePath(filePath: string) {
+    audioQueue.push(Voice.createAudioResource(filePath));
+    playNext();
+}
+
+function onTtsData(data: Readable | string) {
+    audioQueue.push(Voice.createAudioResource(data));
+    playNext();
 }
 
 function onDiscordClientReady() {
@@ -97,8 +110,7 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
 function playAudioFile(filePath: string) {
     log.info("AudioPlayer - Attempting to play file %s", filePath);
     if (fs.existsSync(filePath)) {
-        audioQueue.push(Voice.createAudioResource(filePath));
-        playNext();
+        onAudioFilePath(filePath);
     } else {
         log.error("Unable to play file at path %s", filePath);
     }
@@ -115,10 +127,7 @@ function playTTS(ttsString: string) {
         url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
         responseType: "stream",
     })
-        .then((response) => {
-            audioQueue.push(Voice.createAudioResource(response.data));
-            playNext();
-        })
+        .then((response) => onTtsData(response.data))
         .catch((error) => {
             log.error("Unable to TTS %s with error message %s", ttsString, error.message);
         });
