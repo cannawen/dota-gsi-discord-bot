@@ -85,19 +85,6 @@ function onDiscordClientReady() {
             discordLog.verbose("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
         }
     });
-
-    // Workaround story #15
-    /* eslint-disable */
-    function networkStateChangeHandler(_oldNetworkState: any, newNetworkState: any) {
-        const newUdp = Reflect.get(newNetworkState, "udp");
-        clearInterval(newUdp?.keepAliveInterval);
-    }
-
-    connection.on("stateChange", (oldState, newState) => {
-        Reflect.get(oldState, "networking")?.off("stateChange", networkStateChangeHandler);
-        Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
-    });
-    /* eslint-enable */
 }
 
 discordClient.on("ready", onDiscordClientReady);
