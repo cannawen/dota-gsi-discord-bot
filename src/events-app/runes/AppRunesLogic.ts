@@ -1,12 +1,12 @@
-import AppHandler from "../AppHandler";
+import AppLogic from "../AppLogic";
 import Constants from "./Constants";
 import {
-    IGsiTimeSubscriber,
-} from "../IGsiSubscribers";
+    IGsiTimeObserver,
+} from "../IGsiObservers";
 import sideEffect from "../../SideEffect";
 import timeToRuneIdBitmap from "./logic";
 
-export default class AppRunesHandler extends AppHandler implements IGsiTimeSubscriber {
+export default class AppRunesLogic extends AppLogic implements IGsiTimeObserver {
     public handleTime(time: number) {
         if (time > Constants.Time.GAME_START_TIME) {
             const audioKey = timeToRuneIdBitmap(time + Constants.Time.ADVANCED_WARNING_TIME_BEFORE_RUNE_SPAWN);

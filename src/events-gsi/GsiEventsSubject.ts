@@ -1,9 +1,9 @@
 import {
-    IGsiEventsSubscriber,
-    IGsiGameStateSubscriber,
-} from "../events-app/IGsiSubscribers";
+    IGsiEventsObserver,
+    IGsiGameStateObserver,
+} from "../events-app/IGsiObservers";
 import gsi from "node-gsi";
-import GsiHander from "./GsiHandler";
+import GsiSubject from "./GsiSubject";
 import SideEffect from "../SideEffect";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
@@ -12,8 +12,8 @@ function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
 }
 
 // TODO remove nodeGsi.IEvent dependency by turning into plain object
-export default class GsiEventsHandler extends GsiHander implements IGsiGameStateSubscriber {
-    protected subscribers : IGsiEventsSubscriber[] = [];
+export default class GsiEventsSubject extends GsiSubject implements IGsiGameStateObserver {
+    protected subscribers : IGsiEventsObserver[] = [];
 
     // Note: right now events may overwrite each other if they have the same eventType and gameTime
     // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
@@ -43,6 +43,7 @@ export default class GsiEventsHandler extends GsiHander implements IGsiGameState
             if (this.neverSeenBefore(newEvent)) {
                 this.allEvents.push(newEvent);
                 this.subscribers
+                    // note this event.gameTime is not equal to map.gameTime; it is offset by a specific amount per game
                     .map((handler) => handler.handleEvent(newEvent.eventType, newEvent.gameTime))
                     .map(({
                         data,

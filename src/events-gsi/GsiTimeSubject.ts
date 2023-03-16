@@ -1,11 +1,11 @@
-import GsiHander from "./GsiHandler";
+import GsiSubject from "./GsiSubject";
 import {
-    IGsiTimeSubscriber,
-} from "../events-app/IGsiSubscribers";
+    IGsiTimeObserver,
+} from "../events-app/IGsiObservers";
 import SideEffect from "../SideEffect";
 
-export default class GsiTimeHandler extends GsiHander {
-    protected subscribers : IGsiTimeSubscriber[] = [];
+export default class GsiTimeSubject extends GsiSubject {
+    protected subscribers : IGsiTimeObserver[] = [];
     private time: number | undefined;
 
     public currentTime(newTime: number) {

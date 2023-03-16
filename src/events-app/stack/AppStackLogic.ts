@@ -1,12 +1,12 @@
-import AppHandler from "../AppHandler";
+import AppLogic from "../AppLogic";
 import {
-    IGsiTimeSubscriber,
-} from "../IGsiSubscribers";
+    IGsiTimeObserver,
+} from "../IGsiObservers";
 import sideEffect from "../../SideEffect";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
-export default class AppStackHandler extends AppHandler implements IGsiTimeSubscriber {
+export default class AppStackLogic extends AppLogic implements IGsiTimeObserver {
     public handleTime(time: number) {
         if (time >= 60 && (time + ADVANCED_WARNING_TIME_BEFORE_STACK_TIME) % 60 === 0) {
             return {

@@ -1,41 +1,41 @@
 import {
-    isGsiEventSubscriber,
-    isGsiGameStateSubscriber,
-    isGsiTimeSubscriber,
-} from "./events-app/IGsiSubscribers";
+    isGsiEventObserver,
+    isGsiGameStateObserver,
+    isGsiTimeObserver,
+} from "./events-app/IGsiObservers";
 
-import AppHandler from "./events-app/AppHandler";
-import AppRoshanHandler from "./events-app/roshan/AppRoshanHandler";
-import AppRunesHandler from "./events-app/runes/AppRunesHandler";
-import AppStackHandler from "./events-app/stack/AppStackHandler";
+import AppLogic from "./events-app/AppLogic";
+import AppRoshanLogic from "./events-app/roshan/AppRoshanLogic";
+import AppRunesLogic from "./events-app/runes/AppRunesLogic";
+import AppStackLogic from "./events-app/stack/AppStackLogic";
 
-import GsiEventsHandler from "./events-gsi/GsiEventsHandler";
-import GsiGameStateHandler from "./events-gsi/GsiGameStateHandler";
-import GsiTimeHandler from "./events-gsi/GsiTimeHandler";
+import GsiEventsSubject from "./events-gsi/GsiEventsSubject";
+import GsiGameStateSubject from "./events-gsi/GsiGameStateSubject";
+import GsiTimeSubject from "./events-gsi/GsiTimeSubject";
 
-const event = new GsiEventsHandler();
-const gameState = new GsiGameStateHandler();
-const time = new GsiTimeHandler();
+const event = new GsiEventsSubject();
+const gameState = new GsiGameStateSubject();
+const time = new GsiTimeSubject();
 
-gameState.addSubscriber(event);
+gameState.addObserver(event);
 
-const appHandlers : AppHandler[] = [
-    new AppRoshanHandler(),
-    new AppRunesHandler(),
-    new AppStackHandler(),
+const appHandlers : AppLogic[] = [
+    new AppRoshanLogic(),
+    new AppRunesLogic(),
+    new AppStackLogic(),
 ];
 
 appHandlers
-    .filter(isGsiEventSubscriber)
-    .map((subscriber) => event.addSubscriber(subscriber));
+    .filter(isGsiEventObserver)
+    .map((subscriber) => event.addObserver(subscriber));
 
 appHandlers
-    .filter(isGsiGameStateSubscriber)
-    .map((subscriber) => gameState.addSubscriber(subscriber));
+    .filter(isGsiGameStateObserver)
+    .map((subscriber) => gameState.addObserver(subscriber));
 
 appHandlers
-    .filter(isGsiTimeSubscriber)
-    .map((subscriber) => time.addSubscriber(subscriber));
+    .filter(isGsiTimeObserver)
+    .map((subscriber) => time.addObserver(subscriber));
 
 export default {
     event,

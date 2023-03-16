@@ -1,11 +1,11 @@
-import GsiHander from "./GsiHandler";
+import GsiSubject from "./GsiSubject";
 import {
-    IGsiGameStateSubscriber,
-} from "../events-app/IGsiSubscribers";
+    IGsiGameStateObserver,
+} from "../events-app/IGsiObservers";
 import SideEffect from "../SideEffect";
 
-export default class GsiGameStateHandler extends GsiHander {
-    protected subscribers : IGsiGameStateSubscriber[] = [];
+export default class GsiGameStateSubject extends GsiSubject {
+    protected subscribers : IGsiGameStateObserver[] = [];
     private inGame = false;
 
     public isInGame(newInGame: boolean) {
