@@ -11,9 +11,6 @@ import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
 import Voice = require("@discordjs/voice");
-import {
-    Readable,
-} from "stream";
 import path = require("path");
 
 dotenv.config();
@@ -25,6 +22,11 @@ const discordClient = new Discord.Client({
 
 let subscription : Voice.PlayerSubscription | undefined;
 const audioQueue : Voice.AudioResource[] = [];
+const ttsDirectory = "audio/tts";
+
+if (!fs.existsSync(ttsDirectory)) {
+    fs.mkdirSync(ttsDirectory);
+}
 
 function playNext() {
     if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
@@ -43,7 +45,6 @@ function onAudioPlayerStatusIdle() {
 
 function onVoiceConnectionReady() {
     log.info("Ready to play audio!");
-    playTTS("Hello world");
 }
 
 function onAudioFilePath(filePath: string) {
@@ -51,18 +52,24 @@ function onAudioFilePath(filePath: string) {
     playNext();
 }
 
-function onTtsResponse(response : AxiosResponse) {
-    audioQueue.push(Voice.createAudioResource(response.data));
-    playAudioFile("/Users/canna/workspace/dota-gsi-discord-bot/audio/rosh-maybe.mp3");
-    playNext();
+function ttsPath(ttsString: string) {
+    return path.join(ttsDirectory, `${ttsString}.mp3`);
+}
+
+function onTtsResponse(response : AxiosResponse, ttsString: string) {
+    const write : fs.WriteStream = response.data.pipe(fs.createWriteStream(ttsPath(ttsString)));
+    write.on("close", () => {
+        log.debug("Finished writing TTS response to file");
+        playAudioFile(ttsPath(ttsString));
+    });
 }
 
 function onDiscordClientReady() {
     if (!discordClient || !discordClient.user) {
         log.error("Could not find Discord client or user. Check your .env file");
-    } else {
-        log.info("Logged into Discord as %s!", discordClient.user.tag);
+        return;
     }
+    log.info("Logged into Discord as %s!", discordClient.user.tag);
 
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     if (!guild) {
@@ -108,34 +115,31 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
         log.error("Error logging into Discord. Check your .env file - %s", e.message);
     });
 
-/**
- *
- * @param audioResource local file path or tts text
- */
 function playAudioFile(filePath: string) {
-    log.info("AudioPlayer - Attempting to play file %s", filePath);
+    log.info("Attempting to play file %s", filePath);
     if (fs.existsSync(filePath)) {
         onAudioFilePath(filePath);
     } else {
         log.error("Unable to play file at path %s", filePath);
     }
 }
-/**
- *
- * @param audioResource local file path or tts text
- */
+
 function playTTS(ttsString: string) {
-    log.info("AudioPlayer - Attempting to TTS '%s'", ttsString);
-    const encodedAudio = encodeURIComponent(ttsString);
-    axios({
-        method:       "get",
-        url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
-        responseType: "stream",
-    })
-        .then((response) => onTtsResponse(response))
-        .catch((error) => {
-            log.error("Unable to TTS %s with error message %s", ttsString, error.message);
-        });
+    log.info("Attempting to TTS '%s'", ttsString);
+    if (fs.existsSync(ttsPath(ttsString))) {
+        playAudioFile(ttsPath(ttsString));
+    } else {
+        const encodedAudio = encodeURIComponent(ttsString);
+        axios({
+            method:       "get",
+            responseType: "stream",
+            url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
+        })
+            .then((response) => onTtsResponse(response, ttsString))
+            .catch((error) => {
+                log.error("Unable to TTS %s with error message %s", ttsString, error.message);
+            });
+    }
 }
 
 export default {
