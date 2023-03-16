@@ -39,6 +39,7 @@
         //typescript
         "@typescript-eslint/no-empty-function": "warn",
         //eslint
+        "prefer-template" : "warn",
         "no-cond-assign": ["warn", "except-parens"],
         "no-constant-condition": ["warn", { "checkLoops": true }],
         "no-console": "warn",
