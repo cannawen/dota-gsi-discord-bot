@@ -1,20 +1,26 @@
+import {
+    gsiLog,
+    log,
+} from "./log";
 import gsi = require("node-gsi");
 import gsiHandlers from "./app-gsi-integration";
-import log from "./log";
 
 const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
     if (state.map?.clockTime) {
+        gsiLog.info("map.clockTime %s", state.map.clockTime);
         gsiHandlers.time.currentTime(state.map.clockTime);
     }
 
     if (state.events) {
+        gsiLog.info("events %s", state.events);
         gsiHandlers.event.handle(state.events);
     }
 
     if (state.map?.gameState) {
+        gsiLog.info("map.gameState %s", state.map.gameState);
         switch (state.map?.gameState) {
         case gsi.Dota2GameState.PreGame:
         case gsi.Dota2GameState.TeamShowcase:
