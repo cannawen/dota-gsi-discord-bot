@@ -3,13 +3,12 @@ import {
     IGsiGameStateObserver,
     IGsiTimeObserver,
 } from "../../IGsiObservers";
-import Plugin from "../Plugin";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
-export default class RoshanPlugin extends Plugin
-    implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
+export default class RoshanPlugin
+implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
@@ -21,7 +20,6 @@ export default class RoshanPlugin extends Plugin
     }
 
     public constructor() {
-        super();
         this.resetState();
     }
 
