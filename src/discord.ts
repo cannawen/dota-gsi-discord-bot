@@ -24,18 +24,27 @@ let subscription : Voice.PlayerSubscription | undefined;
 const audioQueue : Voice.AudioResource[] = [];
 const ttsDirectory = "audio/tts";
 
-if (!fs.existsSync(ttsDirectory)) {
+if (fs.existsSync(ttsDirectory)) {
+    log.debug("Found TTS Directory - %s", ttsDirectory);
+} else {
+    log.debug("Creating TTS Directory - %s", ttsDirectory);
     fs.mkdirSync(ttsDirectory);
 }
 
 function playNext() {
     if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
+        log.debug("Audio player not ready to accept new audio");
         return;
     }
 
-    const audioResource = audioQueue.pop();
+    log.debug("Audio player status is idle");
+
+    const audioResource = audioQueue.shift();
     if (audioResource) {
+        log.info("Playing next audio resource on queue");
         subscription.player.play(audioResource);
+    } else {
+        log.debug("Audio queue is empty");
     }
 }
 
@@ -44,7 +53,7 @@ function onAudioPlayerStatusIdle() {
 }
 
 function onVoiceConnectionReady() {
-    log.info("Ready to play audio!");
+    log.info("VoiceConnection ready to play audio!");
 }
 
 function onAudioFilePath(filePath: string) {
@@ -59,7 +68,7 @@ function ttsPath(ttsString: string) {
 function onTtsResponse(response : AxiosResponse, ttsString: string) {
     const write : fs.WriteStream = response.data.pipe(fs.createWriteStream(ttsPath(ttsString)));
     write.on("close", () => {
-        log.debug("Finished writing TTS response to file");
+        log.verbose("Finished writing TTS '%s' to file", ttsString);
         playAudioFile(ttsPath(ttsString));
     });
 }
@@ -116,8 +125,9 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     });
 
 function playAudioFile(filePath: string) {
-    log.info("Attempting to play file %s", filePath);
+    log.info("Processing audio file at path %s", filePath);
     if (fs.existsSync(filePath)) {
+        log.verbose("Found file at path %s", filePath);
         onAudioFilePath(filePath);
     } else {
         log.error("Unable to play file at path %s", filePath);
@@ -125,7 +135,7 @@ function playAudioFile(filePath: string) {
 }
 
 function playTTS(ttsString: string) {
-    log.info("Attempting to TTS '%s'", ttsString);
+    log.info("Processing TTS string '%s'", ttsString);
     if (fs.existsSync(ttsPath(ttsString))) {
         playAudioFile(ttsPath(ttsString));
     } else {
