@@ -1,14 +1,20 @@
+import {
+    IDota2ObserverState, IDota2State,
+} from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import {
     IGsiTimeObserver,
 } from "../events-app/IGsiObservers";
+import {
+    gsiLog as log,
+} from "../log";
 import SideEffect from "../SideEffect";
 
 export default class GsiTimeSubject extends GsiSubject {
     protected subscribers : IGsiTimeObserver[] = [];
     private time: number | undefined;
 
-    public currentTime(newTime: number) {
+    private currentTime(newTime: number) {
         if (this.time !== newTime) {
             this.time = newTime;
 
@@ -18,6 +24,13 @@ export default class GsiTimeSubject extends GsiSubject {
                     data,
                     type,
                 }) => SideEffect.create(type, data).execute());
+        }
+    }
+
+    public handleState(state: IDota2State | IDota2ObserverState): void {
+        if (state.map?.clockTime) {
+            log.debug("map.clockTime %s", state.map.clockTime);
+            this.currentTime(state.map.clockTime);
         }
     }
 }

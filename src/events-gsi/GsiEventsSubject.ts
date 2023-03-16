@@ -4,6 +4,9 @@ import {
 } from "../events-app/IGsiObservers";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
+import {
+    gsiLog as log,
+} from "../log";
 import SideEffect from "../SideEffect";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
@@ -38,7 +41,7 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
             );
     }
 
-    public handle(events: gsi.IEvent[]) {
+    private handle(events: gsi.IEvent[]) {
         events.map((newEvent) => {
             if (this.neverSeenBefore(newEvent)) {
                 this.allEvents.push(newEvent);
@@ -51,5 +54,13 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
                     }) => SideEffect.create(type, data).execute());
             }
         });
+    }
+
+    public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): void {
+        if (state.events) {
+            // change time to game time
+            log.debug("events %s", state.events);
+            this.handle(state.events);
+        }
     }
 }

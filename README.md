@@ -22,11 +22,15 @@ Steam Library -> Right click Dota 2 -> Properties
 ## Architecture
 ### Node and Typescript
 When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `dist` directory
-### How things fit together
-- `index.ts` creates a `node-gsi` server
-- `/events-gsi` is where we hook up our "app logic" to GSI callbacks
-- `/events-app` is where the bulk of our "app logic" lives. One app event can subscribe to one or more GSI callback
+### What is what
+- `index.ts` creates a `node-gsi` server which hooks into Valve's Game State Integration
+- `/gsi` contains GSI subjects that can be observed. GSI subjects can also observe other GSI subjects
+- `/plugins` contains folders for each plugin. One plugin can observe multiple GSI subjects
 - `SideEffect` objects interact with state such as Discord in `announce.ts`
+### To add a new plugin
+- Create a folder `/plugins/<your plugin>` and create a class that implement one or more subject-observing interface(s)
+- Create an instance of the class and register it in `/plugins/<your plugin>/index.ts`
+- Enable the plugin by importing it to `plugins/enabledPlugins.ts`
 
 ## Code Formatting
 - Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
