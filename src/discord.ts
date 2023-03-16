@@ -36,7 +36,7 @@ function playNext() {
     }
 }
 
-discordClient.on("ready", () => {
+function onDiscordClientReady() {
     if (!discordClient || !discordClient.user) {
         log.error("Could not find Discord client or user. Check your .env file");
     } else {
@@ -96,7 +96,9 @@ discordClient.on("ready", () => {
         Reflect.get(newState, "networking")?.on("stateChange", networkStateChangeHandler);
     });
     /* eslint-enable */
-});
+}
+
+discordClient.on("ready", onDiscordClientReady);
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => {
