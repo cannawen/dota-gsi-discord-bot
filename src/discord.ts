@@ -36,6 +36,10 @@ function playNext() {
     }
 }
 
+function onVoiceConnectionReady() {
+    log.info("Ready to play audio!");
+}
+
 function onDiscordClientReady() {
     if (!discordClient || !discordClient.user) {
         log.error("Could not find Discord client or user. Check your .env file");
@@ -68,9 +72,7 @@ function onDiscordClientReady() {
 
     subscription = connection.subscribe(player);
 
-    connection.on(Voice.VoiceConnectionStatus.Ready, () => {
-        log.info("Ready to play audio!");
-    });
+    connection.on(Voice.VoiceConnectionStatus.Ready, onVoiceConnectionReady);
 
     player.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
