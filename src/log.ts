@@ -3,6 +3,21 @@ import winston from "winston";
 const DISCORD_LOG_LEVEL_DEBUG = false;
 const GSI_LOG_LEVEL_DEBUG = false;
 
+function padTo(msg: string, length: number, truncate: boolean) {
+    const stripped = msg.stripColors;
+    if (stripped.length < length) {
+        const endPadLength = length - stripped.length;
+        const endPadString = " ".repeat(endPadLength);
+        return `${msg}${endPadString}`;
+    } else if (truncate) {
+        // Big assumption that this string has a color at the start
+        // It takes this one color and sets it for the rest of the string
+        return msg.slice(0, 5) + stripped.slice(0, length);
+    } else {
+        return msg;
+    }
+}
+
 const timeFormat = winston.format.timestamp({
     format: "YYYY-MM-DD HH:mm:ss",
 });
@@ -16,7 +31,9 @@ const defaultFormatArray = [
 ];
 
 function printFormat(info: winston.Logform.TransformableInfo) {
-    return `${info.timestamp.gray} ${info.level}\t${info.label}\t${info.message}${info.splat ? `${info.splat}` : " "}`;
+    const levelLength = 5;
+    const labelLength = 9;
+    return `${info.timestamp.gray} ${padTo(info.level, levelLength, true)} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
 }
 
 function createTransports() {
@@ -74,7 +91,7 @@ const gsiLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   "[GSI]\t".magenta,
+            label:   "[GSI]".magenta,
             message: false,
         })
     ),
