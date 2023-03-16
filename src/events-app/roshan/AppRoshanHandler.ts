@@ -43,15 +43,13 @@ export default class AppRoshanHandler extends AppHandler
             switch (newRoshStatus) {
                 case Constants.Status.ALIVE:
                     return {
-                        // try mp3 file
-                        data: "roshan is up",
-                        type: sideEffect.Type.TTS,
+                        data: "rosh-alive.mp3",
+                        type: sideEffect.Type.AUDIO_FILE,
                     };
                 case Constants.Status.UNKNOWN:
                     return {
-                        // try mp3 file
-                        data: "roshan might be up",
-                        type: sideEffect.Type.TTS,
+                        data: "rosh-maybe.mp3",
+                        type: sideEffect.Type.AUDIO_FILE,
                     };
                 default:
                     break;
@@ -68,10 +66,6 @@ export default class AppRoshanHandler extends AppHandler
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
-            return {
-                data: "roshan died",
-                type: sideEffect.Type.TTS,
-            };
         }
         return {
             data: null,

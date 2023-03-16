@@ -10,16 +10,11 @@ describe("AppRoshanHandler", () => {
     });
 
     describe("IGsiEventsSubscriber.handleEvent", () => {
-        describe("on roshan killed event", () => {
-            test("return tts side effect", () => {
-                handler.handleTime(0);
-                expect(handler.handleEvent("roshan_killed", 0))
-                    .toHaveProperty("type", "TTS");
-            });
-        });
-        describe("on any different event", () => {
+        describe("on any event", () => {
             test("return no side effect", () => {
                 handler.handleTime(0);
+                expect(handler.handleEvent("roshan_killed", 0))
+                    .toHaveProperty("type", "NONE");
                 expect(handler.handleEvent("bounty_rune_pickup", 0))
                     .toHaveProperty("type", "NONE");
             });
@@ -47,10 +42,7 @@ describe("AppRoshanHandler", () => {
                 expect(handler.handleTime(8 * 60 - 1)).toHaveProperty("type", "NONE");
             });
             test("time at 8:00 should return tts side effect that roshan might be up", () => {
-                expect(handler.handleTime(8 * 60)).toStrictEqual({
-                    data: "roshan might be up",
-                    type: "TTS",
-                });
+                expect(handler.handleTime(8 * 60)).toHaveProperty("type", "AUDIO_FILE");
             });
             test("time at 8:01 should return no side effect, assuming it has already made a 8:00 tts", () => {
                 handler.handleTime(8 * 60);
@@ -58,14 +50,11 @@ describe("AppRoshanHandler", () => {
             });
             test("tts should be returned as soon as possible between 8:00-11:00 after rosh death", () => {
                 expect(handler.handleTime(7 * 60)).toHaveProperty("type", "NONE");
-                expect(handler.handleTime(9 * 60)).toHaveProperty("type", "TTS");
+                expect(handler.handleTime(9 * 60)).toHaveProperty("type", "AUDIO_FILE");
                 expect(handler.handleTime(10 * 60)).toHaveProperty("type", "NONE");
             });
             test("time at 11:00 should return tts side effect roshan is up", () => {
-                expect(handler.handleTime(11 * 60)).toStrictEqual({
-                    data: "roshan is up",
-                    type: "TTS",
-                });
+                expect(handler.handleTime(11 * 60)).toHaveProperty("type", "AUDIO_FILE");
             });
             test("time at 11:01 should return no side effect, assuming it has already made a 11:00 tts", () => {
                 handler.handleTime(11 * 60);
@@ -80,8 +69,8 @@ describe("AppRoshanHandler", () => {
                     expect(handler.handleTime(11 * 60)).toHaveProperty("type", "NONE");
                 });
                 test("time at 18:00 and 21:00 should return tts side effect", () => {
-                    expect(handler.handleTime(18 * 60)).toHaveProperty("type", "TTS");
-                    expect(handler.handleTime(21 * 60)).toHaveProperty("type", "TTS");
+                    expect(handler.handleTime(18 * 60)).toHaveProperty("type", "AUDIO_FILE");
+                    expect(handler.handleTime(21 * 60)).toHaveProperty("type", "AUDIO_FILE");
                 });
             });
         });
