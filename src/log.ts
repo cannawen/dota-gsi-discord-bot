@@ -17,7 +17,7 @@ const defaultFormatArray = [
 ];
 
 function printFormat(info: winston.Logform.TransformableInfo) {
-    return `${info.timestamp} ${info.level}: ${info.label} ${info.message}${info.splat ? `${info.splat}` : " "}`;
+    return `${info.timestamp} ${info.level}\t${info.label}\t${info.message}${info.splat ? `${info.splat}` : " "}`;
 }
 
 function createTransports() {
@@ -62,7 +62,7 @@ const discordLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   colors.blue("[DISCORD]\t"),
+            label:   colors.cyan("[DISCORD]"),
             message: false,
         })
     ),
@@ -74,7 +74,7 @@ const gsiLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   colors.magenta("[GSI]\t\t"),
+            label:   colors.magenta("[GSI]\t"),
             message: false,
         })
     ),
