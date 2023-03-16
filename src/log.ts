@@ -12,8 +12,8 @@ import winston from "winston";
 // }
 
 const LOG_LEVEL = "info";
-const DISCORD_LOG_LEVEL = "info";
-const GSI_LOG_LEVEL = "info";
+const DISCORD_LEVEL = "info";
+const GSI_LEVEL = "info";
 
 const defaultFormatArray = [
     winston.format.colorize(),
@@ -57,7 +57,7 @@ const discordLog = winston.createLogger({
             message: true,
         })
     ),
-    level:      DISCORD_LOG_LEVEL,
+    level:      DISCORD_LEVEL,
     transports: createTransports(),
 });
 
@@ -69,7 +69,7 @@ const gsiLog = winston.createLogger({
             message: true,
         })
     ),
-    level:      GSI_LOG_LEVEL,
+    level:      GSI_LEVEL,
     transports: createTransports(),
 });
 

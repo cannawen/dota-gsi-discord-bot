@@ -1,15 +1,14 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
 /* eslint-disable max-len */
+import axios from "axios";
 import {
-    discordLog,
-    log,
+    discordLog as log,
 } from "./log";
 import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
 import Voice = require("@discordjs/voice");
-import axios from "axios";
 
 dotenv.config();
 
@@ -22,11 +21,7 @@ let subscription : Voice.PlayerSubscription | undefined;
 const audioQueue : Voice.AudioResource[] = [];
 
 function playNext() {
-    if (!subscription) {
-        return;
-    }
-
-    if (subscription.player.state.status !== Voice.AudioPlayerStatus.Idle) {
+    if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
         return;
     }
 
@@ -34,6 +29,10 @@ function playNext() {
     if (audioResource) {
         subscription.player.play(audioResource);
     }
+}
+
+function onAudioPlayerStatusIdle() {
+    playNext();
 }
 
 function onVoiceConnectionReady() {
@@ -63,26 +62,23 @@ function onDiscordClientReady() {
         channelId:      channel.id,
         guildId:        channel.guild.id,
     });
+    connection.on(Voice.VoiceConnectionStatus.Ready, onVoiceConnectionReady);
 
     const player = Voice.createAudioPlayer();
-
-    player.on(Voice.AudioPlayerStatus.Idle, () => {
-        playNext();
-    });
+    player.on(Voice.AudioPlayerStatus.Idle, onAudioPlayerStatusIdle);
 
     subscription = connection.subscribe(player);
 
-    connection.on(Voice.VoiceConnectionStatus.Ready, onVoiceConnectionReady);
-
+    // logging
     player.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            discordLog.verbose("AudioPlayerState - transitioned from %s to %s", oldState.status, newState.status);
+            log.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, newState.status);
         }
     });
 
     connection.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            discordLog.verbose("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
+            log.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
         }
     });
 }
