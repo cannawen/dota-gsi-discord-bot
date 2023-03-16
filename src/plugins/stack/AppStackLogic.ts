@@ -1,7 +1,7 @@
 import AppLogic from "../AppLogic";
 import {
     IGsiTimeObserver,
-} from "../IGsiObservers";
+} from "../../IGsiObservers";
 import sideEffect from "../../SideEffect";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;

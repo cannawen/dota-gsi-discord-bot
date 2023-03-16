@@ -2,7 +2,7 @@ import AppLogic from "../AppLogic";
 import Constants from "./Constants";
 import {
     IGsiTimeObserver,
-} from "../IGsiObservers";
+} from "../../IGsiObservers";
 import sideEffect from "../../SideEffect";
 import timeToRuneIdBitmap from "./logic";
 

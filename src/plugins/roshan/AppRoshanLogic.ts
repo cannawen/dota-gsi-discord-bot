@@ -2,7 +2,7 @@ import {
     IGsiEventsObserver,
     IGsiGameStateObserver,
     IGsiTimeObserver,
-} from "../IGsiObservers";
+} from "../../IGsiObservers";
 import AppLogic from "../AppLogic";
 import Constants from "./Constants";
 import logic from "./logic";

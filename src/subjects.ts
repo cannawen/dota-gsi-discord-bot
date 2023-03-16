@@ -2,7 +2,7 @@ import {
     isGsiEventObserver,
     isGsiGameStateObserver,
     isGsiTimeObserver,
-} from "./plugins/IGsiObservers";
+} from "./IGsiObservers";
 
 import GsiEventsSubject from "./gsi/GsiEventsSubject";
 import GsiGameStateSubject from "./gsi/GsiGameStateSubject";

@@ -1,7 +1,7 @@
 import {
     IGsiEventsObserver,
     IGsiGameStateObserver,
-} from "../plugins/IGsiObservers";
+} from "../IGsiObservers";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import {
