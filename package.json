@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "rimraf ./build && tsc",
+        "build": "rimraf ./build ./tts-cache && tsc",
         "lint": "eslint . --ext .ts --fix",
         "start": "npm run build && node build/index.js",
         "start:nobuild": "node build/index.js",
