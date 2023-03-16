@@ -12,6 +12,7 @@
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "forceConsistentCasingInFileNames": true, 
+        "sourceMap": true,
     },
     "include": [
         "./src/**/*.ts",

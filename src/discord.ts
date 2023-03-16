@@ -19,7 +19,7 @@ const discordClient = new Discord.Client({
 });
 
 let subscription : Voice.PlayerSubscription | undefined;
-const audioQueue : string[] = [];
+const audioQueue : Voice.AudioResource[] = [];
 
 function playNext() {
     if (!subscription) {
@@ -31,23 +31,8 @@ function playNext() {
     }
 
     const audioResource = audioQueue.pop();
-    if (!audioResource) {
-        return;
-    }
-
-    if (fs.existsSync(audioResource)) {
-        discordLog.info("AudioPlayer - Attempting to play %s", audioResource);
-        subscription.player.play(Voice.createAudioResource(audioResource));
-    } else {
-        discordLog.info("AudioPlayer - Attempting to TTS '%s'", audioResource);
-        const encodedAudio = encodeURIComponent(audioResource);
-        axios({
-            method:       "get",
-            url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
-            responseType: "stream",
-        }).then(function (response) {
-            subscription?.player.play(Voice.createAudioResource(response.data));
-        });
+    if (audioResource) {
+        subscription.player.play(audioResource);
     }
 }
 
@@ -76,13 +61,6 @@ discordClient.on("ready", () => {
     });
 
     const player = Voice.createAudioPlayer();
-    player.on("stateChange", (oldState, newState) => {
-        if (oldState.status === newState.status) {
-            discordLog.verbose("AudioPlayerState - %s", oldState.status);
-        } else {
-            discordLog.info("AudioPlayerState - transitioned from %s to %s", oldState.status, newState.status);
-        }
-    });
 
     player.on(Voice.AudioPlayerStatus.Idle, () => {
         playNext();
@@ -90,23 +68,19 @@ discordClient.on("ready", () => {
 
     subscription = connection.subscribe(player);
 
-    connection.on("stateChange", (oldState, newState) => {
-        if (oldState.status === newState.status) {
-            discordLog.verbose("ConnectionStatus - %s", oldState.status);
-        } else {
-            discordLog.info("ConnectionStatus - transitioned from %s to %s", oldState.status, newState.status);
-        }
-    });
-
     connection.on(Voice.VoiceConnectionStatus.Ready, () => {
         log.info("Ready to play audio!");
     });
 
+    player.on("stateChange", (oldState, newState) => {
+        if (oldState.status !== newState.status) {
+            discordLog.verbose("AudioPlayerState - transitioned from %s to %s", oldState.status, newState.status);
+        }
+    });
+
     connection.on("stateChange", (oldState, newState) => {
-        if (oldState.status === newState.status) {
-            discordLog.verbose("VoiceConnectionState - %s", oldState.status);
-        } else {
-            discordLog.info("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
+        if (oldState.status !== newState.status) {
+            discordLog.verbose("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
         }
     });
 
@@ -134,16 +108,33 @@ discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
  * @param audioResource local file path or tts text
  */
 function playAudioFile(filePath: string) {
-    audioQueue.push(filePath);
-    playNext();
+    log.info("AudioPlayer - Attempting to play file %s", filePath);
+    if (fs.existsSync(filePath)) {
+        audioQueue.push(Voice.createAudioResource(filePath));
+        playNext();
+    } else {
+        log.error("Unable to play file at path %s", filePath);
+    }
 }
 /**
  *
  * @param audioResource local file path or tts text
  */
 function playTTS(ttsString: string) {
-    audioQueue.push(ttsString);
-    playNext();
+    log.info("AudioPlayer - Attempting to TTS '%s'", ttsString);
+    const encodedAudio = encodeURIComponent(ttsString);
+    axios({
+        method:       "get",
+        url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
+        responseType: "stream",
+    })
+        .then((response) => {
+            audioQueue.push(Voice.createAudioResource(response.data));
+            playNext();
+        })
+        .catch((error) => {
+            log.error("Unable to TTS %s with error message %s", ttsString, error.message);
+        });
 }
 
 export default {
