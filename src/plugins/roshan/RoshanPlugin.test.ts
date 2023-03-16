@@ -1,12 +1,12 @@
-import AppRoshanLogic from "./AppRoshanLogic";
+import RoshanPlugin from "./RoshanPlugin";
 
 // We are testing the logic twice, once here and once in logic.test
 // We should mock out the logic class here
-describe("AppRoshanLogic", () => {
-    let sut : AppRoshanLogic;
+describe("RoshanPlugin", () => {
+    let sut : RoshanPlugin;
 
     beforeEach(() => {
-        sut = new AppRoshanLogic();
+        sut = new RoshanPlugin();
     });
 
     describe("IGsiEventsObserver.handleEvent", () => {

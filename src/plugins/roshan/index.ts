@@ -1,4 +1,4 @@
-import AppRoshanLogic from "./AppRoshanLogic";
 import register from "../../pluginRegistry";
+import RoshanPlugin from "./RoshanPlugin";
 
-register(new AppRoshanLogic());
+register(new RoshanPlugin());

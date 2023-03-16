@@ -3,12 +3,12 @@ import {
     IGsiGameStateObserver,
     IGsiTimeObserver,
 } from "../../IGsiObservers";
-import AppLogic from "../AppLogic";
+import Plugin from "../Plugin";
 import Constants from "./Constants";
 import logic from "./logic";
 import sideEffect from "../../SideEffect";
 
-export default class AppRoshanLogic extends AppLogic
+export default class RoshanPlugin extends Plugin
     implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;

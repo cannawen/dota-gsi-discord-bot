@@ -1,4 +1,4 @@
-import AppRunesLogic from "./AppRunesLogic";
+import RunesPlugin from "./RunesPlugin";
 import register from "../../pluginRegistry";
 
-register(new AppRunesLogic());
+register(new RunesPlugin());

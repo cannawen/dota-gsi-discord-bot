@@ -1,17 +1,17 @@
-import AppRunesLogic from "./AppRunesLogic";
 import Constants from "./Constants";
+import RunesPlugin from "./RunesPlugin";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logic = require("./logic");
 jest.mock("./logic", () => jest.fn());
 
-describe("AppRunesLogic", () => {
-    let sut : AppRunesLogic;
+describe("RunesPlugin", () => {
+    let sut : RunesPlugin;
 
     describe("IGsiGameStateObserver.handleTime", () => {
         describe("logic returns audio key 1", () => {
             beforeEach(() => {
                 logic.mockImplementation(() => Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
-                sut = new AppRunesLogic();
+                sut = new RunesPlugin();
             });
             test("we called logic for 15 seconds in the future", () => {
                 sut.handleTime(1);
@@ -32,7 +32,7 @@ describe("AppRunesLogic", () => {
         describe("logic returns audio key 0", () => {
             beforeEach(() => {
                 logic.mockImplementation(() => Constants.RuneId.NONE);
-                sut = new AppRunesLogic();
+                sut = new RunesPlugin();
             });
             test("should return no side effect", () => {
                 expect(sut.handleTime(1)).toHaveProperty("type", "NONE");

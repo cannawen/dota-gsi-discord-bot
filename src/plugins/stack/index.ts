@@ -1,4 +1,4 @@
-import AppStackLogic from "./AppStackLogic";
+import StackPlugin from "./StackPlugin";
 import register from "../../pluginRegistry";
 
-register(new AppStackLogic());
+register(new StackPlugin());
