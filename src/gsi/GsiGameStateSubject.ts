@@ -5,7 +5,7 @@ import gsi = require("node-gsi");
 import GsiSubject from "./GsiSubject";
 import {
     IGsiGameStateObserver,
-} from "../events-app/IGsiObservers";
+} from "../plugins/IGsiObservers";
 import {
     gsiLog as log,
 } from "../log";

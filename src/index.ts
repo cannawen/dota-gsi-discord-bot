@@ -1,4 +1,4 @@
-import "./events-app/enabledPlugins";
+import "./plugins/enabledPlugins";
 import {
     gsiLog as log,
 } from "./log";

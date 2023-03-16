@@ -4,7 +4,7 @@ import {
 import GsiSubject from "./GsiSubject";
 import {
     IGsiTimeObserver,
-} from "../events-app/IGsiObservers";
+} from "../plugins/IGsiObservers";
 import {
     gsiLog as log,
 } from "../log";

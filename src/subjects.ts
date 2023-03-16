@@ -2,11 +2,11 @@ import {
     isGsiEventObserver,
     isGsiGameStateObserver,
     isGsiTimeObserver,
-} from "./events-app/IGsiObservers";
+} from "./plugins/IGsiObservers";
 
-import GsiEventsSubject from "./events-gsi/GsiEventsSubject";
-import GsiGameStateSubject from "./events-gsi/GsiGameStateSubject";
-import GsiTimeSubject from "./events-gsi/GsiTimeSubject";
+import GsiEventsSubject from "./gsi/GsiEventsSubject";
+import GsiGameStateSubject from "./gsi/GsiGameStateSubject";
+import GsiTimeSubject from "./gsi/GsiTimeSubject";
 
 export default [
     {

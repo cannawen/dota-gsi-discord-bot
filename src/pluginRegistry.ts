@@ -1,6 +1,6 @@
 import {
     IGsiBaseObserver,
-} from "./events-app/IGsiObservers";
+} from "./plugins/IGsiObservers";
 import subjects from "./subjects";
 
 function register(observer: IGsiBaseObserver) {

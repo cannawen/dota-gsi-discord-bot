@@ -1,6 +1,6 @@
 import {
     IGsiBaseObserver,
-} from "../events-app/IGsiObservers";
+} from "../plugins/IGsiObservers";
 import gsi = require("node-gsi");
 
 export default abstract class GsiSubject {
