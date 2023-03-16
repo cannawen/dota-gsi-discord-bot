@@ -4,6 +4,7 @@
 import axios, {
     AxiosResponse,
 } from "axios";
+import colors from "@colors/colors";
 import {
     discordLog as log,
 } from "./log";
@@ -21,13 +22,10 @@ const discordClient = new Discord.Client({
 });
 
 let subscription : Voice.PlayerSubscription | undefined;
-const audioQueue : Voice.AudioResource[] = [];
-const ttsDirectory = "audio/tts";
+const audioQueue : Array<Voice.AudioResource> = [];
+const ttsDirectory = "tts-cache";
 
-if (fs.existsSync(ttsDirectory)) {
-    log.debug("Found TTS Directory - %s", ttsDirectory);
-} else {
-    log.debug("Creating TTS Directory - %s", ttsDirectory);
+if (!fs.existsSync(ttsDirectory)) {
     fs.mkdirSync(ttsDirectory);
 }
 
@@ -57,6 +55,7 @@ function onVoiceConnectionReady() {
 }
 
 function onAudioFilePath(filePath: string) {
+    log.info("Enqueue file at path %s", colors.blue(filePath));
     audioQueue.push(Voice.createAudioResource(filePath));
     playNext();
 }
@@ -82,12 +81,12 @@ function onDiscordClientReady() {
 
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     if (!guild) {
-        log.error("Could not find Discord guild '%s'. Check your .env file", process.env.HARD_CODED_GUILD_NAME);
+        log.error("Could not find Discord guild '%s'. Check your .env file", colors.red(process.env.HARD_CODED_GUILD_NAME || ""));
         return;
     }
     const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
     if (!channel) {
-        log.error("Could not find Discord channel '%s'. Check your .env file", process.env.HARD_CODED_VOICE_CHANNEL_NAME);
+        log.error("Could not find Discord channel '%s' in guild %s. Check your .env file", colors.red(process.env.HARD_CODED_VOICE_CHANNEL_NAME || ""), guild.name);
         return;
     }
 
@@ -106,13 +105,13 @@ function onDiscordClientReady() {
     // logging
     player.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, newState.status);
+            log.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, colors.blue(newState.status));
         }
     });
 
     connection.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, newState.status);
+            log.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, colors.blue(newState.status));
         }
     });
 }
@@ -121,21 +120,19 @@ discordClient.on("ready", onDiscordClientReady);
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => {
-        log.error("Error logging into Discord. Check your .env file - %s", e.message);
+        log.error("Error logging into Discord. Check your .env file - %s", colors.red(e.message));
     });
 
 function playAudioFile(filePath: string) {
-    log.info("Processing audio file at path %s", filePath);
     if (fs.existsSync(filePath)) {
-        log.verbose("Found file at path %s", filePath);
         onAudioFilePath(filePath);
     } else {
-        log.error("Unable to play file at path %s", filePath);
+        log.error("Unable to play file at path %s", colors.red(filePath));
     }
 }
 
 function playTTS(ttsString: string) {
-    log.info("Processing TTS string '%s'", ttsString);
+    log.info("Processing TTS string '%s'", colors.blue(ttsString));
     if (fs.existsSync(ttsPath(ttsString))) {
         playAudioFile(ttsPath(ttsString));
     } else {
@@ -147,7 +144,7 @@ function playTTS(ttsString: string) {
         })
             .then((response) => onTtsResponse(response, ttsString))
             .catch((error) => {
-                log.error("Unable to TTS %s with error message %s", ttsString, error.message);
+                log.error("Unable to TTS %s with error message %s", colors.red(ttsString), colors.red(error.message));
             });
     }
 }
