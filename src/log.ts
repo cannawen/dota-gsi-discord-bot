@@ -1,19 +1,8 @@
 import colors from "@colors/colors";
 import winston from "winston";
 
-// Available levels
-// {
-//     error: 0,
-//     warn: 1,
-//     info: 2,
-//     http: 3,
-//     verbose: 4,
-//     debug: 5,
-//     silly: 6
-// }
-
-const DISCORD_LEVEL = "info";
-const GSI_LEVEL = "info";
+const DISCORD_LOG_LEVEL_DEBUG = false;
+const GSI_LEVEL_LEVEL_DEBUG = false;
 
 const timeFormat = winston.format.timestamp({
     format: "YYYY-MM-DD HH:mm:ss",
@@ -58,7 +47,18 @@ function createTransports() {
     ];
 }
 
-winston.loggers.add("discord", {
+// Available levels
+// {
+//     error: 0,
+//     warn: 1,
+//     info: 2,
+//     http: 3,
+//     verbose: 4,
+//     debug: 5,
+//     silly: 6
+// }
+
+const discordLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
@@ -66,11 +66,11 @@ winston.loggers.add("discord", {
             message: false,
         })
     ),
-    level:      DISCORD_LEVEL,
+    level:      DISCORD_LOG_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
 });
 
-winston.loggers.add("gsi", {
+const gsiLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
@@ -78,12 +78,13 @@ winston.loggers.add("gsi", {
             message: false,
         })
     ),
-    level:      GSI_LEVEL,
+    level:      GSI_LEVEL_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
 });
 
-const discordLog = winston.loggers.get("discord");
-const gsiLog = winston.loggers.get("gsi");
+// not sure why we need to add loggers to a container, but it's what the winston README does
+winston.loggers.add("discord", discordLog);
+winston.loggers.add("gsi", gsiLog);
 
 export default winston;
 export {
