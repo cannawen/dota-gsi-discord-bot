@@ -23,16 +23,16 @@ function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
     if (state.map?.gameState) {
         gsiLog.info("map.gameState %s", state.map.gameState);
         switch (state.map?.gameState) {
-        case gsi.Dota2GameState.PreGame:
-        case gsi.Dota2GameState.TeamShowcase:
-        case gsi.Dota2GameState.PostGame:
-            gsiHandlers.gameState.isInGame(false);
-            break;
-        case gsi.Dota2GameState.GameInProgress:
-            gsiHandlers.gameState.isInGame(true);
-            break;
-        default:
-            break;
+            case gsi.Dota2GameState.PreGame:
+            case gsi.Dota2GameState.TeamShowcase:
+            case gsi.Dota2GameState.PostGame:
+                gsiHandlers.gameState.isInGame(false);
+                break;
+            case gsi.Dota2GameState.GameInProgress:
+                gsiHandlers.gameState.isInGame(true);
+                break;
+            default:
+                break;
         }
     }
 }

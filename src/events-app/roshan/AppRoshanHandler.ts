@@ -41,20 +41,20 @@ export default class AppRoshanHandler extends AppHandler
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
             switch (newRoshStatus) {
-            case Constants.Status.ALIVE:
-                return {
-                    // try mp3 file
-                    data: "roshan is up",
-                    type: sideEffect.Type.TTS,
-                };
-            case Constants.Status.UNKNOWN:
-                return {
-                    // try mp3 file
-                    data: "roshan might be up",
-                    type: sideEffect.Type.TTS,
-                };
-            default:
-                break;
+                case Constants.Status.ALIVE:
+                    return {
+                        // try mp3 file
+                        data: "roshan is up",
+                        type: sideEffect.Type.TTS,
+                    };
+                case Constants.Status.UNKNOWN:
+                    return {
+                        // try mp3 file
+                        data: "roshan might be up",
+                        type: sideEffect.Type.TTS,
+                    };
+                default:
+                    break;
             }
         }
         return {

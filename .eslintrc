@@ -137,7 +137,7 @@
         "func-style": ["warn", "declaration", { "allowArrowFunctions": false }],
         "function-paren-newline": ["warn", "consistent"],
         "implicit-arrow-linebreak": ["warn", "beside"],
-        "indent": ["warn", 4],
+        "indent": ["warn", 4, {"SwitchCase": 1}],
         "key-spacing": ["warn", { "beforeColon": false, "afterColon": true, "mode": "strict", "align": "value" }],
         "keyword-spacing": ["warn", { "before": true, "after": true }],
         "line-comment-position": ["warn", { "position": "above", "ignorePattern": "", "applyDefaultIgnorePatterns": true }],

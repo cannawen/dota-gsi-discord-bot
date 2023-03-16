@@ -49,13 +49,13 @@ class SideEffectAudio extends SideEffect {
 
 function create(type: string, data: any) : SideEffect {
     switch (type) {
-    case Type.AUDIO_FILE:
-        return new SideEffectAudio(data);
-    case Type.TTS:
-        return new SideEffectTTS(data);
-    case Type.NONE:
-    default:
-        return new SideEffectNone();
+        case Type.AUDIO_FILE:
+            return new SideEffectAudio(data);
+        case Type.TTS:
+            return new SideEffectTTS(data);
+        case Type.NONE:
+        default:
+            return new SideEffectNone();
     }
 }
 
