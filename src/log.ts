@@ -1,10 +1,11 @@
+import colors from "@colors/colors";
 import winston from "winston";
 
 const DISCORD_LOG_LEVEL_DEBUG = false;
 const GSI_LOG_LEVEL_DEBUG = false;
 
 function padTo(msg: string, length: number, truncate: boolean) {
-    const stripped = msg.stripColors;
+    const stripped = colors.stripColors(msg);
     if (stripped.length < length) {
         const endPadLength = length - stripped.length;
         const endPadString = " ".repeat(endPadLength);
@@ -42,7 +43,7 @@ function createTransports() {
             filename: "error.log",
             format:   winston.format.combine(
                 timeFormat,
-                winston.format.printf((info) => printFormat(info).stripColors),
+                winston.format.printf((info) => colors.stripColors(printFormat(info))),
             ),
             level: "error",
         }),
@@ -50,7 +51,7 @@ function createTransports() {
             filename: "combined.log",
             format:   winston.format.combine(
                 timeFormat,
-                winston.format.printf((info) => printFormat(info).stripColors),
+                winston.format.printf((info) => colors.stripColors(printFormat(info))),
             ),
             level: "debug",
         }),
