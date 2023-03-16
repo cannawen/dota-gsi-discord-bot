@@ -37,15 +37,15 @@ function playNext() {
         log.debug("Audio player not ready to accept new audio");
         return;
     }
-
     log.debug("Audio player status is idle");
 
+    log.verbose("Check queue for next audio resource");
     const audioResource = audioQueue.shift();
     if (audioResource) {
-        log.info("Playing next audio resource on queue");
+        log.info("Playing next audio resource");
         subscription.player.play(audioResource);
     } else {
-        log.debug("Audio queue is empty");
+        log.verbose("Audio queue is empty");
     }
 }
 

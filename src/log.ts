@@ -1,7 +1,7 @@
 import winston from "winston";
 
-const DISCORD_LOG_LEVEL_VERBOSE = false;
-const GSI_LOG_LEVEL_VERBOSE = false;
+const DISCORD_LOG_LEVEL_DEBUG = false;
+const GSI_LOG_LEVEL_DEBUG = false;
 
 const timeFormat = winston.format.timestamp({
     format: "YYYY-MM-DD HH:mm:ss",
@@ -66,7 +66,7 @@ const discordLog = winston.createLogger({
             message: false,
         })
     ),
-    level:      DISCORD_LOG_LEVEL_VERBOSE ? "verbose" : "info",
+    level:      DISCORD_LOG_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
 });
 
@@ -78,7 +78,7 @@ const gsiLog = winston.createLogger({
             message: false,
         })
     ),
-    level:      GSI_LOG_LEVEL_VERBOSE ? "verbose" : "info",
+    level:      GSI_LOG_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
 });
 
