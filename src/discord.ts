@@ -1,7 +1,9 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
 /* eslint-disable max-len */
-import axios from "axios";
+import axios, {
+    AxiosResponse,
+} from "axios";
 import {
     discordLog as log,
 } from "./log";
@@ -12,6 +14,7 @@ import Voice = require("@discordjs/voice");
 import {
     Readable,
 } from "stream";
+import path = require("path");
 
 dotenv.config();
 
@@ -40,6 +43,7 @@ function onAudioPlayerStatusIdle() {
 
 function onVoiceConnectionReady() {
     log.info("Ready to play audio!");
+    playTTS("Hello world");
 }
 
 function onAudioFilePath(filePath: string) {
@@ -47,8 +51,9 @@ function onAudioFilePath(filePath: string) {
     playNext();
 }
 
-function onTtsData(data: Readable | string) {
-    audioQueue.push(Voice.createAudioResource(data));
+function onTtsResponse(response : AxiosResponse) {
+    audioQueue.push(Voice.createAudioResource(response.data));
+    playAudioFile("/Users/canna/workspace/dota-gsi-discord-bot/audio/rosh-maybe.mp3");
     playNext();
 }
 
@@ -127,7 +132,7 @@ function playTTS(ttsString: string) {
         url:          `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
         responseType: "stream",
     })
-        .then((response) => onTtsData(response.data))
+        .then((response) => onTtsResponse(response))
         .catch((error) => {
             log.error("Unable to TTS %s with error message %s", ttsString, error.message);
         });
