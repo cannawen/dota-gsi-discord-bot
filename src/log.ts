@@ -11,7 +11,6 @@ import winston from "winston";
 //     silly: 6
 // }
 
-const LOG_LEVEL = "info";
 const DISCORD_LEVEL = "info";
 const GSI_LEVEL = "info";
 
@@ -37,19 +36,7 @@ function createTransports() {
     ];
 }
 
-const log = winston.createLogger({
-    format: winston.format.combine(
-        ...defaultFormatArray,
-        winston.format.label({
-            label:   "GENERAL",
-            message: true,
-        })
-    ),
-    level:      LOG_LEVEL,
-    transports: createTransports(),
-});
-
-const discordLog = winston.createLogger({
+winston.loggers.add("discord", {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
@@ -61,11 +48,11 @@ const discordLog = winston.createLogger({
     transports: createTransports(),
 });
 
-const gsiLog = winston.createLogger({
+winston.loggers.add("gsi", {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   "GSI    ",
+            label:   "GSI",
             message: true,
         })
     ),
@@ -73,9 +60,11 @@ const gsiLog = winston.createLogger({
     transports: createTransports(),
 });
 
-export default log;
+const discordLog = winston.loggers.get("discord");
+const gsiLog = winston.loggers.get("gsi");
+
+export default winston;
 export {
     discordLog,
     gsiLog,
-    log,
 };
