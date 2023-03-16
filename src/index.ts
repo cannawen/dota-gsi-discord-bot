@@ -15,6 +15,7 @@ function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
     }
 
     if (state.events) {
+        // change time to game time
         gsiLog.info("events %s", state.events);
         gsiHandlers.event.handle(state.events);
     }

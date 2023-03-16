@@ -12,12 +12,14 @@ describe("AppRoshanHandler", () => {
     describe("IGsiEventsSubscriber.handleEvent", () => {
         describe("on roshan killed event", () => {
             test("return tts side effect", () => {
+                handler.handleTime(0);
                 expect(handler.handleEvent("roshan_killed", 0))
                     .toHaveProperty("type", "TTS");
             });
         });
         describe("on any different event", () => {
             test("return no side effect", () => {
+                handler.handleTime(0);
                 expect(handler.handleEvent("bounty_rune_pickup", 0))
                     .toHaveProperty("type", "NONE");
             });
@@ -33,6 +35,7 @@ describe("AppRoshanHandler", () => {
 
     describe("when roshan dies at time 0:00", () => {
         beforeEach(() => {
+            handler.handleTime(0);
             handler.handleEvent("roshan_killed", 0);
         });
 
@@ -70,6 +73,7 @@ describe("AppRoshanHandler", () => {
             });
             describe("roshan is killed again at 10:00, between 8:00-11:00", () => {
                 beforeEach(() => {
+                    handler.handleTime(10 * 60);
                     handler.handleEvent("roshan_killed", 10 * 60);
                 });
                 test("time at 11:00 should return no side effect", () => {

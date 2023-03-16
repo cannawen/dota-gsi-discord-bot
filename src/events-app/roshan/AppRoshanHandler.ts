@@ -10,10 +10,12 @@ import sideEffect from "../../SideEffect";
 
 export default class AppRoshanHandler extends AppHandler
     implements IGsiTimeSubscriber, IGsiGameStateSubscriber, IGsiEventsSubscriber {
+    private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
 
     private resetState() {
+        this.currentTime = undefined;
         this.lastRoshanDeathTime = undefined;
         this.roshStatus = Constants.Status.ALIVE;
     }
@@ -34,6 +36,7 @@ export default class AppRoshanHandler extends AppHandler
     }
 
     public handleTime(time: number) {
+        this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
@@ -60,9 +63,10 @@ export default class AppRoshanHandler extends AppHandler
         };
     }
 
-    public handleEvent(eventType: string, time: number) {
+    public handleEvent(eventType: string, _time: number) {
+        // `time` we get from the event is incorrect - use current time instead
         if (eventType === "roshan_killed") {
-            this.lastRoshanDeathTime = time;
+            this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
             return {
                 data: "roshan died",

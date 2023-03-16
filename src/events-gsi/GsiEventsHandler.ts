@@ -43,8 +43,7 @@ export default class GsiEventsHandler extends GsiHander implements IGsiGameState
             if (this.neverSeenBefore(newEvent)) {
                 this.allEvents.push(newEvent);
                 this.subscribers
-                    // events.gameTime start 258 seconds earlier than our map.gameTime for unknown reasons
-                    .map((handler) => handler.handleEvent(newEvent.eventType, newEvent.gameTime - 258))
+                    .map((handler) => handler.handleEvent(newEvent.eventType, newEvent.gameTime))
                     .map(({
                         data,
                         type,
