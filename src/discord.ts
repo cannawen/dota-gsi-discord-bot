@@ -54,7 +54,7 @@ function onAudioPlayerStatusIdle() {
 }
 
 function onVoiceConnectionReady() {
-    log.info(colors.green("VoiceConnection ready to play audio!"));
+    log.info("VoiceConnection ready to play audio!".green);
 }
 
 function onAudioFilePath(filePath: string) {
@@ -92,7 +92,7 @@ function onDiscordClientReady() {
     }
 
     log.info(
-        "Discord ready with user: %s guild: %s channel: %s]",
+        "Discord ready with user: %s guild: %s channel: %s",
         emColor(discordClient.user.tag),
         emColor(guild.name),
         emColor(channel.name)
@@ -144,7 +144,7 @@ function playTTS(ttsString: string) {
         log.info("Found cached TTS %s", ttsString);
         playAudioFile(ttsPath(ttsString));
     } else {
-        log.info("Processing TTS string '%s'", emColor(ttsString));
+        log.info("Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
         axios({
             method:       "get",

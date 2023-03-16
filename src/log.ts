@@ -1,4 +1,3 @@
-import colors from "@colors/colors";
 import winston from "winston";
 
 const DISCORD_LOG_LEVEL_VERBOSE = false;
@@ -17,7 +16,7 @@ const defaultFormatArray = [
 ];
 
 function printFormat(info: winston.Logform.TransformableInfo) {
-    return `${info.timestamp} ${info.level}\t${info.label}\t${info.message}${info.splat ? `${info.splat}` : " "}`;
+    return `${info.timestamp.gray} ${info.level}\t${info.label}\t${info.message}${info.splat ? `${info.splat}` : " "}`;
 }
 
 function createTransports() {
@@ -26,7 +25,7 @@ function createTransports() {
             filename: "error.log",
             format:   winston.format.combine(
                 timeFormat,
-                winston.format.printf((info) => colors.stripColors(printFormat(info))),
+                winston.format.printf((info) => printFormat(info).stripColors),
             ),
             level: "error",
         }),
@@ -34,8 +33,9 @@ function createTransports() {
             filename: "combined.log",
             format:   winston.format.combine(
                 timeFormat,
-                winston.format.printf((info) => colors.stripColors(printFormat(info))),
+                winston.format.printf((info) => printFormat(info).stripColors),
             ),
+            level: "debug",
         }),
         new winston.transports.Console({
             format: winston.format.combine(
@@ -62,7 +62,7 @@ const discordLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   colors.blue("[DISCORD]"),
+            label:   "[DISCORD]".blue,
             message: false,
         })
     ),
@@ -74,7 +74,7 @@ const gsiLog = winston.createLogger({
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
-            label:   colors.magenta("[GSI]\t"),
+            label:   "[GSI]\t".magenta,
             message: false,
         })
     ),
