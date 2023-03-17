@@ -12,23 +12,40 @@ class Item {
     id: string;
     name: string;
 
-    constructor(item: IItem) {
-        this.id = item.name;
-        this.name = item.name;
+    public constructor(id: string, name: string) {
+        this.id = id;
+        this.name = name;
+    }
+
+    static createFromGsi(item: IItem | null) {
+        // TODO find real human readable name from of the item and pass it along in second parameter
+        if (item) {
+            return new Item(item.name, item.name);
+        }
+        return null;
     }
 }
 
 class PlayerItems {
-    inventory: Array<Item | null>;
-    stash: Array<Item | null>;
-    neutral: Item | null;
-    teleport: Item | null;
+    inventory: Array<Item | null> = [];
+    stash: Array<Item | null> = [];
+    neutral: Item | null = null;
+    teleport: Item | null = null;
 
-    constructor(items: IItemContainer) {
-        this.inventory = items.slot.map((item) => item ? new Item(item) : null);
-        this.stash = items.stash.map((item) => item ? new Item(item) : null);
-        this.neutral = items.neutral ? new Item(items.neutral) : null;
-        this.teleport = items.teleport ? new Item(items.teleport) : null;
+    constructor(inventory: Array<Item | null>, stash:Array<Item | null>, neutral: Item | null, teleport: Item | null) {
+        this.inventory = inventory;
+        this.stash = stash;
+        this.neutral = neutral;
+        this.teleport = teleport;
+    }
+
+    static createFromGsi(items: IItemContainer) {
+        return new PlayerItems(
+            items.slot.map(Item.createFromGsi),
+            items.stash.map(Item.createFromGsi),
+            Item.createFromGsi(items.neutral),
+            Item.createFromGsi(items.teleport)
+        );
     }
 }
 
@@ -42,10 +59,11 @@ export default class GsiItemsSubject extends GsiSubject {
 
     private handleItems(itemContainer: IItemContainer) {
         log.gsiItems.debug(itemContainer);
-        const items = new PlayerItems(itemContainer);
-
-        this.observers.map((observer) => observer.items(items))
-            .map(effects.invoke);
+        const items = PlayerItems.createFromGsi(itemContainer);
+        if (items) {
+            this.observers.map((observer) => observer.items(items))
+                .map(effects.invoke);
+        }
     }
 
     public handleState(state: IDota2State | IDota2ObserverState): void {

@@ -147,7 +147,7 @@
         "max-lines": ["warn", { "skipBlankLines": false, "skipComments": false, "max": 300 }],
         "max-lines-per-function": ["warn", { "skipBlankLines": false, "skipComments": false, "IIFEs": false, "max": 50 }],
         "max-nested-callbacks": ["warn", { "max": 3 }],
-        "max-params": ["warn", { "max": 3 }],
+        "max-params": ["warn", { "max": 4 }],
         "max-statements": ["warn", 10],
         "max-statements-per-line": ["warn", { "max": 1 }],
         "new-cap": ["warn", { "newIsCap": true, "capIsNew": true, "newIsCapExceptionPattern": "", "capIsNewExceptionPattern": "", "properties": true }],

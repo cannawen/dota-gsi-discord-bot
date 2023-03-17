@@ -51,6 +51,7 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 }
 ```
 - While you're here, `"editor.minimap.enabled": false` is also nice to remove the minimap view in VS code
+- `Jest Runner` is also a very nice plugin
 
 ## Product Management
 - See Github Projects page for project roadmap
