@@ -1,6 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+import {
+    PlayerItems,
+} from "./gsi/GsiItemsSubject";
+
 interface IGsiItemsObserver {
-    items: () => void
+    items: (items: PlayerItems) => { type: string, data: any }
 }
 
 function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {

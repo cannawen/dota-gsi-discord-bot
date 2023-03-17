@@ -1,8 +1,37 @@
 import {
-    IDota2ObserverState, IDota2State, IItemContainer,
+    IDota2ObserverState, IDota2State, IItem, IItemContainer,
 } from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import log from "../log";
+
+class Item {
+    id: string;
+    name: string;
+
+    constructor(item: IItem) {
+        this.id = item.name;
+        this.name = item.name;
+    }
+}
+
+class PlayerItems {
+    inventory: Array<Item | null>;
+    stash: Array<Item | null>;
+    neutral: Item | null;
+    teleport: Item | null;
+
+    constructor(items: IItemContainer) {
+        this.inventory = items.slot.map((item) => item ? new Item(item) : null);
+        this.stash = items.stash.map((item) => item ? new Item(item) : null);
+        this.neutral = items.neutral ? new Item(items.neutral) : null;
+        this.teleport = items.teleport ? new Item(items.teleport) : null;
+    }
+}
+
+export {
+    Item,
+    PlayerItems,
+};
 
 export default class GsiItemsSubject extends GsiSubject {
     private handleItems(items: IItemContainer) {
