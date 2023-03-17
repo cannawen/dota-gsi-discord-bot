@@ -3,6 +3,10 @@ import {
 } from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import log from "../log";
+import SideEffect from "../SideEffect";
+import {
+    IGsiItemsObserver,
+} from "../IGsiObservers";
 
 class Item {
     id: string;
@@ -34,8 +38,15 @@ export {
 };
 
 export default class GsiItemsSubject extends GsiSubject {
-    private handleItems(items: IItemContainer) {
-        log.gsiItems.debug(items);
+    protected observers: IGsiItemsObserver[] = [];
+
+    private handleItems(itemContainer: IItemContainer) {
+        log.gsiItems.debug(itemContainer);
+        const items = new PlayerItems(itemContainer);
+
+        this.observers.map((observer) => observer.items(items)) // notify all observers about items
+            .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
+            .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
     }
 
     public handleState(state: IDota2State | IDota2ObserverState): void {

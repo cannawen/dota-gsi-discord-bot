@@ -10,19 +10,17 @@ import log from "../log";
 import SideEffect from "../SideEffect";
 
 export default class GsiGameStateSubject extends GsiSubject {
-    protected subscribers : IGsiGameStateObserver[] = [];
+    protected observers : IGsiGameStateObserver[] = [];
     private inGame = false;
 
     private isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
             this.inGame = newInGame;
 
-            this.subscribers
-                .map((event) => event.inGame(newInGame))
-                .map(({
-                    data,
-                    type,
-                }) => SideEffect.create(type, data).execute());
+            this.observers
+                .map((observers) => observers.inGame(newInGame)) // notify all observers if we are in a game
+                .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
+                .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
         }
     }
 

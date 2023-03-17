@@ -9,19 +9,16 @@ import log from "../log";
 import SideEffect from "../SideEffect";
 
 export default class GsiTimeSubject extends GsiSubject {
-    protected subscribers : IGsiTimeObserver[] = [];
+    protected observers : IGsiTimeObserver[] = [];
     private time: number | undefined;
 
     private currentTime(newTime: number) {
         if (this.time !== newTime) {
             this.time = newTime;
 
-            this.subscribers
-                .map((handler) => handler.handleTime(newTime))
-                .map(({
-                    data,
-                    type,
-                }) => SideEffect.create(type, data).execute());
+            this.observers.map((observer) => observer.handleTime(newTime)) // notify all observers about time
+                .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
+                .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
         }
     }
 

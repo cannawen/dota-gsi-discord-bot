@@ -3,9 +3,11 @@ import {
     IGsiGameStateObserver,
     IGsiTimeObserver,
 } from "../../IGsiObservers";
+import SideEffectInfo, {
+    Type,
+} from "../../SideEffectInfo";
 import Constants from "./Constants";
 import logic from "./logic";
-import sideEffect from "../../SideEffect";
 
 export default class RoshanPlugin
 implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
@@ -23,51 +25,36 @@ implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
         this.resetState();
     }
 
-    public inGame(inGame: boolean) {
+    public inGame(inGame: boolean) : SideEffectInfo {
         if (!inGame) {
             this.resetState();
         }
-        return {
-            data: null,
-            type: sideEffect.Type.NONE,
-        };
+        return SideEffectInfo.none();
     }
 
-    public handleTime(time: number) {
+    public handleTime(time: number) : SideEffectInfo {
         this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
             switch (newRoshStatus) {
                 case Constants.Status.ALIVE:
-                    return {
-                        data: "rosh-alive.mp3",
-                        type: sideEffect.Type.AUDIO_FILE,
-                    };
+                    return new SideEffectInfo(Type.AUDIO_FILE, "rosh-alive.mp3");
                 case Constants.Status.UNKNOWN:
-                    return {
-                        data: "rosh-maybe.mp3",
-                        type: sideEffect.Type.AUDIO_FILE,
-                    };
+                    return new SideEffectInfo(Type.AUDIO_FILE, "rosh-maybe.mp3");
                 default:
                     break;
             }
         }
-        return {
-            data: null,
-            type: sideEffect.Type.NONE,
-        };
+        return SideEffectInfo.none();
     }
 
-    public handleEvent(eventType: string, _time: number) {
+    public handleEvent(eventType: string, _time: number) : SideEffectInfo {
         // `time` we get from the event is incorrect - use current time instead
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
         }
-        return {
-            data: null,
-            type: sideEffect.Type.NONE,
-        };
+        return SideEffectInfo.none();
     }
 }

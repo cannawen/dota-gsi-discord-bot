@@ -1,22 +1,18 @@
+import SideEffectInfo, {
+    Type,
+} from "../../SideEffectInfo";
 import {
     IGsiTimeObserver,
 } from "../../IGsiObservers";
-import sideEffect from "../../SideEffect";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
 export default class StackPlugin implements IGsiTimeObserver {
-    public handleTime(time: number) {
+    public handleTime(time: number) : SideEffectInfo {
         if (time >= 60 && (time + ADVANCED_WARNING_TIME_BEFORE_STACK_TIME) % 60 === 0) {
-            return {
-                data: "stack.wav",
-                type: sideEffect.Type.AUDIO_FILE,
-            };
+            return new SideEffectInfo(Type.AUDIO_FILE, "stack.wav");
         } else {
-            return {
-                data: null,
-                type: sideEffect.Type.NONE,
-            };
+            return SideEffectInfo.none();
         }
     }
 }
