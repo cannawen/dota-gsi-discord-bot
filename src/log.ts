@@ -19,50 +19,15 @@ function padTo(msg: string, length: number, truncate: boolean) {
     }
 }
 
-const timeFormat = winston.format.timestamp({
-    format: "YYYY-MM-DD HH:mm:ss",
-});
-
-const defaultFormatArray = [
-    winston.format.colorize(),
-    winston.format.splat(),
-    winston.format.simple(),
-    winston.format.json(),
-    timeFormat,
-];
-
-function printFormat(info: winston.Logform.TransformableInfo) {
+function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     const levelLength = 5;
     const labelLength = 9;
-    return `${info.timestamp.gray} ${padTo(info.level, levelLength, true)} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
-}
-
-function createTransports() {
-    return [
-        new winston.transports.File({
-            filename: "error.log",
-            format:   winston.format.combine(
-                timeFormat,
-                winston.format.printf((info) => colors.stripColors(printFormat(info))),
-            ),
-            level: "error",
-        }),
-        new winston.transports.File({
-            filename: "combined.log",
-            format:   winston.format.combine(
-                timeFormat,
-                winston.format.printf((info) => colors.stripColors(printFormat(info))),
-            ),
-            level: "debug",
-        }),
-        new winston.transports.Console({
-            format: winston.format.combine(
-                winston.format.simple(),
-                timeFormat,
-                winston.format.printf(printFormat)
-            ),
-        }),
-    ];
+    const out = `${info.timestamp.gray} ${padTo(info.level, levelLength, true)} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
+    if (colors) {
+        return out;
+    } else {
+        return out.stripColors;
+    }
 }
 
 // Available levels
@@ -76,41 +41,42 @@ function createTransports() {
 //     silly: 6
 // }
 
-const discordLogMap = {
-    format: winston.format.combine(
-        ...defaultFormatArray,
-        winston.format.label({
-            label:   "[DISCORD]".blue,
-            message: false,
-        })
-    ),
-    level:      DISCORD_LOG_LEVEL_DEBUG ? "debug" : "info",
-    transports: createTransports(),
-};
+function createMap(label: string, debug: boolean) {
+    return {
+        format: winston.format.combine(
+            winston.format.colorize(),
+            winston.format.splat(),
+            winston.format.simple(),
+            winston.format.json(),
+            winston.format.timestamp({
+                format: "YYYY-MM-DD HH:mm:ss",
+            }),
+            winston.format.label({
+                label,
+                message: false,
+            })
+        ),
+        level:      debug ? "debug" : "info",
+        transports: [
+            new winston.transports.File({
+                filename: "error.log",
+                format:   winston.format.printf((info) => printFormat(info, false)),
+                level:    "error",
+            }),
+            new winston.transports.File({
+                filename: "combined.log",
+                format:   winston.format.printf((info) => printFormat(info, false)),
+                level:    "debug",
+            }),
+            new winston.transports.Console({
+                format: winston.format.printf((info) => printFormat(info, true)),
+            }),
+        ],
+    };
+}
 
-const gsiLogMap = {
-    format: winston.format.combine(
-        ...defaultFormatArray,
-        winston.format.label({
-            label:   "[GSI]".magenta,
-            message: false,
-        })
-    ),
-    level:      GSI_LOG_LEVEL_DEBUG ? "debug" : "info",
-    transports: createTransports(),
-};
-
-// Containers not working
-// const container = new winston.Container();
-
-// container.add("discord", discordLogMap);
-// container.add("gsi", gsiLogMap);
-
-// winston.loggers.get("discord").info("discord");
-// winston.loggers.get("gsi").info("gsi");
-
-const discord = winston.createLogger(discordLogMap);
-const gsi = winston.createLogger(gsiLogMap);
+const discord = winston.createLogger(createMap("[DISCORD]".blue, DISCORD_LOG_LEVEL_DEBUG));
+const gsi = winston.createLogger(createMap("[GSI]".magenta, GSI_LOG_LEVEL_DEBUG));
 
 export default {
     discord,
