@@ -2,13 +2,11 @@ import {
     IGsiEventsObserver,
     IGsiGameStateObserver,
 } from "../IGsiObservers";
-import SideEffectInfo, {
-    Type,
-} from "../SideEffectInfo";
+import effects from "../effects/effects";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import log from "../log";
-import SideEffect from "../SideEffect";
+import SideEffectInfo from "../SideEffectInfo";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
     return event1.gameTime === event2.gameTime
@@ -24,11 +22,10 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
     // `allEvents` contains an array of all events seen so far
     private allEvents: gsi.IEvent[] = [];
 
-    public inGame(newInGame: boolean) : SideEffectInfo {
+    public inGame(newInGame: boolean) : void {
         if (!newInGame) {
             this.allEvents = [];
         }
-        return SideEffectInfo.none();
     }
 
     private neverSeenBefore(newEvent : gsi.IEvent) : boolean {
@@ -45,9 +42,8 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
                 this.allEvents.push(newEvent);
                 this.observers
                     // note this event.gameTime is not equal to map.gameTime; it is offset by a specific amount per game
-                    .map((observer) => observer.handleEvent(newEvent.eventType, newEvent.gameTime)) // notify all observers we have a new event
-                    .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
-                    .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
+                    .map((observer) => observer.handleEvent(newEvent.eventType, newEvent.gameTime))
+                    .map(effects.invoke); // TODO lift this up, above the mountains
             }
         });
     }

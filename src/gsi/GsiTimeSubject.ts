@@ -1,12 +1,12 @@
 import {
     IDota2ObserverState, IDota2State,
 } from "node-gsi";
+import effects from "../effects/effects";
 import GsiSubject from "./GsiSubject";
 import {
     IGsiTimeObserver,
 } from "../IGsiObservers";
 import log from "../log";
-import SideEffect from "../SideEffect";
 
 export default class GsiTimeSubject extends GsiSubject {
     protected observers : IGsiTimeObserver[] = [];
@@ -16,9 +16,8 @@ export default class GsiTimeSubject extends GsiSubject {
         if (this.time !== newTime) {
             this.time = newTime;
 
-            this.observers.map((observer) => observer.handleTime(newTime)) // notify all observers about time
-                .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
-                .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
+            this.observers.map((observer) => observer.handleTime(newTime))
+                .map(effects.invoke);
         }
     }
 

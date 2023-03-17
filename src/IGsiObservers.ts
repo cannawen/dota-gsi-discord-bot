@@ -4,7 +4,7 @@ import {
 import SideEffectInfo from "./SideEffectInfo";
 
 interface IGsiItemsObserver {
-    items: (items: PlayerItems) => SideEffectInfo
+    items: (items: PlayerItems) => SideEffectInfo | void
 }
 
 function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
@@ -13,7 +13,7 @@ function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
 
 // Refactor to "inAGame" and "notInGame"
 interface IGsiGameStateObserver {
-    inGame: (inGame: boolean) => SideEffectInfo;
+    inGame: (inGame: boolean) => SideEffectInfo | void;
 }
 
 function isGsiGameStateObserver(observer: any): observer is IGsiGameStateObserver {
@@ -21,7 +21,7 @@ function isGsiGameStateObserver(observer: any): observer is IGsiGameStateObserve
 }
 
 interface IGsiTimeObserver {
-    handleTime: (time: number) => SideEffectInfo;
+    handleTime: (time: number) => SideEffectInfo | void;
 }
 
 function isGsiTimeObserver(observer: any): observer is IGsiTimeObserver {
@@ -29,7 +29,7 @@ function isGsiTimeObserver(observer: any): observer is IGsiTimeObserver {
 }
 
 interface IGsiEventsObserver {
-    handleEvent: (eventType: string, time: number) => SideEffectInfo;
+    handleEvent: (eventType: string, time: number) => SideEffectInfo | void;
 }
 
 function isGsiEventObserver(observer: any): observer is IGsiEventsObserver {

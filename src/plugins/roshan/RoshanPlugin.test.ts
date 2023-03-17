@@ -14,17 +14,17 @@ describe("RoshanPlugin", () => {
             test("return no side effect", () => {
                 sut.handleTime(0);
                 expect(sut.handleEvent("roshan_killed", 0))
-                    .toHaveProperty("type", "NONE");
+                    .toBeUndefined();
                 expect(sut.handleEvent("bounty_rune_pickup", 0))
-                    .toHaveProperty("type", "NONE");
+                    .toBeUndefined();
             });
         });
     });
 
     describe("IGsiGameStateObserver.inGame", () => {
         test("return no side effect", () => {
-            expect(sut.inGame(true)).toHaveProperty("type", "NONE");
-            expect(sut.inGame(false)).toHaveProperty("type", "NONE");
+            expect(sut.inGame(true)).toBeUndefined();
+            expect(sut.inGame(false)).toBeUndefined();
         });
     });
 
@@ -36,29 +36,29 @@ describe("RoshanPlugin", () => {
 
         describe("IGsiTimeObserver.handleTime", () => {
             test("time at 0:01 should return no side effect", () => {
-                expect(sut.handleTime(1)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(1)).toBeUndefined();
             });
             test("time at 7:59 should return no side effect", () => {
-                expect(sut.handleTime(8 * 60 - 1)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(8 * 60 - 1)).toBeUndefined();
             });
             test("time at 8:00 should return tts side effect that roshan might be up", () => {
                 expect(sut.handleTime(8 * 60)).toHaveProperty("type", "AUDIO_FILE");
             });
             test("time at 8:01 should return no side effect, assuming it has already made a 8:00 tts", () => {
                 sut.handleTime(8 * 60);
-                expect(sut.handleTime(8 * 60 + 1)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(8 * 60 + 1)).toBeUndefined();
             });
             test("tts should be returned as soon as possible between 8:00-11:00 after rosh death", () => {
-                expect(sut.handleTime(7 * 60)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(7 * 60)).toBeUndefined();
                 expect(sut.handleTime(9 * 60)).toHaveProperty("type", "AUDIO_FILE");
-                expect(sut.handleTime(10 * 60)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(10 * 60)).toBeUndefined();
             });
             test("time at 11:00 should return tts side effect roshan is up", () => {
                 expect(sut.handleTime(11 * 60)).toHaveProperty("type", "AUDIO_FILE");
             });
             test("time at 11:01 should return no side effect, assuming it has already made a 11:00 tts", () => {
                 sut.handleTime(11 * 60);
-                expect(sut.handleTime(11 * 60 + 1)).toHaveProperty("type", "NONE");
+                expect(sut.handleTime(11 * 60 + 1)).toBeUndefined();
             });
             describe("roshan is killed again at 10:00, between 8:00-11:00", () => {
                 beforeEach(() => {
@@ -66,7 +66,7 @@ describe("RoshanPlugin", () => {
                     sut.handleEvent("roshan_killed", 10 * 60);
                 });
                 test("time at 11:00 should return no side effect", () => {
-                    expect(sut.handleTime(11 * 60)).toHaveProperty("type", "NONE");
+                    expect(sut.handleTime(11 * 60)).toBeUndefined();
                 });
                 test("time at 18:00 and 21:00 should return tts side effect", () => {
                     expect(sut.handleTime(18 * 60)).toHaveProperty("type", "AUDIO_FILE");
@@ -82,7 +82,7 @@ describe("RoshanPlugin", () => {
                     sut.inGame(true);
                 });
                 test("time at 8:00 should return no side effect", () => {
-                    expect(sut.handleTime(8 * 60)).toHaveProperty("type", "NONE");
+                    expect(sut.handleTime(8 * 60)).toBeUndefined();
                 });
             });
         });

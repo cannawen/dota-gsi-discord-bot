@@ -1,12 +1,12 @@
 import {
     IDota2ObserverState, IDota2State, IItem, IItemContainer,
 } from "node-gsi";
+import effects from "../effects/effects";
 import GsiSubject from "./GsiSubject";
-import log from "../log";
-import SideEffect from "../SideEffect";
 import {
     IGsiItemsObserver,
 } from "../IGsiObservers";
+import log from "../log";
 
 class Item {
     id: string;
@@ -44,9 +44,8 @@ export default class GsiItemsSubject extends GsiSubject {
         log.gsiItems.debug(itemContainer);
         const items = new PlayerItems(itemContainer);
 
-        this.observers.map((observer) => observer.items(items)) // notify all observers about items
-            .map((info) => SideEffect.create(info)) // create a side effect from the side effect info
-            .map((sideEffect) => sideEffect.execute()); // execute that side effect - this doesn't belong here
+        this.observers.map((observer) => observer.items(items))
+            .map(effects.invoke);
     }
 
     public handleState(state: IDota2State | IDota2ObserverState): void {

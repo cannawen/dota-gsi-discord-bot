@@ -1,4 +1,5 @@
 import "./plugins/enabledPlugins";
+import "./effects/enabledEffects";
 import gsi = require("node-gsi");
 import log from "./log";
 import subjects from "./subjects";

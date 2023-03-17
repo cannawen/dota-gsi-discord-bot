@@ -25,14 +25,13 @@ implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
         this.resetState();
     }
 
-    public inGame(inGame: boolean) : SideEffectInfo {
+    public inGame(inGame: boolean) : void {
         if (!inGame) {
             this.resetState();
         }
-        return SideEffectInfo.none();
     }
 
-    public handleTime(time: number) : SideEffectInfo {
+    public handleTime(time: number) : SideEffectInfo | void {
         this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
@@ -46,15 +45,13 @@ implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
                     break;
             }
         }
-        return SideEffectInfo.none();
     }
 
-    public handleEvent(eventType: string, _time: number) : SideEffectInfo {
+    public handleEvent(eventType: string, _time: number) : void {
         // `time` we get from the event is incorrect - use current time instead
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
         }
-        return SideEffectInfo.none();
     }
 }
