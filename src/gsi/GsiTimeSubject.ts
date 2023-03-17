@@ -5,10 +5,8 @@ import GsiSubject from "./GsiSubject";
 import {
     IGsiTimeObserver,
 } from "../IGsiObservers";
+import log from "../log";
 import SideEffect from "../SideEffect";
-import winston from "winston";
-
-const log = winston.loggers.get("gsi");
 
 export default class GsiTimeSubject extends GsiSubject {
     protected subscribers : IGsiTimeObserver[] = [];
@@ -29,7 +27,7 @@ export default class GsiTimeSubject extends GsiSubject {
 
     public handleState(state: IDota2State | IDota2ObserverState): void {
         if (state.map?.clockTime) {
-            log.debug("map.clockTime %s", state.map.clockTime);
+            log.gsiTime.debug("map.clockTime %s", state.map.clockTime);
             this.currentTime(state.map.clockTime);
         }
     }

@@ -76,9 +76,18 @@ function createMap(label: string, debug: boolean) {
 }
 
 const discord = winston.createLogger(createMap("[DISCORD]".blue, DISCORD_LOG_LEVEL_DEBUG));
+
 const gsi = winston.createLogger(createMap("[GSI]".magenta, GSI_LOG_LEVEL_DEBUG));
+const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, GSI_LOG_LEVEL_DEBUG));
+const gsiGameState = winston.createLogger(createMap("[GSI GAME STATE]".magenta, GSI_LOG_LEVEL_DEBUG));
+const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, GSI_LOG_LEVEL_DEBUG));
+const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, GSI_LOG_LEVEL_DEBUG));
 
 export default {
     discord,
     gsi,
+    gsiEvents,
+    gsiGameState,
+    gsiItems,
+    gsiTime,
 };

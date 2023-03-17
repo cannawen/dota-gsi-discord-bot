@@ -56,7 +56,7 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
 
     public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): void {
         if (state.events) {
-            log.gsi.debug("events %s", state.events);
+            log.gsiEvents.debug("events %s", state.events);
             this.handle(state.events);
         }
     }
