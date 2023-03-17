@@ -1,6 +1,6 @@
 import SideEffectInfo, {
     Type,
-} from "../SideEffectInfo";
+} from "./SideEffectInfo";
 
 const registry = new Map();
 

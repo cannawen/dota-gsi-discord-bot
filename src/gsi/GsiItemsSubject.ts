@@ -1,7 +1,7 @@
 import {
     IDota2ObserverState, IDota2State, IItem, IItemContainer,
 } from "node-gsi";
-import effects from "../effects/effects";
+import effects from "../effectsRegistry";
 import GsiSubject from "./GsiSubject";
 import {
     IGsiItemsObserver,

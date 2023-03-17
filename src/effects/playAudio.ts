@@ -2,7 +2,7 @@ import SideEffectInfo, {
     Type,
 } from "../SideEffectInfo";
 import discord from "../discord";
-import effects from "./effects";
+import effects from "../effectsRegistry";
 import path from "node:path";
 
 effects.register(Type.TTS, (info: SideEffectInfo) => {

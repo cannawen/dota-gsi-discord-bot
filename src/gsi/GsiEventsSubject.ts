@@ -2,7 +2,7 @@ import {
     IGsiEventsObserver,
     IGsiGameStateObserver,
 } from "../IGsiObservers";
-import effects from "../effects/effects";
+import effects from "../effectsRegistry";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import log from "../log";
