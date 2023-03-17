@@ -4,9 +4,7 @@ import {
 } from "../IGsiObservers";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
-import {
-    gsiLog as log,
-} from "../log";
+import log from "../log";
 import SideEffect from "../SideEffect";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
@@ -58,7 +56,7 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
 
     public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): void {
         if (state.events) {
-            log.debug("events %s", state.events);
+            log.gsi.debug("events %s", state.events);
             this.handle(state.events);
         }
     }

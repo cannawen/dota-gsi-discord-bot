@@ -6,9 +6,7 @@ import GsiSubject from "./GsiSubject";
 import {
     IGsiGameStateObserver,
 } from "../IGsiObservers";
-import {
-    gsiLog as log,
-} from "../log";
+import log from "../log";
 import SideEffect from "../SideEffect";
 
 export default class GsiGameStateSubject extends GsiSubject {
@@ -30,7 +28,7 @@ export default class GsiGameStateSubject extends GsiSubject {
 
     public handleState(state: IDota2State | IDota2ObserverState): void {
         if (state.map?.gameState) {
-            log.debug("map.gameState %s", state.map.gameState);
+            log.gsi.debug("map.gameState %s", state.map.gameState);
             switch (state.map?.gameState) {
                 case gsi.Dota2GameState.PreGame:
                 case gsi.Dota2GameState.TeamShowcase:

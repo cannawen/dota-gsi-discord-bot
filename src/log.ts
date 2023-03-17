@@ -76,7 +76,7 @@ function createTransports() {
 //     silly: 6
 // }
 
-const discordLog = winston.createLogger({
+const discordLogMap = {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
@@ -86,9 +86,9 @@ const discordLog = winston.createLogger({
     ),
     level:      DISCORD_LOG_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
-});
+};
 
-const gsiLog = winston.createLogger({
+const gsiLogMap = {
     format: winston.format.combine(
         ...defaultFormatArray,
         winston.format.label({
@@ -98,13 +98,21 @@ const gsiLog = winston.createLogger({
     ),
     level:      GSI_LOG_LEVEL_DEBUG ? "debug" : "info",
     transports: createTransports(),
-});
+};
 
-winston.loggers.add("discord", discordLog);
-winston.loggers.add("gsi", gsiLog);
+// Containers not working
+// const container = new winston.Container();
 
-export default winston;
-export {
-    discordLog,
-    gsiLog,
+// container.add("discord", discordLogMap);
+// container.add("gsi", gsiLogMap);
+
+// winston.loggers.get("discord").info("discord");
+// winston.loggers.get("gsi").info("gsi");
+
+const discord = winston.createLogger(discordLogMap);
+const gsi = winston.createLogger(gsiLogMap);
+
+export default {
+    discord,
+    gsi,
 };

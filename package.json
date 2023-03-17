@@ -6,8 +6,8 @@
     "scripts": {
         "build": "rimraf ./build ./tts-cache && tsc",
         "lint": "eslint . --ext .ts --fix",
-        "start": "npm run build && node build/index.js",
         "start:nobuild": "node build/index.js",
+        "start": "npm run build && npm run start:nobuild",
         "start:dev": "npx nodemon",
         "test": "jest",
         "test:dev": "jest --watchAll"

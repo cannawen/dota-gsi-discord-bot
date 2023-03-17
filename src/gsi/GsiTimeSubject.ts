@@ -5,10 +5,10 @@ import GsiSubject from "./GsiSubject";
 import {
     IGsiTimeObserver,
 } from "../IGsiObservers";
-import {
-    gsiLog as log,
-} from "../log";
 import SideEffect from "../SideEffect";
+import winston from "winston";
+
+const log = winston.loggers.get("gsi");
 
 export default class GsiTimeSubject extends GsiSubject {
     protected subscribers : IGsiTimeObserver[] = [];

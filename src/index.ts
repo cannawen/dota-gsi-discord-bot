@@ -1,8 +1,6 @@
 import "./plugins/enabledPlugins";
-import {
-    gsiLog as log,
-} from "./log";
 import gsi = require("node-gsi");
+import log from "./log";
 import subjects from "./subjects";
 
 const debug = false;
@@ -22,5 +20,5 @@ server.events.on(gsi.Dota2Event.Dota2ObserverState, (event: gsi.IDota2ObserverSt
     handle(event.state);
 });
 
-log.info("Starting GSI server on port 9001");
+log.gsi.info("Starting GSI server on port 9001");
 server.listen(9001);

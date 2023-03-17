@@ -5,14 +5,12 @@ import axios, {
     AxiosResponse,
 } from "axios";
 import colors from "@colors/colors";
-import {
-    discordLog as log,
-} from "./log";
 import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
 import Voice = require("@discordjs/voice");
 import path = require("path");
+import log from "./log";
 
 dotenv.config();
 
@@ -34,18 +32,18 @@ const errorColor = colors.red;
 
 function playNext() {
     if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
-        log.debug("Audio player not ready to accept new audio");
+        log.discord.debug("Audio player not ready to accept new audio");
         return;
     }
-    log.debug("Audio player status is idle");
+    log.discord.debug("Audio player status is idle");
 
-    log.verbose("Check queue for next audio resource");
+    log.discord.verbose("Check queue for next audio resource");
     const audioResource = audioQueue.shift();
     if (audioResource) {
-        log.info("Playing next audio resource");
+        log.discord.info("Playing next audio resource");
         subscription.player.play(audioResource);
     } else {
-        log.verbose("Audio queue is empty");
+        log.discord.verbose("Audio queue is empty");
     }
 }
 
@@ -54,11 +52,11 @@ function onAudioPlayerStatusIdle() {
 }
 
 function onVoiceConnectionReady() {
-    log.info("VoiceConnection ready to play audio!".green);
+    log.discord.info("VoiceConnection ready to play audio!".green);
 }
 
 function onAudioFilePath(filePath: string) {
-    log.info("Enqueue file at path %s", emColor(filePath));
+    log.discord.info("Enqueue file at path %s", emColor(filePath));
     audioQueue.push(Voice.createAudioResource(filePath));
     playNext();
 }
@@ -70,28 +68,28 @@ function ttsPath(ttsString: string) {
 function onTtsResponse(response : AxiosResponse, ttsString: string) {
     const write : fs.WriteStream = response.data.pipe(fs.createWriteStream(ttsPath(ttsString)));
     write.on("close", () => {
-        log.verbose("Finished writing TTS '%s' to file", ttsString);
+        log.discord.verbose("Finished writing TTS '%s' to file", ttsString);
         playAudioFile(ttsPath(ttsString));
     });
 }
 
 function onDiscordClientReady() {
     if (!discordClient || !discordClient.user) {
-        log.error("Could not find Discord client or user. Check your .env file");
+        log.discord.error("Could not find Discord client or user. Check your .env file");
         return;
     }
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     if (!guild) {
-        log.error("Could not find Discord guild %s. Check your .env file", errorColor(process.env.HARD_CODED_GUILD_NAME || "undefined"));
+        log.discord.error("Could not find Discord guild %s. Check your .env file", errorColor(process.env.HARD_CODED_GUILD_NAME || "undefined"));
         return;
     }
     const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
     if (!channel) {
-        log.error("Could not find Discord channel %s in guild %s. Check your .env file", errorColor(process.env.HARD_CODED_VOICE_CHANNEL_NAME || "undefined"), guild.name);
+        log.discord.error("Could not find Discord channel %s in guild %s. Check your .env file", errorColor(process.env.HARD_CODED_VOICE_CHANNEL_NAME || "undefined"), guild.name);
         return;
     }
 
-    log.info(
+    log.discord.info(
         "Discord ready with user: %s guild: %s channel: %s",
         emColor(discordClient.user.tag),
         emColor(guild.name),
@@ -113,13 +111,13 @@ function onDiscordClientReady() {
     // logging
     player.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, emColor(newState.status));
+            log.discord.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, emColor(newState.status));
         }
     });
 
     connection.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, emColor(newState.status));
+            log.discord.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, emColor(newState.status));
         }
     });
 }
@@ -128,23 +126,23 @@ discordClient.on("ready", onDiscordClientReady);
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => {
-        log.error("Error logging into Discord. Check your .env file - %s", errorColor(e.message));
+        log.discord.error("Error logging into Discord. Check your .env file - %s", errorColor(e.message));
     });
 
 function playAudioFile(filePath: string) {
     if (fs.existsSync(filePath)) {
         onAudioFilePath(filePath);
     } else {
-        log.error("Unable to play file at path %s", errorColor(filePath));
+        log.discord.error("Unable to play file at path %s", errorColor(filePath));
     }
 }
 
 function playTTS(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
-        log.info("Found cached TTS %s", ttsString);
+        log.discord.info("Found cached TTS %s", ttsString);
         playAudioFile(ttsPath(ttsString));
     } else {
-        log.info("Processing TTS string '%s'", ttsString);
+        log.discord.info("Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
         axios({
             method:       "get",
@@ -153,7 +151,7 @@ function playTTS(ttsString: string) {
         })
             .then((response) => onTtsResponse(response, ttsString))
             .catch((error) => {
-                log.error("Unable to TTS %s with error message %s", errorColor(ttsString), errorColor(error.message));
+                log.discord.error("Unable to TTS %s with error message %s", errorColor(ttsString), errorColor(error.message));
             });
     }
 }
