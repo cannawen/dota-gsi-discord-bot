@@ -41,7 +41,18 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
 //     silly: 6
 // }
 
-function createMap(label: string, debug: boolean) {
+function createMap(label: string, level: boolean | string) {
+    let levelString = "info";
+
+    if (typeof level === "string") {
+        levelString = level;
+    } else if (typeof level === "boolean") {
+        levelString = level ? "debug" : "info";
+    } else {
+        // eslint-disable-next-line no-console
+        console.log(`Invalid level parameter ${level}. Defaulting to "info"`);
+    }
+
     return {
         format: winston.format.combine(
             winston.format.colorize(),
@@ -56,7 +67,7 @@ function createMap(label: string, debug: boolean) {
                 message: false,
             })
         ),
-        level:      debug ? "debug" : "info",
+        level:      levelString,
         transports: [
             new winston.transports.File({
                 filename: "error.log",
@@ -80,7 +91,7 @@ const discord = winston.createLogger(createMap("[DISCORD]".blue, DISCORD_LOG_LEV
 const gsi = winston.createLogger(createMap("[GSI]".magenta, GSI_LOG_LEVEL_DEBUG));
 const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, GSI_LOG_LEVEL_DEBUG));
 const gsiGameState = winston.createLogger(createMap("[GSI GAME STATE]".magenta, GSI_LOG_LEVEL_DEBUG));
-const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, true));
+const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, "silly"));
 const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, GSI_LOG_LEVEL_DEBUG));
 
 export default {
