@@ -58,7 +58,6 @@ export default class GsiEventsSubject extends GsiSubject implements IGsiGameStat
 
     public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): void {
         if (state.events) {
-            // change time to game time
             log.debug("events %s", state.events);
             this.handle(state.events);
         }

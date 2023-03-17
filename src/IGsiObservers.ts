@@ -3,6 +3,14 @@ interface IGsiBaseObserver {
 
 }
 
+interface IGsiItemsObserver {
+    items: () => void
+}
+
+function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
+    return typeof observer.items === "function";
+}
+
 // Refactor to "inAGame" and "notInGame"
 interface IGsiGameStateObserver extends IGsiBaseObserver {
     inGame: (inGame: boolean) => { type: string, data: any };
@@ -31,9 +39,11 @@ function isGsiEventObserver(observer: any): observer is IGsiEventsObserver {
 export {
     IGsiBaseObserver,
     IGsiGameStateObserver,
+    IGsiItemsObserver,
     IGsiTimeObserver,
     IGsiEventsObserver,
     isGsiGameStateObserver,
+    isGsiItemsObserver,
     isGsiTimeObserver,
     isGsiEventObserver,
 };

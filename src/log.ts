@@ -100,7 +100,6 @@ const gsiLog = winston.createLogger({
     transports: createTransports(),
 });
 
-// not sure why we need to add loggers to a container, but it's what the winston README does
 winston.loggers.add("discord", discordLog);
 winston.loggers.add("gsi", gsiLog);
 

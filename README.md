@@ -31,6 +31,9 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 - Create a folder `/plugins/<your plugin>` and create a class that implement one or more subject-observing interface(s)
 - Create an instance of the class and register it in `/plugins/<your plugin>/index.ts`
 - Enable the plugin by importing it to `plugins/enabledPlugins.ts`
+### To add a new GSI event
+- Create a subject under `/gsi` that extends `GsiSubject`
+- Create the subject in `subjects.ts`
 
 ## Code Formatting
 - Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
