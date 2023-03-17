@@ -1,9 +1,6 @@
-import {
-    IGsiBaseObserver,
-} from "./IGsiObservers";
 import subjects from "./subjects";
 
-function register(observer: IGsiBaseObserver) {
+function register(observer: any) {
     subjects.map(({
         subject, typeChecker,
     }) => {

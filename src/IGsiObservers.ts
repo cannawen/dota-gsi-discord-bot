@@ -1,8 +1,4 @@
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface IGsiBaseObserver {
-
-}
-
 interface IGsiItemsObserver {
     items: () => void
 }
@@ -12,7 +8,7 @@ function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
 }
 
 // Refactor to "inAGame" and "notInGame"
-interface IGsiGameStateObserver extends IGsiBaseObserver {
+interface IGsiGameStateObserver {
     inGame: (inGame: boolean) => { type: string, data: any };
 }
 
@@ -20,7 +16,7 @@ function isGsiGameStateObserver(observer: any): observer is IGsiGameStateObserve
     return typeof observer.inGame === "function";
 }
 
-interface IGsiTimeObserver extends IGsiBaseObserver {
+interface IGsiTimeObserver {
     handleTime: (time: number) => { type: string, data: any };
 }
 
@@ -28,7 +24,7 @@ function isGsiTimeObserver(observer: any): observer is IGsiTimeObserver {
     return typeof observer.handleTime === "function";
 }
 
-interface IGsiEventsObserver extends IGsiBaseObserver {
+interface IGsiEventsObserver {
     handleEvent: (eventType: string, time: number) => { type: string, data: any };
 }
 
@@ -37,7 +33,6 @@ function isGsiEventObserver(observer: any): observer is IGsiEventsObserver {
 }
 
 export {
-    IGsiBaseObserver,
     IGsiGameStateObserver,
     IGsiItemsObserver,
     IGsiTimeObserver,

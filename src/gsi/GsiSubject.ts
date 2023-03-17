@@ -1,12 +1,9 @@
-import {
-    IGsiBaseObserver,
-} from "../IGsiObservers";
 import gsi = require("node-gsi");
 
 export default abstract class GsiSubject {
-    protected subscribers : IGsiBaseObserver[] = [];
+    protected subscribers : any = [];
 
-    public addObserver(newObserver: IGsiBaseObserver) {
+    public addObserver(newObserver: any) {
         this.subscribers.push(newObserver);
     }
 
