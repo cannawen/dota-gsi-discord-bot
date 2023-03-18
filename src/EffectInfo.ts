@@ -1,6 +1,5 @@
 import EffectType from "./EffectType";
 
-// TODO have static constructor for each effect type
 export default class EffectInfo {
     type: EffectType;
     data: string;
