@@ -2,12 +2,6 @@ import {
     MatcherFunction,
 } from "expect";
 
-type OwnMatcher<Params extends unknown[]> = (
-  this: jest.MatcherContext,
-  actual: unknown,
-  ...params: Params
-) => jest.CustomMatcherResult
-
 declare global {
   namespace jest {
     interface Matchers<R, T> {
@@ -22,7 +16,7 @@ declare global {
 
     interface ExpectExtendMap {
       toBeAudio: MatcherFunction<[fileName: string]>;
-      toBeWithinRange: OwnMatcher<[min: number, max: number]>;
+      toBeWithinRange: MatcherFunction<[min: number, max: number]>;
       setContaining: MatcherFunction<[unknown[]]>;
     }
   }
