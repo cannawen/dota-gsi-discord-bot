@@ -35,7 +35,7 @@ expect.extend({
 
     toBeAudio(actual, expected) {
         if (!(actual instanceof SideEffectInfo)) {
-            throw new Error("Actual value must be a string");
+            throw new Error("Actual value must be a SideEffectInfo");
         }
 
         const pass = actual.type == Type.AUDIO_FILE && actual.data == expected;
@@ -43,14 +43,14 @@ expect.extend({
         return {
             pass,
             message: pass
-                ? () => `expected to have different data ${actual.data} in audio file`
-                : () => `expected to have data ${actual.data} in audio file`,
+                ? () => `expected to have different file name than ${actual.data}`
+                : () => `actual file name ${actual.data?.red} in audio file instead of ${expected.green}`,
         };
     },
 
     toBeTTS(actual, expected) {
         if (!(actual instanceof SideEffectInfo)) {
-            throw new Error("Actual value must be a string");
+            throw new Error("Actual value must be a SideEffectInfo");
         }
 
         const pass = actual.type == Type.TTS && actual.data == expected;
@@ -58,8 +58,8 @@ expect.extend({
         return {
             pass,
             message: pass
-                ? () => `expected to have different data ${actual.data} in TTS file`
-                : () => `expected to have data ${actual.data} in TTS file`,
+                ? () => `expected to have different message than ${actual.data?.red}`
+                : () => `actual TTS message was ${actual.data?.red} instead of ${expected.green}`,
         };
     },
 });
