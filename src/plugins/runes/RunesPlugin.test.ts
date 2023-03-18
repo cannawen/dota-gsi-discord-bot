@@ -23,6 +23,7 @@ describe("RunesPlugin", () => {
             });
             test("should return audio side effect", () => {
                 const sideEffectInfo = sut.handleTime(1);
+                // TODO remove
                 expect(5).toBeWithinRange(3, 6);
                 expect(sideEffectInfo).toBeAudio("bounty_and_power_runes.wav");
             });

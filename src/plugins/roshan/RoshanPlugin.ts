@@ -1,11 +1,10 @@
+import Constants from "./Constants";
 import {
     IGsiEventsObserver,
     IGsiGameStateObserver,
     IGsiTimeObserver,
 } from "../../IGsiObservers";
 import EffectInfo from "../../EffectInfo";
-import EffectType from "../../EffectType";
-import Constants from "./Constants";
 import logic from "./logic";
 
 export default class RoshanPlugin
@@ -37,9 +36,9 @@ implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
             this.roshStatus = newRoshStatus;
             switch (newRoshStatus) {
                 case Constants.Status.ALIVE:
-                    return new EffectInfo(EffectType.AUDIO_FILE, "rosh-alive.mp3");
+                    return EffectInfo.createAudioFile("rosh-alive.mp3");
                 case Constants.Status.UNKNOWN:
-                    return new EffectInfo(EffectType.AUDIO_FILE, "rosh-maybe.mp3");
+                    return EffectInfo.createAudioFile("rosh-maybe.mp3");
                 default:
                     break;
             }

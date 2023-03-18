@@ -2,7 +2,6 @@ import {
     IGsiItemsObserver, IGsiTimeObserver,
 } from "../../IGsiObservers";
 import EffectInfo from "../../EffectInfo";
-import EffectType from "../../EffectType";
 import {
     PlayerItems,
 } from "../../gsi/GsiItemsSubject";
@@ -16,7 +15,7 @@ export default class TrustyShovelPlugin implements IGsiItemsObserver, IGsiTimeOb
         this.currentTime = time;
         if (this.shovelCanBeUsed && this.currentTime - this.lastShovelReminderTime >= 15) {
             this.lastShovelReminderTime = this.currentTime;
-            return new EffectInfo(EffectType.TTS, "dig");
+            return EffectInfo.createTTS("dig");
         }
     }
 

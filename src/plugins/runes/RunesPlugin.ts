@@ -1,6 +1,5 @@
 import Constants from "./Constants";
 import EffectInfo from "../../EffectInfo";
-import EffectType from "../../EffectType";
 import {
     IGsiTimeObserver,
 } from "../../IGsiObservers";
@@ -13,7 +12,7 @@ export default class RunesPlugin implements IGsiTimeObserver {
             const audioFileName = Constants.Audio[audioKey];
 
             if (audioFileName) {
-                return new EffectInfo(EffectType.AUDIO_FILE, audioFileName);
+                return EffectInfo.createAudioFile(audioFileName);
             }
         }
     }
