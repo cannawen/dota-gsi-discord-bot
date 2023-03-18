@@ -1,16 +1,15 @@
+import EffectInfo from "./EffectInfo";
+import EffectType from "./EffectType";
 import log from "./log";
-import SideEffectInfo, {
-    Type,
-} from "./SideEffectInfo";
 
-type SideEffectFunction = (info: SideEffectInfo) => void
-const registry : Map <Type, SideEffectFunction> = new Map();
+type SideEffectFunction = (info: EffectInfo) => void
+const registry : Map <EffectType, SideEffectFunction> = new Map();
 
-function register(type: Type, f: SideEffectFunction) {
+function register(type: EffectType, f: SideEffectFunction) {
     registry.set(type, f);
 }
 
-function invoke(info: SideEffectInfo | void) {
+function invoke(info: EffectInfo | void) {
     if (info) {
         const f = registry.get(info.type);
         if (f) {

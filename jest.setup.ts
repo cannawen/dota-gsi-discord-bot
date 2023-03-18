@@ -1,6 +1,5 @@
-import SideEffectInfo, {
-    Type,
-} from "./src/SideEffectInfo";
+import EffectInfo from "./src/EffectInfo";
+import EffectType from "./src/EffectType";
 
 expect.extend({
     toBeWithinRange(actual, min, max) {
@@ -34,11 +33,11 @@ expect.extend({
     },
 
     toBeAudio(actual, expected) {
-        if (!(actual instanceof SideEffectInfo)) {
-            throw new Error("Actual value must be a SideEffectInfo");
+        if (!(actual instanceof EffectInfo)) {
+            throw new Error("Actual value must be a EffectInfo");
         }
 
-        const pass = actual.type == Type.AUDIO_FILE && actual.data == expected;
+        const pass = actual.type == EffectType.AUDIO_FILE && actual.data == expected;
 
         return {
             pass,
@@ -49,11 +48,11 @@ expect.extend({
     },
 
     toBeTTS(actual, expected) {
-        if (!(actual instanceof SideEffectInfo)) {
-            throw new Error("Actual value must be a SideEffectInfo");
+        if (!(actual instanceof EffectInfo)) {
+            throw new Error("Actual value must be a EffectInfo");
         }
 
-        const pass = actual.type == Type.TTS && actual.data == expected;
+        const pass = actual.type == EffectType.TTS && actual.data == expected;
 
         return {
             pass,

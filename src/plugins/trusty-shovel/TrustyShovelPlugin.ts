@@ -1,9 +1,8 @@
 import {
     IGsiItemsObserver, IGsiTimeObserver,
 } from "../../IGsiObservers";
-import SideEffectInfo, {
-    Type,
-} from "../../SideEffectInfo";
+import EffectInfo from "../../EffectInfo";
+import EffectType from "../../EffectType";
 import {
     PlayerItems,
 } from "../../gsi/GsiItemsSubject";
@@ -13,11 +12,11 @@ export default class TrustyShovelPlugin implements IGsiItemsObserver, IGsiTimeOb
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;
 
-    handleTime(time: number) : SideEffectInfo | void {
+    handleTime(time: number) : EffectInfo | void {
         this.currentTime = time;
         if (this.shovelCanBeUsed && this.currentTime - this.lastShovelReminderTime >= 15) {
             this.lastShovelReminderTime = this.currentTime;
-            return new SideEffectInfo(Type.TTS, "dig");
+            return new EffectInfo(EffectType.TTS, "dig");
         }
     }
 

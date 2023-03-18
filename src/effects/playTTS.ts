@@ -1,10 +1,9 @@
-import SideEffectInfo, {
-    Type,
-} from "../SideEffectInfo";
+import EffectInfo from "../EffectInfo";
+import EffectType from "../EffectType";
 import discord from "../discord";
 import effects from "../effectsRegistry";
 
-effects.register(Type.TTS, (info: SideEffectInfo) => {
+effects.register(EffectType.TTS, (info: EffectInfo) => {
     if (info.data) {
         discord.playTTS(info.data);
     }

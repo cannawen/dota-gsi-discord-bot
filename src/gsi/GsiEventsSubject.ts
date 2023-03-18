@@ -6,7 +6,6 @@ import effects from "../effectsRegistry";
 import gsi from "node-gsi";
 import GsiSubject from "./GsiSubject";
 import log from "../log";
-import SideEffectInfo from "../SideEffectInfo";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
     return event1.gameTime === event2.gameTime

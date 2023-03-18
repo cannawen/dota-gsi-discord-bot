@@ -1,10 +1,10 @@
+import EffectInfo from "./EffectInfo";
 import {
     PlayerItems,
 } from "./gsi/GsiItemsSubject";
-import SideEffectInfo from "./SideEffectInfo";
 
 interface IGsiItemsObserver {
-    items: (items: PlayerItems) => SideEffectInfo | void
+    items: (items: PlayerItems) => EffectInfo | void
 }
 
 function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
@@ -13,7 +13,7 @@ function isGsiItemsObserver(observer: any): observer is IGsiItemsObserver {
 
 // Refactor to "inAGame" and "notInGame"
 interface IGsiGameStateObserver {
-    inGame: (inGame: boolean) => SideEffectInfo | void;
+    inGame: (inGame: boolean) => EffectInfo | void;
 }
 
 function isGsiGameStateObserver(observer: any): observer is IGsiGameStateObserver {
@@ -21,7 +21,7 @@ function isGsiGameStateObserver(observer: any): observer is IGsiGameStateObserve
 }
 
 interface IGsiTimeObserver {
-    handleTime: (time: number) => SideEffectInfo | void;
+    handleTime: (time: number) => EffectInfo | void;
 }
 
 function isGsiTimeObserver(observer: any): observer is IGsiTimeObserver {
@@ -29,7 +29,7 @@ function isGsiTimeObserver(observer: any): observer is IGsiTimeObserver {
 }
 
 interface IGsiEventsObserver {
-    handleEvent: (eventType: string, time: number) => SideEffectInfo | void;
+    handleEvent: (eventType: string, time: number) => EffectInfo | void;
 }
 
 function isGsiEventObserver(observer: any): observer is IGsiEventsObserver {

@@ -3,9 +3,8 @@ import {
     IGsiGameStateObserver,
     IGsiTimeObserver,
 } from "../../IGsiObservers";
-import SideEffectInfo, {
-    Type,
-} from "../../SideEffectInfo";
+import EffectInfo from "../../EffectInfo";
+import EffectType from "../../EffectType";
 import Constants from "./Constants";
 import logic from "./logic";
 
@@ -31,16 +30,16 @@ implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
         }
     }
 
-    public handleTime(time: number) : SideEffectInfo | void {
+    public handleTime(time: number) : EffectInfo | void {
         this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
             switch (newRoshStatus) {
                 case Constants.Status.ALIVE:
-                    return new SideEffectInfo(Type.AUDIO_FILE, "rosh-alive.mp3");
+                    return new EffectInfo(EffectType.AUDIO_FILE, "rosh-alive.mp3");
                 case Constants.Status.UNKNOWN:
-                    return new SideEffectInfo(Type.AUDIO_FILE, "rosh-maybe.mp3");
+                    return new EffectInfo(EffectType.AUDIO_FILE, "rosh-maybe.mp3");
                 default:
                     break;
             }
