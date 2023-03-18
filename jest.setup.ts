@@ -1,3 +1,7 @@
+import SideEffectInfo, {
+    Type,
+} from "./src/SideEffectInfo";
+
 expect.extend({
     toBeWithinRange(actual, min, max) {
         if (typeof actual !== "number") {
@@ -26,6 +30,23 @@ expect.extend({
             message: pass
                 ? () => `expected Set not to contain ${expected.join(", ")}`
                 : () => `expected Set to contain ${expected.join(", ")}`,
+        };
+    },
+
+    toBeAudio(actual, expected) {
+        if (!(actual instanceof SideEffectInfo)) {
+            throw new Error("Actual value must be a string");
+        }
+
+        const isAudioFile = actual.type == Type.AUDIO_FILE;
+        const isSameData = actual.data == expected;
+        const pass = isAudioFile && isSameData;
+
+        return {
+            pass,
+            message: pass
+                ? () => `expected to have different data ${actual.data} in audio file`
+                : () => `expected to have data ${actual.data} in audio file`,
         };
     },
 });

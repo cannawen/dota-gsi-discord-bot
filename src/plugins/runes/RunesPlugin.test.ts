@@ -21,10 +21,10 @@ describe("RunesPlugin", () => {
                 expect(sut.handleTime(-1)).toBeUndefined();
                 expect(sut.handleTime(0)).toBeUndefined();
             });
-            test("should return tts side effect", () => {
+            test("should return audio side effect", () => {
                 const sideEffectInfo = sut.handleTime(1);
-                expect(sideEffectInfo).toHaveProperty("data", "bounty_and_power_runes.wav");
-                expect(sideEffectInfo).toHaveProperty("type", "AUDIO_FILE");
+                expect(5).toBeWithinRange(3, 6);
+                expect(sideEffectInfo).toBeAudio("bounty_and_power_runes.wav");
             });
         });
 
