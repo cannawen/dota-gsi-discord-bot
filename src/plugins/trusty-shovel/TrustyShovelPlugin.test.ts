@@ -2,7 +2,6 @@ import {
     Item,
     PlayerItems,
 } from "../../gsi/GsiItemsSubject";
-import SideEffectInfo from "../../SideEffectInfo";
 import TrustyShovelPlugin from "./TrustyShovelPlugin";
 
 describe("Trusty shovel plugin", () => {
