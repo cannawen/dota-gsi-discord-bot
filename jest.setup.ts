@@ -38,15 +38,28 @@ expect.extend({
             throw new Error("Actual value must be a string");
         }
 
-        const isAudioFile = actual.type == Type.AUDIO_FILE;
-        const isSameData = actual.data == expected;
-        const pass = isAudioFile && isSameData;
+        const pass = actual.type == Type.AUDIO_FILE && actual.data == expected;
 
         return {
             pass,
             message: pass
                 ? () => `expected to have different data ${actual.data} in audio file`
                 : () => `expected to have data ${actual.data} in audio file`,
+        };
+    },
+
+    toBeTTS(actual, expected) {
+        if (!(actual instanceof SideEffectInfo)) {
+            throw new Error("Actual value must be a string");
+        }
+
+        const pass = actual.type == Type.TTS && actual.data == expected;
+
+        return {
+            pass,
+            message: pass
+                ? () => `expected to have different data ${actual.data} in TTS file`
+                : () => `expected to have data ${actual.data} in TTS file`,
         };
     },
 });
