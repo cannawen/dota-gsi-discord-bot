@@ -1,12 +1,11 @@
-import {
-    IGsiItemsObserver, IGsiTimeObserver,
-} from "../../IGsiObservers";
 import EffectInfo from "../../EffectInfo";
+import GsiItemsObserver from "../../gsi/GsiItemsObserver";
+import GsiTimeObserver from "../../gsi/GsiTimeObserver";
 import {
     PlayerItems,
-} from "../../gsi/GsiItemsSubject";
+} from "../../gsi/GsiItems";
 
-export default class TrustyShovelPlugin implements IGsiItemsObserver, IGsiTimeObserver {
+export default class TrustyShovelPlugin implements GsiItemsObserver, GsiTimeObserver {
     private currentTime: number | undefined;
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;

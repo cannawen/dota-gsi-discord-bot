@@ -1,14 +1,12 @@
 import Constants from "./Constants";
-import {
-    IGsiEventsObserver,
-    IGsiGameStateObserver,
-    IGsiTimeObserver,
-} from "../../IGsiObservers";
 import EffectInfo from "../../EffectInfo";
+import GsiEventsObserver from "../../gsi/GsiEventsObserver";
+import GsiGameStateObserver from "../../gsi/GsiGameStateObserver";
+import GsiTimeObserver from "../../gsi/GsiTimeObserver";
 import logic from "./logic";
 
 export default class RoshanPlugin
-implements IGsiTimeObserver, IGsiGameStateObserver, IGsiEventsObserver {
+implements GsiTimeObserver, GsiGameStateObserver, GsiEventsObserver {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;

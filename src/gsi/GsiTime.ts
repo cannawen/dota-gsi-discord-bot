@@ -2,14 +2,12 @@ import {
     IDota2ObserverState, IDota2State,
 } from "node-gsi";
 import effects from "../effectsRegistry";
-import GsiSubject from "./GsiSubject";
-import {
-    IGsiTimeObserver,
-} from "../IGsiObservers";
+import GsiBase from "./GsiBase";
+import GsiTimeObserver from "./GsiTimeObserver";
 import log from "../log";
 
-export default class GsiTimeSubject extends GsiSubject {
-    protected observers : IGsiTimeObserver[] = [];
+export default class GsiTime extends GsiBase {
+    protected observers : GsiTimeObserver[] = [];
     private time: number | undefined;
 
     private currentTime(newTime: number) {

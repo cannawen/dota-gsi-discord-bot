@@ -1,7 +1,6 @@
 import {
-    Item,
-    PlayerItems,
-} from "../../gsi/GsiItemsSubject";
+    Item, PlayerItems,
+} from "../../gsi/GsiItems";
 import TrustyShovelPlugin from "./TrustyShovelPlugin";
 
 describe("Trusty shovel plugin", () => {

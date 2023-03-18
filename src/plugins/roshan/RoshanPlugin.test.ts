@@ -9,7 +9,7 @@ describe("RoshanPlugin", () => {
         sut = new RoshanPlugin();
     });
 
-    describe("IGsiEventsObserver.handleEvent", () => {
+    describe("GsiEventsObserver.handleEvent", () => {
         describe("on any event", () => {
             test("return no side effect", () => {
                 sut.handleTime(0);
@@ -21,7 +21,7 @@ describe("RoshanPlugin", () => {
         });
     });
 
-    describe("IGsiGameStateObserver.inGame", () => {
+    describe("GsiGameStateObserver.inGame", () => {
         test("return no side effect", () => {
             expect(sut.inGame(true)).toBeUndefined();
             expect(sut.inGame(false)).toBeUndefined();
@@ -34,7 +34,7 @@ describe("RoshanPlugin", () => {
             sut.handleEvent("roshan_killed", 0);
         });
 
-        describe("IGsiTimeObserver.handleTime", () => {
+        describe("GsiTimeObserver.handleTime", () => {
             test("time at 0:01 should return no side effect", () => {
                 expect(sut.handleTime(1)).toBeUndefined();
             });
@@ -75,7 +75,7 @@ describe("RoshanPlugin", () => {
             });
         });
 
-        describe("IGsiGameStateObserver.inGame", () => {
+        describe("GsiGameStateObserver.inGame", () => {
             describe("we exit the game and join a new one", () => {
                 beforeEach(() => {
                     sut.inGame(false);

@@ -3,14 +3,12 @@ import {
 } from "node-gsi";
 import effects from "../effectsRegistry";
 import gsi = require("node-gsi");
-import GsiSubject from "./GsiSubject";
-import {
-    IGsiGameStateObserver,
-} from "../IGsiObservers";
+import GsiBase from "./GsiBase";
+import GsiGameStateObserver from "./GsiGameStateObserver";
 import log from "../log";
 
-export default class GsiGameStateSubject extends GsiSubject {
-    protected observers : IGsiGameStateObserver[] = [];
+export default class GsiGameState extends GsiBase {
+    protected observers : GsiGameStateObserver[] = [];
     private inGame = false;
 
     private isInGame(newInGame: boolean) {

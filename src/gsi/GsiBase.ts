@@ -1,7 +1,7 @@
 import gsi = require("node-gsi");
 import log from "../log";
 
-export default abstract class GsiSubject {
+export default abstract class GsiBase {
     protected observers : any = [];
 
     public addObserver(newObserver: any) {

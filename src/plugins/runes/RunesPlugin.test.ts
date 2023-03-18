@@ -7,7 +7,7 @@ jest.mock("./logic", () => jest.fn());
 describe("RunesPlugin", () => {
     let sut : RunesPlugin;
 
-    describe("IGsiGameStateObserver.handleTime", () => {
+    describe("GsiGameStateObserver.handleTime", () => {
         describe("logic returns audio key 1", () => {
             beforeEach(() => {
                 logic.mockImplementation(() => Constants.RuneId.BOUNTY | Constants.RuneId.POWER);

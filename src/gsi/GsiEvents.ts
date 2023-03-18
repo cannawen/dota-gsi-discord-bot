@@ -1,10 +1,8 @@
-import {
-    IGsiEventsObserver,
-    IGsiGameStateObserver,
-} from "../IGsiObservers";
 import effects from "../effectsRegistry";
 import gsi from "node-gsi";
-import GsiSubject from "./GsiSubject";
+import GsiBase from "./GsiBase";
+import GsiEventsObserver from "./GsiEventsObserver";
+import GsiGameStateObserver from "./GsiGameStateObserver";
 import log from "../log";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
@@ -13,8 +11,8 @@ function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
 }
 
 // TODO remove nodeGsi.IEvent dependency by turning into plain object
-export default class GsiEventsSubject extends GsiSubject implements IGsiGameStateObserver {
-    protected observers : IGsiEventsObserver[] = [];
+export default class GsiEvents extends GsiBase implements GsiGameStateObserver {
+    protected observers : GsiEventsObserver[] = [];
 
     // Note: right now events may overwrite each other if they have the same eventType and gameTime
     // 4 players grabbing 4 bounty runes at the same time will only count as 1 event

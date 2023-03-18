@@ -1,30 +1,35 @@
+import GsiEvents from "./gsi/GsiEvents";
+import GsiGameState from "./gsi/GsiGameState";
+import GsiItems from "./gsi/GsiItems";
+import GsiTime from "./gsi/GsiTime";
 import {
     isGsiEventObserver,
+} from "./gsi/GsiEventsObserver";
+import {
     isGsiGameStateObserver,
+} from "./gsi/GsiGameStateObserver";
+import {
     isGsiItemsObserver,
+} from "./gsi/GsiItemsObserver";
+import {
     isGsiTimeObserver,
-} from "./IGsiObservers";
-
-import GsiEventsSubject from "./gsi/GsiEventsSubject";
-import GsiGameStateSubject from "./gsi/GsiGameStateSubject";
-import GsiItemsSubject from "./gsi/GsiItemsSubject";
-import GsiTimeSubject from "./gsi/GsiTimeSubject";
+} from "./gsi/GsiTimeObserver";
 
 export default [
     {
-        subject:     new GsiEventsSubject(),
+        subject:     new GsiEvents(),
         typeChecker: isGsiEventObserver,
     },
     {
-        subject:     new GsiGameStateSubject(),
+        subject:     new GsiGameState(),
         typeChecker: isGsiGameStateObserver,
     },
     {
-        subject:     new GsiTimeSubject(),
+        subject:     new GsiTime(),
         typeChecker: isGsiTimeObserver,
     },
     {
-        subject:     new GsiItemsSubject(),
+        subject:     new GsiItems(),
         typeChecker: isGsiItemsObserver,
     },
 ];

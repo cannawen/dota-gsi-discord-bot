@@ -2,10 +2,8 @@ import {
     IDota2ObserverState, IDota2State, IItem, IItemContainer,
 } from "node-gsi";
 import effects from "../effectsRegistry";
-import GsiSubject from "./GsiSubject";
-import {
-    IGsiItemsObserver,
-} from "../IGsiObservers";
+import GsiBase from "./GsiBase";
+import GsiItemsObserver from "./GsiItemsObserver";
 import log from "../log";
 
 class Item {
@@ -56,8 +54,8 @@ export {
     PlayerItems,
 };
 
-export default class GsiItemsSubject extends GsiSubject {
-    protected observers: IGsiItemsObserver[] = [];
+export default class GsiItems extends GsiBase {
+    protected observers: GsiItemsObserver[] = [];
 
     private handleItems(itemContainer: IItemContainer) {
         log.gsiItems.debug(itemContainer);
