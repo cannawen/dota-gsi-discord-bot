@@ -12,7 +12,6 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 - When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version
 - `npm update`
 
-
 ## Dependencies
 ### Dota 2 Game State Integration
 Steam Library -> Right click Dota 2 -> Properties
@@ -30,7 +29,7 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 - `index.ts` creates a `node-gsi` server which hooks into Valve's Game State Integration
 - `/gsi` contains GSI subjects that can be observed. GSI subjects can also observe other GSI subjects
 - `/plugins` contains folders for each plugin. One plugin can observe multiple GSI subjects
-- `SideEffect` objects interact with state such as Discord in `announce.ts`
+- `effects` interact with external state such as Discord in `announce.ts`
 ### To add a new plugin
 - Create a folder `/plugins/<your plugin>` and create a class that implement one or more subject-observing interface(s)
 - Create an instance of the class and register it in `/plugins/<your plugin>/index.ts`
@@ -38,6 +37,9 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 ### To add a new GSI event
 - Create a subject under `/gsi` that extends `GsiSubject`
 - Create the subject in `subjects.ts`
+### To create a new effect
+- Create a new file in `effects` and register a handler function to an `EffectType`
+- Enable it in `enabledEffects.ts`
 
 ## Code Formatting
 - Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
