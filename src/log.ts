@@ -72,22 +72,12 @@ function createMap(label: string, levelString: string | undefined) {
     };
 }
 
-const discord = winston.createLogger(createMap("[DISCORD]".blue, process.env.DISCORD_LOG_LEVEL));
-
 const broker = winston.createLogger(createMap("[BROKER]".yellow, process.env.BROKER_LOG_LEVEL));
-
+const discord = winston.createLogger(createMap("[DISCORD]".blue, process.env.DISCORD_LOG_LEVEL));
 const gsi = winston.createLogger(createMap("[GSI]".magenta, process.env.GSI_LOG_LEVEL));
-const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, process.env.GSI_LOG_LEVEL));
-const gsiGameState = winston.createLogger(createMap("[GSI GAME STATE]".magenta, process.env.GSI_LOG_LEVEL));
-const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, process.env.GSI_LOG_LEVEL));
-const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, process.env.GSI_LOG_LEVEL));
 
 export default {
     broker,
     discord,
     gsi,
-    gsiEvents,
-    gsiGameState,
-    gsiItems,
-    gsiTime,
 };

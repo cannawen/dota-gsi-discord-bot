@@ -10,7 +10,7 @@ class GsiTime {
 
     public handleState(state: IDota2State | IDota2ObserverState): number | void {
         if (state.map?.clockTime) {
-            log.gsiTime.debug("map.clockTime %s", state.map.clockTime);
+            log.gsi.debug("map.clockTime %s", state.map.clockTime);
             const newTime = state.map.clockTime;
             if (this.time !== newTime) {
                 this.time = newTime;

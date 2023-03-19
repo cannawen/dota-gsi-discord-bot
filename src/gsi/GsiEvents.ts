@@ -44,7 +44,7 @@ class GsiEvents {
 
     public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): gsi.IEvent[] | void {
         if (state.events) {
-            log.gsiEvents.debug("events %s", state.events);
+            log.gsi.debug("events %s", state.events);
             return this.handle(state.events);
         }
     }
