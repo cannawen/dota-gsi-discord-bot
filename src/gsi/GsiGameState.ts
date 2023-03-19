@@ -36,4 +36,4 @@ class GsiGameState {
 }
 
 const component = new GsiGameState();
-broker.register(Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));
+broker.register("GSI/GAME_STATE", Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));

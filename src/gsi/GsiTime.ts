@@ -21,4 +21,4 @@ class GsiTime {
 }
 
 const component = new GsiTime();
-broker.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, component.handleState.bind(component));
+broker.register("GSI/TIME", Topic.GSI_DATA, Topic.DOTA_2_TIME, component.handleState.bind(component));

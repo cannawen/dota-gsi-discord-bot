@@ -12,4 +12,4 @@ class Stack {
 }
 
 const component = new Stack();
-broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register("ASSISTANT/STACK", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));

@@ -23,7 +23,7 @@ const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
-    broker.publish(Topic.GSI_DATA, state);
+    broker.publish("node-gsi", Topic.GSI_DATA, state);
 }
 
 server.events.on(gsi.Dota2Event.Dota2State, (event: gsi.IDota2StateEvent) => {

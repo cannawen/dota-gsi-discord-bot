@@ -25,5 +25,5 @@ export default class TrustyShovel {
 }
 
 const component = new TrustyShovel();
-broker.register(Topic.DOTA_2_ITEMS, null, component.items.bind(component));
-broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, component.handleTime.bind(component));
+broker.register("ASSISTANT/TRUSTY_SHOVEL", Topic.DOTA_2_ITEMS, null, component.items.bind(component));
+broker.register("ASSISTANT/TRUSTY_SHOVEL", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, component.handleTime.bind(component));

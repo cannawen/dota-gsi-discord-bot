@@ -13,4 +13,4 @@ export default class Runes {
 }
 
 const component = new Runes();
-broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register("ASSISTANT/RUNES", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));

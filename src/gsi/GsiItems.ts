@@ -72,4 +72,4 @@ class GsiItems {
 }
 
 const component = new GsiItems();
-broker.register(Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));
+broker.register("GSI/ITEMS", Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));
