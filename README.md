@@ -22,24 +22,26 @@ Steam Library -> Right click Dota 2 -> Properties
 - Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
 - Create a `.env` file with from copying `sample.env` and change relevant values
 
-## Architecture
+## Development
 ### Node and Typescript
 When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `dist` directory
-### What is what
-- `index.ts` creates a `node-gsi` server which hooks into Valve's Game State Integration
-- `/gsi` contains GSI subjects that can be observed. GSI subjects can also observe other GSI subjects
-- `/plugins` contains folders for each plugin. One plugin can observe multiple GSI subjects
-- `effects` interact with external state such as Discord in `announce.ts`
-### To add a new plugin
-- Create a folder `/plugins/<your plugin>` and create a class that implement one or more subject-observing interface(s)
-- Create an instance of the class and register it in `/plugins/<your plugin>/index.ts`
-- Enable the plugin by importing it to `plugins/enabledPlugins.ts`
-### To add a new GSI event
-- Create a subject under `/gsi` that extends `GsiSubject`
-- Create the subject in `subjects.ts`
-### To create a new effect
-- Create a new file in `effects` and register a handler function to an `EffectType`
-- Enable it in `enabledEffects.ts`
+### Logging
+winston containers weren't working, so just import your loggers from `log.ts` and feel free to create new loggers
+### What is happening
+- In general, there are three main sections of the app
+  - GSI that takes data form Valve's Game State integration and parses it to a form we can use (Time, Items)
+  - Plugins (Roshan, Trusty Shovel) that use that take the parsed data (Time, Items) and returns an effect (Audio File, TTS)
+  - An Effect that knows how to execute the desired effect (playing audio on discord)
+- These three sections communicate via `glue` using `Topic`s.
+- `Topic`s are strings representing the kind of data one may produce or consume.
+- The GSI server starts and produces a `Topic.GSI_DATA`
+- Code in `gsi/` consume `Topic.GSI_DATA` and produce their own topics as an output, such as `Topic.DOTA_2_TIME`
+- Code in `plugins/` consume topics such as `Topic.DOTA_2_TIME` and produce effects like `Topic.EFFECT_PLAY_FILE`
+- Code in `effects/` consume the effect and produce no outputs
+Note: There is no special requirement for the code to be separated into these three sections; a component can declare they want to consume a `Topic.GSI_DATA` and produce a `Topic.EFFECT_PLAY_FILE` if they wish. It is currently just separated into different folders for logical reasons
+### mitmproxy
+When you don't want to run dota to test your app, you can use mitmproxy to replay saved HTTP requests from GSI.  
+[See here for details](./mitmproxy.md)
 
 ## Code Formatting
 - Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
