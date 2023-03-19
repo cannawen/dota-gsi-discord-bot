@@ -3,7 +3,7 @@ import winston from "winston";
 
 const DISCORD_LOG_LEVEL_DEBUG = false;
 const GSI_LOG_LEVEL_DEBUG = false;
-const GLUE_LOG_LEVEL_DEBUG = false;
+const BROKER_LOG_LEVEL_DEBUG = false;
 
 function padTo(msg: string, length: number, truncate: boolean) {
     const stripped = colors.stripColors(msg);
@@ -89,7 +89,7 @@ function createMap(label: string, level: boolean | string) {
 
 const discord = winston.createLogger(createMap("[DISCORD]".blue, DISCORD_LOG_LEVEL_DEBUG));
 
-const glue = winston.createLogger(createMap("[GLUE]".yellow, GLUE_LOG_LEVEL_DEBUG));
+const broker = winston.createLogger(createMap("[BROKER]".yellow, BROKER_LOG_LEVEL_DEBUG));
 
 const gsi = winston.createLogger(createMap("[GSI]".magenta, GSI_LOG_LEVEL_DEBUG));
 const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, GSI_LOG_LEVEL_DEBUG));
@@ -99,7 +99,7 @@ const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, GSI_LOG_LEV
 
 export default {
     discord,
-    glue,
+    broker,
     gsi,
     gsiEvents,
     gsiGameState,

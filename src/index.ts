@@ -15,15 +15,15 @@ import "./effects/playTTS";
 import "./effects/playAudio";
 
 import gsi = require("node-gsi");
-import glue from "./glue";
+import broker from "./broker";
 import log from "./log";
-import topics from "./topics";
+import Topic from "./Topic";
 
 const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
-    glue.publish(topics.GSI_DATA, state);
+    broker.publish(Topic.GSI_DATA, state);
 }
 
 server.events.on(gsi.Dota2Event.Dota2State, (event: gsi.IDota2StateEvent) => {

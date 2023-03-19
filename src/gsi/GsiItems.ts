@@ -1,9 +1,9 @@
 import {
     IDota2ObserverState, IDota2State, IItem, IItemContainer,
 } from "node-gsi";
-import glue from "../glue";
+import broker from "../broker";
 import log from "../log";
-import topics from "../topics";
+import Topic from "../Topic";
 
 class Item {
     id: string;
@@ -72,4 +72,4 @@ class GsiItems {
 }
 
 const component = new GsiItems();
-glue.register(topics.GSI_DATA, topics.DOTA_2_ITEMS, component.handleState.bind(component));
+broker.register(Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));

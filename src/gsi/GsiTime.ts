@@ -1,9 +1,9 @@
 import {
     IDota2ObserverState, IDota2State,
 } from "node-gsi";
-import glue from "../glue";
+import broker from "../broker";
 import log from "../log";
-import topics from "../topics";
+import Topic from "../Topic";
 
 class GsiTime {
     private time: number | undefined;
@@ -21,4 +21,4 @@ class GsiTime {
 }
 
 const component = new GsiTime();
-glue.register(topics.GSI_DATA, topics.DOTA_2_TIME, component.handleState.bind(component));
+broker.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, component.handleState.bind(component));

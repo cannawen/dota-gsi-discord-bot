@@ -1,7 +1,7 @@
 import Constants from "./Constants";
-import glue from "../../glue";
+import broker from "../../broker";
 import timeToRuneIdBitmap from "./logic";
-import topics from "../../topics";
+import Topic from "../../Topic";
 
 export default class RunesPlugin {
     public handleTime(time: number) : string | null | undefined {
@@ -13,4 +13,4 @@ export default class RunesPlugin {
 }
 
 const component = new RunesPlugin();
-glue.register(topics.DOTA_2_TIME, topics.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));

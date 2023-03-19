@@ -1,10 +1,10 @@
 import discord from "../discord";
-import glue from "../glue";
+import broker from "../broker";
 import path from "node:path";
-import topics from "../topics";
+import Topic from "../Topic";
 
-glue.register(
-    topics.EFFECT_PLAY_FILE,
+broker.register(
+    Topic.EFFECT_PLAY_FILE,
     null,
     (filePath: string) => discord.playAudioFile(path.join(__dirname, "../../audio/", filePath))
 );

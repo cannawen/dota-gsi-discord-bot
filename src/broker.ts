@@ -2,7 +2,7 @@
 import log from "./log";
 import {
     Topic,
-} from "./topics";
+} from "./Topic";
 
 class Registrant<InType, OutType> {
     inTopic: Topic<InType>;
@@ -27,16 +27,16 @@ function register<InType, OutType>(
     outTopic: Topic<OutType> | null,
     handler: (input: InType) => OutType | void
 ) : void {
-    log.glue.debug("Registered %s to %s", inTopic.label.green, outTopic?.label.green);
+    log.broker.debug("Registered %s to %s", inTopic.label.green, outTopic?.label.green);
     registry.push(new Registrant(inTopic, outTopic, handler));
 }
 
 function publish<TopicType>(topic: Topic<TopicType>, data: TopicType) {
-    log.glue.debug("Publish %s", topic.label.green);
+    log.broker.debug("Publish %s", topic.label.green);
     registry.forEach((registrant) => {
         if (topic.label === registrant.inTopic.label) {
             const result = registrant.handler(data);
-            log.glue.debug(
+            log.broker.debug(
                 "Converting %s to %s",
                 registrant.inTopic.label.green,
                 registrant.outTopic?.label.green,

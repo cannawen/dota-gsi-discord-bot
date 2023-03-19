@@ -1,8 +1,8 @@
-import glue from "../../glue";
+import broker from "../../broker";
 import {
     PlayerItems,
 } from "../../gsi/GsiItems";
-import topics from "../../topics";
+import Topic from "../../Topic";
 
 export default class TrustyShovelPlugin {
     private currentTime: number | undefined;
@@ -25,5 +25,5 @@ export default class TrustyShovelPlugin {
 }
 
 const component = new TrustyShovelPlugin();
-glue.register(topics.DOTA_2_ITEMS, null, component.items.bind(component));
-glue.register(topics.DOTA_2_TIME, topics.EFFECT_PLAY_TTS, component.handleTime.bind(component));
+broker.register(Topic.DOTA_2_ITEMS, null, component.items.bind(component));
+broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, component.handleTime.bind(component));

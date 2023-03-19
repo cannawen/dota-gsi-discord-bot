@@ -1,5 +1,5 @@
-import glue from "../../glue";
-import topics from "../../topics";
+import broker from "../../broker";
+import Topic from "../../Topic";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 
@@ -12,4 +12,4 @@ class StackPlugin {
 }
 
 const component = new StackPlugin();
-glue.register(topics.DOTA_2_TIME, topics.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));

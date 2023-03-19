@@ -1,7 +1,7 @@
-import glue from "../glue";
+import broker from "../broker";
 import gsi from "node-gsi";
 import log from "../log";
-import topics from "../topics";
+import Topic from "../Topic";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
     return event1.gameTime === event2.gameTime
@@ -51,5 +51,5 @@ class GsiEvents {
 }
 
 const component = new GsiEvents();
-glue.register(topics.GSI_DATA, topics.DOTA_2_EVENTS, component.handleState.bind(component));
-glue.register(topics.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+broker.register(Topic.GSI_DATA, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
+broker.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));

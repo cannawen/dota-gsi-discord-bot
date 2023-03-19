@@ -1,8 +1,8 @@
 import Constants from "./Constants";
-import glue from "../../glue";
+import broker from "../../broker";
 import gsi from "node-gsi";
 import logic from "./logic";
-import topics from "../../topics";
+import Topic from "../../Topic";
 
 export default class RoshanPlugin {
     private currentTime: number | undefined;
@@ -57,6 +57,6 @@ export default class RoshanPlugin {
 }
 
 const component = new RoshanPlugin();
-glue.register(topics.DOTA_2_TIME, topics.EFFECT_PLAY_FILE, component.handleTime.bind(component));
-glue.register(topics.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
-glue.register(topics.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
+broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+broker.register(Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
