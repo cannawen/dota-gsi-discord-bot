@@ -88,7 +88,7 @@ function parseLogEnv(input: string) {
     const validLevels = new Set([ "error", "warn", "info", "http", "verbose", "debug", "silly" ]);
     const settings = input.split(",")
         .map((single) => single.split(":"))
-        .reduce((memo, [ label, level, color ]) => memo.set(label, {
+        .reduce((memo, [ label, level, color ]) => memo.set(label.toUpperCase(), {
             color,
             level,
         }), new Map());
@@ -124,7 +124,7 @@ function getLogger(label: string): winston.Logger {
 
 function makeLog(logLevel: string) {
     return (label:string, formatString:string, ...vars:any[]) => {
-        getLogger(label).log(logLevel, formatString, ...vars);
+        getLogger(label.toUpperCase()).log(logLevel, formatString, ...vars);
     };
 }
 
