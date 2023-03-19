@@ -4,7 +4,7 @@ import {
 } from "../../gsi/GsiItems";
 import Topic from "../../Topics";
 
-class TrustyShovelPlugin {
+export default class TrustyShovelPlugin {
     private currentTime: number | undefined;
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;

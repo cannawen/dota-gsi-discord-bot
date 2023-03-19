@@ -36,7 +36,7 @@ describe("Trusty shovel plugin", () => {
                 const shovel = new Item("item_trusty_shovel", "Trusty Shovel", 0);
                 sut.items(new PlayerItems([], [], shovel, null));
 
-                expect(sut.handleTime(15)).toBeTTS("dig");
+                expect(sut.handleTime(15)).toBe("dig");
             });
 
             describe("user does not use the shovel", () => {
@@ -46,7 +46,7 @@ describe("Trusty shovel plugin", () => {
                     sut.items(new PlayerItems([], [], shovel, null));
                     sut.handleTime(15);
                     expect(sut.handleTime(29)).toBeUndefined();
-                    expect(sut.handleTime(30)).toBeTTS("dig");
+                    expect(sut.handleTime(30)).toBe("dig");
                     expect(sut.handleTime(31)).toBeUndefined();
                 });
             });

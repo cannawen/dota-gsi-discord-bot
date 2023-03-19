@@ -4,7 +4,7 @@ import gsi from "node-gsi";
 import logic from "./logic";
 import Topic from "../../Topics";
 
-class RoshanPlugin {
+export default class RoshanPlugin {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;

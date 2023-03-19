@@ -18,14 +18,11 @@ describe("RunesPlugin", () => {
                 expect(logic).toHaveBeenCalledWith(16);
             });
             test("returns no side effect before or euqal to time 0", () => {
-                expect(sut.handleTime(-1)).toBeUndefined();
-                expect(sut.handleTime(0)).toBeUndefined();
+                expect(sut.handleTime(-1)).toBeFalsy();
+                expect(sut.handleTime(0)).toBeFalsy();
             });
             test("should return audio side effect", () => {
-                const sideEffectInfo = sut.handleTime(1);
-                // TODO remove
-                expect(5).toBeWithinRange(3, 6);
-                expect(sideEffectInfo).toBeAudio("bounty_and_power_runes.wav");
+                expect(sut.handleTime(1)).toBe("bounty_and_power_runes.wav");
             });
         });
 
@@ -35,7 +32,7 @@ describe("RunesPlugin", () => {
                 sut = new RunesPlugin();
             });
             test("should return no side effect", () => {
-                expect(sut.handleTime(1)).toBeUndefined();
+                expect(sut.handleTime(1)).toBeFalsy();
             });
         });
     });
