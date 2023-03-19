@@ -1,10 +1,6 @@
 import colors from "@colors/colors";
 import winston from "winston";
 
-const DISCORD_LOG_LEVEL_DEBUG = false;
-const GSI_LOG_LEVEL_DEBUG = false;
-const BROKER_LOG_LEVEL_DEBUG = false;
-
 function padTo(msg: string, length: number, truncate: boolean) {
     const stripped = colors.stripColors(msg);
     if (stripped.length < length) {
@@ -42,18 +38,7 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
 //     silly: 6
 // }
 
-function createMap(label: string, level: boolean | string) {
-    let levelString = "info";
-
-    if (typeof level === "string") {
-        levelString = level;
-    } else if (typeof level === "boolean") {
-        levelString = level ? "debug" : "info";
-    } else {
-        // eslint-disable-next-line no-console
-        console.log(`Invalid level parameter ${level}. Defaulting to "info"`);
-    }
-
+function createMap(label: string, levelString: string | undefined) {
     return {
         format: winston.format.combine(
             winston.format.colorize(),
@@ -68,7 +53,7 @@ function createMap(label: string, level: boolean | string) {
                 message: false,
             })
         ),
-        level:      levelString,
+        level:      levelString ? levelString : "info",
         transports: [
             new winston.transports.File({
                 filename: "error.log",
@@ -87,19 +72,19 @@ function createMap(label: string, level: boolean | string) {
     };
 }
 
-const discord = winston.createLogger(createMap("[DISCORD]".blue, DISCORD_LOG_LEVEL_DEBUG));
+const discord = winston.createLogger(createMap("[DISCORD]".blue, process.env.DISCORD_LOG_LEVEL));
 
-const broker = winston.createLogger(createMap("[BROKER]".yellow, BROKER_LOG_LEVEL_DEBUG));
+const broker = winston.createLogger(createMap("[BROKER]".yellow, process.env.BROKER_LOG_LEVEL));
 
-const gsi = winston.createLogger(createMap("[GSI]".magenta, GSI_LOG_LEVEL_DEBUG));
-const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, GSI_LOG_LEVEL_DEBUG));
-const gsiGameState = winston.createLogger(createMap("[GSI GAME STATE]".magenta, GSI_LOG_LEVEL_DEBUG));
-const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, GSI_LOG_LEVEL_DEBUG));
-const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, GSI_LOG_LEVEL_DEBUG));
+const gsi = winston.createLogger(createMap("[GSI]".magenta, process.env.GSI_LOG_LEVEL));
+const gsiEvents = winston.createLogger(createMap("[GSI EVENTS]".magenta, process.env.GSI_LOG_LEVEL));
+const gsiGameState = winston.createLogger(createMap("[GSI GAME STATE]".magenta, process.env.GSI_LOG_LEVEL));
+const gsiItems = winston.createLogger(createMap("[GSI ITEMS]".magenta, process.env.GSI_LOG_LEVEL));
+const gsiTime = winston.createLogger(createMap("[GSI TIME]".magenta, process.env.GSI_LOG_LEVEL));
 
 export default {
-    discord,
     broker,
+    discord,
     gsi,
     gsiEvents,
     gsiGameState,
