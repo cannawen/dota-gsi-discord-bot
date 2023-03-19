@@ -17,7 +17,7 @@ class GsiGameState {
 
     public handleState(state: IDota2State | IDota2ObserverState): boolean {
         if (state.map?.gameState) {
-            log.gsi.debug("map.gameState %s", state.map.gameState);
+            log.debug("gsi", "map.gameState %s", state.map.gameState);
             switch (state.map?.gameState) {
                 case gsi.Dota2GameState.PreGame:
                 case gsi.Dota2GameState.TeamShowcase:

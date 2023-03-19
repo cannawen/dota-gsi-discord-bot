@@ -31,18 +31,19 @@ function register<InType, OutType>(
     outTopic: Topic<OutType> | null,
     handler: (input: InType) => OutType | void
 ) : void {
-    log.broker.debug("Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
+    log.debug("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
     registry.push(new Registrant(label, inTopic, outTopic, handler));
 }
 
 function publish<TopicType>(label: string | null, topic: Topic<TopicType>, data: TopicType) {
     if (label) {
-        log.broker.debug("%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
+        log.debug("broker", "%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
     }
     registry.forEach((registrant) => {
         if (topic.label === registrant.inTopic.label) {
             const result = registrant.handler(data);
-            log.broker.debug(
+            log.debug(
+                "broker",
                 "Process %s -> %s -> %s",
                 registrant.inTopic.label.green,
                 registrant.label.yellow,

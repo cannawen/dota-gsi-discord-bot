@@ -37,5 +37,5 @@ server.events.on(gsi.Dota2Event.Dota2ObserverState, (event: gsi.IDota2ObserverSt
     handle(event.state);
 });
 
-log.gsi.info("Starting GSI server on port 9001");
+log.info("gsi", "Starting GSI server on port 9001");
 server.listen(9001);

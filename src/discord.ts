@@ -28,18 +28,18 @@ const errorColor = colors.red;
 
 function playNext() {
     if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
-        log.discord.debug("Audio player not ready to accept new audio");
+        log.debug("discord", "Audio player not ready to accept new audio");
         return;
     }
-    log.discord.debug("Audio player status is idle");
+    log.debug("discord", "Audio player status is idle");
 
-    log.discord.verbose("Check queue for next audio resource");
+    log.verbose("discord", "Check queue for next audio resource");
     const audioResource = audioQueue.shift();
     if (audioResource) {
-        log.discord.info("Playing next audio resource");
+        log.info("discord", "Playing next audio resource");
         subscription.player.play(audioResource);
     } else {
-        log.discord.verbose("Audio queue is empty");
+        log.verbose("discord", "Audio queue is empty");
     }
 }
 
@@ -48,11 +48,11 @@ function onAudioPlayerStatusIdle() {
 }
 
 function onVoiceConnectionReady() {
-    log.discord.info("VoiceConnection ready to play audio!".green);
+    log.info("discord", "VoiceConnection ready to play audio!".green);
 }
 
 function onAudioFilePath(filePath: string) {
-    log.discord.info("Enqueue file at path %s", emColor(filePath));
+    log.info("discord", "Enqueue file at path %s", emColor(filePath));
     audioQueue.push(Voice.createAudioResource(filePath));
     playNext();
 }
@@ -64,32 +64,33 @@ function ttsPath(ttsString: string) {
 function onTtsResponse(response : AxiosResponse, ttsString: string) {
     const write : fs.WriteStream = response.data.pipe(fs.createWriteStream(ttsPath(ttsString)));
     write.on("close", () => {
-        log.discord.verbose("Finished writing TTS '%s' to file", ttsString);
+        log.verbose("discord", "Finished writing TTS '%s' to file", ttsString);
         playAudioFile(ttsPath(ttsString));
     });
 }
 
 function onDiscordClientReady() {
     if (!discordClient || !discordClient.user) {
-        log.discord.error("Could not find Discord client or user. Check your .env file");
+        log.error("discord", "Could not find Discord client or user. Check your .env file");
         return;
     }
     const guild = Array.from(discordClient.guilds.cache.values()).find((guild) => guild.name === process.env.HARD_CODED_GUILD_NAME);
     if (!guild) {
-        log.discord.error("Could not find Discord guild %s. Check your .env file", errorColor(process.env.HARD_CODED_GUILD_NAME || "undefined"));
+        log.error("discord", "Could not find Discord guild %s. Check your .env file", errorColor(process.env.HARD_CODED_GUILD_NAME || "undefined"));
         return;
     }
     const channel = Array.from(guild.channels.cache.values()).find((channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME);
     if (!channel) {
-        log.discord.error("Could not find Discord channel %s in guild %s. Check your .env file", errorColor(process.env.HARD_CODED_VOICE_CHANNEL_NAME || "undefined"), guild.name);
+        log.error("discord", "Could not find Discord channel %s in guild %s. Check your .env file", errorColor(process.env.HARD_CODED_VOICE_CHANNEL_NAME || "undefined"), guild.name);
         return;
     }
 
-    log.discord.info(
+    log.info(
+        "discord",
         "Discord ready with user: %s guild: %s channel: %s",
         emColor(discordClient.user.tag),
         emColor(guild.name),
-        emColor(channel.name)
+        emColor(channel.name),
     );
 
     const connection = Voice.joinVoiceChannel({
@@ -107,13 +108,13 @@ function onDiscordClientReady() {
     // logging
     player.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.discord.debug("AudioPlayerState - transitioned from %s to %s", oldState.status, emColor(newState.status));
+            log.debug("discord", "AudioPlayerState - transitioned from %s to %s", oldState.status, emColor(newState.status));
         }
     });
 
     connection.on("stateChange", (oldState, newState) => {
         if (oldState.status !== newState.status) {
-            log.discord.debug("VoiceConnectionState - transitioned from %s to %s", oldState.status, emColor(newState.status));
+            log.debug("discord", "VoiceConnectionState - transitioned from %s to %s", oldState.status, emColor(newState.status));
         }
     });
 }
@@ -122,23 +123,23 @@ discordClient.on("ready", onDiscordClientReady);
 
 discordClient.login(process.env.DISCORD_CLIENT_TOKEN)
     .catch((e: Discord.DiscordjsError) => {
-        log.discord.error("Error logging into Discord. Check your .env file - %s", errorColor(e.message));
+        log.error("discord", "Error logging into Discord. Check your .env file - %s", errorColor(e.message));
     });
 
 function playAudioFile(filePath: string) {
     if (fs.existsSync(filePath)) {
         onAudioFilePath(filePath);
     } else {
-        log.discord.error("Unable to play file at path %s", errorColor(filePath));
+        log.error("discord", "Unable to play file at path %s", errorColor(filePath));
     }
 }
 
 function playTTS(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
-        log.discord.info("Found cached TTS %s", ttsString);
+        log.info("discord", "Found cached TTS %s", ttsString);
         playAudioFile(ttsPath(ttsString));
     } else {
-        log.discord.info("Processing TTS string '%s'", ttsString);
+        log.info("discord", "Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
         axios({
             method:       "get",
@@ -147,7 +148,7 @@ function playTTS(ttsString: string) {
         })
             .then((response) => onTtsResponse(response, ttsString))
             .catch((error) => {
-                log.discord.error("Unable to TTS %s with error message %s", errorColor(ttsString), errorColor(error.message));
+                log.error("discord", "Unable to TTS %s with error message %s", errorColor(ttsString), errorColor(error.message));
             });
     }
 }

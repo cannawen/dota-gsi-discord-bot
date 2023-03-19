@@ -76,10 +76,6 @@ function createMap(label: string, levelString: string) {
     };
 }
 
-const broker = winston.createLogger(createMap("[BROKER]".yellow, "info"));
-const discord = winston.createLogger(createMap("[DISCORD]".blue, "info"));
-const gsi = winston.createLogger(createMap("[GSI]".magenta, "info"));
-
 const loggers: Map<string, winston.Logger> = new Map();
 
 function parseLogEnv(input: string) {
@@ -136,7 +132,4 @@ export default {
     verbose: makeLog("verbose"),
     debug:   makeLog("debug"),
     silly:   makeLog("silly"),
-    broker,
-    discord,
-    gsi,
 };

@@ -55,7 +55,7 @@ export {
 
 class GsiItems {
     private handleItems(itemContainer: IItemContainer) {
-        log.gsi.debug(itemContainer);
+        log.debug("gsi", "%s", itemContainer);
         const items = PlayerItems.createFromGsi(itemContainer);
         if (items) {
             return items;
