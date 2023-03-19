@@ -31,7 +31,7 @@ function register<InType, OutType>(
     outTopic: Topic<OutType> | null,
     handler: (input: InType) => OutType | void
 ) : void {
-    log.debug("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
+    log.info("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
     registry.push(new Registrant(label, inTopic, outTopic, handler));
 }
 
