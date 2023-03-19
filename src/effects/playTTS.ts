@@ -1,6 +1,9 @@
 import discord from "../discord";
 import glue from "../glue";
-import Topic from "../Topics";
+import topics from "../topics";
 
-glue.register(Topic.EFFECT_PLAY_TTS, null, (message: string) => discord.playTTS(message));
-
+glue.register(
+    topics.EFFECT_PLAY_TTS,
+    null,
+    (message: string) => discord.playTTS(message)
+);

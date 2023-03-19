@@ -3,7 +3,7 @@ import {
 } from "node-gsi";
 import glue from "../glue";
 import log from "../log";
-import Topic from "../Topics";
+import topics from "../topics";
 
 class Item {
     id: string;
@@ -72,4 +72,4 @@ class GsiItems {
 }
 
 const component = new GsiItems();
-glue.register(Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));
+glue.register(topics.GSI_DATA, topics.DOTA_2_ITEMS, component.handleState.bind(component));

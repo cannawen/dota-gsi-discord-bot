@@ -7,10 +7,8 @@ import colors from "@colors/colors";
 import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
-import glue from "./glue";
 import path = require("path");
 import log from "./log";
-import Topic from "./Topics";
 import Voice = require("@discordjs/voice");
 
 dotenv.config();

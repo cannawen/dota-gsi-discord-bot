@@ -17,13 +17,13 @@ import "./effects/playAudio";
 import gsi = require("node-gsi");
 import glue from "./glue";
 import log from "./log";
-import Topic from "./Topics";
+import topics from "./topics";
 
 const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 function handle(state: gsi.IDota2State | gsi.IDota2ObserverState) {
-    glue.publish(Topic.GSI_DATA, state);
+    glue.publish(topics.GSI_DATA, state);
 }
 
 server.events.on(gsi.Dota2Event.Dota2State, (event: gsi.IDota2StateEvent) => {

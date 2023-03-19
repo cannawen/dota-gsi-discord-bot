@@ -4,7 +4,7 @@ import {
 import glue from "../glue";
 import gsi = require("node-gsi");
 import log from "../log";
-import Topic from "../Topics";
+import topics from "../topics";
 
 class GsiGameState {
     private inGame = false;
@@ -36,4 +36,4 @@ class GsiGameState {
 }
 
 const component = new GsiGameState();
-glue.register(Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));
+glue.register(topics.GSI_DATA, topics.DOTA_2_GAME_STATE, component.handleState.bind(component));

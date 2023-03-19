@@ -1,26 +1,48 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import log from "./log";
-import Topic from "./Topics";
+import {
+    Topic,
+} from "./topics";
 
-type HandlerFn = (input: any) => any;
+class Registrant<InType, OutType> {
+    inTopic: Topic<InType>;
+    outTopic: Topic<OutType> | null;
+    handler: (input: InType) => OutType | void;
 
-const registry : Array<[inTopic: Topic | null, outTopic: Topic | null, handler: HandlerFn]> = [];
-
-function register(inTopic: Topic, outTopic: Topic | null, handler: HandlerFn) : void {
-    log.glue.debug("Registered %s to %s", inTopic.green, outTopic?.green);
-    registry.push([ inTopic, outTopic, handler ]);
+    constructor(
+        inTopic: Topic<InType>,
+        outTopic: Topic<OutType> | null,
+        handler: (input: InType) => OutType | void
+    ) {
+        this.inTopic = inTopic;
+        this.outTopic = outTopic;
+        this.handler = handler;
+    }
 }
 
-function publish(topic: Topic, data: any) {
-    log.glue.debug("Publish %s", topic.green);
+const registry : Array<Registrant<any, any>> = [];
+
+function register<InType, OutType>(
+    inTopic: Topic<InType>,
+    outTopic: Topic<OutType> | null,
+    handler: (input: InType) => OutType | void
+) : void {
+    log.glue.debug("Registered %s to %s", inTopic.label.green, outTopic?.label.green);
+    registry.push(new Registrant(inTopic, outTopic, handler));
+}
+
+function publish<TopicType>(topic: Topic<TopicType>, data: TopicType) {
+    log.glue.debug("Publish %s", topic.label.green);
     registry.forEach((registrant) => {
-        const [ inTopic, outTopic, handler ] = registrant;
-        if (inTopic === topic) {
-            const result = handler(data);
-            log.glue.debug("Converting %s to %s with input %s and result %s",
-                inTopic?.green, outTopic?.green, data, result);
-            if (outTopic && result) {
-                publish(outTopic, result);
+        if (topic.label === registrant.inTopic.label) {
+            const result = registrant.handler(data);
+            log.glue.debug(
+                "Converting %s to %s",
+                registrant.inTopic.label.green,
+                registrant.outTopic?.label.green,
+            );
+            if (registrant.outTopic && result) {
+                publish(registrant.outTopic, result);
             }
         }
     });

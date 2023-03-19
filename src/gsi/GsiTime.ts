@@ -3,7 +3,7 @@ import {
 } from "node-gsi";
 import glue from "../glue";
 import log from "../log";
-import Topic from "../Topics";
+import topics from "../topics";
 
 class GsiTime {
     private time: number | undefined;
@@ -21,4 +21,4 @@ class GsiTime {
 }
 
 const component = new GsiTime();
-glue.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, component.handleState.bind(component));
+glue.register(topics.GSI_DATA, topics.DOTA_2_TIME, component.handleState.bind(component));

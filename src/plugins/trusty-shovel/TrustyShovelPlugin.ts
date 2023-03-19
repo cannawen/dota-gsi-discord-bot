@@ -2,7 +2,7 @@ import glue from "../../glue";
 import {
     PlayerItems,
 } from "../../gsi/GsiItems";
-import Topic from "../../Topics";
+import topics from "../../topics";
 
 export default class TrustyShovelPlugin {
     private currentTime: number | undefined;
@@ -25,5 +25,5 @@ export default class TrustyShovelPlugin {
 }
 
 const component = new TrustyShovelPlugin();
-glue.register(Topic.DOTA_2_ITEMS, null, component.items.bind(component));
-glue.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, component.handleTime.bind(component));
+glue.register(topics.DOTA_2_ITEMS, null, component.items.bind(component));
+glue.register(topics.DOTA_2_TIME, topics.EFFECT_PLAY_TTS, component.handleTime.bind(component));
