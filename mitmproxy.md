@@ -1,5 +1,5 @@
 # mitmproxy
-Goal: to develop the app without having dota open
+Goal: to develop the app without having dota open  
 [Official site](https://mitmproxy.org/)
 - `brew install mitmproxy`
 - change your gsi configuration to point to mitmproxy at "http://localhost:8080/gsi" (instead of port 9001)
@@ -17,5 +17,5 @@ Goal: to develop the app without having dota open
 `mitmdump --mode reverse:http://localhost:9001 -w flow_file`
 
 ## replay some file
-mitdump -C flow_file  
+`mitmdump -C flow_file`  
 see `mitmproxy-flows` folders for currently saved flows
