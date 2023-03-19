@@ -14,10 +14,10 @@ enum RuneId {
 }
 
 const Audio = {
-    [RuneId.BOUNTY | RuneId.POWER]: "bounty_and_power_runes.wav",
-    [RuneId.BOUNTY]:                "bounty_runes.wav",
-    [RuneId.POWER]:                 "power_rune.wav",
-    [RuneId.WATER]:                 "water_runes.wav",
+    [RuneId.BOUNTY | RuneId.POWER]: "rune-sound.mp3",
+    [RuneId.BOUNTY]:                "rune-sound.mp3",
+    [RuneId.POWER]:                 "rune-sound.mp3",
+    [RuneId.WATER]:                 "rune-sound.mp3",
     [RuneId.NONE]:                  null,
 };
 

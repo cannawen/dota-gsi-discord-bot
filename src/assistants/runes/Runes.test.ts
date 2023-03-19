@@ -22,7 +22,7 @@ describe("Runes", () => {
                 expect(sut.handleTime(0)).toBeFalsy();
             });
             test("should return audio side effect", () => {
-                expect(sut.handleTime(1)).toBe("bounty_and_power_runes.wav");
+                expect(sut.handleTime(1)).toBe("rune-sound.mp3");
             });
         });
 
