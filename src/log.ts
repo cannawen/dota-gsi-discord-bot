@@ -1,5 +1,9 @@
 import colors from "@colors/colors";
 import winston from "winston";
+const {
+    stylize, styles,
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+} = require("@colors/colors");
 
 function padTo(msg: string, length: number, truncate: boolean) {
     const stripped = colors.stripColors(msg);
@@ -38,7 +42,7 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
 //     silly: 6
 // }
 
-function createMap(label: string, levelString: string | undefined) {
+function createMap(label: string, levelString: string) {
     return {
         format: winston.format.combine(
             winston.format.colorize(),
@@ -53,7 +57,7 @@ function createMap(label: string, levelString: string | undefined) {
                 message: false,
             })
         ),
-        level:      levelString ? levelString : "info",
+        level:      levelString,
         transports: [
             new winston.transports.File({
                 filename: "error.log",
@@ -72,11 +76,66 @@ function createMap(label: string, levelString: string | undefined) {
     };
 }
 
-const broker = winston.createLogger(createMap("[BROKER]".yellow, process.env.BROKER_LOG_LEVEL));
-const discord = winston.createLogger(createMap("[DISCORD]".blue, process.env.DISCORD_LOG_LEVEL));
-const gsi = winston.createLogger(createMap("[GSI]".magenta, process.env.GSI_LOG_LEVEL));
+const broker = winston.createLogger(createMap("[BROKER]".yellow, "info"));
+const discord = winston.createLogger(createMap("[DISCORD]".blue, "info"));
+const gsi = winston.createLogger(createMap("[GSI]".magenta, "info"));
+
+const loggers: Map<string, winston.Logger> = new Map();
+
+function parseLogEnv(input: string) {
+    // GSI:debug:magenta,DISCORD:warn
+    const validColors = new Set(Object.keys(styles));
+    const validLevels = new Set([ "error", "warn", "info", "http", "verbose", "debug", "silly" ]);
+    const settings = input.split(",")
+        .map((single) => single.split(":"))
+        .reduce((memo, [ label, level, color ]) => memo.set(label, {
+            color,
+            level,
+        }), new Map());
+
+    return function (label:string) {
+        const color = settings.get(label)?.color;
+        const level = settings.get(label)?.level;
+        return {
+            color: validColors.has(color) ? color : "white",
+            level: validLevels.has(level) ? level : "info",
+        };
+    };
+}
+
+function getLogger(label: string): winston.Logger {
+    const settings = parseLogEnv(process.env.LOG || "");
+
+    const existingLogger = loggers.get(label);
+
+    if (existingLogger) {
+        return existingLogger;
+    } else {
+        const newLogger = winston.createLogger(
+            createMap(
+                stylize(`[${label}]`, settings(label).color),
+                settings(label).level
+            )
+        );
+        loggers.set(label, newLogger);
+        return newLogger;
+    }
+}
+
+function makeLog(logLevel: string) {
+    return (label:string, formatString:string, ...vars:any[]) => {
+        getLogger(label).log(logLevel, formatString, ...vars);
+    };
+}
 
 export default {
+    error:   makeLog("error"),
+    warn:    makeLog("warn"),
+    info:    makeLog("info"),
+    http:    makeLog("http"),
+    verbose: makeLog("verbose"),
+    debug:   makeLog("debug"),
+    silly:   makeLog("silly"),
     broker,
     discord,
     gsi,
