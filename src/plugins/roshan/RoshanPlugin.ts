@@ -1,12 +1,10 @@
 import Constants from "./Constants";
-import EffectInfo from "../../EffectInfo";
-import GsiEventsObserver from "../../gsi/GsiEventsObserver";
-import GsiGameStateObserver from "../../gsi/GsiGameStateObserver";
-import GsiTimeObserver from "../../gsi/GsiTimeObserver";
+import glue from "../../glue";
+import gsi from "node-gsi";
 import logic from "./logic";
+import Topic from "../../Topics";
 
-export default class RoshanPlugin
-implements GsiTimeObserver, GsiGameStateObserver, GsiEventsObserver {
+class RoshanPlugin {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
@@ -27,27 +25,38 @@ implements GsiTimeObserver, GsiGameStateObserver, GsiEventsObserver {
         }
     }
 
-    public handleTime(time: number) : EffectInfo | void {
+    public handleTime(time: number) : string | void {
         this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
             this.roshStatus = newRoshStatus;
             switch (newRoshStatus) {
                 case Constants.Status.ALIVE:
-                    return EffectInfo.createAudioFile("rosh-alive.mp3");
+                    return "rosh-alive.mp3";
                 case Constants.Status.UNKNOWN:
-                    return EffectInfo.createAudioFile("rosh-maybe.mp3");
+                    return "rosh-maybe.mp3";
                 default:
                     break;
             }
         }
     }
 
-    public handleEvent(eventType: string, _time: number) : void {
+    private handleEvent(eventType: string, _time: number) : void {
         // `time` we get from the event is incorrect - use current time instead
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
         }
     }
+
+    public handleEvents(events: gsi.IEvent[]) : void {
+        events.map((gsiEvent) => {
+            this.handleEvent(gsiEvent.eventType, gsiEvent.gameTime);
+        });
+    }
 }
+
+const component = new RoshanPlugin();
+glue.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+glue.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+glue.register(Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));

@@ -1,19 +1,14 @@
-import effects from "../effectsRegistry";
+import glue from "../glue";
 import gsi from "node-gsi";
-import GsiBase from "./GsiBase";
-import GsiEventsObserver from "./GsiEventsObserver";
-import GsiGameStateObserver from "./GsiGameStateObserver";
 import log from "../log";
+import Topic from "../Topics";
 
 function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
     return event1.gameTime === event2.gameTime
         && event1.eventType === event2.eventType;
 }
 
-// TODO remove nodeGsi.IEvent dependency by turning into plain object
-export default class GsiEvents extends GsiBase implements GsiGameStateObserver {
-    protected observers : GsiEventsObserver[] = [];
-
+class GsiEvents {
     // Note: right now events may overwrite each other if they have the same eventType and gameTime
     // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
     // `allEvents` contains an array of all events seen so far
@@ -34,21 +29,27 @@ export default class GsiEvents extends GsiBase implements GsiGameStateObserver {
     }
 
     private handle(events: gsi.IEvent[]) {
+        let added = false;
         events.map((newEvent) => {
             if (this.neverSeenBefore(newEvent)) {
+                added = true;
                 this.allEvents.push(newEvent);
-                this.observers
-                    // note this event.gameTime is not equal to map.gameTime; it is offset by a specific amount per game
-                    .map((observer) => observer.handleEvent(newEvent.eventType, newEvent.gameTime))
-                    .map(effects.invoke); // TODO lift this up, above the mountains
             }
         });
+        // this is not debounced
+        if (added) {
+            return this.allEvents;
+        }
     }
 
-    public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): void {
+    public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): gsi.IEvent[] | void {
         if (state.events) {
             log.gsiEvents.debug("events %s", state.events);
-            this.handle(state.events);
+            return this.handle(state.events);
         }
     }
 }
+
+const component = new GsiEvents();
+glue.register(Topic.GSI_DATA, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
+glue.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
