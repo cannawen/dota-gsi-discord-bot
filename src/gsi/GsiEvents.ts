@@ -8,16 +8,11 @@ function sameGSIEvent(event1: gsi.IEvent, event2: gsi.IEvent) {
         && event1.eventType === event2.eventType;
 }
 
-export default class GsiEvents {
+class GsiEvents {
     // Note: right now events may overwrite each other if they have the same eventType and gameTime
     // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
     // `allEvents` contains an array of all events seen so far
     private allEvents: gsi.IEvent[] = [];
-
-    constructor() {
-        glue.register(Topic.GSI_DATA, Topic.DOTA_2_EVENTS, this.handleState);
-        glue.register(Topic.DOTA_2_GAME_STATE, null, this.inGame);
-    }
 
     public inGame(newInGame: boolean) : void {
         if (!newInGame) {
@@ -54,3 +49,7 @@ export default class GsiEvents {
         }
     }
 }
+
+const component = new GsiEvents();
+glue.register(Topic.GSI_DATA, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
+glue.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));

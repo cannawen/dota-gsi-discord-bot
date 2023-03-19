@@ -53,11 +53,7 @@ export {
     PlayerItems,
 };
 
-export default class GsiItems {
-    constructor() {
-        glue.register(Topic.GSI_DATA, Topic.DOTA_2_ITEMS, this.handleState);
-    }
-
+class GsiItems {
     private handleItems(itemContainer: IItemContainer) {
         log.gsiItems.debug(itemContainer);
         const items = PlayerItems.createFromGsi(itemContainer);
@@ -75,67 +71,5 @@ export default class GsiItems {
     }
 }
 
-// State
-// {"slot":[],"stash":[]}
-//
-// Observer state
-// [
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]},
-//     {"slot":[],"stash":[]}
-// ]
-// For one person
-// {
-//     slot: [
-//       {
-//         name: "item_tango",
-//         purchaser: 0,
-//         passive: false,
-//         can_cast: true,
-//         cooldown: 0,
-//         charges: 2,
-//       },
-//       null,
-//       null,
-//       {
-//         name: "item_branches",
-//         purchaser: 0,
-//         passive: false,
-//         can_cast: true,
-//         cooldown: 0,
-//       },
-//       {
-//         name: "item_magic_stick",
-//         purchaser: 0,
-//         passive: false,
-//         can_cast: false,
-//         cooldown: 0,
-//         charges: 0,
-//       },
-//       {
-//         name: "item_branches",
-//         purchaser: 0,
-//         passive: false,
-//         can_cast: true,
-//         cooldown: 0,
-//       },
-//       null,
-//       null,
-//       null,
-//     ],
-//     stash: [
-//       null,
-//       null,
-//       null,
-//       null,
-//       null,
-//       null,
-//     ],
-//   }
+const component = new GsiItems();
+glue.register(Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));

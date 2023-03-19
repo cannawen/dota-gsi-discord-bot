@@ -1,3 +1,9 @@
+// Enabled GSI
+import "./gsi/GsiEvents";
+import "./gsi/GsiGameState";
+import "./gsi/GsiItems";
+import "./gsi/GsiTime";
+
 // Enabled plugins
 import "./plugins/roshan/RoshanPlugin";
 import "./plugins/runes/RunesPlugin";

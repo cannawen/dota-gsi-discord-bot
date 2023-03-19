@@ -6,12 +6,8 @@ import gsi = require("node-gsi");
 import log from "../log";
 import Topic from "../Topics";
 
-export default class GsiGameState {
+class GsiGameState {
     private inGame = false;
-
-    constructor() {
-        glue.register(Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, this.handleState);
-    }
 
     private isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
@@ -38,3 +34,6 @@ export default class GsiGameState {
         return false;
     }
 }
+
+const component = new GsiGameState();
+glue.register(Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));

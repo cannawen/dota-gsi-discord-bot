@@ -5,12 +5,8 @@ import glue from "../glue";
 import log from "../log";
 import Topic from "../Topics";
 
-export default class GsiTime {
+class GsiTime {
     private time: number | undefined;
-
-    constructor() {
-        glue.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, this.handleState);
-    }
 
     public handleState(state: IDota2State | IDota2ObserverState): number | void {
         if (state.map?.clockTime) {
@@ -23,3 +19,6 @@ export default class GsiTime {
         }
     }
 }
+
+const component = new GsiTime();
+glue.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, component.handleState.bind(component));

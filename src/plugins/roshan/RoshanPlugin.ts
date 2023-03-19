@@ -4,7 +4,7 @@ import gsi from "node-gsi";
 import logic from "./logic";
 import Topic from "../../Topics";
 
-export default class RoshanPlugin {
+class RoshanPlugin {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
@@ -17,9 +17,6 @@ export default class RoshanPlugin {
 
     public constructor() {
         this.resetState();
-        glue.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, this.handleTime);
-        glue.register(Topic.DOTA_2_GAME_STATE, null, this.inGame);
-        glue.register(Topic.DOTA_2_EVENTS, null, this.handleEvents);
     }
 
     public inGame(inGame: boolean) : void {
@@ -58,3 +55,8 @@ export default class RoshanPlugin {
         });
     }
 }
+
+const component = new RoshanPlugin();
+glue.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+glue.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+glue.register(Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
