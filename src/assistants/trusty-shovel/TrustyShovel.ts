@@ -5,14 +5,12 @@ import {
 import Topic from "../../Topic";
 
 export default class TrustyShovel {
-    private currentTime: number | undefined;
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;
 
     public handleTime(time: number) : string | void {
-        this.currentTime = time;
-        if (this.shovelCanBeUsed && this.currentTime - this.lastShovelReminderTime >= 15) {
-            this.lastShovelReminderTime = this.currentTime;
+        if (this.shovelCanBeUsed && time - this.lastShovelReminderTime >= 15) {
+            this.lastShovelReminderTime = time;
             return "dig";
         }
     }
