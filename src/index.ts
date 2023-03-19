@@ -4,11 +4,11 @@ import "./gsi/GsiGameState";
 import "./gsi/GsiItems";
 import "./gsi/GsiTime";
 
-// Enabled plugins
-import "./plugins/roshan/RoshanPlugin";
-import "./plugins/runes/RunesPlugin";
-// import "./plugins/stack/StackPlugin.ts";
-import "./plugins/trusty-shovel/TrustyShovelPlugin";
+// Enabled assistants
+import "./assistants/roshan/RoshanPlugin";
+import "./assistants/runes/RunesPlugin";
+// import "./assistants/stack/StackPlugin.ts";
+import "./assistants/trusty-shovel/TrustyShovelPlugin";
 
 // Enabled effects
 import "./effects/playTTS";
