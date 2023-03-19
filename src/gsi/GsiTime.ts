@@ -1,28 +1,25 @@
 import {
     IDota2ObserverState, IDota2State,
 } from "node-gsi";
-import effects from "../effectsRegistry";
-import GsiBase from "./GsiBase";
-import GsiTimeObserver from "./GsiTimeObserver";
+import glue from "../glue";
 import log from "../log";
+import Topic from "../Topics";
 
-export default class GsiTime extends GsiBase {
-    protected observers : GsiTimeObserver[] = [];
+export default class GsiTime {
     private time: number | undefined;
 
-    private currentTime(newTime: number) {
-        if (this.time !== newTime) {
-            this.time = newTime;
-
-            this.observers.map((observer) => observer.handleTime(newTime))
-                .map(effects.invoke);
-        }
+    constructor() {
+        glue.register(Topic.GSI_DATA, Topic.DOTA_2_TIME, this.handleState);
     }
 
-    public handleState(state: IDota2State | IDota2ObserverState): void {
+    public handleState(state: IDota2State | IDota2ObserverState): number | void {
         if (state.map?.clockTime) {
             log.gsiTime.debug("map.clockTime %s", state.map.clockTime);
-            this.currentTime(state.map.clockTime);
+            const newTime = state.map.clockTime;
+            if (this.time !== newTime) {
+                this.time = newTime;
+                return newTime;
+            }
         }
     }
 }

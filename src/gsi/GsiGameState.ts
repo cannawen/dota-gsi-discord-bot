@@ -1,27 +1,25 @@
 import {
     IDota2ObserverState, IDota2State,
 } from "node-gsi";
-import effects from "../effectsRegistry";
+import glue from "../glue";
 import gsi = require("node-gsi");
-import GsiBase from "./GsiBase";
-import GsiGameStateObserver from "./GsiGameStateObserver";
 import log from "../log";
+import Topic from "../Topics";
 
-export default class GsiGameState extends GsiBase {
-    protected observers : GsiGameStateObserver[] = [];
+export default class GsiGameState {
     private inGame = false;
+
+    constructor() {
+        glue.register(Topic.GSI_DATA, Topic.DOTA_2_GAME_STATE, this.handleState);
+    }
 
     private isInGame(newInGame: boolean) {
         if (this.inGame !== newInGame) {
             this.inGame = newInGame;
-
-            this.observers
-                .map((observers) => observers.inGame(newInGame))
-                .map(effects.invoke);
         }
     }
 
-    public handleState(state: IDota2State | IDota2ObserverState): void {
+    public handleState(state: IDota2State | IDota2ObserverState): boolean {
         if (state.map?.gameState) {
             log.gsiGameState.debug("map.gameState %s", state.map.gameState);
             switch (state.map?.gameState) {
@@ -29,13 +27,14 @@ export default class GsiGameState extends GsiBase {
                 case gsi.Dota2GameState.TeamShowcase:
                 case gsi.Dota2GameState.PostGame:
                     this.isInGame(false);
-                    break;
+                    return false;
                 case gsi.Dota2GameState.GameInProgress:
                     this.isInGame(true);
-                    break;
+                    return true;
                 default:
                     break;
             }
         }
+        return false;
     }
 }

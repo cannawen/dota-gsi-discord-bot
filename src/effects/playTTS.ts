@@ -1,10 +1,6 @@
-import EffectInfo from "../EffectInfo";
-import EffectType from "../EffectType";
 import discord from "../discord";
-import effects from "../effectsRegistry";
+import glue from "../glue";
+import Topic from "../Topics";
 
-effects.register(EffectType.TTS, (info: EffectInfo) => {
-    if (info.data) {
-        discord.playTTS(info.data);
-    }
-});
+glue.register(Topic.EFFECT_PLAY_TTS, null, (message: string) => discord.playTTS(message));
+

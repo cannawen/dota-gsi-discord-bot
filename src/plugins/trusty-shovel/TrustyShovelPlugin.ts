@@ -1,20 +1,24 @@
-import EffectInfo from "../../EffectInfo";
-import GsiItemsObserver from "../../gsi/GsiItemsObserver";
-import GsiTimeObserver from "../../gsi/GsiTimeObserver";
+import glue from "../../glue";
 import {
     PlayerItems,
 } from "../../gsi/GsiItems";
+import Topic from "../../Topics";
 
-export default class TrustyShovelPlugin implements GsiItemsObserver, GsiTimeObserver {
+export default class TrustyShovelPlugin {
     private currentTime: number | undefined;
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;
 
-    handleTime(time: number) : EffectInfo | void {
+    constructor() {
+        glue.register(Topic.DOTA_2_ITEMS, null, this.items);
+        glue.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, this.handleTime);
+    }
+
+    handleTime(time: number) : string | void {
         this.currentTime = time;
         if (this.shovelCanBeUsed && this.currentTime - this.lastShovelReminderTime >= 15) {
             this.lastShovelReminderTime = this.currentTime;
-            return EffectInfo.createTTS("dig");
+            return "dig";
         }
     }
 

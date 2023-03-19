@@ -1,22 +1,27 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Topic from "./Topics";
 
-type HandlerFn = (input: any) => any
+type HandlerFn = (input: any) => any;
 
-class GlueRegistrant {
-    inTopic: Topic | null;
-    outTopic: Topic | null;
-    handler: HandlerFn;
+const registry : Array<[inTopic: Topic | null, outTopic: Topic | null, handler: HandlerFn]> = [];
 
-    constructor(inTopic: Topic | null, outTopic: Topic | null, handler: HandlerFn) {
-        this.inTopic = inTopic;
-        this.outTopic = outTopic;
-        this.handler = handler;
-    }
+function register(inTopic: Topic | null, outTopic: Topic | null, handler: HandlerFn) : void {
+    registry.push([ inTopic, outTopic, handler ]);
 }
 
-const registry : Array<GlueRegistrant> = [];
-
-function register(registrant: GlueRegistrant) : void {
-    registry.push(registrant);
+function publish(topic: Topic, data: any) {
+    registry.map((registrant) => {
+        const [ inTopic, outTopic, handler ] = registrant;
+        if (inTopic === topic) {
+            const result = handler(data);
+            if (outTopic && result) {
+                publish(outTopic, result);
+            }
+        }
+    });
 }
+
+export default {
+    publish,
+    register,
+};
