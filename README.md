@@ -28,7 +28,7 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 ### Logging
 - winston containers weren't working, so just import your loggers from `log.ts` and feel free to create new loggers  
 - Loggers use environment variables to determine log levels (it default to `info` if env variable is not set)
-- For example, use `BROKER_LOG_LEVEL=debug npm run start` to see debug-level broker logs
+- See sample.env for usage example
 ### What is happening
 - In general, there are three main sections of the app
   - GSI that takes data form Valve's Game State integration and parses it to a form we can use (Time, Items)
