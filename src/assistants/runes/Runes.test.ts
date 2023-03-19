@@ -1,17 +1,17 @@
 import Constants from "./Constants";
-import RunesPlugin from "./RunesPlugin";
+import Runes from "./Runes";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const logic = require("./logic");
 jest.mock("./logic", () => jest.fn());
 
-describe("RunesPlugin", () => {
-    let sut : RunesPlugin;
+describe("Runes", () => {
+    let sut : Runes;
 
     describe("GsiGameStateObserver.handleTime", () => {
         describe("logic returns audio key 1", () => {
             beforeEach(() => {
                 logic.mockImplementation(() => Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
-                sut = new RunesPlugin();
+                sut = new Runes();
             });
             test("we called logic for 15 seconds in the future", () => {
                 sut.handleTime(1);
@@ -29,7 +29,7 @@ describe("RunesPlugin", () => {
         describe("logic returns audio key 0", () => {
             beforeEach(() => {
                 logic.mockImplementation(() => Constants.RuneId.NONE);
-                sut = new RunesPlugin();
+                sut = new Runes();
             });
             test("should return no side effect", () => {
                 expect(sut.handleTime(1)).toBeFalsy();

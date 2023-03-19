@@ -5,10 +5,10 @@ import "./gsi/GsiItems";
 import "./gsi/GsiTime";
 
 // Enabled assistants
-import "./assistants/roshan/RoshanPlugin";
-import "./assistants/runes/RunesPlugin";
-// import "./assistants/stack/StackPlugin.ts";
-import "./assistants/trusty-shovel/TrustyShovelPlugin";
+import "./assistants/roshan/Roshan";
+import "./assistants/runes/Runes";
+// import "./assistants/stack/Stack";
+import "./assistants/trusty-shovel/TrustyShovel";
 
 // Enabled effects
 import "./effects/playTTS";

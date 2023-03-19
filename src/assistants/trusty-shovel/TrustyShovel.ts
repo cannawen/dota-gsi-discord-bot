@@ -4,7 +4,7 @@ import {
 } from "../../gsi/GsiItems";
 import Topic from "../../Topic";
 
-export default class TrustyShovelPlugin {
+export default class TrustyShovel {
     private currentTime: number | undefined;
     private shovelCanBeUsed: boolean | undefined;
     private lastShovelReminderTime = 0;
@@ -24,6 +24,6 @@ export default class TrustyShovelPlugin {
     }
 }
 
-const component = new TrustyShovelPlugin();
+const component = new TrustyShovel();
 broker.register(Topic.DOTA_2_ITEMS, null, component.items.bind(component));
 broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_TTS, component.handleTime.bind(component));

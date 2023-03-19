@@ -1,12 +1,12 @@
 import {
     Item, PlayerItems,
 } from "../../gsi/GsiItems";
-import TrustyShovelPlugin from "./TrustyShovelPlugin";
+import TrustyShovel from "./TrustyShovel";
 
-describe("Trusty shovel plugin", () => {
-    let sut: TrustyShovelPlugin;
+describe("Trusty shovel", () => {
+    let sut: TrustyShovel;
     beforeEach(() => {
-        sut = new TrustyShovelPlugin();
+        sut = new TrustyShovel();
     });
 
     describe("when player does not have trusty shovel neutral item", () => {

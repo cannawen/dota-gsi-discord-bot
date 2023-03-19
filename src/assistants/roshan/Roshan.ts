@@ -1,10 +1,10 @@
-import Constants from "./Constants";
 import broker from "../../broker";
+import Constants from "./Constants";
 import gsi from "node-gsi";
 import logic from "./logic";
 import Topic from "../../Topic";
 
-export default class RoshanPlugin {
+export default class Roshan {
     private currentTime: number | undefined;
     private lastRoshanDeathTime: number | undefined;
     private roshStatus: string | undefined;
@@ -56,7 +56,7 @@ export default class RoshanPlugin {
     }
 }
 
-const component = new RoshanPlugin();
+const component = new Roshan();
 broker.register(Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
 broker.register(Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
 broker.register(Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
