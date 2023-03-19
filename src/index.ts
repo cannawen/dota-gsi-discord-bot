@@ -1,3 +1,6 @@
+import dotenv = require("dotenv");
+dotenv.config();
+
 // Enabled GSI
 import "./gsi/GsiEvents";
 import "./gsi/GsiGameState";

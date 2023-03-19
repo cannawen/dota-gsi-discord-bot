@@ -4,14 +4,11 @@ import axios, {
     AxiosResponse,
 } from "axios";
 import colors from "@colors/colors";
-import dotenv = require("dotenv")
 import Discord = require("discord.js");
 import fs = require("fs");
 import path = require("path");
 import log from "./log";
 import Voice = require("@discordjs/voice");
-
-dotenv.config();
 
 const discordClient = new Discord.Client({
     // eslint-disable-next-line no-magic-numbers
