@@ -7,11 +7,6 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 - `npm start`
 ### Development
 [See here for details](./development.md)
-- `npm run start:dev` or `npm run test:dev` for hot reloading
-- `npm run lint` to identify & fix linting issues
-### Using node-gsi library
-- When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version
-- `npm update`
 
 ## Dependencies
 ### Dota 2 Game State Integration
