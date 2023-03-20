@@ -1,62 +1,15 @@
 import {
-    IDota2ObserverState, IDota2State, IItem, IItemContainer,
+    IDota2ObserverState, IDota2State, IItemContainer,
 } from "node-gsi";
 import broker from "../broker";
 import log from "../log";
+import PlayerItems from "../PlayerItems";
 import Topic from "../Topic";
-
-class Item {
-    id: string;
-    name: string;
-    cooldown?: number;
-
-    public constructor(id: string, name: string, cooldown?: number) {
-        this.id = id;
-        this.name = name;
-        this.cooldown = cooldown;
-    }
-
-    static createFromGsi(item: IItem | null) {
-        // TODO find real human readable name from of the item and pass it along in second parameter
-        if (item) {
-            return new Item(item.name, item.name, item.cooldown);
-        }
-        return null;
-    }
-}
-
-class PlayerItems {
-    inventory: Array<Item | null> = [];
-    stash: Array<Item | null> = [];
-    neutral: Item | null = null;
-    teleport: Item | null = null;
-
-    constructor(inventory: Array<Item | null>, stash:Array<Item | null>, neutral: Item | null, teleport: Item | null) {
-        this.inventory = inventory;
-        this.stash = stash;
-        this.neutral = neutral;
-        this.teleport = teleport;
-    }
-
-    static createFromGsi(items: IItemContainer) {
-        return new PlayerItems(
-            items.slot.map(Item.createFromGsi),
-            items.stash.map(Item.createFromGsi),
-            Item.createFromGsi(items.neutral),
-            Item.createFromGsi(items.teleport)
-        );
-    }
-}
-
-export {
-    Item,
-    PlayerItems,
-};
 
 class GsiItems {
     private handleItems(itemContainer: IItemContainer) {
         log.debug("gsi", "%s", itemContainer);
-        const items = PlayerItems.createFromGsi(itemContainer);
+        const items = PlayerItems.create(itemContainer);
         if (items) {
             return items;
         }

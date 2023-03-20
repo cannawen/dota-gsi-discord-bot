@@ -1,6 +1,6 @@
 import broker from "../../broker";
 import Constants from "./Constants";
-import gsi from "node-gsi";
+import Event from "../../Event";
 import logic from "./logic";
 import Topic from "../../Topic";
 
@@ -49,9 +49,9 @@ export default class Roshan {
         }
     }
 
-    public handleEvents(events: gsi.IEvent[]) : void {
-        events.map((gsiEvent) => {
-            this.handleEvent(gsiEvent.eventType, gsiEvent.gameTime);
+    public handleEvents(events: Event[]) : void {
+        events.map((event) => {
+            this.handleEvent(event.type, event.time);
         });
     }
 }

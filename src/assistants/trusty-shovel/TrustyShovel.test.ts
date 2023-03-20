@@ -1,6 +1,5 @@
-import {
-    Item, PlayerItems,
-} from "../../gsi/GsiItems";
+import Item from "../../Item";
+import PlayerItems from "../../PlayerItems";
 import TrustyShovel from "./TrustyShovel";
 
 describe("Trusty shovel", () => {

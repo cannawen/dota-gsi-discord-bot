@@ -1,7 +1,5 @@
 import broker from "../../broker";
-import {
-    PlayerItems,
-} from "../../gsi/GsiItems";
+import PlayerItems from "../../PlayerItems";
 import Topic from "../../Topic";
 
 export default class TrustyShovel {
