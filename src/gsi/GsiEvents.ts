@@ -27,17 +27,18 @@ class GsiEvents {
     public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): Event[] | void {
         if (state.events) {
             log.debug("gsi", "events %s", state.events);
-            let added = false;
+            const newEvents: Event[] = [];
             state.events
                 .map(Event.create)
                 .map((event) => {
                     if (this.neverSeenBefore(event)) {
-                        added = true;
-                        this.allEvents.push(event);
+                        newEvents.push(event);
                     }
                 });
-            if (added) {
-                return this.allEvents;
+            // Debouncing events
+            if (newEvents.length > 0) {
+                this.allEvents.concat(newEvents);
+                return newEvents;
             }
         }
     }
