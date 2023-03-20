@@ -6,6 +6,7 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 - `npm install`
 - `npm start`
 ### Development
+[See here for details](./development.md)
 - `npm run start:dev` or `npm run test:dev` for hot reloading
 - `npm run lint` to identify & fix linting issues
 ### Using node-gsi library
@@ -21,9 +22,6 @@ Steam Library -> Right click Dota 2 -> Properties
 - Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 - Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
 - Create a `.env` file with from copying `sample.env` and change relevant values
-
-## Development 
-[See here for details](./development.md)
 
 ## Product Management
 - See Github Projects page for project roadmap
