@@ -57,6 +57,6 @@ export default class Roshan {
 }
 
 const component = new Roshan();
-broker.register("ASSISTANT/ROSHAN", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
-broker.register("ASSISTANT/ROSHAN", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
-broker.register("ASSISTANT/ROSHAN", Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
+broker.register("ASSISTANT/ROSHAN/TIME", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
+broker.register("ASSISTANT/ROSHAN/GAME_STATE", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+broker.register("ASSISTANT/ROSHAN/EVENTS", Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));

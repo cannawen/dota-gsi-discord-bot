@@ -37,23 +37,34 @@ function register<InType, OutType>(
 
 function publish<TopicType>(label: string | null, topic: Topic<TopicType>, data: TopicType) {
     if (label) {
-        log.debug("broker", "%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
+        log.verbose("broker", "%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
     }
-    registry.forEach((registrant) => {
+    registry.forEach((registrant, index, registry) => {
         if (topic.label === registrant.inTopic.label) {
             const result = registrant.handler(data);
-            log.debug(
+            log.verbose(
                 "broker",
-                "Process %s -> %s -> %s",
+                "Process (%s/%s) %s -> %s -> %s",
+                index + 1,
+                registry.length,
                 registrant.inTopic.label.green,
                 registrant.label.yellow,
                 registrant.outTopic && result
                     ? registrant.outTopic?.label.green
-                    : registrant.outTopic?.label.green.strikethrough,
+                    : registrant.outTopic?.label.strikethrough,
             );
             if (registrant.outTopic && result) {
                 publish(null, registrant.outTopic, result);
             }
+        } else {
+            log.debug(
+                "broker",
+                "Process (%s/%s) %s does not take %s",
+                index + 1,
+                registry.length,
+                registrant.label,
+                topic.label,
+            );
         }
     });
 }

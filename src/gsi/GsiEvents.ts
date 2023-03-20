@@ -51,5 +51,5 @@ class GsiEvents {
 }
 
 const component = new GsiEvents();
-broker.register("GSI/EVENTS", Topic.GSI_DATA, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
-broker.register("GSI/EVENTS", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+broker.register("GSI/EVENTS/EVENTS", Topic.GSI_DATA, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
+broker.register("GSI/EVENTS/GAME_STATE", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));

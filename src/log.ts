@@ -23,7 +23,7 @@ function padTo(msg: string, length: number, truncate: boolean) {
 function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     const levelLength = 5;
     const labelLength = 9;
-    const out = `${info.timestamp.gray} ${padTo(info.level, levelLength, true)} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
+    const out = `${info.timestamp.gray} ${padTo(info.level, levelLength, true).stripColors} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
     if (colors) {
         return out;
     } else {
