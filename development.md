@@ -36,3 +36,17 @@ Goal: to develop the app without having dota open
 ### replay some file
 `mitmdump -C flow_file`  
 see `mitmproxy-flows` folders for currently saved flows
+
+## Code Formatting
+- Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
+- Add to Visual Studio Code `settings.json` to auto-format [(src)](https://daveceddia.com/vscode-use-eslintrc/#:~:text=Configure%20VSCode%20Settings%20to%20use%20ESLint%20for%20Formatting&text=Click%20that%20tiny%20icon%20in,paper%20with%20a%20little%20arrow.&text=The%20first%20one%20turns%20on,it%2C%20we're%20done.)
+```
+{
+    "eslint.format.enable": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+}
+```
+- While you're here, `"editor.minimap.enabled": false` is also nice to remove the minimap view in VS code
+- `Jest Runner` is also a very nice plugin
