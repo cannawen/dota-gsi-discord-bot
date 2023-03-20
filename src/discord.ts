@@ -36,7 +36,7 @@ function playNext() {
     log.verbose("discord", "Check queue for next audio resource");
     const audioResource = audioQueue.shift();
     if (audioResource) {
-        log.info("discord", "Playing next audio resource");
+        log.verbose("discord", "Playing next audio resource");
         subscription.player.play(audioResource);
     } else {
         log.verbose("discord", "Audio queue is empty");
@@ -136,10 +136,10 @@ function playAudioFile(filePath: string) {
 
 function playTTS(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
-        log.info("discord", "Found cached TTS %s", ttsString);
+        log.verbose("discord", "Found cached TTS %s", ttsString);
         playAudioFile(ttsPath(ttsString));
     } else {
-        log.info("discord", "Processing TTS string '%s'", ttsString);
+        log.verbose("discord", "Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
         axios({
             method:       "get",
