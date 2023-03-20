@@ -25,4 +25,5 @@ class GsiItems {
 }
 
 const component = new GsiItems();
-broker.register("GSI/ITEMS", Topic.GSI_DATA, Topic.DOTA_2_ITEMS, component.handleState.bind(component));
+broker.register("GSI/ITEMS", Topic.GSI_DATA_LIVE, Topic.DOTA_2_ITEMS, component.handleState.bind(component));
+broker.register("GSI/ITEMS", Topic.GSI_DATA_OBSERVER, Topic.DOTA_2_ITEMS, component.handleState.bind(component));

@@ -36,8 +36,8 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
   - An Effect that knows how to execute the desired effect (playing audio on discord)
 - These three sections communicate via `broker` using `Topic`s.
 - `Topic`s represent the kind of data one may produce and/or consume and their type.
-- The GSI server starts and produces a `Topic.GSI_DATA` to the broker
-- Code in `gsi/` consume `Topic.GSI_DATA` and produce their own topics as an output, such as `Topic.DOTA_2_TIME`
+- The GSI server starts and produces a `Topic.GSI_DATA_LIVE` to the broker
+- Code in `gsi/` consume `Topic.GSI_DATA_LIVE` and produce their own topics as an output, such as `Topic.DOTA_2_TIME`
 - Code in `assistants/` consume topics such as `Topic.DOTA_2_TIME` and produce effects like `Topic.EFFECT_PLAY_FILE`
 - Code in `effects/` consume the effect and produce no outputs to the broker (but have side effects)
 Note: There is no special requirement for the code to be separated into these three sections; a component can declare they want to consume a `Topic.GSI_DATA` and produce a `Topic.EFFECT_PLAY_FILE` if they wish. It is currently just separated into different folders for logical reasons
