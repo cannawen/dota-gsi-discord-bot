@@ -8,7 +8,8 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 ## Logging
 - Use winston loggers from `log.ts`. New "labels" are created for loggers on the fly  
-- Loggers use environment variables to determine log levels (it default to `info` if env variable is not set)
+- Loggers use environment variables to determine log levels (it defaults to `info` if env variable is not set)
+- Colors from @colors/colors may also be used to describe a label
 - See sample.env for usage example
 
 ## Architecture
