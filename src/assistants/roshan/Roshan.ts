@@ -43,7 +43,7 @@ export default class Roshan {
 
     private handleEvent(eventType: string, _time: number) : void {
         // `time` we get from the event is incorrect - use current time instead
-        if (eventType === "roshan_killed") {
+        if (eventType === "roshan_killed" && this.roshStatus === Constants.Status.ALIVE) {
             this.lastRoshanDeathTime = this.currentTime;
             this.roshStatus = Constants.Status.DEAD;
         }
