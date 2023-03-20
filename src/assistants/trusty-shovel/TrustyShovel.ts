@@ -3,7 +3,7 @@ import PlayerItems from "../../PlayerItems";
 import Topic from "../../Topic";
 
 export default class TrustyShovel {
-    private shovelCanBeUsed: boolean | undefined;
+    private shovelCanBeUsed = false;
     private lastShovelReminderTime = 0;
 
     public handleTime(time: number) : string | void {
@@ -15,7 +15,7 @@ export default class TrustyShovel {
 
     public items(items: PlayerItems): void {
         if (items.neutral?.id === "item_trusty_shovel") {
-            this.shovelCanBeUsed = items.neutral.cooldown === undefined || items.neutral.cooldown === 0;
+            this.shovelCanBeUsed = items.neutral.canCast ? items.neutral.canCast : false;
         }
     }
 }
