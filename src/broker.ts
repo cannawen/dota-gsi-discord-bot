@@ -23,7 +23,7 @@ class Registrant<InType, OutType> {
     }
 }
 
-const registry : Array<Registrant<any, any>> = [];
+const registry : Map<Topic<any>, [Registrant<any, any>]> = new Map();
 
 function register<InType, OutType>(
     label: string,
@@ -31,40 +31,35 @@ function register<InType, OutType>(
     outTopic: Topic<OutType> | null,
     handler: (input: InType) => OutType | void
 ) : void {
-    log.info("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
-    registry.push(new Registrant(label, inTopic, outTopic, handler));
+    log.verbose("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
+    const newRegistrant = new Registrant(label, inTopic, outTopic, handler);
+
+    const currentlyRegistered = registry.get(inTopic);
+    if (currentlyRegistered) {
+        currentlyRegistered.push(newRegistrant);
+    } else {
+        registry.set(inTopic, [newRegistrant]);
+    }
+    log.debug("broker", "%s now has %s subscriber(s)".gray, inTopic.label, registry.get(inTopic)?.length);
 }
 
 function publish<TopicType>(label: string | null, topic: Topic<TopicType>, data: TopicType) {
     if (label) {
         log.verbose("broker", "%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
     }
-    registry.forEach((registrant, index, registry) => {
-        if (topic.label === registrant.inTopic.label) {
-            const result = registrant.handler(data);
-            log.verbose(
-                "broker",
-                "Process (%s/%s) %s -> %s -> %s",
-                index + 1,
-                registry.length,
-                registrant.inTopic.label.green,
-                registrant.label.yellow,
-                registrant.outTopic && result
-                    ? registrant.outTopic?.label.green
-                    : registrant.outTopic?.label.strikethrough,
-            );
-            if (registrant.outTopic && result) {
-                publish(null, registrant.outTopic, result);
-            }
-        } else {
-            log.debug(
-                "broker",
-                "Process (%s/%s) %s does not take %s",
-                index + 1,
-                registry.length,
-                registrant.label,
-                topic.label,
-            );
+    registry.get(topic)?.forEach((registrant) => {
+        const result = registrant.handler(data);
+        log.verbose(
+            "broker",
+            "Process %s -> %s -> %s",
+            registrant.inTopic.label.green,
+            registrant.label.yellow,
+            registrant.outTopic && result
+                ? registrant.outTopic?.label.green
+                : registrant.outTopic?.label.strikethrough,
+        );
+        if (registrant.outTopic && result) {
+            publish(null, registrant.outTopic, result);
         }
     });
 }
