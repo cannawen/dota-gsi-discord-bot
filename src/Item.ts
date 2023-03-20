@@ -1,4 +1,7 @@
 import gsi from "node-gsi";
+import items from "./data/items.json";
+
+const itemNames = new Map(Object.entries(items));
 
 export default class Item {
     id: string;
@@ -12,9 +15,9 @@ export default class Item {
     }
 
     static create(item: gsi.IItem | null) {
-        // TODO find real human readable name from of the item and pass it along in second parameter
         if (item) {
-            return new Item(item.name, item.name, item.cooldown);
+            const name = itemNames.get(item.name);
+            return new Item(item.name, name ? name : item.name, item.cooldown);
         }
         return null;
     }
