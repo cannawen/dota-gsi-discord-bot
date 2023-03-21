@@ -19,13 +19,9 @@ export class Fact<Type> {
     }
 }
 
-const topic = {
+let topic = {
     time: new Topic<number>("time"),
     event_message: new Topic<string>("event_message"),
-    roshanIsMaybeBackAnnounceTime: new Topic<number>(
-        "roshanIsMaybeBackAnnounceTime"
-    ),
-    roshanIsBackAnnounceTime: new Topic<number>("roshanIsBackAnnounceTime"),
     playAudioFile: new Topic<string>("playAudioFile"),
 };
 
@@ -97,28 +93,37 @@ const engine = new Engine();
 /// using it
 
 // in roshan.js
+
+const ltopic = {
+    roshanIsMaybeBackAnnounceTime: new Topic<number>(
+        "roshanIsMaybeBackAnnounceTime"
+    ),
+    roshanIsBackAnnounceTime: new Topic<number>("roshanIsBackAnnounceTime"),
+};
+
 engine.registerRule({
     given: [topic.time, topic.event_message],
     when: (db) => db.get(topic.event_message) === "roshan_killed",
     then: (db) => [
         new Fact(
-            topic.roshanIsMaybeBackAnnounceTime,
+            ltopic.roshanIsMaybeBackAnnounceTime,
             db.get(topic.time) + 8 * 60
         ),
-        new Fact(topic.roshanIsBackAnnounceTime, db.get(topic.time) + 11 * 60),
+        new Fact(ltopic.roshanIsBackAnnounceTime, db.get(topic.time) + 11 * 60),
     ],
 });
 
 engine.registerRule({
-    given: [topic.time, topic.roshanIsMaybeBackAnnounceTime],
+    given: [topic.time, ltopic.roshanIsMaybeBackAnnounceTime],
     when: (db) =>
-        db.get(topic.time) === db.get(topic.roshanIsMaybeBackAnnounceTime),
+        db.get(topic.time) === db.get(ltopic.roshanIsMaybeBackAnnounceTime),
     then: (_) => [new Fact(topic.playAudioFile, "roshan_maybe_alive.wav")],
 });
 
 engine.registerRule({
-    given: [topic.time, topic.roshanIsBackAnnounceTime],
-    when: (db) => db.get(topic.time) === db.get(topic.roshanIsBackAnnounceTime),
+    given: [topic.time, ltopic.roshanIsBackAnnounceTime],
+    when: (db) =>
+        db.get(topic.time) === db.get(ltopic.roshanIsBackAnnounceTime),
     then: (_) => [new Fact(topic.playAudioFile, "roshan_alive.wav")],
 });
 
