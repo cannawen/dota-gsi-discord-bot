@@ -1,4 +1,4 @@
-const doesIntersect = (set, arr) => {
+const doesIntersect = (set: Set<string>, arr: Array<string>) => {
     for (const item of arr) {
         if (set.has(item)) {
             return true;
@@ -7,18 +7,25 @@ const doesIntersect = (set, arr) => {
     return false;
 };
 
-class Engine {
-    rules = [];
-    db = {};
+type KVs = { [key: string]: any };
+type Rule = {
+    given: Array<string>;
+    when?: (db: KVs) => boolean;
+    then: (db: KVs) => KVs | void;
+};
 
-    registerRule = (rule) => {
+class Engine {
+    rules: Rule[] = [];
+    db: KVs = {};
+
+    public registerRule = (rule: Rule) => {
         this.rules.push(rule);
     };
 
-    set = (changes) => {
+    public set = (changes: KVs | void) => {
         console.log("set", changes);
         if (changes) {
-            const changedKeys = new Set();
+            const changedKeys = new Set<string>();
             Object.keys(changes).forEach((k) => {
                 if (this.db[k] !== changes[k]) {
                     changedKeys.add(k);
@@ -28,8 +35,8 @@ class Engine {
             this.next(changedKeys);
         }
     };
-    // private
-    next = (changedKeys) => {
+
+    private next = (changedKeys: Set<string>) => {
         console.log("next");
         this.rules.forEach((rule) => {
             if (doesIntersect(changedKeys, rule.given)) {
@@ -55,7 +62,6 @@ engine.registerRule({
     }),
 });
 
-// in roshan.js
 engine.registerRule({
     given: ["time", "roshanIsMaybeBackAnnounceTime"],
     when: ({ time, roshanIsMaybeBackAnnounceTime }) =>
@@ -65,7 +71,6 @@ engine.registerRule({
     }),
 });
 
-// in roshan.js
 engine.registerRule({
     given: ["time", "roshanIsBackAnnounceTime"],
     when: ({ time, roshanIsBackAnnounceTime }) =>
@@ -75,9 +80,9 @@ engine.registerRule({
     }),
 });
 
-const playAudio = (f) => console.log("PLAY", f);
-
 // in audio.js
+const playAudio = (f: string) => console.log("PLAY", f);
+
 engine.registerRule({
     given: ["playAudioFile"],
     then: (db) => {
@@ -85,6 +90,7 @@ engine.registerRule({
     },
 });
 
+// in GSI
 engine.set({ time: 123, event_message: "roshan_killed" });
 engine.set({ time: 124, event_message: null });
 engine.set({ time: 603, event_message: null });
