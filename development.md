@@ -64,12 +64,10 @@ see `mitmproxy-flows` folders for currently saved flows
 
 ```
 {
-    "eslint.format.enable": true,
-    "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": true
-    }
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
 }
 ```
 
 -   While you're here, `"editor.minimap.enabled": false` removes the minimap view in VS code
--   `Jest Runner` is also a very nice plugin to run a single test or test suite
+-   `Jest Runner` and `Prettier - Code formatter.` are also recommended plugins
