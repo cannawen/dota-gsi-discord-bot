@@ -1,5 +1,6 @@
 import colors from "@colors/colors";
 import winston from "winston";
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { stylize, styles } = require("@colors/colors");
 
 function padTo(msg: string, length: number, truncate: boolean) {

@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "build": "rimraf ./build ./tts-cache && tsc",
-        "lint": "npx prettier --write .",
+        "linter": "eslint . --ext .ts",
+        "formatter": "npx prettier --write .",
         "start:nobuild": "node build/index.js",
         "start": "npm run build && npm run start:nobuild",
         "start:dev": "npx nodemon",
