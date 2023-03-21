@@ -19,7 +19,6 @@ if (!fs.existsSync(ttsDirectory)) {
 }
 
 const emColor = colors.blue;
-const errorColor = colors.red;
 
 function playNext() {
     if (subscription?.player.state.status !== Voice.AudioPlayerStatus.Idle) {
@@ -81,7 +80,7 @@ function onDiscordClientReady() {
         log.error(
             "discord",
             "Could not find Discord guild %s. Check your .env file",
-            errorColor(process.env.HARD_CODED_GUILD_NAME || "undefined")
+            process.env.HARD_CODED_GUILD_NAME
         );
         return;
     }
@@ -92,9 +91,7 @@ function onDiscordClientReady() {
         log.error(
             "discord",
             "Could not find Discord channel %s in guild %s. Check your .env file",
-            errorColor(
-                process.env.HARD_CODED_VOICE_CHANNEL_NAME || "undefined"
-            ),
+            process.env.HARD_CODED_VOICE_CHANNEL_NAME,
             guild.name
         );
         return;
@@ -152,7 +149,7 @@ discordClient
         log.error(
             "discord",
             "Error logging into Discord. Check your .env file - %s",
-            errorColor(e.message)
+            e.message
         );
     });
 
@@ -160,11 +157,7 @@ function playAudioFile(filePath: string) {
     if (fs.existsSync(filePath)) {
         onAudioFilePath(filePath);
     } else {
-        log.error(
-            "discord",
-            "Unable to play file at path %s",
-            errorColor(filePath)
-        );
+        log.error("discord", "Unable to play file at path %s", filePath);
     }
 }
 
@@ -185,8 +178,8 @@ function playTTS(ttsString: string) {
                 log.error(
                     "discord",
                     "Unable to TTS %s with error message %s",
-                    errorColor(ttsString),
-                    errorColor(error.message)
+                    ttsString,
+                    error.message
                 );
             });
     }

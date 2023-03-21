@@ -140,7 +140,11 @@ function getLogger(label: string): winston.Logger {
 
 function makeLog(logLevel: string) {
     return (label: string, formatString: string, ...vars: any[]) => {
-        getLogger(label.toUpperCase()).log(logLevel, formatString, ...vars);
+        let params = vars;
+        if (logLevel === "error") {
+            params = vars.map(colors.red);
+        }
+        getLogger(label.toUpperCase()).log(logLevel, formatString, ...params);
     };
 }
 
