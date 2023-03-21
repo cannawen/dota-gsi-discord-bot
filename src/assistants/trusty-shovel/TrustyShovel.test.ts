@@ -21,7 +21,11 @@ describe("Trusty shovel", () => {
     describe("when player has a trusty shovel neutral item", () => {
         describe("shovel is on cooldown", () => {
             test("TTS should not be played", () => {
-                const shovel = new Item("item_trusty_shovel", "Trusty Shovel", false);
+                const shovel = new Item(
+                    "item_trusty_shovel",
+                    "Trusty Shovel",
+                    false
+                );
                 sut.items(new PlayerItems([], [], shovel, null));
 
                 expect(sut.handleTime(0)).toBeUndefined();
@@ -32,7 +36,11 @@ describe("Trusty shovel", () => {
         describe("it has been on cooldown for 15 seconds", () => {
             test("there should be a TTS reminder to dig", () => {
                 sut.handleTime(0);
-                const shovel = new Item("item_trusty_shovel", "Trusty Shovel", true);
+                const shovel = new Item(
+                    "item_trusty_shovel",
+                    "Trusty Shovel",
+                    true
+                );
                 sut.items(new PlayerItems([], [], shovel, null));
 
                 expect(sut.handleTime(15)).toBe("dig");
@@ -41,7 +49,11 @@ describe("Trusty shovel", () => {
             describe("user does not use the shovel", () => {
                 test("TTS should be played again after another 15 seconds", () => {
                     sut.handleTime(0);
-                    const shovel = new Item("item_trusty_shovel", "Trusty Shovel", true);
+                    const shovel = new Item(
+                        "item_trusty_shovel",
+                        "Trusty Shovel",
+                        true
+                    );
                     sut.items(new PlayerItems([], [], shovel, null));
                     sut.handleTime(15);
                     expect(sut.handleTime(29)).toBeUndefined();

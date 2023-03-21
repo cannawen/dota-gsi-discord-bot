@@ -9,8 +9,10 @@ expect.extend({
         return {
             pass,
             message: pass
-                ? () => `expected ${actual} not to be within range (${min}..${max})`
-                : () => `expected ${actual} to be within range (${min}..${max})`,
+                ? () =>
+                      `expected ${actual} not to be within range (${min}..${max})`
+                : () =>
+                      `expected ${actual} to be within range (${min}..${max})`,
         };
     },
 

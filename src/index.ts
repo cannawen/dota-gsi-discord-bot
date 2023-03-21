@@ -29,9 +29,12 @@ server.events.on(gsi.Dota2Event.Dota2State, (event: gsi.IDota2StateEvent) => {
     broker.publish("node-gsi", Topic.GSI_DATA_LIVE, event.state);
 });
 
-server.events.on(gsi.Dota2Event.Dota2ObserverState, (event: gsi.IDota2ObserverStateEvent) => {
-    broker.publish("node-gsi", Topic.GSI_DATA_OBSERVER, event.state);
-});
+server.events.on(
+    gsi.Dota2Event.Dota2ObserverState,
+    (event: gsi.IDota2ObserverStateEvent) => {
+        broker.publish("node-gsi", Topic.GSI_DATA_OBSERVER, event.state);
+    }
+);
 
 log.info("gsi", "Starting GSI server on port 9001");
 server.listen(9001);

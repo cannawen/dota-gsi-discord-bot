@@ -1,9 +1,6 @@
 import colors from "@colors/colors";
 import winston from "winston";
-const {
-    stylize, styles,
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-} = require("@colors/colors");
+const { stylize, styles } = require("@colors/colors");
 
 function padTo(msg: string, length: number, truncate: boolean) {
     const stripped = colors.stripColors(msg);
@@ -23,7 +20,11 @@ function padTo(msg: string, length: number, truncate: boolean) {
 function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     const levelLength = 5;
     const labelLength = 9;
-    const out = `${info.timestamp.gray} ${padTo(info.level, levelLength, true).stripColors} ${padTo(info.label, labelLength, false)} ${info.message}${info.splat ? `${info.splat}` : " "}`;
+    const out = `${info.timestamp.gray} ${
+        padTo(info.level, levelLength, true).stripColors
+    } ${padTo(info.label, labelLength, false)} ${info.message}${
+        info.splat ? `${info.splat}` : " "
+    }`;
     if (colors) {
         return out;
     } else {
@@ -57,20 +58,26 @@ function createMap(label: string, levelString: string) {
                 message: false,
             })
         ),
-        level:      levelString,
+        level: levelString,
         transports: [
             new winston.transports.File({
                 filename: "error.log",
-                format:   winston.format.printf((info) => printFormat(info, false)),
-                level:    "error",
+                format: winston.format.printf((info) =>
+                    printFormat(info, false)
+                ),
+                level: "error",
             }),
             new winston.transports.File({
                 filename: "combined.log",
-                format:   winston.format.printf((info) => printFormat(info, false)),
-                level:    "debug",
+                format: winston.format.printf((info) =>
+                    printFormat(info, false)
+                ),
+                level: "debug",
             }),
             new winston.transports.Console({
-                format: winston.format.printf((info) => printFormat(info, true)),
+                format: winston.format.printf((info) =>
+                    printFormat(info, true)
+                ),
             }),
         ],
     };
@@ -81,15 +88,28 @@ const loggers: Map<string, winston.Logger> = new Map();
 function parseLogEnv(input: string) {
     // GSI:debug:magenta,DISCORD:warn
     const validColors = new Set(Object.keys(styles));
-    const validLevels = new Set([ "error", "warn", "info", "http", "verbose", "debug", "silly" ]);
-    const settings = input.split(",")
+    const validLevels = new Set([
+        "error",
+        "warn",
+        "info",
+        "http",
+        "verbose",
+        "debug",
+        "silly",
+    ]);
+    const settings = input
+        .split(",")
         .map((single) => single.split(":"))
-        .reduce((memo, [ label, level, color ]) => memo.set(label.toUpperCase(), {
-            color,
-            level,
-        }), new Map());
+        .reduce(
+            (memo, [label, level, color]) =>
+                memo.set(label.toUpperCase(), {
+                    color,
+                    level,
+                }),
+            new Map()
+        );
 
-    return function (label:string) {
+    return function (label: string) {
         const color = settings.get(label)?.color;
         const level = settings.get(label)?.level;
         return {
@@ -119,17 +139,17 @@ function getLogger(label: string): winston.Logger {
 }
 
 function makeLog(logLevel: string) {
-    return (label:string, formatString:string, ...vars:any[]) => {
+    return (label: string, formatString: string, ...vars: any[]) => {
         getLogger(label.toUpperCase()).log(logLevel, formatString, ...vars);
     };
 }
 
 export default {
-    error:   makeLog("error"),
-    warn:    makeLog("warn"),
-    info:    makeLog("info"),
-    http:    makeLog("http"),
+    error: makeLog("error"),
+    warn: makeLog("warn"),
+    info: makeLog("info"),
+    http: makeLog("http"),
     verbose: makeLog("verbose"),
-    debug:   makeLog("debug"),
-    silly:   makeLog("silly"),
+    debug: makeLog("debug"),
+    silly: makeLog("silly"),
 };

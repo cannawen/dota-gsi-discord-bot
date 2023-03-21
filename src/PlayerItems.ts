@@ -7,7 +7,12 @@ export default class PlayerItems {
     neutral: Item | null = null;
     teleport: Item | null = null;
 
-    constructor(inventory: Array<Item | null>, stash: Array<Item | null>, neutral: Item | null, teleport: Item | null) {
+    constructor(
+        inventory: Array<Item | null>,
+        stash: Array<Item | null>,
+        neutral: Item | null,
+        teleport: Item | null
+    ) {
         this.inventory = inventory;
         this.stash = stash;
         this.neutral = neutral;

@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import log from "./log";
-import {
-    Topic,
-} from "./Topic";
+import { Topic } from "./Topic";
 
 class Registrant<InType, OutType> {
     label: string;
@@ -23,15 +20,21 @@ class Registrant<InType, OutType> {
     }
 }
 
-const registry : Map<Topic<any>, [Registrant<any, any>]> = new Map();
+const registry: Map<Topic<any>, [Registrant<any, any>]> = new Map();
 
 function register<InType, OutType>(
     label: string,
     inTopic: Topic<InType>,
     outTopic: Topic<OutType> | null,
     handler: (input: InType) => OutType | void
-) : void {
-    log.verbose("broker", "Register %s -> %s -> %s", inTopic.label.green, label.yellow, outTopic?.label.green);
+): void {
+    log.verbose(
+        "broker",
+        "Register %s -> %s -> %s",
+        inTopic.label.green,
+        label.yellow,
+        outTopic?.label.green
+    );
     const newRegistrant = new Registrant(label, inTopic, outTopic, handler);
 
     const currentlyRegistered = registry.get(inTopic);
@@ -40,12 +43,27 @@ function register<InType, OutType>(
     } else {
         registry.set(inTopic, [newRegistrant]);
     }
-    log.debug("broker", "%s now has %s subscriber(s)".gray, inTopic.label, registry.get(inTopic)?.length);
+    log.debug(
+        "broker",
+        "%s now has %s subscriber(s)".gray,
+        inTopic.label,
+        registry.get(inTopic)?.length
+    );
 }
 
-function publish<TopicType>(label: string | null, topic: Topic<TopicType>, data: TopicType) {
+function publish<TopicType>(
+    label: string | null,
+    topic: Topic<TopicType>,
+    data: TopicType
+) {
     if (label) {
-        log.verbose("broker", "%s %s -> %s", "Publish".magenta, label.yellow, topic.label.green);
+        log.verbose(
+            "broker",
+            "%s %s -> %s",
+            "Publish".magenta,
+            label.yellow,
+            topic.label.green
+        );
     }
     registry.get(topic)?.forEach((registrant) => {
         const result = registrant.handler(data);
@@ -56,7 +74,7 @@ function publish<TopicType>(label: string | null, topic: Topic<TopicType>, data:
             registrant.label.yellow,
             registrant.outTopic && result
                 ? registrant.outTopic?.label.green
-                : registrant.outTopic?.label.strikethrough,
+                : registrant.outTopic?.label.strikethrough
         );
         if (registrant.outTopic && result) {
             publish(null, registrant.outTopic, result);

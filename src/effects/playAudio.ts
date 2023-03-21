@@ -7,5 +7,6 @@ broker.register(
     "EFFECT/PLAY_AUDIO",
     Topic.EFFECT_PLAY_FILE,
     null,
-    (filePath: string) => discord.playAudioFile(path.join(__dirname, "../../audio/", filePath))
+    (filePath: string) =>
+        discord.playAudioFile(path.join(__dirname, "../../audio/", filePath))
 );

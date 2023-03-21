@@ -1,7 +1,7 @@
 import Constants from "./Constants";
 import logic from "./logic";
 
-function spawnsAtMinute(time: number) : number {
+function spawnsAtMinute(time: number): number {
     return time * 60;
 }
 
@@ -30,8 +30,12 @@ describe("rune event", () => {
 
     describe("every 6 minutes", () => {
         test("spawns bounty and power runes", () => {
-            expect(logic(spawnsAtMinute(6))).toBe(Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
-            expect(logic(spawnsAtMinute(60))).toBe(Constants.RuneId.BOUNTY | Constants.RuneId.POWER);
+            expect(logic(spawnsAtMinute(6))).toBe(
+                Constants.RuneId.BOUNTY | Constants.RuneId.POWER
+            );
+            expect(logic(spawnsAtMinute(60))).toBe(
+                Constants.RuneId.BOUNTY | Constants.RuneId.POWER
+            );
         });
     });
 

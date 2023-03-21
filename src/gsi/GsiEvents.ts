@@ -10,31 +10,31 @@ class GsiEvents {
     // `allEvents` contains an array of all events seen so far
     private allEvents: Event[] = [];
 
-    public inGame(newInGame: boolean) : void {
+    public inGame(newInGame: boolean): void {
         if (!newInGame) {
             this.allEvents = [];
         }
     }
 
-    private neverSeenBefore(newEvent : Event) : boolean {
-        return !this.allEvents
-            .reduce(
-                (haveSeenBefore, existingEvent) => Event.same(existingEvent, newEvent) || haveSeenBefore,
-                false
-            );
+    private neverSeenBefore(newEvent: Event): boolean {
+        return !this.allEvents.reduce(
+            (haveSeenBefore, existingEvent) =>
+                Event.same(existingEvent, newEvent) || haveSeenBefore,
+            false
+        );
     }
 
-    public handleState(state: gsi.IDota2State | gsi.IDota2ObserverState): Event[] | void {
+    public handleState(
+        state: gsi.IDota2State | gsi.IDota2ObserverState
+    ): Event[] | void {
         if (state.events) {
             log.debug("gsi", "events %s", state.events);
             const newEvents: Event[] = [];
-            state.events
-                .map(Event.create)
-                .map((event) => {
-                    if (this.neverSeenBefore(event)) {
-                        newEvents.push(event);
-                    }
-                });
+            state.events.map(Event.create).map((event) => {
+                if (this.neverSeenBefore(event)) {
+                    newEvents.push(event);
+                }
+            });
             // Debouncing events
             if (newEvents.length > 0) {
                 this.allEvents.concat(newEvents);
@@ -45,6 +45,21 @@ class GsiEvents {
 }
 
 const component = new GsiEvents();
-broker.register("GSI/EVENTS/EVENTS", Topic.GSI_DATA_LIVE, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
-broker.register("GSI/EVENTS/EVENTS", Topic.GSI_DATA_OBSERVER, Topic.DOTA_2_EVENTS, component.handleState.bind(component));
-broker.register("GSI/EVENTS/GAME_STATE", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
+broker.register(
+    "GSI/EVENTS/EVENTS",
+    Topic.GSI_DATA_LIVE,
+    Topic.DOTA_2_EVENTS,
+    component.handleState.bind(component)
+);
+broker.register(
+    "GSI/EVENTS/EVENTS",
+    Topic.GSI_DATA_OBSERVER,
+    Topic.DOTA_2_EVENTS,
+    component.handleState.bind(component)
+);
+broker.register(
+    "GSI/EVENTS/GAME_STATE",
+    Topic.DOTA_2_GAME_STATE,
+    null,
+    component.inGame.bind(component)
+);

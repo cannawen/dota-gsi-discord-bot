@@ -1,6 +1,4 @@
-import {
-    IDota2ObserverState, IDota2State,
-} from "node-gsi";
+import { IDota2ObserverState, IDota2State } from "node-gsi";
 import broker from "../broker";
 import gsi = require("node-gsi");
 import log from "../log";
@@ -36,5 +34,15 @@ class GsiGameState {
 }
 
 const component = new GsiGameState();
-broker.register("GSI/GAME_STATE", Topic.GSI_DATA_LIVE, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));
-broker.register("GSI/GAME_STATE", Topic.GSI_DATA_OBSERVER, Topic.DOTA_2_GAME_STATE, component.handleState.bind(component));
+broker.register(
+    "GSI/GAME_STATE",
+    Topic.GSI_DATA_LIVE,
+    Topic.DOTA_2_GAME_STATE,
+    component.handleState.bind(component)
+);
+broker.register(
+    "GSI/GAME_STATE",
+    Topic.GSI_DATA_OBSERVER,
+    Topic.DOTA_2_GAME_STATE,
+    component.handleState.bind(component)
+);

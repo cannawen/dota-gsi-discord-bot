@@ -19,13 +19,13 @@ export default class Roshan {
         this.resetState();
     }
 
-    public inGame(inGame: boolean) : void {
+    public inGame(inGame: boolean): void {
         if (!inGame) {
             this.resetState();
         }
     }
 
-    public handleTime(time: number) : string | void {
+    public handleTime(time: number): string | void {
         this.currentTime = time;
         const newRoshStatus = logic(time, this.lastRoshanDeathTime);
         if (newRoshStatus !== this.roshStatus) {
@@ -41,7 +41,7 @@ export default class Roshan {
         }
     }
 
-    private handleEvent(eventType: string, _time: number) : void {
+    private handleEvent(eventType: string, _time: number): void {
         // `time` we get from the event is incorrect - use current time instead
         if (eventType === "roshan_killed") {
             this.lastRoshanDeathTime = this.currentTime;
@@ -49,7 +49,7 @@ export default class Roshan {
         }
     }
 
-    public handleEvents(events: Event[]) : void {
+    public handleEvents(events: Event[]): void {
         events.map((event) => {
             this.handleEvent(event.type, event.time);
         });
@@ -57,6 +57,21 @@ export default class Roshan {
 }
 
 const component = new Roshan();
-broker.register("ASSISTANT/ROSHAN/TIME", Topic.DOTA_2_TIME, Topic.EFFECT_PLAY_FILE, component.handleTime.bind(component));
-broker.register("ASSISTANT/ROSHAN/GAME_STATE", Topic.DOTA_2_GAME_STATE, null, component.inGame.bind(component));
-broker.register("ASSISTANT/ROSHAN/EVENTS", Topic.DOTA_2_EVENTS, null, component.handleEvents.bind(component));
+broker.register(
+    "ASSISTANT/ROSHAN/TIME",
+    Topic.DOTA_2_TIME,
+    Topic.EFFECT_PLAY_FILE,
+    component.handleTime.bind(component)
+);
+broker.register(
+    "ASSISTANT/ROSHAN/GAME_STATE",
+    Topic.DOTA_2_GAME_STATE,
+    null,
+    component.inGame.bind(component)
+);
+broker.register(
+    "ASSISTANT/ROSHAN/EVENTS",
+    Topic.DOTA_2_EVENTS,
+    null,
+    component.handleEvents.bind(component)
+);
