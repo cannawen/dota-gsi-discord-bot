@@ -27,16 +27,19 @@ engine.register({
     },
     then: (db) => {
         const allEvents = db.get(ltopic.allEvents) || [];
-        const newEvents =
-            db
-                .get(topic.gsiData)
-                .events?.map(Event.create)
-                .filter((event) => neverSeenBefore(allEvents, event)) || [];
+        const newEvents = db
+            .get(topic.gsiData)
+            .events?.map(Event.create)
+            .filter((event) => neverSeenBefore(allEvents, event));
 
-        return [
-            new Fact(ltopic.allEvents, allEvents.concat(newEvents)),
-            new Fact(topic.events, newEvents),
-        ];
+        if (newEvents && newEvents.length > 0) {
+            return [
+                new Fact(ltopic.allEvents, allEvents.concat(newEvents)),
+                new Fact(topic.events, newEvents),
+            ];
+        } else {
+            return [new Fact(topic.events, undefined)];
+        }
     },
 });
 
