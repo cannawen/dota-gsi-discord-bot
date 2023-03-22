@@ -45,6 +45,7 @@ class FactStore {
         this.facts.set(fact.topic, fact);
     };
 }
+
 type getFn = <T>(topic: Topic<T>) => T;
 
 type Rule = {

@@ -2,8 +2,8 @@ import { Topic, Fact } from "../Engine";
 import engine from "../customEngine";
 import topics from "../topics";
 
-const roshanMaybeAliveTime = new Topic<number>("roshanMaybeAliveTime");
-const roshanAliveTime = new Topic<number>("roshanAliveTime");
+const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
+const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");
 
 engine.register(
     "assistant/roshan/killed_event/set_future_audio_state",
@@ -16,8 +16,8 @@ engine.register(
             const time = get(topics.time);
             if (time) {
                 return [
-                    new Fact(roshanMaybeAliveTime, time + 8 * 60),
-                    new Fact(roshanAliveTime, time + 11 * 60),
+                    new Fact(roshanMaybeTimeTopic, time + 8 * 60),
+                    new Fact(roshanAliveTimeTopic, time + 11 * 60),
                 ];
             }
         }

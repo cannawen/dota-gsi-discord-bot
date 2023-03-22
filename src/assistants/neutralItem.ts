@@ -3,7 +3,7 @@ import engine from "../customEngine";
 import topics from "../topics";
 
 const lastWarnedNeutralTimeTopic = new Topic<number | undefined>(
-    "lastWarnedNeutralTime"
+    "lastWarnedNeutralTimeTopic"
 );
 
 engine.register(
