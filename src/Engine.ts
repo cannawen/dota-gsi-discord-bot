@@ -52,6 +52,10 @@ type Rule = {
     then: (db: FactStore) => Fact<any>[] | void;
 };
 
+function removeLineBreaks(s: string) {
+    return s.replace(/(\r\n|\n|\r)/gm, "");
+}
+
 class Engine {
     rules: Rule[] = [];
     db = new FactStore();
@@ -75,8 +79,12 @@ class Engine {
                     "rules",
                     "%s : %s -> %s",
                     log.padToWithColor(newTopic.label.green, 15, true),
-                    log.padToWithColor(colors.gray(oldValue), 15, true),
-                    log.padToWithColor(colors.green(newValue), 15, true)
+                    removeLineBreaks(
+                        log.padToWithColor(colors.gray(oldValue), 15, true)
+                    ),
+                    removeLineBreaks(
+                        log.padToWithColor(colors.green(newValue), 15, true)
+                    )
                 );
                 changedKeys.add(newTopic);
                 this.db.set(newFact);
