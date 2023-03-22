@@ -9,7 +9,7 @@ import "./gsi/gsiTime";
 
 // Enabled assistants
 import "./assistants/roshan";
-//import "./assistants/runes/Runes";
+import "./assistants/runes";
 // import "./assistants/stack/Stack";
 //import "./assistants/trusty-shovel/TrustyShovel";
 

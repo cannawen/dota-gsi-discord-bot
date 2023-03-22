@@ -4,6 +4,8 @@ export default class Event {
     type: string;
     time: number;
 
+    // Events using "game time" which is different than "clock time"
+    // In the rest of the app we are using "clock_time"
     constructor(type: string, time: number) {
         this.type = type;
         this.time = time;
