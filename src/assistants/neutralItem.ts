@@ -13,14 +13,14 @@ engine.register(
         const neutralItem = get(topics.items)?.neutral;
         const time = get(topics.time);
         if (!neutralItem || !time) {
-            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
+            return new Fact(lastWarnedNeutralTimeTopic, undefined);
         }
         const validNeutralItems = ["item_trusty_shovel", "item_pirate_hat"];
         if (!validNeutralItems.find((id) => neutralItem.id === id)) {
-            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
+            return new Fact(lastWarnedNeutralTimeTopic, undefined);
         }
         if (!neutralItem.canCast) {
-            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
+            return new Fact(lastWarnedNeutralTimeTopic, undefined);
         }
 
         const lastWarnedTime = get(lastWarnedNeutralTimeTopic);

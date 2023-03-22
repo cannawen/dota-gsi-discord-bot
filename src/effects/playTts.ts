@@ -8,5 +8,5 @@ engine.register("effect/playTts", [topics.playTts], (get) => {
     if (ttsMessage) {
         discord.playTts(ttsMessage);
     }
-    return [new Fact(topics.playTts, undefined)];
+    return new Fact(topics.playTts, undefined);
 });

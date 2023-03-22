@@ -11,6 +11,6 @@ engine.register("assistant/runes", [topics.time, topics.inGame], (get) => {
         time > 0 &&
         (time % (2 * 60) === 0 || time % (3 * 60) === 0)
     ) {
-        return [new Fact(topics.playAudioFile, "rune-sound.mp3")];
+        return new Fact(topics.playAudioFile, "rune-sound.mp3");
     }
 });

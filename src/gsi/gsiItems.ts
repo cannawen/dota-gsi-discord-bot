@@ -6,8 +6,8 @@ import topics from "../topics";
 engine.register("gsi/items", [topics.gsiData], (get) => {
     const gsiItems = get(topics.gsiData).items;
     if (gsiItems) {
-        return [new Fact(topics.items, PlayerItems.create(gsiItems))];
+        return new Fact(topics.items, PlayerItems.create(gsiItems));
     } else {
-        return [new Fact(topics.items, undefined)];
+        return new Fact(topics.items, undefined);
     }
 });

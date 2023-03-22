@@ -10,5 +10,5 @@ engine.register("effect/playAudio", [topics.playAudioFile], (get) => {
         discord.playAudioFile(path.join(__dirname, "../../audio/", audioFile));
     }
 
-    return [new Fact(topics.playAudioFile, undefined)];
+    return new Fact(topics.playAudioFile, undefined);
 });

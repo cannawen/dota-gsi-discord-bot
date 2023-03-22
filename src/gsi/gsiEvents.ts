@@ -32,13 +32,13 @@ engine.register("gsi/events/new", [topics.gsiData], (get) => {
                 new Fact(topics.events, newEvents),
             ];
         } else {
-            return [new Fact(topics.events, undefined)];
+            return new Fact(topics.events, undefined);
         }
     }
 });
 
 engine.register("gsi/events/reset_all", [topics.inGame], (get) => {
     if (!get(topics.inGame)) {
-        return [new Fact(allEventsTopic, [])];
+        return new Fact(allEventsTopic, []);
     }
 });
