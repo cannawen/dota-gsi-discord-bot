@@ -6,9 +6,7 @@ import topic from "../topics";
 // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
 // `allEvents` contains an array of all events seen so far
 
-const ltopic = {
-    allEvents: new Topic<Event[] | undefined>("allEvents"),
-};
+const allEventsTopic = new Topic<Event[] | undefined>("allEvents");
 
 const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
     return !allEvents.reduce(
@@ -21,7 +19,7 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
 engine.register("gsi/events/new", [topic.gsiData], (db) => {
     const events = db.get(topic.gsiData).events;
     if (events !== null && events.length > 0) {
-        const allEvents = db.get(ltopic.allEvents) || [];
+        const allEvents = db.get(allEventsTopic) || [];
         const newEvents = db
             .get(topic.gsiData)
             .events?.map(Event.create)
@@ -29,7 +27,7 @@ engine.register("gsi/events/new", [topic.gsiData], (db) => {
 
         if (newEvents && newEvents.length > 0) {
             return [
-                new Fact(ltopic.allEvents, allEvents.concat(newEvents)),
+                new Fact(allEventsTopic, allEvents.concat(newEvents)),
                 new Fact(topic.events, newEvents),
             ];
         } else {
@@ -40,6 +38,6 @@ engine.register("gsi/events/new", [topic.gsiData], (db) => {
 
 engine.register("gsi/events/reset_all", [topic.inGame], (db) => {
     if (!db.get(topic.inGame)) {
-        return [new Fact(ltopic.allEvents, [])];
+        return [new Fact(allEventsTopic, [])];
     }
 });
