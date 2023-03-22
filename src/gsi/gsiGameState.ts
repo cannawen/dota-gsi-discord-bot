@@ -1,4 +1,4 @@
-import engine from "../CustomEngine";
+import engine from "../customEngine";
 import { Fact } from "../Engine";
 import topics from "../topics";
 import { Dota2GameState } from "node-gsi";

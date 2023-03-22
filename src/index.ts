@@ -16,7 +16,7 @@ import "./assistants/neutralItem";
 import "./effects/playAudio";
 import "./effects/playTts";
 
-import engine from "./CustomEngine";
+import engine from "./customEngine";
 import gsi = require("node-gsi");
 import log from "./log";
 

@@ -1,6 +1,6 @@
 import { Fact, Topic } from "../Engine";
 import deepEqual from "deep-equal";
-import engine from "../CustomEngine";
+import engine from "../customEngine";
 import Event from "../Event";
 import topics from "../topics";
 
