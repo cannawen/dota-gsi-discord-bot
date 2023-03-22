@@ -18,14 +18,9 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
     );
 };
 
-engine.register({
-    label: "gsi/events/new",
-    given: [topic.gsiData],
-    when: (db) => {
-        const events = db.get(topic.gsiData).events;
-        return events !== null && events.length > 0;
-    },
-    then: (db) => {
+engine.register("gsi/events/new", [topic.gsiData], (db) => {
+    const events = db.get(topic.gsiData).events;
+    if (events !== null && events.length > 0) {
         const allEvents = db.get(ltopic.allEvents) || [];
         const newEvents = db
             .get(topic.gsiData)
@@ -40,14 +35,11 @@ engine.register({
         } else {
             return [new Fact(topic.events, undefined)];
         }
-    },
+    }
 });
 
-engine.register({
-    label: "gsi/events/reset_all",
-    given: [topic.inGame],
-    when: (db) => !db.get(topic.inGame),
-    then: (_) => {
+engine.register("gsi/events/reset_all", [topic.inGame], (db) => {
+    if (!db.get(topic.inGame)) {
         return [new Fact(ltopic.allEvents, [])];
-    },
+    }
 });

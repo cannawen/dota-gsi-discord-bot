@@ -50,7 +50,6 @@ class FactStore {
 type Rule = {
     label: string;
     given: Array<Topic<any>>;
-    when?: (db: FactStore) => boolean;
     then: (db: FactStore) => Fact<any>[] | void;
 };
 
@@ -62,7 +61,16 @@ class Engine {
     rules: Rule[] = [];
     db = new FactStore();
 
-    public register = (rule: Rule) => {
+    public register = (
+        label: string,
+        given: Array<Topic<any>>,
+        then: (db: FactStore) => Fact<any>[] | void
+    ) => {
+        const rule = {
+            label: label,
+            given: given,
+            then: then,
+        };
         log.info("rules", "Registering new rule %s", rule.label.yellow);
         this.rules.push(rule);
     };
@@ -99,13 +107,11 @@ class Engine {
     private next = (changedKeys: Set<Topic<any>>) => {
         this.rules.forEach((rule) => {
             if (doesIntersect(changedKeys, rule.given)) {
-                if (!rule.when || rule.when(this.db)) {
-                    const out = rule.then(this.db);
-                    if (out) {
-                        log.debug("rules", "Start rule\t%s", rule.label.yellow);
-                        this.set(...out);
-                        log.debug("rules", "End rule  \t%s", rule.label);
-                    }
+                const out = rule.then(this.db);
+                if (out) {
+                    log.debug("rules", "Start rule\t%s", rule.label.yellow);
+                    this.set(...out);
+                    log.debug("rules", "End rule  \t%s", rule.label);
                 }
             }
         });

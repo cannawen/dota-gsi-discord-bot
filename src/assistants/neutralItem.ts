@@ -5,31 +5,30 @@ const lastWarnedNeutralTimeTopic = new Topic<number | undefined>(
     "lastWarnedNeutralTime"
 );
 
-engine.register({
-    label: "assistant/neutral_item",
-    given: [topics.items, topics.time, lastWarnedNeutralTimeTopic],
-    when: (db) => {
+engine.register(
+    "assistant/neutral_item",
+    [topics.items, topics.time, lastWarnedNeutralTimeTopic],
+    (db) => {
         const neutralItem = db.get(topics.items)?.neutral;
         const time = db.get(topics.time);
         if (!neutralItem || !time) {
-            return false;
+            return;
         }
         const validNeutralItems = ["item_trusty_shovel", "item_pirate_hat"];
         if (!validNeutralItems.find((id) => neutralItem.id === id)) {
-            return false;
+            return;
         }
         if (!neutralItem.canCast) {
-            return false;
+            return;
         }
 
         const lastWarnedTime = db.get(lastWarnedNeutralTimeTopic) || 0;
-        return time > lastWarnedTime + 15;
-    },
-    then: (db) => {
-        const currentTime = db.get(topics.time);
-        engine.set(
-            new Fact(lastWarnedNeutralTimeTopic, currentTime),
-            new Fact(topics.playAudioFile, "shovel.mp3")
-        );
-    },
-});
+        if (time > lastWarnedTime + 15) {
+            const currentTime = db.get(topics.time);
+            return [
+                new Fact(lastWarnedNeutralTimeTopic, currentTime),
+                new Fact(topics.playAudioFile, "shovel.mp3"),
+            ];
+        }
+    }
+);
