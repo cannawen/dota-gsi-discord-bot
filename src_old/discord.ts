@@ -3,7 +3,7 @@ import colors from "@colors/colors";
 import Discord = require("discord.js");
 import fs = require("fs");
 import path = require("path");
-import log from "./log";
+import log from "../src/log";
 import Voice = require("@discordjs/voice");
 
 const discordClient = new Discord.Client({

@@ -1,5 +1,5 @@
 import broker from "../../broker";
-import Topic from "../../Topic";
+import Topic from "../../../src/topics";
 
 const ADVANCED_WARNING_TIME_BEFORE_STACK_TIME = 20;
 

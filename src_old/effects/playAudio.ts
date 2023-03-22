@@ -1,7 +1,7 @@
 import broker from "../broker";
 import discord from "../discord";
 import path from "node:path";
-import Topic from "../Topic";
+import Topic from "../../src/topics";
 
 broker.register(
     "EFFECT/PLAY_AUDIO",

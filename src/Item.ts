@@ -1,5 +1,5 @@
 import gsi from "node-gsi";
-import items from "./data/items.json";
+import items from "../src_old/data/items.json";
 
 const itemNames = new Map(Object.entries(items));
 

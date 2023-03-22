@@ -1,65 +1,50 @@
-import broker from "../broker";
+import { engine, Fact, Topic } from "../Engine";
 import Event from "../Event";
-import gsi from "node-gsi";
-import log from "../log";
-import Topic from "../Topic";
+import topic from "../topics";
 
-class GsiEvents {
-    // Note: right now events may overwrite each other if they have the same eventType and gameTime
-    // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
-    // `allEvents` contains an array of all events seen so far
-    private allEvents: Event[] = [];
+// Note: right now events may overwrite each other if they have the same eventType and gameTime
+// 4 players grabbing 4 bounty runes at the same time will only count as 1 event
+// `allEvents` contains an array of all events seen so far
 
-    public inGame(newInGame: boolean): void {
-        if (!newInGame) {
-            this.allEvents = [];
-        }
-    }
+const ltopic = {
+    allEvents: new Topic<Event[] | undefined>("allEvents"),
+};
 
-    private neverSeenBefore(newEvent: Event): boolean {
-        return !this.allEvents.reduce(
-            (haveSeenBefore, existingEvent) =>
-                Event.same(existingEvent, newEvent) || haveSeenBefore,
-            false
-        );
-    }
+const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
+    return !allEvents.reduce(
+        (haveSeenBefore, existingEvent) =>
+            Event.same(existingEvent, newEvent) || haveSeenBefore,
+        false
+    );
+};
 
-    public handleState(
-        state: gsi.IDota2State | gsi.IDota2ObserverState
-    ): Event[] | void {
-        if (state.events) {
-            log.debug("gsi", "events %s", state.events);
-            const newEvents: Event[] = [];
-            state.events.map(Event.create).map((event) => {
-                if (this.neverSeenBefore(event)) {
-                    newEvents.push(event);
-                }
-            });
-            // Debouncing events
-            if (newEvents.length > 0) {
-                this.allEvents.concat(newEvents);
-                return newEvents;
-            }
-        }
-    }
-}
+engine.register({
+    label: "process gsi to only pass new events downstream",
+    given: [topic.gsiData],
+    when: (db) => {
+        const events = db.get(topic.gsiData).events;
+        return events !== null && events.length > 0;
+    },
+    then: (db) => {
+        const allEvents = db.get(ltopic.allEvents) || [];
+        const newEvents =
+            db
+                .get(topic.gsiData)
+                .events?.map(Event.create)
+                .filter((event) => neverSeenBefore(allEvents, event)) || [];
 
-const component = new GsiEvents();
-broker.register(
-    "GSI/EVENTS/EVENTS",
-    Topic.GSI_DATA_LIVE,
-    Topic.DOTA_2_EVENTS,
-    component.handleState.bind(component)
-);
-broker.register(
-    "GSI/EVENTS/EVENTS",
-    Topic.GSI_DATA_OBSERVER,
-    Topic.DOTA_2_EVENTS,
-    component.handleState.bind(component)
-);
-broker.register(
-    "GSI/EVENTS/GAME_STATE",
-    Topic.DOTA_2_GAME_STATE,
-    null,
-    component.inGame.bind(component)
-);
+        return [
+            new Fact(ltopic.allEvents, allEvents.concat(newEvents)),
+            new Fact(topic.events, newEvents),
+        ];
+    },
+});
+
+engine.register({
+    label: "process gsi events reset",
+    given: [topic.inGame],
+    when: (db) => !db.get(topic.inGame),
+    then: (_) => {
+        return [new Fact(ltopic.allEvents, [])];
+    },
+});

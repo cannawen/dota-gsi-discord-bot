@@ -1,7 +1,7 @@
 import broker from "../../broker";
 import Constants from "./Constants";
 import timeToRuneIdBitmap from "./logic";
-import Topic from "../../Topic";
+import Topic from "../../../src/topics";
 
 export default class Runes {
     public handleTime(time: number): string | null | undefined {

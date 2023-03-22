@@ -1,8 +1,8 @@
 import { IDota2ObserverState, IDota2State } from "node-gsi";
 import broker from "../broker";
 import gsi = require("node-gsi");
-import log from "../log";
-import Topic from "../Topic";
+import log from "../../src/log";
+import Topic from "../../src/topics";
 
 class GsiGameState {
     private inGame = false;

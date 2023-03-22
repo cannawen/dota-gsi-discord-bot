@@ -1,8 +1,8 @@
 import { IDota2ObserverState, IDota2State, IItemContainer } from "node-gsi";
 import broker from "../broker";
-import log from "../log";
-import PlayerItems from "../PlayerItems";
-import Topic from "../Topic";
+import log from "../../src/log";
+import PlayerItems from "../../src/PlayerItems";
+import Topic from "../../src/topics";
 
 class GsiItems {
     private handleItems(itemContainer: IItemContainer) {

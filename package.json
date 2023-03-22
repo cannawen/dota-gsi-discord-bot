@@ -11,7 +11,8 @@
         "start": "npm run build && npm run start:nobuild",
         "start:dev": "npx nodemon",
         "test": "jest",
-        "test:dev": "jest --watchAll"
+        "test:dev": "jest --watchAll",
+        "replay": "mitmdump -C mitmproxy-flows/rosh-killed-lobby"
     },
     "author": "",
     "license": "ISC",

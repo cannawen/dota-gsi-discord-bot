@@ -1,6 +1,6 @@
 import broker from "../../broker";
-import PlayerItems from "../../PlayerItems";
-import Topic from "../../Topic";
+import PlayerItems from "../../../src/PlayerItems";
+import Topic from "../../../src/topics";
 
 export default class TrustyShovel {
     private shovelCanBeUsed = false;

@@ -1,5 +1,5 @@
-import log from "./log";
-import { Topic } from "./Topic";
+import log from "../src/log";
+import { Topic } from "../src/topics";
 
 class Registrant<InType, OutType> {
     label: string;

@@ -1,6 +1,6 @@
 import broker from "../broker";
 import discord from "../discord";
-import Topic from "../Topic";
+import Topic from "../../src/topics";
 
 broker.register(
     "EFFECT/PLAY_TTS",
