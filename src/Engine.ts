@@ -1,7 +1,6 @@
-import log from "./log";
 import colors from "@colors/colors";
-// var deepEqual = require("deep-equal");
 import deepEqual from "deep-equal";
+import log from "./log";
 
 // in topics.js
 export class Topic<Type> {
@@ -57,9 +56,9 @@ function removeLineBreaks(s: string) {
     return s.replace(/(\r\n|\n|\r)/gm, "");
 }
 
-class Engine {
-    rules: Rule[] = [];
-    db = new FactStore();
+export abstract class Engine {
+    protected rules: Rule[] = [];
+    protected db = new FactStore();
 
     public register = (
         label: string,
@@ -75,7 +74,7 @@ class Engine {
         this.rules.push(rule);
     };
 
-    public set = (...changes: Fact<any>[]) => {
+    protected set = (...changes: Fact<any>[]) => {
         const changedKeys = new Set<Topic<any>>();
         changes.forEach((newFact) => {
             const newTopic = newFact.topic;
@@ -118,4 +117,4 @@ class Engine {
     };
 }
 
-export const engine = new Engine();
+export default Engine;
