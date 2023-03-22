@@ -110,20 +110,3 @@ class Engine {
 }
 
 export const engine = new Engine();
-
-/// using it
-
-// in roshan.js
-
-// // in audio.js
-//
-
-// // in GSI
-// engine.set([
-//     new Fact(topic.time, 123),
-//     new Fact(topic.event_message, "roshan_killed"),
-// ]);
-// engine.set([new Fact(topic.time, 124), new Fact(topic.event_message, null)]);
-// engine.set([new Fact(topic.time, 603), new Fact(topic.event_message, null)]);
-// engine.set([new Fact(topic.time, 604), new Fact(topic.event_message, null)]);
-// engine.set([new Fact(topic.time, 783), new Fact(topic.event_message, null)]);

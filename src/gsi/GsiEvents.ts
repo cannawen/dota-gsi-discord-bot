@@ -19,7 +19,7 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
 };
 
 engine.register({
-    label: "process gsi to only pass new events downstream",
+    label: "process gsi new events",
     given: [topic.gsiData],
     when: (db) => {
         const events = db.get(topic.gsiData).events;
@@ -44,7 +44,7 @@ engine.register({
 });
 
 engine.register({
-    label: "process gsi events reset",
+    label: "process gsi all events reset",
     given: [topic.inGame],
     when: (db) => !db.get(topic.inGame),
     then: (_) => {
