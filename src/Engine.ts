@@ -77,12 +77,16 @@ class Engine {
 
             if (!deepEqual(oldValue, newValue)) {
                 if ("gsiData" !== newTopic.label) {
-                    log.debug(
+                    log.verbose(
                         "rules",
                         "%s : %s -> %s",
                         log.padToWithColor(newTopic.label.green, 15, true),
-                        colors.gray(oldValue),
-                        colors.green(newValue)
+                        log.padToWithColor(
+                            removeLineBreaks(colors.gray(oldValue)),
+                            15,
+                            false
+                        ),
+                        removeLineBreaks(colors.green(newValue))
                     );
                 }
                 changedKeys.add(newTopic);
@@ -96,12 +100,12 @@ class Engine {
         this.rules.forEach((rule) => {
             if (doesIntersect(changedKeys, rule.given)) {
                 if (!rule.when || rule.when(this.db)) {
-                    log.debug("rules", "Start rule\t%s", rule.label.yellow);
                     const out = rule.then(this.db);
                     if (out) {
+                        log.debug("rules", "Start rule\t%s", rule.label.yellow);
                         this.set(...out);
+                        log.debug("rules", "End rule  \t%s", rule.label);
                     }
-                    log.debug("rules", "End rule  \t%s", rule.label);
                 }
             }
         });

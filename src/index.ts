@@ -3,7 +3,7 @@ dotenv.config();
 
 // Enabled GSI
 import "./gsi/GsiEvents";
-//import "./gsi/GsiGameState";
+import "./gsi/GsiGameState";
 //import "./gsi/GsiItems";
 import "./gsi/GsiTime";
 
@@ -22,7 +22,7 @@ import gsi = require("node-gsi");
 import log from "./log";
 import topic from "./topics";
 
-const debug = true;
+const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 server.events.on(gsi.Dota2Event.Dota2State, (gsiData: gsi.IDota2StateEvent) =>
