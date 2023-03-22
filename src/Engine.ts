@@ -45,11 +45,12 @@ class FactStore {
         this.facts.set(fact.topic, fact);
     };
 }
+type getFn = <T>(topic: Topic<T>) => T;
 
 type Rule = {
     label: string;
     given: Array<Topic<any>>;
-    then: (db: FactStore) => Fact<any>[] | void;
+    then: (get: getFn) => Fact<any>[] | void;
 };
 
 function removeLineBreaks(s: string) {
@@ -63,7 +64,7 @@ export abstract class Engine {
     public register = (
         label: string,
         given: Array<Topic<any>>,
-        then: (db: FactStore) => Fact<any>[] | void
+        then: (get: getFn) => Fact<any>[] | void
     ) => {
         const rule = {
             label: label,
@@ -106,7 +107,7 @@ export abstract class Engine {
     private next = (changedKeys: Set<Topic<any>>) => {
         this.rules.forEach((rule) => {
             if (doesIntersect(changedKeys, rule.given)) {
-                const out = rule.then(this.db);
+                const out = rule.then((topic) => this.db.get(topic));
                 if (out) {
                     log.debug("rules", "Start rule\t%s", rule.label.yellow);
                     this.set(...out);

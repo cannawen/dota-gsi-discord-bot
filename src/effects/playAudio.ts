@@ -1,10 +1,11 @@
-import topics from "../topics";
-import { engine, Fact } from "../Engine";
 import discord from "../discord";
+import engine from "../CustomEngine";
+import { Fact } from "../Engine";
 import path from "path";
+import topics from "../topics";
 
-engine.register("effect/playAudio", [topics.playAudioFile], (db) => {
-    const audioFile = db.get(topics.playAudioFile);
+engine.register("effect/playAudio", [topics.playAudioFile], (get) => {
+    const audioFile = get(topics.playAudioFile);
     if (audioFile) {
         discord.playAudioFile(path.join(__dirname, "../../audio/", audioFile));
     }

@@ -1,5 +1,6 @@
+import { Topic, Fact } from "../Engine";
+import engine from "../CustomEngine";
 import topic from "../topics";
-import { engine, Topic, Fact } from "../Engine";
 
 const roshanMaybeAliveTime = new Topic<number>("roshanMaybeAliveTime");
 const roshanAliveTime = new Topic<number>("roshanAliveTime");
@@ -7,13 +8,12 @@ const roshanAliveTime = new Topic<number>("roshanAliveTime");
 engine.register(
     "assistant/roshan/killed_event/set_future_audio_state",
     [topic.time, topic.events],
-    (db) => {
-        const roshKilledEventIndex = db
-            .get(topic.events)
+    (get) => {
+        const roshKilledEventIndex = get(topic.events)
             ?.map((event) => event.type)
             .indexOf("roshan_killed");
         if (roshKilledEventIndex !== undefined && roshKilledEventIndex !== -1) {
-            const time = db.get(topic.time);
+            const time = get(topic.time);
             if (time) {
                 return [
                     new Fact(roshanMaybeAliveTime, time + 8 * 60),
@@ -27,8 +27,8 @@ engine.register(
 engine.register(
     "assistant/roshan/maybe_alive_time/play_audio",
     [topic.time, roshanMaybeAliveTime],
-    (db) => {
-        if (db.get(topic.time) === db.get(roshanMaybeAliveTime)) {
+    (get) => {
+        if (get(topic.time) === get(roshanMaybeAliveTime)) {
             return [
                 new Fact(topic.playAudioFile, "rosh-maybe.mp3"),
                 new Fact(roshanMaybeAliveTime, undefined),
@@ -40,8 +40,8 @@ engine.register(
 engine.register(
     "assistant/roshan/alive_time/play_audio",
     [topic.time, roshanAliveTime],
-    (db) => {
-        if (db.get(topic.time) === db.get(roshanAliveTime)) {
+    (get) => {
+        if (get(topic.time) === get(roshanAliveTime)) {
             return [
                 new Fact(topic.playAudioFile, "rosh-alive.mp3"),
                 new Fact(roshanAliveTime, undefined),

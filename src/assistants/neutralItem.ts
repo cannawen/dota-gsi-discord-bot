@@ -1,4 +1,5 @@
-import { engine, Fact, Topic } from "../Engine";
+import { Fact, Topic } from "../Engine";
+import engine from "../CustomEngine";
 import topics from "../topics";
 
 const lastWarnedNeutralTimeTopic = new Topic<number | undefined>(
@@ -8,9 +9,9 @@ const lastWarnedNeutralTimeTopic = new Topic<number | undefined>(
 engine.register(
     "assistant/neutral_item",
     [topics.items, topics.time, lastWarnedNeutralTimeTopic],
-    (db) => {
-        const neutralItem = db.get(topics.items)?.neutral;
-        const time = db.get(topics.time);
+    (get) => {
+        const neutralItem = get(topics.items)?.neutral;
+        const time = get(topics.time);
         if (!neutralItem || !time) {
             return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
         }
@@ -22,10 +23,10 @@ engine.register(
             return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
         }
 
-        const lastWarnedTime = db.get(lastWarnedNeutralTimeTopic);
+        const lastWarnedTime = get(lastWarnedNeutralTimeTopic);
         if (!lastWarnedTime || time > lastWarnedTime + 15) {
             return [
-                new Fact(lastWarnedNeutralTimeTopic, db.get(topics.time)),
+                new Fact(lastWarnedNeutralTimeTopic, get(topics.time)),
                 new Fact(topics.playAudioFile, "shovel.mp3"),
             ];
         }

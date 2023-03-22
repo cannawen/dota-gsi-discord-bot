@@ -1,9 +1,10 @@
-import { engine, Fact } from "../Engine";
+import engine from "../CustomEngine";
+import { Fact } from "../Engine";
 import topics from "../topics";
 
-engine.register("assistant/runes", [topics.time, topics.inGame], (db) => {
-    const time = db.get(topics.time);
-    const inGame = db.get(topics.inGame);
+engine.register("assistant/runes", [topics.time, topics.inGame], (get) => {
+    const time = get(topics.time);
+    const inGame = get(topics.inGame);
     if (
         time &&
         inGame &&

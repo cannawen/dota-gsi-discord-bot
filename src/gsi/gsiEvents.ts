@@ -1,5 +1,6 @@
-import { engine, Fact, Topic } from "../Engine";
+import { Fact, Topic } from "../Engine";
 import deepEqual from "deep-equal";
+import engine from "../CustomEngine";
 import Event from "../Event";
 import topics from "../topics";
 
@@ -17,10 +18,10 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
     );
 };
 
-engine.register("gsi/events/new", [topics.gsiData], (db) => {
-    const events = db.get(topics.gsiData).events;
+engine.register("gsi/events/new", [topics.gsiData], (get) => {
+    const events = get(topics.gsiData).events;
     if (events !== null && events.length > 0) {
-        const allEvents = db.get(allEventsTopic) || [];
+        const allEvents = get(allEventsTopic) || [];
         const newEvents = events
             .map(Event.create)
             .filter((event) => neverSeenBefore(allEvents, event));
@@ -36,8 +37,8 @@ engine.register("gsi/events/new", [topics.gsiData], (db) => {
     }
 });
 
-engine.register("gsi/events/reset_all", [topics.inGame], (db) => {
-    if (!db.get(topics.inGame)) {
+engine.register("gsi/events/reset_all", [topics.inGame], (get) => {
+    if (!get(topics.inGame)) {
         return [new Fact(allEventsTopic, [])];
     }
 });
