@@ -4,7 +4,7 @@ dotenv.config();
 // Enabled GSI
 import "./gsi/GsiEvents";
 import "./gsi/GsiGameState";
-//import "./gsi/GsiItems";
+import "./gsi/GsiItems";
 import "./gsi/GsiTime";
 
 // Enabled assistants
