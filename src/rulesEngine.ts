@@ -1,3 +1,6 @@
+import log from "./log";
+import colors from "@colors/colors";
+
 // in topics.js
 
 export class Topic<Type> {
@@ -19,7 +22,7 @@ export class Fact<Type> {
     }
 }
 
-let topic = {
+const topic = {
     time: new Topic<number>("time"),
     event_message: new Topic<string>("event_message"),
     playAudioFile: new Topic<string>("playAudioFile"),
@@ -49,6 +52,7 @@ class FactStore {
 }
 
 type Rule = {
+    label: string;
     given: Array<Topic<any>>;
     when?: (db: FactStore) => boolean;
     then: (db: FactStore) => Fact<any>[] | void;
@@ -58,18 +62,30 @@ class Engine {
     rules: Rule[] = [];
     db = new FactStore();
 
-    public registerRule = (rule: Rule) => {
+    public register = (rule: Rule) => {
+        log.info("rules", "Registering new rule %s", rule.label.yellow);
         this.rules.push(rule);
     };
 
     public set = (changes: Fact<any>[] | void) => {
-        console.log("set", changes);
         if (changes) {
             const changedKeys = new Set<Topic<any>>();
-            changes.forEach((fact) => {
-                if (this.db.get(fact.topic) !== fact.value) {
-                    changedKeys.add(fact.topic);
-                    this.db.set(fact);
+            changes.forEach((newFact) => {
+                const topic = newFact.topic;
+
+                const oldValue = this.db.get(topic);
+                const newValue = newFact.value;
+
+                if (oldValue !== newValue) {
+                    log.debug(
+                        "rules",
+                        "%s : %s -> %s",
+                        log.padToWithColor(topic.label.green, 15, true),
+                        log.padToWithColor(colors.gray(oldValue), 15, true),
+                        colors.green(newValue)
+                    );
+                    changedKeys.add(topic);
+                    this.db.set(newFact);
                 }
             });
             this.next(changedKeys);
@@ -77,16 +93,19 @@ class Engine {
     };
 
     private next = (changedKeys: Set<Topic<any>>) => {
-        console.log("next");
         this.rules.forEach((rule) => {
             if (doesIntersect(changedKeys, rule.given)) {
                 if (!rule.when || rule.when(this.db)) {
+                    log.debug("rules", "Start rule\t%s", rule.label.yellow);
                     this.set(rule.then(this.db));
+                    log.debug("rules", "End rule  \t%s", rule.label);
                 }
             }
         });
     };
 }
+
+export default Engine;
 
 const engine = new Engine();
 
@@ -94,48 +113,47 @@ const engine = new Engine();
 
 // in roshan.js
 
-const ltopic = {
-    roshanIsMaybeBackAnnounceTime: new Topic<number>(
-        "roshanIsMaybeBackAnnounceTime"
-    ),
-    roshanIsBackAnnounceTime: new Topic<number>("roshanIsBackAnnounceTime"),
+const localTopic = {
+    roshanMaybeAliveTime: new Topic<number>("roshanMaybeAliveTime"),
+    roshanAliveTime: new Topic<number>("roshanAliveTime"),
 };
 
-engine.registerRule({
+engine.register({
+    label: "assistant/roshan/killed_event/set_future_audio_state",
     given: [topic.time, topic.event_message],
     when: (db) => db.get(topic.event_message) === "roshan_killed",
     then: (db) => [
-        new Fact(
-            ltopic.roshanIsMaybeBackAnnounceTime,
-            db.get(topic.time) + 8 * 60
-        ),
-        new Fact(ltopic.roshanIsBackAnnounceTime, db.get(topic.time) + 11 * 60),
+        new Fact(localTopic.roshanMaybeAliveTime, db.get(topic.time) + 8 * 60),
+        new Fact(localTopic.roshanAliveTime, db.get(topic.time) + 11 * 60),
     ],
 });
 
-engine.registerRule({
-    given: [topic.time, ltopic.roshanIsMaybeBackAnnounceTime],
+engine.register({
+    label: "assistant/roshan/maybe_alive_time/play_audio",
+    given: [topic.time, localTopic.roshanMaybeAliveTime],
     when: (db) =>
-        db.get(topic.time) === db.get(ltopic.roshanIsMaybeBackAnnounceTime),
-    then: (_) => [new Fact(topic.playAudioFile, "roshan_maybe_alive.wav")],
+        db.get(topic.time) === db.get(localTopic.roshanMaybeAliveTime),
+    then: (_) => [new Fact(topic.playAudioFile, "roshan_maybe.wav")],
 });
 
-engine.registerRule({
-    given: [topic.time, ltopic.roshanIsBackAnnounceTime],
-    when: (db) =>
-        db.get(topic.time) === db.get(ltopic.roshanIsBackAnnounceTime),
+engine.register({
+    label: "assistant/roshan/alive_time/play_audio",
+    given: [topic.time, localTopic.roshanAliveTime],
+    when: (db) => db.get(topic.time) === db.get(localTopic.roshanAliveTime),
     then: (_) => [new Fact(topic.playAudioFile, "roshan_alive.wav")],
 });
 
 // in audio.js
 const playAudio = (f: string) => console.log("PLAY", f);
 
-engine.registerRule({
+engine.register({
+    label: "playAudio",
     given: [topic.playAudioFile],
     then: (db) => {
         const f = db.get(topic.playAudioFile);
         if (f) {
             playAudio(f);
+            //TODO need to reset audio to null so we can play the same audio twice in a row
         }
     },
 });
