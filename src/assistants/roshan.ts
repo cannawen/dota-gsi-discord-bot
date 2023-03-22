@@ -41,17 +41,3 @@ engine.register({
     when: (db) => db.get(topic.time) === db.get(localTopic.roshanAliveTime),
     then: (_) => [new Fact(topic.playAudioFile, "rosh-alive.mp3")],
 });
-
-const playAudio = (f: string) => console.log("PLAY", f);
-
-engine.register({
-    label: "playAudio",
-    given: [topic.playAudioFile],
-    then: (db) => {
-        const f = db.get(topic.playAudioFile);
-        if (f) {
-            playAudio(f);
-            //TODO need to reset audio to null so we can play the same audio twice in a row
-        }
-    },
-});

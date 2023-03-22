@@ -9,6 +9,6 @@ export default {
     items: new Topic<PlayerItems | undefined>("items"),
     inGame: new Topic<boolean | undefined>("inGame"),
     events: new Topic<Event[] | undefined>("events"),
-    // event_message: new Topic<string>("event_message"),
     playAudioFile: new Topic<string | undefined>("playAudioFile"),
+    playTts: new Topic<string | undefined>("playTts"),
 };

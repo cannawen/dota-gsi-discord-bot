@@ -13,8 +13,8 @@ import "./assistants/runes";
 import "./assistants/neutralItem";
 
 // Enabled effects
-//import "./effects/playTTS";
-//import "./effects/playAudio";
+import "./effects/playAudio";
+import "./effects/playTts";
 
 import { engine, Fact } from "./Engine";
 import gsi = require("node-gsi");
