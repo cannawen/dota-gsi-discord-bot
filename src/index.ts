@@ -10,8 +10,7 @@ import "./gsi/gsiTime";
 // Enabled assistants
 import "./assistants/roshan";
 import "./assistants/runes";
-// import "./assistants/stack/Stack";
-//import "./assistants/trusty-shovel/TrustyShovel";
+import "./assistants/neutralItem";
 
 // Enabled effects
 //import "./effects/playTTS";
