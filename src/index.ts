@@ -2,13 +2,13 @@ import dotenv = require("dotenv");
 dotenv.config();
 
 // Enabled GSI
-import "./gsi/GsiEvents";
-import "./gsi/GsiGameState";
-import "./gsi/GsiItems";
-import "./gsi/GsiTime";
+import "./gsi/gsiEvents";
+import "./gsi/gsiGameState";
+import "./gsi/gsiItems";
+import "./gsi/gsiTime";
 
 // Enabled assistants
-import "./assistants/Roshan";
+import "./assistants/roshan";
 //import "./assistants/runes/Runes";
 // import "./assistants/stack/Stack";
 //import "./assistants/trusty-shovel/TrustyShovel";
