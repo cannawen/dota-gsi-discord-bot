@@ -12,21 +12,20 @@ engine.register(
         const neutralItem = db.get(topics.items)?.neutral;
         const time = db.get(topics.time);
         if (!neutralItem || !time) {
-            return;
+            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
         }
         const validNeutralItems = ["item_trusty_shovel", "item_pirate_hat"];
         if (!validNeutralItems.find((id) => neutralItem.id === id)) {
-            return;
+            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
         }
         if (!neutralItem.canCast) {
-            return;
+            return [new Fact(lastWarnedNeutralTimeTopic, undefined)];
         }
 
-        const lastWarnedTime = db.get(lastWarnedNeutralTimeTopic) || 0;
-        if (time > lastWarnedTime + 15) {
-            const currentTime = db.get(topics.time);
+        const lastWarnedTime = db.get(lastWarnedNeutralTimeTopic);
+        if (!lastWarnedTime || time > lastWarnedTime + 15) {
             return [
-                new Fact(lastWarnedNeutralTimeTopic, currentTime),
+                new Fact(lastWarnedNeutralTimeTopic, db.get(topics.time)),
                 new Fact(topics.playAudioFile, "shovel.mp3"),
             ];
         }

@@ -1,6 +1,7 @@
 import { engine, Fact, Topic } from "../Engine";
+import deepEqual from "deep-equal";
 import Event from "../Event";
-import topic from "../topics";
+import topics from "../topics";
 
 // Note: right now events may overwrite each other if they have the same eventType and gameTime
 // 4 players grabbing 4 bounty runes at the same time will only count as 1 event
@@ -11,33 +12,32 @@ const allEventsTopic = new Topic<Event[] | undefined>("allEvents");
 const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean => {
     return !allEvents.reduce(
         (haveSeenBefore, existingEvent) =>
-            Event.same(existingEvent, newEvent) || haveSeenBefore,
+            deepEqual(existingEvent, newEvent) || haveSeenBefore,
         false
     );
 };
 
-engine.register("gsi/events/new", [topic.gsiData], (db) => {
-    const events = db.get(topic.gsiData).events;
+engine.register("gsi/events/new", [topics.gsiData], (db) => {
+    const events = db.get(topics.gsiData).events;
     if (events !== null && events.length > 0) {
         const allEvents = db.get(allEventsTopic) || [];
-        const newEvents = db
-            .get(topic.gsiData)
-            .events?.map(Event.create)
+        const newEvents = events
+            .map(Event.create)
             .filter((event) => neverSeenBefore(allEvents, event));
 
         if (newEvents && newEvents.length > 0) {
             return [
                 new Fact(allEventsTopic, allEvents.concat(newEvents)),
-                new Fact(topic.events, newEvents),
+                new Fact(topics.events, newEvents),
             ];
         } else {
-            return [new Fact(topic.events, undefined)];
+            return [new Fact(topics.events, undefined)];
         }
     }
 });
 
-engine.register("gsi/events/reset_all", [topic.inGame], (db) => {
-    if (!db.get(topic.inGame)) {
+engine.register("gsi/events/reset_all", [topics.inGame], (db) => {
+    if (!db.get(topics.inGame)) {
         return [new Fact(allEventsTopic, [])];
     }
 });

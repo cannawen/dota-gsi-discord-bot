@@ -29,7 +29,10 @@ engine.register(
     [topic.time, roshanMaybeAliveTime],
     (db) => {
         if (db.get(topic.time) === db.get(roshanMaybeAliveTime)) {
-            return [new Fact(topic.playAudioFile, "rosh-maybe.mp3")];
+            return [
+                new Fact(topic.playAudioFile, "rosh-maybe.mp3"),
+                new Fact(roshanMaybeAliveTime, undefined),
+            ];
         }
     }
 );
@@ -39,7 +42,10 @@ engine.register(
     [topic.time, roshanAliveTime],
     (db) => {
         if (db.get(topic.time) === db.get(roshanAliveTime)) {
-            return [new Fact(topic.playAudioFile, "rosh-alive.mp3")];
+            return [
+                new Fact(topic.playAudioFile, "rosh-alive.mp3"),
+                new Fact(roshanAliveTime, undefined),
+            ];
         }
     }
 );
