@@ -19,16 +19,13 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 -   In general, there are three main sections of the app
     -   GSI that takes data form Valve's Game State integration and parses it to a form we can use (Time, Items)
-    -   Assistants (Roshan, Trusty Shovel) that use that take that data and returns an effect (Audio File, Text to speech)
+    -   Assistants (Roshan, Runes) that use that take that data and returns an effect (Audio file, Text to speech)
     -   An Effect that knows how to execute the desired effect (playing audio on discord)
--   These three sections communicate via `broker` using `Topic`s.
--   `Topic`s represent the kind of data one may produce and/or consume and their type.
--   The GSI server starts and produces a `Topic.GSI_DATA_LIVE` to the broker
--   Code in `gsi/` consume `Topic.GSI_DATA_LIVE` and produce their own topics as an output, such as `Topic.DOTA_2_TIME`
--   Code in `assistants/` consume topics such as `Topic.DOTA_2_TIME` and produce effects like `Topic.EFFECT_PLAY_FILE`
--   Code in `effects/` consume the effect and produce no outputs to the broker (but have side effects)
+-   These three sections communicate via a single key-value database where a `Topic<T>` points to a `Fact<T>` containing a `value : T`
+-   A module may register a rule with the `Engine` by telling it what topics it is interested in, and what function to run when the database values of those topics change
+-   A module may read from the database and return new key-value pairs to store in the database.
 
-Note: From the broker's perspective, there is no inherent requirement for the code to be separated into these three sections; a component can declare they want to consume a `Topic.GSI_DATA` and produce a `Topic.EFFECT_PLAY_FILE` if they wish. It is currently just separated into different folders for logical reasons
+Note: From the engine's perspective, there is no inherent requirement for the code to be separated into these three sections. It is currently just separated for logical reasons
 
 ## mitmproxy
 
