@@ -3,7 +3,7 @@ import topics from "../topics";
 import { Dota2GameState } from "node-gsi";
 
 engine.register({
-    label: "process game state",
+    label: "gsi/game_state",
     given: [topics.gsiData],
     then: (db) => {
         const state = db.get(topics.gsiData).gameState;
