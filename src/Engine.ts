@@ -1,5 +1,7 @@
 import log from "./log";
 import colors from "@colors/colors";
+// var deepEqual = require("deep-equal");
+import deepEqual from "deep-equal";
 
 // in topics.js
 export class Topic<Type> {
@@ -73,19 +75,16 @@ class Engine {
             const oldValue = this.db.get(newTopic);
             const newValue = newFact.value;
 
-            if (oldValue !== newValue) {
-                // <--- TODO deep equal
-                log.debug(
-                    "rules",
-                    "%s : %s -> %s",
-                    log.padToWithColor(newTopic.label.green, 15, true),
-                    removeLineBreaks(
-                        log.padToWithColor(colors.gray(oldValue), 15, true)
-                    ),
-                    removeLineBreaks(
-                        log.padToWithColor(colors.green(newValue), 15, true)
-                    )
-                );
+            if (!deepEqual(oldValue, newValue)) {
+                if ("gsiData" !== newTopic.label) {
+                    log.debug(
+                        "rules",
+                        "%s : %s -> %s",
+                        log.padToWithColor(newTopic.label.green, 15, true),
+                        colors.gray(oldValue),
+                        colors.green(newValue)
+                    );
+                }
                 changedKeys.add(newTopic);
                 this.db.set(newFact);
             }
