@@ -1,7 +1,7 @@
 import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
-import topics from "../topics";
 import { EventType } from "../Event";
+import topics from "../topics";
 
 const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
 const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");

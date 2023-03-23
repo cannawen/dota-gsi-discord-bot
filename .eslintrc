@@ -10,6 +10,7 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
         "plugin:jest/recommended"
+        // if we enable prettier here, all the eslint goodness goes away.
         // "prettier"
     ],
     "overrides": [
@@ -33,6 +34,7 @@
         "@typescript-eslint/no-empty-function": "warn",
         //eslint
         // "keyword-spacing": ["warn", { "before": true, "after": true }]
+        "spaced-comment": ["warn", "always"],
         "for-direction": "warn",
         "getter-return": ["warn", { "allowImplicit": false }],
         "no-await-in-loop": "warn",
@@ -151,19 +153,6 @@
         "no-shadow-restricted-names": "warn",
         "no-undef": ["warn", { "typeof": false }],
         "no-undef-init": "warn",
-        "no-undefined": "warn",
-        "no-unused-vars": [
-            "warn",
-            {
-                "vars": "all",
-                "varsIgnorePattern": "",
-                "args": "after-used",
-                "ignoreRestSiblings": false,
-                "argsIgnorePattern": "",
-                "caughtErrors": "none",
-                "caughtErrorsIgnorePattern": ""
-            }
-        ],
         "no-use-before-define": [
             "warn",
             { "functions": true, "classes": true, "variables": true }
@@ -192,8 +181,8 @@
             }
         ],
         "max-nested-callbacks": ["warn", { "max": 3 }],
-        "max-params": ["warn", { "max": 3 }],
-        "max-statements": ["warn", 10],
+        "max-params": ["warn", { "max": 4 }],
+        "max-statements": ["warn", 12],
         "max-statements-per-line": ["warn", { "max": 1 }],
         "new-cap": [
             "warn",
@@ -211,7 +200,6 @@
         "no-continue": "warn",
         "no-inline-comments": "warn",
         "no-lonely-if": "warn",
-        "no-mixed-operators": ["warn", { "allowSamePrecedence": true }],
         "no-multi-assign": "warn",
         "no-negated-condition": "warn",
         "no-nested-ternary": "warn",
@@ -266,7 +254,7 @@
         "prefer-template": "warn",
         "sort-imports": [
             "warn",
-            { "ignoreCase": false, "ignoreMemberSort": false }
+            { "ignoreCase": true, "ignoreMemberSort": false }
         ]
     }
 }

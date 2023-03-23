@@ -5,10 +5,10 @@ import gsi = require("node-gsi");
  * to a shared data structure so we can handle them similarily
  */
 type GsiData = {
-    items: gsi.IItemContainer | undefined | null;
-    time: number | undefined;
     events: gsi.IEvent[] | null;
     gameState: gsi.Dota2GameState | undefined;
+    items: gsi.IItemContainer | undefined | null;
+    time: number | undefined;
 };
 
 export default GsiData;

@@ -3,6 +3,7 @@ import gsi from "node-gsi";
 /**
  * This matches the definition from node-gsi
  */
+// eslint-disable-next-line no-shadow
 export enum EventType {
     AegisPickedUp = "aegis_picked_up",
     BountyRunePickedUp = "bounty_rune_pickup",

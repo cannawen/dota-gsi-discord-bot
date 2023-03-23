@@ -1,6 +1,7 @@
+/* eslint-disable sort-keys */
 import colors from "@colors/colors";
-import winston from "winston";
 import dotenv from "dotenv";
+import winston from "winston";
 dotenv.config();
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { stylize, styles } = require("@colors/colors");
@@ -29,7 +30,10 @@ function padToWithColor(msg: string, length: number, truncate: boolean) {
     return msg.slice(0, 5) + stripped + "".reset;
 }
 
-function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
+function printFormat(
+    info: winston.Logform.TransformableInfo,
+    returnColored: boolean
+) {
     const levelLength = 5;
     const labelLength = 9;
     const out = `${info.timestamp.gray} ${
@@ -37,7 +41,7 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     } ${padToWithColor(info.label, labelLength, false)} ${info.message}${
         info.splat ? `${info.splat}` : " "
     }`;
-    if (colors) {
+    if (returnColored) {
         return out;
     }
     return out.stripColors;
@@ -138,10 +142,11 @@ function getLogger(label: string): winston.Logger {
 }
 
 function makeLog(logLevel: string) {
-    return (label: string, formatString: string, ...vars: any[]) => {
+    return (label: string, formatString: string, ...vars: unknown[]) => {
         let params = vars;
         if (logLevel === "error") {
-            params = vars.map(colors.red);
+            // TODO: very sketchy cast
+            params = vars.map((v) => colors.red(v as string));
         }
         getLogger(label.toUpperCase()).log(logLevel, formatString, ...params);
     };

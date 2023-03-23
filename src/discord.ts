@@ -7,6 +7,7 @@ import log from "./log";
 import Voice = require("@discordjs/voice");
 
 const discordClient = new Discord.Client({
+    // eslint-disable-next-line no-magic-numbers
     intents: [131071],
 });
 
@@ -74,7 +75,7 @@ function onDiscordClientReady() {
         return;
     }
     const guild = Array.from(discordClient.guilds.cache.values()).find(
-        (guild) => guild.name === process.env.HARD_CODED_GUILD_NAME
+        (g) => g.name === process.env.HARD_CODED_GUILD_NAME
     );
     if (!guild) {
         log.error(
@@ -85,7 +86,7 @@ function onDiscordClientReady() {
         return;
     }
     const channel = Array.from(guild.channels.cache.values()).find(
-        (channel) => channel.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME
+        (c) => c.name === process.env.HARD_CODED_VOICE_CHANNEL_NAME
     );
     if (!channel) {
         log.error(

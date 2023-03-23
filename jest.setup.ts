@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 expect.extend({
     toBeWithinRange(actual, min, max) {
         if (typeof actual !== "number") {

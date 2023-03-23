@@ -1,7 +1,7 @@
 import Event from "./Event";
+import GsiData from "./gsi/GsiData";
 import PlayerItems from "./PlayerItems";
 import { Topic } from "./Engine";
-import GsiData from "./gsi/GsiData";
 
 /**
  * These are topics that cross different modules
@@ -10,11 +10,11 @@ import GsiData from "./gsi/GsiData";
  * in which case it can be declared inside the module
  */
 export default {
-    gsiData: new Topic<GsiData>("gsiData"),
-    time: new Topic<number | undefined>("time"),
-    items: new Topic<PlayerItems | undefined>("items"),
-    inGame: new Topic<boolean | undefined>("inGame"),
     events: new Topic<Event[] | undefined>("events"),
+    gsiData: new Topic<GsiData>("gsiData"),
+    inGame: new Topic<boolean | undefined>("inGame"),
+    items: new Topic<PlayerItems | undefined>("items"),
     playAudioFile: new Topic<string | undefined>("playAudioFile"),
     playTts: new Topic<string | undefined>("playTts"),
+    time: new Topic<number | undefined>("time"),
 };

@@ -40,11 +40,13 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
 };
 
 class FactStore {
-    facts = new Map<Topic<any>, Fact<any>>();
+    facts = new Map<Topic<unknown>, Fact<unknown>>();
 
-    get = <T>(topic: Topic<T>): T => this.facts.get(topic)?.value;
+    // Casting to T is safe here because when it is set,
+    // The fact's topic is used as a key
+    get = <T>(topic: Topic<T>): T => this.facts.get(topic)?.value as T;
 
-    set = (fact: Fact<any>) => {
+    set = (fact: Fact<unknown>) => {
         this.facts.set(fact.topic, fact);
     };
 }
@@ -54,8 +56,8 @@ type dbGetFn = <T>(topic: Topic<T>) => T;
 type Rule = {
     // label is only used for logging purposes
     label: string;
-    given: Array<Topic<any>>;
-    then: (get: dbGetFn) => Fact<any>[] | Fact<any> | void;
+    given: Array<Topic<unknown>>;
+    then: (get: dbGetFn) => Fact<unknown>[] | Fact<unknown> | void;
 };
 
 function removeLineBreaks(s: string) {
@@ -68,11 +70,12 @@ export class Engine {
 
     public register = (
         label: string,
-        given: Array<Topic<any>>,
-        then: (get: dbGetFn) => Fact<any>[] | Fact<any> | void
+        given: Array<Topic<unknown>>,
+        then: (get: dbGetFn) => Fact<unknown>[] | Fact<unknown> | void
     ) => {
         const rule = {
             label: label,
+            // eslint-disable-next-line sort-keys
             given: given,
             then: then,
         };
@@ -84,8 +87,8 @@ export class Engine {
     // This is because our app's only dynamic input is from GSI data
     // and any other database change must be triggered by that.
     // This will change in the future from discord interactions
-    protected set = (...newFacts: Fact<any>[]) => {
-        const changedTopics = new Set<Topic<any>>();
+    protected set = (...newFacts: Fact<unknown>[]) => {
+        const changedTopics = new Set<Topic<unknown>>();
         newFacts.forEach((newFact) => {
             const newTopic = newFact.topic;
 
@@ -95,16 +98,17 @@ export class Engine {
             if (!deepEqual(oldValue, newValue)) {
                 // Do not print out GSI data because it's too large
                 if (newTopic.label !== "gsiData") {
+                    // TODO: Casting to string here is pretty sus - what do?
                     log.verbose(
                         "rules",
                         "%s : %s -> %s",
                         log.padToWithColor(newTopic.label.green, 15, true),
                         log.padToWithColor(
-                            removeLineBreaks(colors.gray(oldValue)),
+                            removeLineBreaks(colors.gray(oldValue as string)),
                             15,
                             false
                         ),
-                        removeLineBreaks(colors.green(newValue))
+                        removeLineBreaks(colors.green(newValue as string))
                     );
                 }
                 changedTopics.add(newTopic);

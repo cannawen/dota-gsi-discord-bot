@@ -5,16 +5,16 @@
     "main": "index.js",
     "scripts": {
         "build": "rimraf ./build ./tts-cache && tsc",
-        "lint": "eslint . --ext .ts",
+        "lint": "eslint . --ext .ts --fix",
         "format": "npx prettier --write .",
         "start:nobuild": "node build/index.js",
         "start": "npm run build && npm run start:nobuild",
         "start:dev": "npx nodemon",
         "test": "jest",
         "test:dev": "jest --watchAll",
-        "replay-rosh": "mitmdump -C mitmproxy-flows/rosh-killed-lobby",
-        "replay-rosh-all": "mitmdump -C mitmproxy-flows/rosh/rosh_fallen_1095 && mitmdump -C mitmproxy-flows/rosh/rosh_maybe && mitmdump -C mitmproxy-flows/rosh/rosh_up",
-        "replay-rune": "mitmdump -C mitmproxy-flows/water_runes"
+        "rosh-lobby": "mitmdump -C mitmproxy-flows/rosh-killed-lobby",
+        "rosh": "mitmdump -C mitmproxy-flows/rosh/rosh_fallen_1095 && mitmdump -C mitmproxy-flows/rosh/rosh_maybe && mitmdump -C mitmproxy-flows/rosh/rosh_up",
+        "water-rune": "mitmdump -C mitmproxy-flows/water_runes"
     },
     "author": "",
     "license": "ISC",
