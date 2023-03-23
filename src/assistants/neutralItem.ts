@@ -4,6 +4,9 @@ import Item from "../Item";
 import PlayerItems from "../PlayerItems";
 import topics from "../topics";
 
+const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
+const TIME_BETWEEN_REMINDERS = 15;
+
 const lastNeutralReminderTimeTopic = new Topic<number | undefined>(
     "lastNeutralReminderTimeTopic"
 );
@@ -12,7 +15,7 @@ function validNeutralItem(item: Item | null): boolean {
     if (!item) {
         return false;
     }
-    return ["item_trusty_shovel", "item_pirate_hat"].reduce(
+    return VALID_NEUTRAL_ARRAY.reduce(
         (memo, validId) => memo || item.id === validId,
         false
     );
@@ -49,11 +52,11 @@ function handleNeutralItem(
 
     // If we have never reminded the user before
     // or if our last reminder time was more than 15 seconds ago
-    if (!lastReminderTime || time > lastReminderTime + 15) {
+    if (!lastReminderTime || time > lastReminderTime + TIME_BETWEEN_REMINDERS) {
         // Remind the user
         // And update the last reminder time
         return [
-            new Fact(topics.playAudioFile, "shovel.mp3"),
+            new Fact(topics.playTts, "dig"),
             new Fact(lastNeutralReminderTimeTopic, time),
         ];
     }
