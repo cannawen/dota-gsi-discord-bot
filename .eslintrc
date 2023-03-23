@@ -14,7 +14,7 @@
     ],
     "overrides": [
         {
-            "files": ["*.test.ts", "Constants.ts"],
+            "files": ["*.test.ts"],
             "rules": {
                 "@typescript-eslint/no-var-requires": ["off"]
             }

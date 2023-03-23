@@ -1,12 +1,28 @@
 import gsi from "node-gsi";
 
+/**
+ * This matches the definition from node-gsi
+ */
+export enum EventType {
+    AegisPickedUp = "aegis_picked_up",
+    BountyRunePickedUp = "bounty_rune_pickup",
+    RoshanKilled = "roshan_killed",
+    AegisDenied = "aegis_denied",
+    Tip = "tip",
+    BountyPickup = "bounty_rune_pickup",
+    CourierKilled = "courier_killed",
+}
+
 export default class Event {
-    type: string;
+    type: EventType;
     time: number;
 
-    // Events using "game time" which is different than "clock time"
-    // In the rest of the app we are using "clock_time"
-    constructor(type: string, time: number) {
+    /**
+     *
+     * @param type EventType
+     * @param time This is "map.game_time" which differs from "map.clock_time" that is being used throughout the app
+     */
+    constructor(type: EventType, time: number) {
         this.type = type;
         this.time = time;
     }

@@ -17,10 +17,16 @@ function padTo(msg: string, length: number, truncate: boolean) {
     }
 }
 
+/**
+ * Big assumption that this string has a 5-character color at the start
+ * It takes this one color and sets it for the rest of the string
+ * @param msg message with color
+ * @param length length to pad to
+ * @param truncate boolean: should truncate?
+ * @returns padded message
+ */
 function padToWithColor(msg: string, length: number, truncate: boolean) {
     const stripped = padTo(msg.stripColors, length, truncate);
-    // Big assumption that this string has a 5-character color at the start
-    // It takes this one color and sets it for the rest of the string
     return msg.slice(0, 5) + stripped + "".reset;
 }
 
@@ -38,17 +44,6 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
         return out.stripColors;
     }
 }
-
-// Available levels
-// {
-//     error: 0,
-//     warn: 1,
-//     info: 2,
-//     http: 3,
-//     verbose: 4,
-//     debug: 5,
-//     silly: 6
-// }
 
 function createMap(label: string, levelString: string) {
     return {

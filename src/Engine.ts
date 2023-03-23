@@ -2,27 +2,31 @@ import colors from "@colors/colors";
 import deepEqual from "deep-equal";
 import log from "./log";
 
-// in topics.js
+/**
+ * A `Topic` describes the type of data (i.e. Time is a number)
+ */
 export class Topic<Type> {
-    label: string;
+    public label: string;
+    // The following variable is not used, but is only here for type-checking reasons
     private _type: Type | undefined;
 
-    constructor(label: string) {
+    public constructor(label: string) {
         this.label = label;
     }
 }
 
+/**
+ * A `Fact` describes a topic and value (i.e. Time is the number 5)
+ */
 export class Fact<Type> {
-    topic: Topic<Type>;
-    value: Type | null;
+    public topic: Topic<Type>;
+    public value: Type | null;
 
-    constructor(topic: Topic<Type>, value: Type) {
+    public constructor(topic: Topic<Type>, value: Type) {
         this.topic = topic;
         this.value = value;
     }
 }
-
-// engine
 
 const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
     // eslint-disable-next-line no-loops/no-loops
@@ -46,26 +50,27 @@ class FactStore {
     };
 }
 
-type getFn = <T>(topic: Topic<T>) => T;
+type dbGetFn = <T>(topic: Topic<T>) => T;
 
 type Rule = {
+    // label is only used for logging purposes
     label: string;
     given: Array<Topic<any>>;
-    then: (get: getFn) => Fact<any>[] | Fact<any> | void;
+    then: (get: dbGetFn) => Fact<any>[] | Fact<any> | void;
 };
 
 function removeLineBreaks(s: string) {
     return s.replace(/(\r\n|\n|\r)/gm, "");
 }
 
-export abstract class Engine {
-    protected rules: Rule[] = [];
-    protected db = new FactStore();
+export class Engine {
+    private rules: Rule[] = [];
+    private db = new FactStore();
 
     public register = (
         label: string,
         given: Array<Topic<any>>,
-        then: (get: getFn) => Fact<any>[] | Fact<any> | void
+        then: (get: dbGetFn) => Fact<any>[] | Fact<any> | void
     ) => {
         const rule = {
             label: label,
@@ -76,15 +81,20 @@ export abstract class Engine {
         this.rules.push(rule);
     };
 
-    protected set = (...changes: Fact<any>[]) => {
-        const changedKeys = new Set<Topic<any>>();
-        changes.forEach((newFact) => {
+    // Currently only way to set on this database is to create a custom subclass
+    // This is because our app's only dynamic input is from GSI data
+    // and any other database change must be triggered by that.
+    // This will change in the future from discord interactions
+    protected set = (...newFacts: Fact<any>[]) => {
+        const changedTopics = new Set<Topic<any>>();
+        newFacts.forEach((newFact) => {
             const newTopic = newFact.topic;
 
             const oldValue = this.db.get(newTopic);
             const newValue = newFact.value;
 
             if (!deepEqual(oldValue, newValue)) {
+                // Do not print out GSI data because it's too large
                 if ("gsiData" !== newTopic.label) {
                     log.verbose(
                         "rules",
@@ -98,20 +108,20 @@ export abstract class Engine {
                         removeLineBreaks(colors.green(newValue))
                     );
                 }
-                changedKeys.add(newTopic);
+                changedTopics.add(newTopic);
                 this.db.set(newFact);
             }
         });
-        this.next(changedKeys);
-    };
 
-    private next = (changedKeys: Set<Topic<any>>) => {
         this.rules.forEach((rule) => {
-            if (doesIntersect(changedKeys, rule.given)) {
+            // If a topic that a rule is interested in has changed
+            if (doesIntersect(changedTopics, rule.given)) {
+                // Process the rule
                 const out = rule.then((topic) => this.db.get(topic));
                 if (!out) {
                     return;
                 }
+                // Process any database changes as a result of this rule being applied
                 const arrOut = Array.isArray(out) ? out : [out];
                 log.debug("rules", "Start rule\t%s", rule.label.yellow);
                 this.set(...arrOut);
