@@ -10,12 +10,12 @@ import { Topic } from "./Engine";
  * in which case it can be declared inside the module
  */
 export default {
-    alive: new Topic<boolean | undefined>("alive"),
-    events: new Topic<Event[] | undefined>("events"),
+    alive: new Topic<boolean>("alive"),
+    events: new Topic<Event[]>("events"),
     gsiData: new Topic<GsiData>("gsiData"),
-    inGame: new Topic<boolean | undefined>("inGame"),
-    items: new Topic<PlayerItems | undefined>("items"),
-    playAudioFile: new Topic<string | undefined>("playAudioFile"),
-    playTts: new Topic<string | undefined>("playTts"),
-    time: new Topic<number | undefined>("time"),
+    inGame: new Topic<boolean>("inGame"),
+    items: new Topic<PlayerItems>("items"),
+    playAudioFile: new Topic<string>("playAudioFile"),
+    playTts: new Topic<string>("playTts"),
+    time: new Topic<number>("time"),
 };

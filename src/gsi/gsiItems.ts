@@ -4,9 +4,10 @@ import PlayerItems from "../PlayerItems";
 import topics from "../topics";
 
 engine.register("gsi/items", [topics.gsiData], (get) => {
-    const gsiItems = get(topics.gsiData).items;
-    if (gsiItems) {
-        return new Fact(topics.items, PlayerItems.create(gsiItems));
+    const items = get(topics.gsiData)?.items;
+    if (items) {
+        return new Fact(topics.items, PlayerItems.create(items));
+    } else {
+        return new Fact(topics.items, undefined);
     }
-    return new Fact(topics.items, undefined);
 });

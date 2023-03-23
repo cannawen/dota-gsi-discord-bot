@@ -22,8 +22,8 @@ engine.register("gsi/events/new", [topics.gsiData], (get) => {
     // Events from gsi server last for about 10 seconds
     // But we want to debounce events for our app
     // And only send unique events downstream
-    const { events } = get(topics.gsiData);
-    if (events !== null && events.length > 0) {
+    const events = get(topics.gsiData)?.events;
+    if (events && events.length > 0) {
         const allEvents = get(allEventsTopic) || [];
         // Filter GSI events for new events we have never seen before
         const newEvents = events
@@ -31,15 +31,16 @@ engine.register("gsi/events/new", [topics.gsiData], (get) => {
             .filter((event) => neverSeenBefore(allEvents, event));
 
         // If there is a new event we have not seen before
-        if (newEvents && newEvents.length > 0) {
+        if (newEvents.length > 0) {
             // Add it to allEventsTopic and return it as a new topics.event
             return [
                 new Fact(allEventsTopic, allEvents.concat(newEvents)),
                 new Fact(topics.events, newEvents),
             ];
+        } else {
+            // Reset topics.event
+            return new Fact(topics.events, undefined);
         }
-        // Reset topics.event
-        return new Fact(topics.events, undefined);
     }
 });
 

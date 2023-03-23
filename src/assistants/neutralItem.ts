@@ -29,24 +29,17 @@ function canCast(item: Item | null): boolean {
 }
 
 function handleNeutralItem(
-    alive: boolean | undefined,
-    items: PlayerItems | undefined,
+    alive: boolean,
+    items: PlayerItems,
     lastReminderTime: number | undefined,
-    time: number | undefined
+    time: number
 ): Fact<unknown>[] | Fact<unknown> | void {
-    // If we do not have a time or items, or if we are not alive
-    // reset last reminder time
-    if (!items || !time || !alive) {
-        return new Fact(lastNeutralReminderTimeTopic, undefined);
-    }
-
     const validItems = [...items.stash, items.neutral]
         .filter(validNeutralItem)
         .filter(canCast);
-
-    // If we do not have any valid neutral items that are also castable
+    // If we are not alive or if we cannot cast any valid neutral items
     // reset last reminder time
-    if (validItems.length === 0) {
+    if (!alive || validItems.length === 0) {
         return new Fact(lastNeutralReminderTimeTopic, undefined);
     }
 

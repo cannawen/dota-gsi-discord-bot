@@ -22,17 +22,18 @@
         }
     ],
     "rules": {
-        //jest plugin rules
+        // jest plugin rules
         "jest/no-disabled-tests": "warn",
         "jest/no-focused-tests": "error",
         "jest/no-identical-title": "error",
         "jest/prefer-to-have-length": "warn",
         "jest/valid-expect": "error",
-        //no-loops plugin rules
+        // no-loops plugin rules
         "no-loops/no-loops": "warn",
-        //typescript
+        //t ypescript
         "@typescript-eslint/no-empty-function": "warn",
-        //eslint
+        // eslint
+        // I would really like this, but it will interfere with prettier
         // "keyword-spacing": ["warn", { "before": true, "after": true }]
         "spaced-comment": ["warn", "always"],
         "for-direction": "warn",
@@ -80,7 +81,6 @@
         "no-caller": "warn",
         "no-case-declarations": "warn",
         "no-div-regex": "warn",
-        "no-else-return": ["warn", { "allowElseIf": true }],
         "no-empty-function": "warn",
         "no-empty-pattern": "warn",
         "no-eq-null": "warn",

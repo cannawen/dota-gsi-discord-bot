@@ -5,5 +5,5 @@ import topics from "../topics";
 engine.register(
     "gsi/alive",
     [topics.gsiData],
-    (get) => new Fact(topics.alive, get(topics.gsiData).hero?.alive)
+    (get) => new Fact(topics.alive, get(topics.gsiData)?.hero?.alive || false)
 );

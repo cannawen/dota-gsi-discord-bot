@@ -64,6 +64,9 @@ function removeLineBreaks(s: string) {
     return s.replace(/(\r\n|\n|\r)/gm, "");
 }
 
+const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
+    topics.reduce((memo, topic) => memo && db.get(topic) !== undefined, true);
+
 export class Engine {
     private rules: Rule[] = [];
     private db = new FactStore();
@@ -91,7 +94,6 @@ export class Engine {
         const changedTopics = new Set<Topic<unknown>>();
         newFacts.forEach((newFact) => {
             const newTopic = newFact.topic;
-
             const oldValue = this.db.get(newTopic);
             const newValue = newFact.value;
 
@@ -118,7 +120,13 @@ export class Engine {
 
         this.rules.forEach((rule) => {
             // If a topic that a rule is interested in has changed
-            if (doesIntersect(changedTopics, rule.given)) {
+            // and there none of the givens are `undefined`
+            // Note: anyone can still `set` a fact to be undefined,
+            // But it will not be propogated downstream
+            if (
+                doesIntersect(changedTopics, rule.given) &&
+                topicsAllDefined(rule.given, this.db)
+            ) {
                 // Process the rule
                 const out = rule.then((topic) => this.db.get(topic));
                 if (!out) {

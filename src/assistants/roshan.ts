@@ -1,29 +1,44 @@
+import Event, { EventType } from "../Event";
 import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
-import { EventType } from "../Event";
 import topics from "../topics";
 
-const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
-const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");
+const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
+const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-// When we are notified that roshan is killed
+const roshanMaybeTimeTopic = new Topic<number | undefined>(
+    "roshanMaybeTimeTopic"
+);
+const roshanAliveTimeTopic = new Topic<number | undefined>(
+    "roshanAliveTimeTopic"
+);
+
+function roshanWasKilled(events: Event[]) {
+    return events.reduce(
+        (memo, event) => event.type === EventType.RoshanKilled || memo,
+        false
+    );
+}
+
+// When an event notifies us that roshan is killed
 // Set roshan maybe time to 8 minutes from now
 // Set roshan alibe time to 11 minutes from now
 engine.register(
     "assistant/roshan/killed_event/set_future_audio_state",
     [topics.time, topics.events],
     (get) => {
-        const roshKilledEventIndex = get(topics.events)
-            ?.map((event) => event.type)
-            .indexOf(EventType.RoshanKilled);
-        if (roshKilledEventIndex !== undefined && roshKilledEventIndex !== -1) {
+        if (roshanWasKilled(get(topics.events))) {
             const time = get(topics.time);
-            if (time) {
-                return [
-                    new Fact(roshanMaybeTimeTopic, time + 8 * 60),
-                    new Fact(roshanAliveTimeTopic, time + 11 * 60),
-                ];
-            }
+            return [
+                new Fact(
+                    roshanMaybeTimeTopic,
+                    time + ROSHAN_MINIMUM_SPAWN_TIME
+                ),
+                new Fact(
+                    roshanAliveTimeTopic,
+                    time + ROSHAN_MAXIMUM_SPAWN_TIME
+                ),
+            ];
         }
     }
 );
@@ -34,10 +49,7 @@ engine.register(
     "assistant/roshan/maybe_alive_time/play_audio",
     [topics.time, roshanMaybeTimeTopic],
     (get) => {
-        if (
-            get(topics.time) !== undefined &&
-            get(topics.time) === get(roshanMaybeTimeTopic)
-        ) {
+        if (get(topics.time) === get(roshanMaybeTimeTopic)) {
             return [
                 new Fact(topics.playAudioFile, "rosh-maybe.mp3"),
                 new Fact(roshanMaybeTimeTopic, undefined),
@@ -52,10 +64,7 @@ engine.register(
     "assistant/roshan/alive_time/play_audio",
     [topics.time, roshanAliveTimeTopic],
     (get) => {
-        if (
-            get(topics.time) !== undefined &&
-            get(topics.time) === get(roshanAliveTimeTopic)
-        ) {
+        if (get(topics.time) === get(roshanAliveTimeTopic)) {
             return [
                 new Fact(topics.playAudioFile, "rosh-alive.mp3"),
                 new Fact(roshanAliveTimeTopic, undefined),
