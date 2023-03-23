@@ -34,7 +34,10 @@ engine.register(
     "assistant/roshan/maybe_alive_time/play_audio",
     [topics.time, roshanMaybeTimeTopic],
     (get) => {
-        if (get(topics.time) === get(roshanMaybeTimeTopic)) {
+        if (
+            get(topics.time) !== undefined &&
+            get(topics.time) === get(roshanMaybeTimeTopic)
+        ) {
             return [
                 new Fact(topics.playAudioFile, "rosh-maybe.mp3"),
                 new Fact(roshanMaybeTimeTopic, undefined),
@@ -49,7 +52,10 @@ engine.register(
     "assistant/roshan/alive_time/play_audio",
     [topics.time, roshanAliveTimeTopic],
     (get) => {
-        if (get(topics.time) === get(roshanAliveTimeTopic)) {
+        if (
+            get(topics.time) !== undefined &&
+            get(topics.time) === get(roshanAliveTimeTopic)
+        ) {
             return [
                 new Fact(topics.playAudioFile, "rosh-alive.mp3"),
                 new Fact(roshanAliveTimeTopic, undefined),
