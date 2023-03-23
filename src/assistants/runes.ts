@@ -8,9 +8,9 @@ const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 // If we have a time greater than 0 and are in a game
 // And the time is a multiple of 2 or 3 minutes
 // Play rune sound
-engine.register("assistant/runes", [topics.time, topics.inGame], (get) => {
-    const time = get(topics.time);
+engine.register("assistant/runes", [topics.inGame, topics.time], (get) => {
     const inGame = get(topics.inGame);
+    const time = get(topics.time);
     if (
         inGame &&
         time > 0 &&

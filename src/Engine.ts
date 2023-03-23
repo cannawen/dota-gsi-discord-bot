@@ -21,7 +21,7 @@ export class Topic<Type> {
  */
 export class Fact<Type> {
     public topic: Topic<Type>;
-    public value: Type | null;
+    public value: Type;
 
     public constructor(topic: Topic<Type>, value: Type) {
         this.topic = topic;

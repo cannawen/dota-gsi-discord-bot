@@ -6,12 +6,8 @@ import topics from "../topics";
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanMaybeTimeTopic = new Topic<number | undefined>(
-    "roshanMaybeTimeTopic"
-);
-const roshanAliveTimeTopic = new Topic<number | undefined>(
-    "roshanAliveTimeTopic"
-);
+const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
+const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");
 
 function roshanWasKilled(events: Event[]) {
     return events.reduce(

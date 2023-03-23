@@ -57,7 +57,7 @@ function handleNeutralItem(
 
 engine.register(
     "assistant/neutral_item",
-    [topics.items, topics.time, topics.alive],
+    [topics.alive, topics.items, topics.time],
     (get) =>
         handleNeutralItem(
             get(topics.alive),
