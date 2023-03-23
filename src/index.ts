@@ -2,38 +2,47 @@ import dotenv = require("dotenv");
 dotenv.config();
 
 // Enabled GSI
-import "./gsi/GsiEvents";
-import "./gsi/GsiGameState";
-import "./gsi/GsiItems";
-import "./gsi/GsiTime";
+import "./gsi/gsiEvents";
+import "./gsi/gsiGameState";
+import "./gsi/gsiItems";
+import "./gsi/gsiTime";
 
 // Enabled assistants
-import "./assistants/roshan/Roshan";
-import "./assistants/runes/Runes";
-// import "./assistants/stack/Stack";
-import "./assistants/trusty-shovel/TrustyShovel";
+import "./assistants/roshan";
+import "./assistants/runes";
+import "./assistants/neutralItem";
 
 // Enabled effects
-import "./effects/playTTS";
 import "./effects/playAudio";
+import "./effects/playTts";
 
+import engine from "./customEngine";
 import gsi = require("node-gsi");
-import broker from "./broker";
 import log from "./log";
-import Topic from "./Topic";
 
 const debug = false;
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
-server.events.on(gsi.Dota2Event.Dota2State, (event: gsi.IDota2StateEvent) => {
-    broker.publish("node-gsi", Topic.GSI_DATA_LIVE, event.state);
-});
+server.events.on(gsi.Dota2Event.Dota2State, (gsiData: gsi.IDota2StateEvent) =>
+    engine.setGsi({
+        items: gsiData.state.items,
+        time: gsiData.state.map?.clockTime,
+        events: gsiData.state.events,
+        gameState: gsiData.state.map?.gameState,
+    })
+);
 
 server.events.on(
     gsi.Dota2Event.Dota2ObserverState,
-    (event: gsi.IDota2ObserverStateEvent) => {
-        broker.publish("node-gsi", Topic.GSI_DATA_OBSERVER, event.state);
-    }
+    (gsiData: gsi.IDota2ObserverStateEvent) =>
+        engine.setGsi({
+            // If we are looking at a replay or as an observer,
+            // run all logic on the items of the first player only
+            items: gsiData.state.items?.at(0),
+            time: gsiData.state.map?.clockTime,
+            events: gsiData.state.events,
+            gameState: gsiData.state.map?.gameState,
+        })
 );
 
 log.info("gsi", "Starting GSI server on port 9001");

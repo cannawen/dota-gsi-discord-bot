@@ -9,16 +9,14 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:jest/recommended",
-        "prettier"
+        "plugin:jest/recommended"
+        // "prettier"
     ],
     "overrides": [
         {
-            "files": ["*.test.ts", "Constants.ts"],
+            "files": ["*.test.ts"],
             "rules": {
-                "no-magic-numbers": ["off"],
-                "max-lines-per-function": ["off"],
-                "max-nested-callbacks": ["off"]
+                "@typescript-eslint/no-var-requires": ["off"]
             }
         }
     ],
@@ -32,8 +30,9 @@
         //no-loops plugin rules
         "no-loops/no-loops": "warn",
         //typescript
-        "@typescript-eslint/no-empty-function": "warn"
+        "@typescript-eslint/no-empty-function": "warn",
         //eslint
         // "keyword-spacing": ["warn", { "before": true, "after": true }]
+        "no-console": "warn"
     }
 }

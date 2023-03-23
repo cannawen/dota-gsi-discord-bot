@@ -161,7 +161,7 @@ function playAudioFile(filePath: string) {
     }
 }
 
-function playTTS(ttsString: string) {
+function playTts(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
         log.verbose("discord", "Found cached TTS %s", ttsString);
         playAudioFile(ttsPath(ttsString));
@@ -187,5 +187,5 @@ function playTTS(ttsString: string) {
 
 export default {
     playAudioFile,
-    playTTS,
+    playTts,
 };

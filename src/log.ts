@@ -1,28 +1,41 @@
 import colors from "@colors/colors";
 import winston from "winston";
+import dotenv from "dotenv";
+dotenv.config();
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { stylize, styles } = require("@colors/colors");
 
 function padTo(msg: string, length: number, truncate: boolean) {
-    const stripped = colors.stripColors(msg);
-    if (stripped.length < length) {
-        const endPadLength = length - stripped.length;
+    if (msg.length < length) {
+        const endPadLength = length - msg.length;
         const endPadString = " ".repeat(endPadLength);
         return `${msg}${endPadString}`;
     } else if (truncate) {
-        // Big assumption that this string has a color at the start
-        // It takes this one color and sets it for the rest of the string
-        return msg.slice(0, 5) + stripped.slice(0, length);
+        return msg.slice(0, length);
     } else {
         return msg;
     }
+}
+
+/**
+ * Big assumption that this string has a 5-character color at the start
+ * It takes this one color and sets it for the rest of the string
+ * @param msg message with color
+ * @param length length to pad to
+ * @param truncate boolean: should truncate?
+ * @returns padded message
+ */
+function padToWithColor(msg: string, length: number, truncate: boolean) {
+    const stripped = padTo(msg.stripColors, length, truncate);
+    return msg.slice(0, 5) + stripped + "".reset;
 }
 
 function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     const levelLength = 5;
     const labelLength = 9;
     const out = `${info.timestamp.gray} ${
-        padTo(info.level, levelLength, true).stripColors
-    } ${padTo(info.label, labelLength, false)} ${info.message}${
+        padToWithColor(info.level, levelLength, true).stripColors
+    } ${padToWithColor(info.label, labelLength, false)} ${info.message}${
         info.splat ? `${info.splat}` : " "
     }`;
     if (colors) {
@@ -31,17 +44,6 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
         return out.stripColors;
     }
 }
-
-// Available levels
-// {
-//     error: 0,
-//     warn: 1,
-//     info: 2,
-//     http: 3,
-//     verbose: 4,
-//     debug: 5,
-//     silly: 6
-// }
 
 function createMap(label: string, levelString: string) {
     return {
@@ -156,4 +158,5 @@ export default {
     verbose: makeLog("verbose"),
     debug: makeLog("debug"),
     silly: makeLog("silly"),
+    padToWithColor,
 };

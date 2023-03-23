@@ -1,12 +1,14 @@
-import broker from "../broker";
 import discord from "../discord";
-import path from "node:path";
-import Topic from "../Topic";
+import engine from "../customEngine";
+import { Fact } from "../Engine";
+import path from "path";
+import topics from "../topics";
 
-broker.register(
-    "EFFECT/PLAY_AUDIO",
-    Topic.EFFECT_PLAY_FILE,
-    null,
-    (filePath: string) =>
-        discord.playAudioFile(path.join(__dirname, "../../audio/", filePath))
-);
+engine.register("effect/playAudio", [topics.playAudioFile], (get) => {
+    const audioFile = get(topics.playAudioFile);
+    if (audioFile) {
+        discord.playAudioFile(path.join(__dirname, "../../audio/", audioFile));
+    }
+
+    return new Fact(topics.playAudioFile, undefined);
+});
