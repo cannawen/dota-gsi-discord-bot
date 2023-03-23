@@ -12,9 +12,8 @@ function padTo(msg: string, length: number, truncate: boolean) {
         return `${msg}${endPadString}`;
     } else if (truncate) {
         return msg.slice(0, length);
-    } else {
-        return msg;
     }
+    return msg;
 }
 
 /**
@@ -40,9 +39,8 @@ function printFormat(info: winston.Logform.TransformableInfo, colors: boolean) {
     }`;
     if (colors) {
         return out;
-    } else {
-        return out.stripColors;
     }
+    return out.stripColors;
 }
 
 function createMap(label: string, levelString: string) {
@@ -128,16 +126,15 @@ function getLogger(label: string): winston.Logger {
 
     if (existingLogger) {
         return existingLogger;
-    } else {
-        const newLogger = winston.createLogger(
-            createMap(
-                stylize(`[${label}]`, settings(label).color),
-                settings(label).level
-            )
-        );
-        loggers.set(label, newLogger);
-        return newLogger;
     }
+    const newLogger = winston.createLogger(
+        createMap(
+            stylize(`[${label}]`, settings(label).color),
+            settings(label).level
+        )
+    );
+    loggers.set(label, newLogger);
+    return newLogger;
 }
 
 function makeLog(logLevel: string) {

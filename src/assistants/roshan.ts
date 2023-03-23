@@ -1,4 +1,4 @@
-import { Topic, Fact } from "../Engine";
+import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
 import topics from "../topics";
 import { EventType } from "../Event";

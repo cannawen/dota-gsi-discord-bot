@@ -1,3 +1,4 @@
+/* eslint-disable max-classes-per-file */
 import colors from "@colors/colors";
 import deepEqual from "deep-equal";
 import log from "./log";
@@ -41,9 +42,7 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
 class FactStore {
     facts = new Map<Topic<any>, Fact<any>>();
 
-    get = <T>(topic: Topic<T>): T => {
-        return this.facts.get(topic)?.value;
-    };
+    get = <T>(topic: Topic<T>): T => this.facts.get(topic)?.value;
 
     set = (fact: Fact<any>) => {
         this.facts.set(fact.topic, fact);
@@ -95,7 +94,7 @@ export class Engine {
 
             if (!deepEqual(oldValue, newValue)) {
                 // Do not print out GSI data because it's too large
-                if ("gsiData" !== newTopic.label) {
+                if (newTopic.label !== "gsiData") {
                     log.verbose(
                         "rules",
                         "%s : %s -> %s",
