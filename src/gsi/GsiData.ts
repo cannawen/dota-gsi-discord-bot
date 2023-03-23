@@ -7,6 +7,7 @@ import gsi = require("node-gsi");
 type GsiData = {
     events: gsi.IEvent[] | null;
     gameState: gsi.Dota2GameState | undefined;
+    hero: gsi.IHero | undefined | null;
     items: gsi.IItemContainer | undefined | null;
     time: number | undefined;
 };

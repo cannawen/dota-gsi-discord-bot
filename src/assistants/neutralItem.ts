@@ -8,12 +8,14 @@ const lastNeutralReminderTimeTopic = new Topic<number | undefined>(
 
 engine.register(
     "assistant/neutral_item",
-    [topics.items, topics.time, lastNeutralReminderTimeTopic],
+    [topics.items, topics.time, topics.alive],
     (get) => {
         const neutralItem = get(topics.items)?.neutral;
         const time = get(topics.time);
-        // If we do not have a time or neutral item, reset last reminder time
-        if (!neutralItem || !time) {
+
+        // If we do not have a time or neutral item, or if we are not alive
+        // reset last reminder time
+        if (!neutralItem || !time || !get(topics.alive)) {
             return new Fact(lastNeutralReminderTimeTopic, undefined);
         }
         const validNeutralItems = ["item_trusty_shovel", "item_pirate_hat"];
@@ -22,7 +24,7 @@ engine.register(
             return new Fact(lastNeutralReminderTimeTopic, undefined);
         }
         // If we cannot cast our valid neutral item, reset last reminder time
-        if (!neutralItem.canCast) {
+        if (neutralItem.cooldown === undefined || neutralItem.cooldown > 0) {
             return new Fact(lastNeutralReminderTimeTopic, undefined);
         }
 

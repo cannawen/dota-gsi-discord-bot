@@ -10,6 +10,7 @@ import { Topic } from "./Engine";
  * in which case it can be declared inside the module
  */
 export default {
+    alive: new Topic<boolean | undefined>("alive"),
     events: new Topic<Event[] | undefined>("events"),
     gsiData: new Topic<GsiData>("gsiData"),
     inGame: new Topic<boolean | undefined>("inGame"),
