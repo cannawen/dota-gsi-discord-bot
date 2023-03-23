@@ -40,13 +40,20 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
 };
 
 class FactStore {
-    facts = new Map<Topic<unknown>, Fact<unknown>>();
+    private facts = new Map<Topic<unknown>, Fact<unknown>>();
 
-    // Casting to T is safe here because when it is set,
-    // The fact's topic is used as a key
-    get = <T>(topic: Topic<T>): T => this.facts.get(topic)?.value as T;
+    public get = <T>(topic: Topic<T>): T | undefined => {
+        const fact = this.facts.get(topic);
+        if (fact) {
+            // Casting to T is safe here because when it is set,
+            // The fact's topic is used as a key
+            return fact.value as T;
+        } else {
+            return undefined;
+        }
+    };
 
-    set = (fact: Fact<unknown>) => {
+    public set = (fact: Fact<unknown>) => {
         this.facts.set(fact.topic, fact);
     };
 }
