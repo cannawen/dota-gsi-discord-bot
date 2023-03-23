@@ -1,43 +1,72 @@
 import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
+import Item from "../Item";
+import PlayerItems from "../PlayerItems";
 import topics from "../topics";
 
 const lastNeutralReminderTimeTopic = new Topic<number | undefined>(
     "lastNeutralReminderTimeTopic"
 );
 
+function validNeutralItem(item: Item | null): boolean {
+    if (!item) {
+        return false;
+    }
+    return ["item_trusty_shovel", "item_pirate_hat"].reduce(
+        (memo, validId) => memo || item.id === validId,
+        false
+    );
+}
+
+function canCast(item: Item | null): boolean {
+    if (!item) {
+        return false;
+    }
+    return item.cooldown === 0;
+}
+
+function handleNeutralItem(
+    alive: boolean | undefined,
+    items: PlayerItems | undefined,
+    lastReminderTime: number | undefined,
+    time: number | undefined
+): Fact<unknown>[] | Fact<unknown> | void {
+    // If we do not have a time or items, or if we are not alive
+    // reset last reminder time
+    if (!items || !time || !alive) {
+        return new Fact(lastNeutralReminderTimeTopic, undefined);
+    }
+
+    const validItems = [...items.stash, items.neutral]
+        .filter(validNeutralItem)
+        .filter(canCast);
+
+    // If we do not have any valid neutral items that are also castable
+    // reset last reminder time
+    if (validItems.length === 0) {
+        return new Fact(lastNeutralReminderTimeTopic, undefined);
+    }
+
+    // If we have never reminded the user before
+    // or if our last reminder time was more than 15 seconds ago
+    if (!lastReminderTime || time > lastReminderTime + 15) {
+        // Remind the user
+        // And update the last reminder time
+        return [
+            new Fact(topics.playAudioFile, "shovel.mp3"),
+            new Fact(lastNeutralReminderTimeTopic, time),
+        ];
+    }
+}
+
 engine.register(
     "assistant/neutral_item",
     [topics.items, topics.time, topics.alive],
-    (get) => {
-        const neutralItem = get(topics.items)?.neutral;
-        const time = get(topics.time);
-
-        // If we do not have a time or neutral item, or if we are not alive
-        // reset last reminder time
-        if (!neutralItem || !time || !get(topics.alive)) {
-            return new Fact(lastNeutralReminderTimeTopic, undefined);
-        }
-        const validNeutralItems = ["item_trusty_shovel", "item_pirate_hat"];
-        // If we do not have a valid neutral item, reset last reminder time
-        if (!validNeutralItems.find((id) => neutralItem.id === id)) {
-            return new Fact(lastNeutralReminderTimeTopic, undefined);
-        }
-        // If we cannot cast our valid neutral item, reset last reminder time
-        if (neutralItem.cooldown === undefined || neutralItem.cooldown > 0) {
-            return new Fact(lastNeutralReminderTimeTopic, undefined);
-        }
-
-        const lastReminderTime = get(lastNeutralReminderTimeTopic);
-        // If we have never reminded the user before
-        // or if our last reminder time was more than 15 seconds ago
-        if (!lastReminderTime || time > lastReminderTime + 15) {
-            // Remind the user
-            // And update the last reminder time
-            return [
-                new Fact(topics.playAudioFile, "shovel.mp3"),
-                new Fact(lastNeutralReminderTimeTopic, get(topics.time)),
-            ];
-        }
-    }
+    (get) =>
+        handleNeutralItem(
+            get(topics.alive),
+            get(topics.items),
+            get(lastNeutralReminderTimeTopic),
+            get(topics.time)
+        )
 );
