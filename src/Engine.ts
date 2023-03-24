@@ -50,6 +50,7 @@ class FactStore {
             // The fact's topic is used as a key
             return fact.value as T;
         } else {
+            log.debug("rules", "No value for fact %s", topic.label.yellow);
             return undefined;
         }
     };
@@ -107,7 +108,7 @@ export class Engine {
 
             if (!deepEqual(oldValue, newValue)) {
                 // Do not print out GSI data because it's too large
-                if (newTopic.label !== "gsiData") {
+                if (topic.label !== "gsiData") {
                     // TODO: Casting to string here is pretty sus - what do?
                     log.verbose(
                         "rules",
