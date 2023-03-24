@@ -4,7 +4,7 @@ import engine from "../customEngine";
 import log from "../log";
 import topic from "../topic";
 import topicDiscord from "./topicDiscord";
-import Voice from "@discordjs/voice";
+import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 const discordSubscriptionTopic = new Topic<Voice.PlayerSubscription>(
