@@ -1,5 +1,5 @@
 import Discord from "discord.js";
-import { Topic } from "../Engine";
+import Topic from "../classes/engine/Topic";
 
 export default {
     channel: new Topic<Discord.GuildBasedChannel>("discordChannel"),

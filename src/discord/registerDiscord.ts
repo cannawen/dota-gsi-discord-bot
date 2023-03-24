@@ -1,7 +1,7 @@
 import colors from "@colors/colors";
 import Discord from "discord.js";
 import engine from "../customEngine";
-import { Fact } from "../Engine";
+import Fact from "../classes/engine/Fact";
 import log from "../log";
 import topic from "../topic";
 import topicDiscord from "./topicDiscord";

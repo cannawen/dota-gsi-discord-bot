@@ -1,7 +1,8 @@
-import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
-import Item from "../Item";
-import PlayerItems from "../PlayerItems";
+import Fact from "../classes/engine/Fact";
+import Item from "../classes/data/Item";
+import PlayerItems from "../classes/data/PlayerItems";
+import Topic from "../classes/engine/Topic";
 import topic from "../topic";
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];

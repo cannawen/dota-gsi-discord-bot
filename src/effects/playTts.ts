@@ -1,6 +1,6 @@
 import axios from "axios";
 import engine from "../customEngine";
-import { Fact } from "../Engine";
+import Fact from "../classes/engine/Fact";
 import fs = require("fs");
 import log from "../log";
 import path = require("path");

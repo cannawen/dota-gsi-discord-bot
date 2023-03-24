@@ -1,7 +1,7 @@
-import Event from "./Event";
+import Event from "./classes/data/Event";
 import GsiData from "./gsi/GsiData";
-import PlayerItems from "./PlayerItems";
-import { Topic } from "./Engine";
+import PlayerItems from "./classes/data/PlayerItems";
+import Topic from "./classes/engine/Topic";
 
 const gsiData = {
     gsiData: new Topic<GsiData>("gsiData"),

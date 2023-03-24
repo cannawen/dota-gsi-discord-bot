@@ -1,5 +1,5 @@
 import engine from "../customEngine";
-import { Fact } from "../Engine";
+import Fact from "../classes/engine/Fact";
 import path from "path";
 import topic from "../topic";
 

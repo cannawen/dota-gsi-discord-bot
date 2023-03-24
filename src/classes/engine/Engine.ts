@@ -2,33 +2,9 @@
 /* eslint-disable max-classes-per-file */
 import colors from "@colors/colors";
 import deepEqual from "deep-equal";
-import log from "./log";
-
-/**
- * A `Topic` describes the type of data (i.e. Time is a number)
- */
-export class Topic<Type> {
-    public label: string;
-    // The following variable is not used, but is only here for type-checking reasons
-    private _type: Type | undefined;
-
-    public constructor(label: string) {
-        this.label = label;
-    }
-}
-
-/**
- * A `Fact` describes a topic and value (i.e. Time is the number 5)
- */
-export class Fact<Type> {
-    public topic: Topic<Type>;
-    public value: Type;
-
-    public constructor(topic: Topic<Type>, value: Type) {
-        this.topic = topic;
-        this.value = value;
-    }
-}
+import Fact from "./Fact";
+import log from "../../log";
+import Topic from "./Topic";
 
 const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
     // eslint-disable-next-line no-loops/no-loops
@@ -82,7 +58,7 @@ function removeLineBreaks(s: string) {
 const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
     topics.reduce((memo, topic) => memo && db.get(topic) !== undefined, true);
 
-export class Engine {
+class Engine {
     private rules: Rule[] = [];
     private db = new FactStore();
 

@@ -1,6 +1,6 @@
 import engine from "../customEngine";
-import { Fact } from "../Engine";
-import PlayerItems from "../PlayerItems";
+import Fact from "../classes/engine/Fact";
+import PlayerItems from "../classes/data/PlayerItems";
 import topic from "../topic";
 
 engine.register("gsi/items", [topic.gsiData], (get) => {

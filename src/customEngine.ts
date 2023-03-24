@@ -1,4 +1,5 @@
-import { Engine, Fact } from "./Engine";
+import Engine from "./classes/engine/Engine";
+import Fact from "./classes/engine/Fact";
 import GsiData from "./gsi/GsiData";
 import topic from "./topic";
 

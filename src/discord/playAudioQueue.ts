@@ -1,7 +1,8 @@
-import { Fact, Topic } from "../Engine";
 import colors from "@colors/colors";
 import engine from "../customEngine";
+import Fact from "../classes/engine/Fact";
 import log from "../log";
+import Topic from "../classes/engine/Topic";
 import topic from "../topic";
 import topicDiscord from "./topicDiscord";
 import Voice = require("@discordjs/voice");

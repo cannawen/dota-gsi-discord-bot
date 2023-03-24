@@ -1,6 +1,6 @@
 import { Dota2GameState } from "node-gsi";
 import engine from "../customEngine";
-import { Fact } from "../Engine";
+import Fact from "../classes/engine/Fact";
 import topic from "../topic";
 
 engine.register("gsi/game_state", [topic.gsiData], (get) => {

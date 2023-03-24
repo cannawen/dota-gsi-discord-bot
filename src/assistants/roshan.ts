@@ -1,6 +1,7 @@
-import Event, { EventType } from "../Event";
-import { Fact, Topic } from "../Engine";
+import Event, { EventType } from "../classes/data/Event";
 import engine from "../customEngine";
+import Fact from "../classes/engine/Fact";
+import Topic from "../classes/engine/Topic";
 import topic from "../topic";
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
