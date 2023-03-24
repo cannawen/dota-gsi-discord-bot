@@ -1,8 +1,8 @@
-import axios, { AxiosResponse } from "axios";
+/* eslint-disable max-statements */
+/* eslint-disable max-lines-per-function */
 import colors from "@colors/colors";
 import Discord = require("discord.js");
 import fs = require("fs");
-import path = require("path");
 import log from "./log";
 import Voice = require("@discordjs/voice");
 
@@ -13,11 +13,6 @@ const discordClient = new Discord.Client({
 
 let subscription: Voice.PlayerSubscription | undefined;
 const audioQueue: Voice.AudioResource[] = [];
-const ttsDirectory = "tts-cache";
-
-if (!fs.existsSync(ttsDirectory)) {
-    fs.mkdirSync(ttsDirectory);
-}
 
 const emColor = colors.blue;
 
@@ -50,20 +45,6 @@ function onAudioFilePath(filePath: string) {
     log.info("discord", "Enqueue file at path %s", emColor(filePath));
     audioQueue.push(Voice.createAudioResource(filePath));
     playNext();
-}
-
-function ttsPath(ttsString: string) {
-    return path.join(ttsDirectory, `${ttsString}.mp3`);
-}
-
-function onTtsResponse(response: AxiosResponse, ttsString: string) {
-    const write: fs.WriteStream = response.data.pipe(
-        fs.createWriteStream(ttsPath(ttsString))
-    );
-    write.on("close", () => {
-        log.verbose("discord", "Finished writing TTS '%s' to file", ttsString);
-        playAudioFile(ttsPath(ttsString));
-    });
 }
 
 function onDiscordClientReady() {
@@ -162,31 +143,6 @@ function playAudioFile(filePath: string) {
     }
 }
 
-function playTts(ttsString: string) {
-    if (fs.existsSync(ttsPath(ttsString))) {
-        log.verbose("discord", "Found cached TTS %s", ttsString);
-        playAudioFile(ttsPath(ttsString));
-    } else {
-        log.verbose("discord", "Processing TTS string '%s'", ttsString);
-        const encodedAudio = encodeURIComponent(ttsString);
-        axios({
-            method: "get",
-            responseType: "stream",
-            url: `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
-        })
-            .then((response) => onTtsResponse(response, ttsString))
-            .catch((error) => {
-                log.error(
-                    "discord",
-                    "Unable to TTS %s with error message %s",
-                    ttsString,
-                    error.message
-                );
-            });
-    }
-}
-
 export default {
     playAudioFile,
-    playTts,
 };

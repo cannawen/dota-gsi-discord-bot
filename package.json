@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "rimraf ./build ./tts-cache && tsc",
+        "build": "rimraf ./build ./audio/tts-cache && tsc",
         "lint": "eslint . --ext .ts --fix",
         "format": "npx prettier --write .",
         "start:nobuild": "node build/index.js",

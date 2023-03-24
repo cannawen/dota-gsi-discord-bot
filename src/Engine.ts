@@ -66,7 +66,13 @@ type Rule = {
     // label is only used for logging purposes
     label: string;
     given: Array<Topic<unknown>>;
-    then: (get: getFn) => Fact<unknown>[] | Fact<unknown> | void;
+    then: (
+        get: getFn
+    ) =>
+        | Fact<unknown>
+        | Promise<Fact<unknown>>
+        | void
+        | Array<Fact<unknown> | Promise<Fact<unknown> | void>>;
 };
 
 function removeLineBreaks(s: string) {
@@ -99,33 +105,32 @@ export class Engine {
     // This is because our app's only dynamic input is from GSI data
     // and any other database change must be triggered by that.
     // This will change in the future from discord interactions
-    protected set = (...newFacts: Fact<unknown>[]) => {
+    protected set = (newFact: Fact<unknown>) => {
         const changedTopics = new Set<Topic<unknown>>();
-        newFacts.forEach((newFact) => {
-            const topic = newFact.topic;
-            const oldValue = this.db.get(topic);
-            const newValue = newFact.value;
 
-            if (!deepEqual(oldValue, newValue)) {
-                // Do not print out GSI data because it's too large
-                if (topic.label !== "gsiData") {
-                    // TODO: Casting to string here is pretty sus - what do?
-                    log.verbose(
-                        "rules",
-                        "%s : %s -> %s",
-                        log.padToWithColor(topic.label.green, 15, true),
-                        log.padToWithColor(
-                            removeLineBreaks(colors.gray(oldValue as any)),
-                            15,
-                            false
-                        ),
-                        removeLineBreaks(colors.green(newValue as string))
-                    );
-                }
-                changedTopics.add(topic);
-                this.db.set(newFact);
+        const topic = newFact.topic;
+        const oldValue = this.db.get(topic);
+        const newValue = newFact.value;
+
+        if (!deepEqual(oldValue, newValue)) {
+            // Do not print out GSI data because it's too large
+            if (topic.label !== "gsiData") {
+                log.verbose(
+                    "rules",
+                    "%s : %s -> %s",
+                    log.padToWithColor(topic.label.green, 15, true),
+                    log.padToWithColor(
+                        // TODO: Weird cast to pass into colors
+                        removeLineBreaks(colors.gray(oldValue as any)),
+                        15,
+                        false
+                    ),
+                    removeLineBreaks(colors.green(newValue as string))
+                );
             }
-        });
+            changedTopics.add(topic);
+            this.db.set(newFact);
+        }
 
         this.rules.forEach((rule) => {
             // If a topic that a rule is interested in has changed
@@ -141,10 +146,21 @@ export class Engine {
                 if (!out) {
                     return;
                 }
+
                 // Process any database changes as a result of this rule being applied
                 const arrOut = Array.isArray(out) ? out : [out];
                 log.debug("rules", "Start rule\t%s", rule.label.yellow);
-                this.set(...arrOut);
+                arrOut.forEach((factOrFactPromise) => {
+                    if (factOrFactPromise instanceof Promise) {
+                        factOrFactPromise.then((fact) => {
+                            if (fact) {
+                                this.set(fact);
+                            }
+                        });
+                    } else {
+                        this.set(factOrFactPromise);
+                    }
+                });
                 log.debug("rules", "End rule  \t%s", rule.label);
             }
         });
