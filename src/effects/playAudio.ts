@@ -6,7 +6,7 @@ import topics from "../topics";
 
 engine.register("effect/playAudio", [topics.playAudioFile], (get) => {
     discord.playAudioFile(
-        path.join(__dirname, "../../audio/", get(topics.playAudioFile))
+        path.join(__dirname, "../../audio/", get(topics.playAudioFile)!)
     );
 
     return new Fact(topics.playAudioFile, undefined);

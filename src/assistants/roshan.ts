@@ -23,8 +23,8 @@ engine.register(
     "assistant/roshan/killed_event/set_future_audio_state",
     [topics.time, topics.events],
     (get) => {
-        if (roshanWasKilled(get(topics.events))) {
-            const time = get(topics.time);
+        if (roshanWasKilled(get(topics.events)!)) {
+            const time = get(topics.time)!;
             return [
                 new Fact(
                     roshanMaybeTimeTopic,

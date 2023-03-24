@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable max-classes-per-file */
 import colors from "@colors/colors";
 import deepEqual from "deep-equal";
@@ -44,7 +45,7 @@ class FactStore {
 
     public get = <T>(topic: Topic<T>): T | undefined => {
         const fact = this.facts.get(topic);
-        if (fact) {
+        if (fact && fact.value !== undefined) {
             // Casting to T is safe here because when it is set,
             // The fact's topic is used as a key
             return fact.value as T;
@@ -58,13 +59,13 @@ class FactStore {
     };
 }
 
-type dbGetFn = <T>(topic: Topic<T>) => T;
+type getFn = <T>(topic: Topic<T>) => T | undefined;
 
 type Rule = {
     // label is only used for logging purposes
     label: string;
     given: Array<Topic<unknown>>;
-    then: (get: dbGetFn) => Fact<unknown>[] | Fact<unknown> | void;
+    then: (get: getFn) => Fact<unknown>[] | Fact<unknown> | void;
 };
 
 function removeLineBreaks(s: string) {
@@ -79,9 +80,9 @@ export class Engine {
     private db = new FactStore();
 
     public register = (
-        label: string,
-        given: Array<Topic<unknown>>,
-        then: (get: dbGetFn) => Fact<unknown>[] | Fact<unknown> | void
+        label: Rule["label"],
+        given: Rule["given"],
+        then: Rule["then"]
     ) => {
         const rule = {
             label: label,
@@ -100,8 +101,8 @@ export class Engine {
     protected set = (...newFacts: Fact<unknown>[]) => {
         const changedTopics = new Set<Topic<unknown>>();
         newFacts.forEach((newFact) => {
-            const newTopic = newFact.topic;
-            const oldValue = this.db.get(newTopic);
+            const topic = newFact.topic;
+            const oldValue = this.db.get(topic);
             const newValue = newFact.value;
 
             if (!deepEqual(oldValue, newValue)) {
@@ -111,16 +112,16 @@ export class Engine {
                     log.verbose(
                         "rules",
                         "%s : %s -> %s",
-                        log.padToWithColor(newTopic.label.green, 15, true),
+                        log.padToWithColor(topic.label.green, 15, true),
                         log.padToWithColor(
-                            removeLineBreaks(colors.gray(oldValue as string)),
+                            removeLineBreaks(colors.gray(oldValue as any)),
                             15,
                             false
                         ),
                         removeLineBreaks(colors.green(newValue as string))
                     );
                 }
-                changedTopics.add(newTopic);
+                changedTopics.add(topic);
                 this.db.set(newFact);
             }
         });
