@@ -21,11 +21,9 @@ const effects = {
 };
 
 const discord = {
-    registerDiscordBotSecret: new Topic<string>("registerDiscordBotSecret"),
-    registerDiscordGuild: new Topic<string>("registerDiscordGuild"),
-    registerDiscordGuildChannel: new Topic<string>(
-        "registerDiscordGuildChannel"
-    ),
+    discordBotSecret: new Topic<string>("registerDiscordBotSecret"),
+    discordGuildId: new Topic<string>("registerDiscordGuild"),
+    discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
 };
 
 /**

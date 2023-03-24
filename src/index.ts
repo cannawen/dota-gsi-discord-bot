@@ -34,6 +34,19 @@ if (botSecretKey) {
     );
 }
 
+const discordGuildId = process.env.HARD_CODED_GUILD_ID;
+const discordChannelId = process.env.HARD_CODED_VOICE_CHANNEL_ID;
+if (discordGuildId && discordChannelId) {
+    engine.setDiscordBotGuildIdAndChannelId(discordGuildId, discordChannelId);
+} else {
+    log.error(
+        "discord",
+        "Unable to find bot channel or guild id. Expected environment variables %s and %s",
+        "HARD_CODED_GUILD_ID",
+        "HARD_CODED_VOICE_CHANNEL_ID"
+    );
+}
+
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 

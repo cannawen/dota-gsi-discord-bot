@@ -8,7 +8,15 @@ class CustomEngine extends Engine {
     }
 
     public setDiscordBotSecretKey(key: string) {
-        this.set(new Fact(topics.registerDiscordBotSecret, key));
+        this.set(new Fact(topics.discordBotSecret, key));
+    }
+
+    public setDiscordBotGuildIdAndChannelId(
+        guildId: string,
+        channelId: string
+    ) {
+        this.set(new Fact(topics.discordGuildId, guildId));
+        this.set(new Fact(topics.discordGuildChannelId, channelId));
     }
 }
 
