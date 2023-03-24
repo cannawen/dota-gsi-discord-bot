@@ -1,7 +1,7 @@
 import Event, { EventType } from "../Event";
 import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
-import topics from "../topics";
+import topic from "../topic";
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
@@ -21,10 +21,10 @@ function roshanWasKilled(events: Event[]) {
 // Set roshan alibe time to 11 minutes from now
 engine.register(
     "assistant/roshan/killed_event/set_future_audio_state",
-    [topics.time, topics.events],
+    [topic.time, topic.events],
     (get) => {
-        if (roshanWasKilled(get(topics.events)!)) {
-            const time = get(topics.time)!;
+        if (roshanWasKilled(get(topic.events)!)) {
+            const time = get(topic.time)!;
             return [
                 new Fact(
                     roshanMaybeTimeTopic,
@@ -43,11 +43,11 @@ engine.register(
 // Play audio and reset roshan maybe alive time state
 engine.register(
     "assistant/roshan/maybe_alive_time/play_audio",
-    [topics.time, roshanMaybeTimeTopic],
+    [topic.time, roshanMaybeTimeTopic],
     (get) => {
-        if (get(topics.time) === get(roshanMaybeTimeTopic)) {
+        if (get(topic.time) === get(roshanMaybeTimeTopic)) {
             return [
-                new Fact(topics.playAudioFile, "audio/rosh-maybe.mp3"),
+                new Fact(topic.playAudioFile, "audio/rosh-maybe.mp3"),
                 new Fact(roshanMaybeTimeTopic, undefined),
             ];
         }
@@ -58,11 +58,11 @@ engine.register(
 // Play audio and reset roshan alive time state
 engine.register(
     "assistant/roshan/alive_time/play_audio",
-    [topics.time, roshanAliveTimeTopic],
+    [topic.time, roshanAliveTimeTopic],
     (get) => {
-        if (get(topics.time) === get(roshanAliveTimeTopic)) {
+        if (get(topic.time) === get(roshanAliveTimeTopic)) {
             return [
-                new Fact(topics.playAudioFile, "audio/rosh-alive.mp3"),
+                new Fact(topic.playAudioFile, "audio/rosh-alive.mp3"),
                 new Fact(roshanAliveTimeTopic, undefined),
             ];
         }
@@ -70,8 +70,8 @@ engine.register(
 );
 
 // When we are no longer in a game, reset all our roshan timers
-engine.register("assistant/roshan/reset", [topics.inGame], (get) => {
-    if (!get(topics.inGame)) {
+engine.register("assistant/roshan/reset", [topic.inGame], (get) => {
+    if (!get(topic.inGame)) {
         return [
             new Fact(roshanAliveTimeTopic, undefined),
             new Fact(roshanMaybeTimeTopic, undefined),

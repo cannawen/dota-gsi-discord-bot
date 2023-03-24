@@ -2,7 +2,7 @@ import { Fact, Topic } from "../Engine";
 import engine from "../customEngine";
 import Item from "../Item";
 import PlayerItems from "../PlayerItems";
-import topics from "../topics";
+import topic from "../topic";
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
 const TIME_BETWEEN_REMINDERS = 15;
@@ -49,7 +49,7 @@ function handleNeutralItem(
         // Remind the user
         // And update the last reminder time
         return [
-            new Fact(topics.playTts, "dig"),
+            new Fact(topic.playTts, "dig"),
             new Fact(lastNeutralReminderTimeTopic, time),
         ];
     }
@@ -57,12 +57,12 @@ function handleNeutralItem(
 
 engine.register(
     "assistant/neutral_item",
-    [topics.alive, topics.items, topics.time],
+    [topic.alive, topic.items, topic.time],
     (get) =>
         handleNeutralItem(
-            get(topics.alive)!,
-            get(topics.items)!,
+            get(topic.alive)!,
+            get(topic.items)!,
             get(lastNeutralReminderTimeTopic),
-            get(topics.time)!
+            get(topic.time)!
         )
 );

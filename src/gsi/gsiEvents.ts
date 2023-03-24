@@ -2,7 +2,7 @@ import { Fact, Topic } from "../Engine";
 import deepEqual from "deep-equal";
 import engine from "../customEngine";
 import Event from "../Event";
-import topics from "../topics";
+import topic from "../topic";
 
 /**
  * Note: right now events may overwrite each other if they have the same eventType and gameTime
@@ -18,11 +18,11 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
         false
     );
 
-engine.register("gsi/events/new", [topics.gsiData], (get) => {
+engine.register("gsi/events/new", [topic.gsiData], (get) => {
     // Events from gsi server last for about 10 seconds
     // But we want to debounce events for our app
     // And only send unique events downstream
-    const events = get(topics.gsiData)?.events;
+    const events = get(topic.gsiData)?.events;
     if (events && events.length > 0) {
         const allEvents = get(allEventsTopic) || [];
         // Filter GSI events for new events we have never seen before
@@ -35,18 +35,18 @@ engine.register("gsi/events/new", [topics.gsiData], (get) => {
             // Add it to allEventsTopic and return it as a new topics.event
             return [
                 new Fact(allEventsTopic, allEvents.concat(newEvents)),
-                new Fact(topics.events, newEvents),
+                new Fact(topic.events, newEvents),
             ];
         } else {
             // Reset topics.event
-            return new Fact(topics.events, undefined);
+            return new Fact(topic.events, undefined);
         }
     }
 });
 
 // If we are no longer in a game, reset all events
-engine.register("gsi/events/reset_all", [topics.inGame], (get) => {
-    if (!get(topics.inGame)) {
+engine.register("gsi/events/reset_all", [topic.inGame], (get) => {
+    if (!get(topic.inGame)) {
         return new Fact(allEventsTopic, undefined);
     }
 });

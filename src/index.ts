@@ -17,7 +17,9 @@ import "./assistants/neutralItem";
 import "./effects/playAudio";
 import "./effects/playTts";
 
+// Discord
 import "./discord/registerDiscord";
+import "./discord/playAudioQueue";
 
 import engine from "./customEngine";
 import gsi = require("node-gsi");

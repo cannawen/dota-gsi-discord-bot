@@ -1,9 +1,9 @@
 import engine from "../customEngine";
 import { Fact } from "../Engine";
-import topics from "../topics";
+import topic from "../topic";
 
 engine.register(
     "gsi/alive",
-    [topics.gsiData],
-    (get) => new Fact(topics.alive, get(topics.gsiData)!.hero?.alive || false)
+    [topic.gsiData],
+    (get) => new Fact(topic.alive, get(topic.gsiData)!.hero?.alive || false)
 );
