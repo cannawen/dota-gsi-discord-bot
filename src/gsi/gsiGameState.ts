@@ -1,12 +1,12 @@
 import { Dota2GameState } from "node-gsi";
 import engine from "../customEngine";
 import { Fact } from "../Engine";
-import topics from "../topics";
+import topic from "../topic";
 
-engine.register("gsi/game_state", [topics.gsiData], (get) => {
-    if (get(topics.gsiData)!.gameState === Dota2GameState.GameInProgress) {
-        return new Fact(topics.inGame, true);
+engine.register("gsi/game_state", [topic.gsiData], (get) => {
+    if (get(topic.gsiData)!.gameState === Dota2GameState.GameInProgress) {
+        return new Fact(topic.inGame, true);
     } else {
-        return new Fact(topics.inGame, false);
+        return new Fact(topic.inGame, false);
     }
 });

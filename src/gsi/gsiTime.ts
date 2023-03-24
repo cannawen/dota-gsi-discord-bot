@@ -1,9 +1,9 @@
 import engine from "../customEngine";
 import { Fact } from "../Engine";
-import topics from "../topics";
+import topic from "../topic";
 
 engine.register(
     "gsi/time",
-    [topics.gsiData],
-    (get) => new Fact(topics.time, get(topics.gsiData)?.time)
+    [topic.gsiData],
+    (get) => new Fact(topic.time, get(topic.gsiData)?.time)
 );

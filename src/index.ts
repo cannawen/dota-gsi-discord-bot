@@ -17,9 +17,37 @@ import "./assistants/neutralItem";
 import "./effects/playAudio";
 import "./effects/playTts";
 
+// Discord
+import "./discord/registerDiscord";
+import "./discord/playAudioQueue";
+
 import engine from "./customEngine";
 import gsi = require("node-gsi");
 import log from "./log";
+
+const botSecretKey = process.env.DISCORD_CLIENT_TOKEN;
+if (botSecretKey) {
+    engine.setDiscordBotSecretKey(botSecretKey);
+} else {
+    log.error(
+        "discord",
+        "Unable to find bot secret key. Expected environment variable %s",
+        "DISCORD_CLIENT_TOKEN"
+    );
+}
+
+const discordGuildId = process.env.HARD_CODED_GUILD_ID;
+const discordChannelId = process.env.HARD_CODED_VOICE_CHANNEL_ID;
+if (discordGuildId && discordChannelId) {
+    engine.setDiscordBotGuildIdAndChannelId(discordGuildId, discordChannelId);
+} else {
+    log.error(
+        "discord",
+        "Unable to find bot channel or guild id. Expected environment variables %s and %s",
+        "HARD_CODED_GUILD_ID",
+        "HARD_CODED_VOICE_CHANNEL_ID"
+    );
+}
 
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);

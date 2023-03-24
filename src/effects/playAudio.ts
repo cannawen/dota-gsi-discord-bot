@@ -1,13 +1,16 @@
-import discord from "../discord";
 import engine from "../customEngine";
 import { Fact } from "../Engine";
 import path from "path";
-import topics from "../topics";
+import topic from "../topic";
 
-engine.register("effect/playAudio", [topics.playAudioFile], (get) => {
-    discord.playAudioFile(
-        path.join(__dirname, "../../audio/", get(topics.playAudioFile)!)
-    );
+engine.register("effect/playAudio", [topic.playAudioFile], (get) => {
+    const queue = [...(get(topic.discordAudioQueue) || [])];
+    const fileName = path.join(__dirname, "../../", get(topic.playAudioFile)!);
 
-    return new Fact(topics.playAudioFile, undefined);
+    queue.push(fileName);
+
+    return [
+        new Fact(topic.discordAudioQueue, queue),
+        new Fact(topic.playAudioFile, undefined),
+    ];
 });
