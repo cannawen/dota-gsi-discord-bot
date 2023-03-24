@@ -17,9 +17,22 @@ import "./assistants/neutralItem";
 import "./effects/playAudio";
 import "./effects/playTts";
 
+import "./discord/registerDiscord";
+
 import engine from "./customEngine";
 import gsi = require("node-gsi");
 import log from "./log";
+
+const botSecretKey = process.env.DISCORD_CLIENT_TOKEN;
+if (botSecretKey) {
+    engine.setDiscordBotSecretKey(botSecretKey);
+} else {
+    log.error(
+        "discord",
+        "Unable to find bot secret key. Expected environment variable %s",
+        "DISCORD_CLIENT_TOKEN"
+    );
+}
 
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
