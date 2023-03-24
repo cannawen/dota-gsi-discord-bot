@@ -7,7 +7,7 @@ import topics from "../topics";
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
 const TIME_BETWEEN_REMINDERS = 15;
 
-const lastNeutralReminderTimeTopic = new Topic<number | undefined>(
+const lastNeutralReminderTimeTopic = new Topic<number>(
     "lastNeutralReminderTimeTopic"
 );
 
@@ -60,9 +60,9 @@ engine.register(
     [topics.alive, topics.items, topics.time],
     (get) =>
         handleNeutralItem(
-            get(topics.alive),
-            get(topics.items),
+            get(topics.alive)!,
+            get(topics.items)!,
             get(lastNeutralReminderTimeTopic),
-            get(topics.time)
+            get(topics.time)!
         )
 );

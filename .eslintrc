@@ -247,7 +247,6 @@
             "warn",
             { "ignoreReadBeforeAssign": false, "destructuring": "any" }
         ],
-        "prefer-destructuring": ["warn", { "object": true, "array": false }],
         "prefer-numeric-literals": "warn",
         "prefer-rest-params": "warn",
         "prefer-spread": "warn",
