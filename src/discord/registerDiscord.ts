@@ -9,9 +9,14 @@ import Voice = require("@discordjs/voice");
 
 const discordClientTopic = new Topic<Discord.Client<true>>("discordClient");
 const discordGuildTopic = new Topic<Discord.Guild>("discordGuildTopic");
-const discordChannelTopic = new Topic<Discord.Channel>("discordChannelTopic");
+const discordChannelTopic = new Topic<Discord.GuildBasedChannel>(
+    "discordChannelTopic"
+);
+const discordSubscriptionTopic = new Topic<Voice.PlayerSubscription>(
+    "discordSubscriptionTopic"
+);
 
-const emColor = colors.blue;
+const emColor = colors.cyan;
 
 engine.register(
     "discord/register_bot_secret",
@@ -96,5 +101,70 @@ engine.register(
         );
 
         return new Fact(discordChannelTopic, channel);
+    }
+);
+
+engine.register(
+    "discord/create-establish-voice-subscription",
+    [discordChannelTopic],
+    (get) => {
+        const channel = get(discordChannelTopic)!;
+
+        const connection = Voice.joinVoiceChannel({
+            adapterCreator: channel.guild.voiceAdapterCreator,
+            channelId: channel.id,
+            guildId: channel.guild.id,
+        });
+        connection.on(Voice.VoiceConnectionStatus.Ready, () => {
+            log.info("discord", "VoiceConnection ready to play audio!".green);
+            engine.readyToPlayAudio(true);
+        });
+
+        const player = Voice.createAudioPlayer();
+        player.on("stateChange", (oldState, newState) => {
+            if (oldState.status !== newState.status) {
+                log.debug(
+                    "discord",
+                    "AudioPlayerState - transitioned from %s to %s",
+                    oldState.status,
+                    emColor(newState.status)
+                );
+            }
+            if (newState.status === Voice.AudioPlayerStatus.Idle) {
+                engine.readyToPlayAudio(true);
+            } else {
+                engine.readyToPlayAudio(false);
+            }
+        });
+
+        return [
+            new Fact(topics.discordReadyToPlayAudio, false),
+            new Fact(discordSubscriptionTopic, connection.subscribe(player)),
+        ];
+    }
+);
+
+engine.register(
+    "discord/play_next",
+    [
+        topics.discordReadyToPlayAudio,
+        topics.discordAudioQueue,
+        discordSubscriptionTopic,
+    ],
+    (get) => {
+        const ready = get(topics.discordReadyToPlayAudio)!;
+        const subscription = get(discordSubscriptionTopic)!;
+        const audioQueue = [...get(topics.discordAudioQueue)!];
+
+        if (ready && audioQueue.length > 0) {
+            const filePath = audioQueue.pop()!;
+            log.info("discord", "Playing %s", emColor(filePath));
+            const resource = Voice.createAudioResource(filePath);
+            subscription.player.play(resource);
+            return [
+                new Fact(topics.discordAudioQueue, audioQueue),
+                new Fact(topics.discordReadyToPlayAudio, false),
+            ];
+        }
     }
 );

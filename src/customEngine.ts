@@ -18,6 +18,10 @@ class CustomEngine extends Engine {
         this.set(new Fact(topics.discordGuildId, guildId));
         this.set(new Fact(topics.discordGuildChannelId, channelId));
     }
+
+    public readyToPlayAudio(ready: boolean) {
+        this.set(new Fact(topics.discordReadyToPlayAudio, ready));
+    }
 }
 
 const engine = new CustomEngine();

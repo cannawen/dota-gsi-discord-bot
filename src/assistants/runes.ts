@@ -17,6 +17,6 @@ engine.register("assistant/runes", [topics.inGame, topics.time], (get) => {
         (time % RIVER_RUNE_SPAWN_INTERVAL === 0 ||
             time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
     ) {
-        return new Fact(topics.playAudioFile, "rune-sound.mp3");
+        return new Fact(topics.playAudioFile, "audio/rune-sound.mp3");
     }
 });

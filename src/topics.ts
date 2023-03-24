@@ -24,6 +24,9 @@ const discord = {
     discordBotSecret: new Topic<string>("registerDiscordBotSecret"),
     discordGuildId: new Topic<string>("registerDiscordGuild"),
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
+
+    discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
+    discordAudioQueue: new Topic<string[]>("discordAudioQueue"),
 };
 
 /**
