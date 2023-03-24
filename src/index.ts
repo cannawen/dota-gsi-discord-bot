@@ -21,7 +21,7 @@ import engine from "./customEngine";
 import gsi = require("node-gsi");
 import log from "./log";
 
-const debug = false;
+const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 // TODO refactor time and gamestate to be under map and split up later
