@@ -4,8 +4,9 @@ import GsiData from "./gsi/GsiData";
 import topic from "./topic";
 
 class CustomEngine extends Engine {
-    public setGsi(data: GsiData) {
+    public setGsi(auth: string, data: GsiData) {
         this.set(new Fact(topic.gsiData, data));
+        this.set(new Fact(topic.gsiAuthToken, auth));
     }
 
     public setDiscordBotSecretKey(key: string) {

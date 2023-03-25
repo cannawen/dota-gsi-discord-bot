@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 import { DeepReadonly } from "ts-essentials";
 import Event from "./classes/data/Event";
 import GsiData from "./gsi/GsiData";
@@ -9,6 +10,8 @@ const gsiData = {
 };
 
 const gsi = {
+    gsiAuthToken: new Topic<string>("authToken"),
+
     alive: new Topic<boolean>("alive"),
     events: new Topic<DeepReadonly<Event[]>>("events"),
     inGame: new Topic<boolean>("inGame"),
@@ -25,9 +28,10 @@ const discord = {
     discordBotSecret: new Topic<string>("registerDiscordBotSecret"),
     discordGuildId: new Topic<string>("registerDiscordGuild"),
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
-
+    // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    // slash commands
     discordCoachMe: new Topic<string | undefined>("discordCoachMe"),
 };
 
