@@ -3,6 +3,9 @@ import dotenv = require("dotenv");
 import Command from "./Command";
 dotenv.config();
 
+// This file should be run every time the definitions of the slash commands change
+// `npm run discord-commands`
+
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(
     process.env.DISCORD_CLIENT_TOKEN!
