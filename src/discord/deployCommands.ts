@@ -7,6 +7,14 @@ const rest = new REST({ version: "10" }).setToken(
     process.env.DISCORD_CLIENT_TOKEN!
 );
 
+const configureCommand = new SlashCommandBuilder()
+    .setName("config")
+    .setDescription(
+        "Replies with your Dota 2 Game State Integration configuration file"
+    );
+
+const allCommands = [configureCommand];
+
 // and deploy your commands!
 (async () => {
     try {
@@ -15,16 +23,11 @@ const rest = new REST({ version: "10" }).setToken(
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
             Routes.applicationGuildCommands(
-                "761897641591701524",
+                "761897641591701524", // Application id
                 process.env.HARD_CODED_GUILD_ID!
             ),
             {
-                body: [
-                    new SlashCommandBuilder()
-                        .setName("ping")
-                        .setDescription("Replies with Pong!")
-                        .toJSON(),
-                ],
+                body: allCommands.map((cmd) => cmd.toJSON()),
             }
         );
 

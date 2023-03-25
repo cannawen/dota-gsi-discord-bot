@@ -1,7 +1,11 @@
+import fs from "fs";
 import gsi from "node-gsi";
-import items from "../../data/items.json";
+import path from "path";
 
-const itemNames = new Map(Object.entries(items));
+const items = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../../../data/items.json"), "utf8")
+);
+const itemNames = new Map<string, string>(Object.entries(items));
 
 export default class Item {
     id: string;

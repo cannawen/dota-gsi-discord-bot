@@ -1,4 +1,7 @@
-"dota-gsi-discord-bot Configuration"
+Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-coach.cfg`
+
+```
+"Dota 2 Coach Configuration"
 {
     "uri" "http://localhost:9001/gsi"
     "timeout" "5.0"
@@ -23,3 +26,4 @@
         "token" "your_auth_token"
     }
 }
+```
