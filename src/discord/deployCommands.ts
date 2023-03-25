@@ -1,5 +1,6 @@
 import { REST, Routes, SlashCommandBuilder } from "discord.js";
 import dotenv = require("dotenv");
+import Command from "./Command";
 dotenv.config();
 
 // Construct and prepare an instance of the REST module
@@ -8,7 +9,7 @@ const rest = new REST({ version: "10" }).setToken(
 );
 
 const configureCommand = new SlashCommandBuilder()
-    .setName("config")
+    .setName(Command.config)
     .setDescription(
         "Replies with your Dota 2 Game State Integration configuration file"
     );

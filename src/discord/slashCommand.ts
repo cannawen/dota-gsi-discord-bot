@@ -1,28 +1,21 @@
-import {
-    CacheType,
-    ChatInputCommandInteraction,
-    Events,
-    SlashCommandBuilder,
-} from "discord.js";
+import { CacheType, ChatInputCommandInteraction, Events } from "discord.js";
+import Command from "./Command";
 import engine from "../customEngine";
 import fs from "fs";
 import log from "../log";
 import path from "path";
 import topicDiscord from "./topicDiscord";
 
-const configureCommand = new SlashCommandBuilder()
-    .setName("config")
-    .setDescription(
-        "Replies with your Dota 2 Game State Integration configuration file"
-    );
-
 function generateConfigFile(userId: string) {
-    return fs
-        .readFileSync(
-            path.join(__dirname, "../../data/configInstructions.txt"),
-            "utf8"
-        )
-        .replace("your_auth_token", userId);
+    return (
+        fs
+            .readFileSync(
+                path.join(__dirname, "../../data/configInstructions.txt"),
+                "utf8"
+            )
+            // TODO use a hash of your userId as the auth token
+            .replace("your_auth_token", userId)
+    );
 }
 
 function handleConfigureInteraction(
@@ -58,7 +51,7 @@ engine.register(
         client.on(Events.InteractionCreate, (interaction) => {
             if (!interaction.isChatInputCommand()) return;
 
-            if (interaction.commandName === configureCommand.name) {
+            if (interaction.commandName === Command.config) {
                 handleConfigureInteraction(interaction);
             }
         });
