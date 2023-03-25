@@ -23,6 +23,10 @@ class CustomEngine extends Engine {
     public readyToPlayAudio(ready: boolean) {
         this.set(new Fact(topic.discordReadyToPlayAudio, ready));
     }
+
+    public slashCommand() {
+        this.set(new Fact(topic.discordSlashEvent, true));
+    }
 }
 
 const engine = new CustomEngine();

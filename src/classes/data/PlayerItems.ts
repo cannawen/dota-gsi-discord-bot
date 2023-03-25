@@ -1,3 +1,4 @@
+import { DeepReadonly } from "ts-essentials";
 import gsi from "node-gsi";
 import Item from "./Item";
 
@@ -19,7 +20,7 @@ export default class PlayerItems {
         this.teleport = teleport;
     }
 
-    static create(items: gsi.IItemContainer) {
+    static create(items: DeepReadonly<gsi.IItemContainer>) {
         return new PlayerItems(
             items.slot.map(Item.create),
             items.stash.map(Item.create),

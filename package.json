@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "rimraf ./build ./audio/tts-cache && tsc",
+        "discord-commands": "npm run build && node build/discord/deployCommands.js",
         "lint": "eslint . --ext .ts --fix",
         "format": "npx prettier --write .",
         "start:nobuild": "node build/index.js",

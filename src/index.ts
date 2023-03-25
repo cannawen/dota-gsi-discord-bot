@@ -20,6 +20,7 @@ import "./effects/playTts";
 // Discord
 import "./discord/registerDiscord";
 import "./discord/playAudioQueue";
+import "./discord/slashCommandBuilder";
 
 import engine from "./customEngine";
 import gsi = require("node-gsi");
