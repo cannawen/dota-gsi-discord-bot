@@ -24,8 +24,12 @@ class CustomEngine extends Engine {
         this.set(new Fact(topic.discordReadyToPlayAudio, ready));
     }
 
-    public slashCommand() {
-        this.set(new Fact(topic.discordSlashEvent, true));
+    public startCoachingSession(id: string) {
+        this.set(new Fact(topic.discordCoachMe, id));
+    }
+
+    public stopCoachingSession(_id: string) {
+        this.set(new Fact(topic.discordCoachMe, undefined));
     }
 }
 

@@ -8,13 +8,19 @@ const rest = new REST({ version: "10" }).setToken(
     process.env.DISCORD_CLIENT_TOKEN!
 );
 
-const configureCommand = new SlashCommandBuilder()
-    .setName(Command.config)
-    .setDescription(
-        "Replies with your Dota 2 Game State Integration configuration file"
-    );
-
-const allCommands = [configureCommand];
+const allCommands = [
+    new SlashCommandBuilder()
+        .setName(Command.config)
+        .setDescription(
+            "Replies with your Dota 2 Game State Integration configuration file"
+        ),
+    new SlashCommandBuilder()
+        .setName(Command.coachme)
+        .setDescription("Start coaching me"),
+    new SlashCommandBuilder()
+        .setName(Command.stop)
+        .setDescription("Stop coaching me"),
+];
 
 // and deploy your commands!
 (async () => {

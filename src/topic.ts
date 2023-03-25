@@ -28,7 +28,7 @@ const discord = {
 
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
-    discordSlashEvent: new Topic<boolean>("discordSlashEvent"),
+    discordCoachMe: new Topic<string | undefined>("discordCoachMe"),
 };
 
 /**

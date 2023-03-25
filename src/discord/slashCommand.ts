@@ -42,6 +42,18 @@ function handleConfigureInteraction(
         });
 }
 
+function handleCoachMeInteraction(
+    interaction: ChatInputCommandInteraction<CacheType>
+) {
+    engine.startCoachingSession(interaction.user.id);
+}
+
+function handleStopInteraction(
+    interaction: ChatInputCommandInteraction<CacheType>
+) {
+    engine.stopCoachingSession(interaction.user.id);
+}
+
 engine.register(
     "discord/slash_command_handler",
     [topicDiscord.client],
@@ -51,8 +63,28 @@ engine.register(
         client.on(Events.InteractionCreate, (interaction) => {
             if (!interaction.isChatInputCommand()) return;
 
-            if (interaction.commandName === Command.config) {
-                handleConfigureInteraction(interaction);
+            log.info(
+                "discord",
+                "Handling slash command interaction %s",
+                interaction.commandName
+            );
+            switch (interaction.commandName) {
+                case Command.config:
+                    handleConfigureInteraction(interaction);
+                    break;
+                case Command.coachme:
+                    handleCoachMeInteraction(interaction);
+                    break;
+                case Command.stop:
+                    handleStopInteraction(interaction);
+                    break;
+                default:
+                    log.error(
+                        "discord",
+                        "Unable to handle interaction %s",
+                        interaction.commandName
+                    );
+                    break;
             }
         });
     }
