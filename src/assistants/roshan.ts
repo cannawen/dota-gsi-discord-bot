@@ -1,4 +1,5 @@
 import Event, { EventType } from "../classes/data/Event";
+import { DeepReadonly } from "ts-essentials";
 import engine from "../customEngine";
 import Fact from "../classes/engine/Fact";
 import Topic from "../classes/engine/Topic";
@@ -10,7 +11,7 @@ const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
 const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");
 
-function roshanWasKilled(events: Event[]) {
+function roshanWasKilled(events: DeepReadonly<Event[]>) {
     return events.reduce(
         (memo, event) => event.type === EventType.RoshanKilled || memo,
         false

@@ -1,17 +1,18 @@
+import { DeepReadonly } from "ts-essentials";
 import Event from "./classes/data/Event";
 import GsiData from "./gsi/GsiData";
 import PlayerItems from "./classes/data/PlayerItems";
 import Topic from "./classes/engine/Topic";
 
 const gsiData = {
-    gsiData: new Topic<GsiData>("gsiData"),
+    gsiData: new Topic<DeepReadonly<GsiData>>("gsiData"),
 };
 
 const gsi = {
     alive: new Topic<boolean>("alive"),
-    events: new Topic<Event[]>("events"),
+    events: new Topic<DeepReadonly<Event[]>>("events"),
     inGame: new Topic<boolean>("inGame"),
-    items: new Topic<PlayerItems>("items"),
+    items: new Topic<DeepReadonly<PlayerItems>>("items"),
     time: new Topic<number>("time"),
 };
 
@@ -26,7 +27,7 @@ const discord = {
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
 
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
-    discordAudioQueue: new Topic<string[]>("discordAudioQueue"),
+    discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
 };
 
 /**

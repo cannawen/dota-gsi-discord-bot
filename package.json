@@ -43,6 +43,7 @@
         "eslint-plugin-no-loops": "^0.3.0",
         "nodemon": "^2.0.21",
         "rimraf": "^4.4.0",
+        "ts-essentials": "^9.3.1",
         "ts-jest": "^29.0.5",
         "ts-node": "^10.9.1",
         "ts-node-dev": "^2.0.0",

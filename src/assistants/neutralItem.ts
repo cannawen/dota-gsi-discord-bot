@@ -1,3 +1,4 @@
+import { DeepReadonly } from "ts-essentials";
 import engine from "../customEngine";
 import Fact from "../classes/engine/Fact";
 import Item from "../classes/data/Item";
@@ -31,7 +32,7 @@ function canCast(item: Item | null): boolean {
 
 function handleNeutralItem(
     alive: boolean,
-    items: PlayerItems,
+    items: DeepReadonly<PlayerItems>,
     lastReminderTime: number | undefined,
     time: number
 ): Fact<unknown>[] | Fact<unknown> | void {

@@ -24,8 +24,9 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   These three sections communicate via a single key-value database where a `Topic<T>` points to a `Fact<T>`
 -   A `Topic<T>` is the concept of a type of data (i.e. `Time is a number` or `AudioFile is a string`)
 -   A `Fact<T>` is the combination of a Topic and a concrete value (i.e. `Time is the number 5` or `AudioFile is the string foo.mp3`)
--   A module may register a rule with the `Engine` by telling it what topics it is interested in, and what code to execute when the database values of those topics change. If any topic's value is `undefined`, the rule will not be executed.
--   A module may read from the database and return new key-value pairs to store in the database.
+-   A module may register a rule with the `Engine` by telling it what topics it is interested in, and what code to execute when the values of those topics change. If any interested topics' values are `undefined`, the rule will not be executed.
+-   A module may get data from the engine and return new `Fact`s (or `Promise<Fact>`s) to store in the engine.
+-   Note: When a module gets data from the engine, it may mutate the data directly instead of returning a new key-value pair but this will bypass the rules of the engine and downstream rules will not be notified of the change. Suggested solution: store appropriate types as `DeeplyReadonly`. See issue #39
 
 Note: From the engine's perspective, there is no inherent requirement for the code to be separated into these three sections. It is currently just separated for logical reasons
 
