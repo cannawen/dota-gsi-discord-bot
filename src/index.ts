@@ -19,7 +19,7 @@ import "./effects/playTts";
 
 // Discord
 import "./discord/client";
-import "./discord/registerDiscord";
+import "./discord/startVoiceSubscription";
 import "./discord/playAudioQueue";
 
 import engine from "./customEngine";
@@ -44,6 +44,7 @@ server.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
 
 // If we are looking at a replay or as an observer,
 // run all logic on the items of one of the players only (from 0-9)
+// needs to be 6 for mitmproxy die-respawn-dig-dig_canna to run properly
 const playerId = 6;
 server.events.on(
     gsi.Dota2Event.Dota2ObserverState,
