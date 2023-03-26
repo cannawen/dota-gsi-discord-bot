@@ -3,7 +3,7 @@ Copy the configuration below and save it into `game/dota/cfg/gamestate_integrati
 ```
 "Dota 2 Coach Configuration"
 {
-    "uri" "http://localhost:9001/gsi"
+    "uri" "DOTA_SERVER_URL"
     "timeout" "5.0"
     "buffer" "0.5"
     "throttle" "0.5"

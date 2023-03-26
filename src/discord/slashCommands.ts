@@ -25,6 +25,10 @@ function generateConfigFile(userId: string) {
             path.join(__dirname, "../../data/configInstructions.txt"),
             "utf8"
         )
+        .replace(
+            /DOTA_SERVER_URL/,
+            process.env.SERVER_URL || "http://localhost:9001/gsi"
+        )
         .replace(/insert_student_id_here/g, userId);
 }
 
