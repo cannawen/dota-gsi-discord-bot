@@ -1,3 +1,4 @@
+import { DeepReadonly } from "ts-essentials";
 import fs from "fs";
 import gsi from "node-gsi";
 import path from "path";
@@ -18,7 +19,7 @@ export default class Item {
         this.cooldown = cooldown;
     }
 
-    static create(item: gsi.IItem | null) {
+    static create(item: DeepReadonly<gsi.IItem> | null) {
         if (item) {
             const name = itemNames.get(item.name);
             return new Item(item.name, name ? name : item.name, item.cooldown);
