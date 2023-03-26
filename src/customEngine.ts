@@ -1,22 +1,34 @@
 import Engine from "./classes/engine/Engine";
 import Fact from "./classes/engine/Fact";
+import FactStore from "./classes/engine/FactStore";
 import GsiData from "./gsi/GsiData";
 import topic from "./topic";
 
 class CustomEngine extends Engine {
-    public setGsi(studentId: string | null, data: GsiData) {
-        if (studentId && this.shouldCoachStudent(studentId)) {
-            // Make a new db here specifically for this student
-            this.set(new Fact(topic.gsiData, data));
+    private sessions: Map<string, FactStore> = new Map();
+
+    private withDb(
+        studentId: string | null,
+        effectFn: (db: FactStore) => void
+    ) {
+        if (studentId) {
+            const db = this.sessions.get(studentId);
+            if (db) {
+                effectFn(db);
+            }
         }
     }
 
-    public setDiscordBotSecretKey(key: string) {
-        this.set(new Fact(topic.discordBotSecret, key));
+    public setGsi(studentId: string | null, data: GsiData) {
+        this.withDb(studentId, (db) =>
+            this.set(db, new Fact(topic.gsiData, data))
+        );
     }
 
-    public readyToPlayAudio(ready: boolean) {
-        this.set(new Fact(topic.discordReadyToPlayAudio, ready));
+    public readyToPlayAudio(studentId: string, ready: boolean) {
+        this.withDb(studentId, (db) =>
+            this.set(db, new Fact(topic.discordReadyToPlayAudio, ready))
+        );
     }
 
     public startCoachingSession(
@@ -24,20 +36,16 @@ class CustomEngine extends Engine {
         guildId: string,
         channelId: string
     ) {
-        this.set(new Fact(topic.registerStudentId, studentId));
-        this.set(new Fact(topic.discordGuildId, guildId));
-        this.set(new Fact(topic.discordGuildChannelId, channelId));
+        this.sessions.set(studentId, new FactStore());
+        this.withDb(studentId, (db) => {
+            this.set(db, new Fact(topic.studentId, studentId));
+            this.set(db, new Fact(topic.discordGuildId, guildId));
+            this.set(db, new Fact(topic.discordGuildChannelId, channelId));
+        });
     }
 
     public stopCoachingSession(studentId: string) {
-        this.set(new Fact(topic.unregisterStudentId, studentId));
-    }
-
-    public shouldCoachStudent(studentId: string) {
-        return (
-            this.db.get(topic.currentlyCoachedStudentIds)?.has(studentId) ||
-            false
-        );
+        this.sessions.delete(studentId);
     }
 }
 

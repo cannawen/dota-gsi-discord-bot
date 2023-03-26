@@ -4,6 +4,7 @@ import Event from "./classes/data/Event";
 import GsiData from "./gsi/GsiData";
 import PlayerItems from "./classes/data/PlayerItems";
 import Topic from "./classes/engine/Topic";
+import Voice from "@discordjs/voice";
 
 const gsiData = {
     gsiData: new Topic<DeepReadonly<GsiData>>("gsiData"),
@@ -20,23 +21,16 @@ const gsi = {
 const effects = {
     playAudioFile: new Topic<string>("playAudioFile"),
     playTts: new Topic<string>("playTts"),
-
-    registerStudentId: new Topic<string>("registerStudent"),
-    unregisterStudentId: new Topic<string>("unregisterStudent"),
 };
 
 const discord = {
-    discordBotSecret: new Topic<string>("registerDiscordBotSecret"),
     discordGuildId: new Topic<string>("registerDiscordGuild"),
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
-};
-
-const appState = {
-    currentlyCoachedStudentIds: new Topic<DeepReadonly<Set<string>>>(
-        "currentlyCoachedStudentIds"
+    discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
+        "discordSubscriptionTopic"
     ),
 };
 
@@ -47,9 +41,9 @@ const appState = {
  * in which case it can be declared inside the module
  */
 export default {
+    studentId: new Topic<string>("studentId"),
     ...gsiData,
     ...effects,
     ...gsi,
     ...discord,
-    ...appState,
 };

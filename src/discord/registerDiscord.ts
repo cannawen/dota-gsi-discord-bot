@@ -1,95 +1,80 @@
+/* eslint-disable max-lines-per-function */
+/* eslint-disable max-statements */
+import client from "./client";
 import colors from "@colors/colors";
-import Discord from "discord.js";
 import engine from "../customEngine";
 import Fact from "../classes/engine/Fact";
 import log from "../log";
 import topic from "../topic";
-import topicDiscord from "./topicDiscord";
+import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 
 engine.register(
-    "discord/register_bot_secret",
-    [topic.discordBotSecret],
-    (get) =>
-        new Promise((resolve, reject) => {
-            const discordClient = new Discord.Client({
-                // eslint-disable-next-line no-magic-numbers
-                intents: [131071],
-            });
-
-            discordClient
-                .login(get(topic.discordBotSecret)!)
-                .catch((e: Discord.DiscordjsError) => {
-                    log.error(
-                        "discord",
-                        "Error logging into Discord. Check your .env file - %s",
-                        e.message
-                    );
-                    reject(e);
-                });
-
-            discordClient.on("ready", (client) => {
-                log.info(
-                    "discord",
-                    "Discord ready with user: %s",
-                    emColor(client.user.tag)
-                );
-                resolve(new Fact(topicDiscord.client, client));
-            });
-        })
-);
-
-engine.register(
     "discord/guild",
-    [topicDiscord.client, topic.discordGuildId],
+    [topic.discordGuildId, topic.discordGuildChannelId, topic.studentId],
     (get) => {
-        const client = get(topicDiscord.client)!;
         const guildId = get(topic.discordGuildId)!;
+        const channelId = get(topic.discordGuildChannelId)!;
+        const studentId = get(topic.studentId)!;
 
         const guild = client.guilds.cache.find((g) => g.id === guildId);
         if (!guild) {
-            log.error(
-                "discord",
-                "Unable to find guild with id %s. Check your .env file",
-                guildId
-            );
+            log.error("discord", "Unable to find guild with id %s.", guildId);
             return;
         }
-
-        log.info(
-            "discord",
-            "Discord ready with guild: %s",
-            emColor(guild.name)
-        );
-
-        return new Fact(topicDiscord.guild, guild);
-    }
-);
-
-engine.register(
-    "discord/guild_channel",
-    [topicDiscord.guild, topic.discordGuildChannelId],
-    (get) => {
-        const guild = get(topicDiscord.guild)!;
-        const channelId = get(topic.discordGuildChannelId)!;
 
         const channel = guild.channels.cache.find((c) => c.id === channelId);
         if (!channel) {
             log.error(
                 "discord",
-                "Unable to find channel with id %s. Check your .env file",
-                channelId
+                "Unable to find channel with id %s in guild %s",
+                channelId,
+                guild.name
             );
             return;
         }
 
         log.info(
             "discord",
-            "Discord ready with channel: %s",
+            "Discord ready with guild: %s channel: %s",
+            emColor(guild.name),
             emColor(channel.name)
         );
 
-        return new Fact(topicDiscord.channel, channel);
+        const connection = Voice.joinVoiceChannel({
+            adapterCreator: channel.guild.voiceAdapterCreator,
+            channelId: channel.id,
+            guildId: channel.guild.id,
+        });
+
+        connection.on(Voice.VoiceConnectionStatus.Ready, () => {
+            log.info("discord", "VoiceConnection ready to play audio!".green);
+            engine.readyToPlayAudio(studentId, true);
+        });
+
+        const player = Voice.createAudioPlayer();
+        player.on("stateChange", (oldState, newState) => {
+            if (oldState.status !== newState.status) {
+                log.debug(
+                    "discord",
+                    "AudioPlayerState - transitioned from %s to %s",
+                    oldState.status,
+                    emColor(newState.status)
+                );
+            }
+            if (newState.status === Voice.AudioPlayerStatus.Idle) {
+                engine.readyToPlayAudio(studentId, true);
+            } else {
+                engine.readyToPlayAudio(studentId, false);
+            }
+        });
+
+        const subscription = connection.subscribe(player);
+
+        return [
+            new Fact(topic.discordReadyToPlayAudio, false),
+            new Fact(topic.discordSubscriptionTopic, subscription),
+        ];
     }
 );

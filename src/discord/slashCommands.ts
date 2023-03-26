@@ -1,11 +1,9 @@
-import { CacheType, ChatInputCommandInteraction, Events } from "discord.js";
-import Command from "./Command";
+import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
 import log from "../log";
 import path from "path";
-import topicDiscord from "./topicDiscord";
 
 function hashStudentId(userId: string) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
@@ -30,9 +28,7 @@ function generateConfigFile(userId: string) {
         .replace(/insert_student_id_here/g, userId);
 }
 
-function handleConfigureInteraction(
-    interaction: ChatInputCommandInteraction<CacheType>
-) {
+function handleConfig(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction
         .reply({
             content: generateConfigFile(hashStudentId(interaction.user.id)),
@@ -54,9 +50,7 @@ function handleConfigureInteraction(
         });
 }
 
-function handleCoachMeInteraction(
-    interaction: ChatInputCommandInteraction<CacheType>
-) {
+function handleCoachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     if (interaction.channel?.isVoiceBased && interaction.guildId) {
         engine.startCoachingSession(
             hashStudentId(interaction.user.id),
@@ -76,48 +70,17 @@ function handleCoachMeInteraction(
     }
 }
 
-function handleStopInteraction(
-    interaction: ChatInputCommandInteraction<CacheType>
-) {
+function handleStop(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
         content: "Ending...",
         ephemeral: true,
     });
+    // TODO have bot leave the channel
     engine.stopCoachingSession(hashStudentId(interaction.user.id));
 }
 
-engine.register(
-    "discord/slash_command_handler",
-    [topicDiscord.client],
-    (get) => {
-        const client = get(topicDiscord.client)!;
-
-        client.on(Events.InteractionCreate, (interaction) => {
-            if (!interaction.isChatInputCommand()) return;
-
-            log.info(
-                "discord",
-                "Handling slash command interaction %s",
-                interaction.commandName
-            );
-            switch (interaction.commandName) {
-                case Command.config:
-                    handleConfigureInteraction(interaction);
-                    break;
-                case Command.coachme:
-                    handleCoachMeInteraction(interaction);
-                    break;
-                case Command.stop:
-                    handleStopInteraction(interaction);
-                    break;
-                default:
-                    log.error(
-                        "discord",
-                        "Unable to handle interaction %s",
-                        interaction.commandName
-                    );
-                    break;
-            }
-        });
-    }
-);
+export default {
+    handleConfig,
+    handleCoachMe,
+    handleStop,
+};
