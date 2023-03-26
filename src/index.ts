@@ -61,4 +61,4 @@ server.events.on(
 
 log.info("gsi", "Starting GSI server on port 9001");
 // eslint-disable-next-line no-magic-numbers
-server.listen(9001);
+server.listen(Number(process.env.PORT) || 9001);
