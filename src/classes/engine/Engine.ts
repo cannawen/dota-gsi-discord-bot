@@ -3,6 +3,7 @@
 import colors from "@colors/colors";
 import deepEqual from "deep-equal";
 import Fact from "./Fact";
+import FactStore from "./FactStore";
 import log from "../../log";
 import Topic from "./Topic";
 
@@ -15,26 +16,6 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
     }
     return false;
 };
-
-class FactStore {
-    private facts = new Map<Topic<unknown>, Fact<unknown>>();
-
-    public get = <T>(topic: Topic<T>): T | undefined => {
-        const fact = this.facts.get(topic);
-        if (fact && fact.value !== undefined) {
-            // Casting to T is safe here because when it is set,
-            // The fact's topic is used as a key
-            return fact.value as T;
-        } else {
-            log.debug("rules", "No value for fact %s", topic.label.yellow);
-            return undefined;
-        }
-    };
-
-    public set = (fact: Fact<unknown>) => {
-        this.facts.set(fact.topic, fact);
-    };
-}
 
 type getFn = <T>(topic: Topic<T>) => T | undefined;
 
@@ -60,7 +41,6 @@ const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
 
 class Engine {
     private rules: Rule[] = [];
-    private db = new FactStore();
 
     public register = (
         label: Rule["label"],
@@ -81,11 +61,11 @@ class Engine {
     // This is because our app's only dynamic input is from GSI data
     // and any other database change must be triggered by that.
     // This will change in the future from discord interactions
-    protected set = (newFact: Fact<unknown>) => {
+    protected set = (db: FactStore, newFact: Fact<unknown>) => {
         const changedTopics = new Set<Topic<unknown>>();
 
         const topic = newFact.topic;
-        const oldValue = this.db.get(topic);
+        const oldValue = db.get(topic);
         const newValue = newFact.value;
 
         if (!deepEqual(oldValue, newValue)) {
@@ -105,7 +85,7 @@ class Engine {
                 );
             }
             changedTopics.add(topic);
-            this.db.set(newFact);
+            db.set(newFact);
         }
 
         this.rules.forEach((rule) => {
@@ -115,10 +95,10 @@ class Engine {
             // But it will not be propogated downstream
             if (
                 doesIntersect(changedTopics, rule.given) &&
-                topicsAllDefined(rule.given, this.db)
+                topicsAllDefined(rule.given, db)
             ) {
                 // Process the rule
-                const out = rule.then((topic) => this.db.get(topic));
+                const out = rule.then((topic) => db.get(topic));
                 if (!out) {
                     return;
                 }
@@ -130,11 +110,11 @@ class Engine {
                     if (factOrFactPromise instanceof Promise) {
                         factOrFactPromise.then((fact) => {
                             if (fact) {
-                                this.set(fact);
+                                this.set(db, fact);
                             }
                         });
                     } else {
-                        this.set(factOrFactPromise);
+                        this.set(db, factOrFactPromise);
                     }
                 });
                 log.debug("rules", "End rule  \t%s", rule.label);

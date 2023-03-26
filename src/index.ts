@@ -18,64 +18,45 @@ import "./effects/playAudio";
 import "./effects/playTts";
 
 // Discord
-import "./discord/registerDiscord";
+import "./discord/client";
+import "./discord/startVoiceSubscription";
 import "./discord/playAudioQueue";
 
 import engine from "./customEngine";
 import gsi = require("node-gsi");
 import log from "./log";
 
-const botSecretKey = process.env.DISCORD_CLIENT_TOKEN;
-if (botSecretKey) {
-    engine.setDiscordBotSecretKey(botSecretKey);
-} else {
-    log.error(
-        "discord",
-        "Unable to find bot secret key. Expected environment variable %s",
-        "DISCORD_CLIENT_TOKEN"
-    );
-}
-
-const discordGuildId = process.env.HARD_CODED_GUILD_ID;
-const discordChannelId = process.env.HARD_CODED_VOICE_CHANNEL_ID;
-if (discordGuildId && discordChannelId) {
-    engine.setDiscordBotGuildIdAndChannelId(discordGuildId, discordChannelId);
-} else {
-    log.error(
-        "discord",
-        "Unable to find bot channel or guild id. Expected environment variables %s and %s",
-        "HARD_CODED_GUILD_ID",
-        "HARD_CODED_VOICE_CHANNEL_ID"
-    );
-}
-
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
 
 // TODO refactor time and gamestate to be under map and split up later
-server.events.on(gsi.Dota2Event.Dota2State, (gsiData: gsi.IDota2StateEvent) =>
-    engine.setGsi({
-        events: gsiData.state.events,
-        gameState: gsiData.state.map?.gameState,
-        hero: gsiData.state.hero,
-        items: gsiData.state.items,
-        time: gsiData.state.map?.clockTime,
-    })
-);
+server.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
+    // Check to see if we care about this auth token before sending info to the engine
+    // See if it matches topic.discordCoachMe and is not undefined
+    engine.setGsi(data.auth, {
+        events: data.state.events,
+        gameState: data.state.map?.gameState,
+        hero: data.state.hero,
+        items: data.state.items,
+        time: data.state.map?.clockTime,
+    });
+});
 
 // If we are looking at a replay or as an observer,
 // run all logic on the items of one of the players only (from 0-9)
+// needs to be 6 for mitmproxy die-respawn-dig-dig_canna to run properly
 const playerId = 6;
 server.events.on(
     gsi.Dota2Event.Dota2ObserverState,
-    (gsiData: gsi.IDota2ObserverStateEvent) =>
-        engine.setGsi({
-            events: gsiData.state.events,
-            gameState: gsiData.state.map?.gameState,
-            hero: gsiData.state.hero?.at(playerId),
-            items: gsiData.state.items?.at(playerId),
-            time: gsiData.state.map?.clockTime,
-        })
+    (data: gsi.IDota2ObserverStateEvent) => {
+        engine.setGsi(data.auth, {
+            events: data.state.events,
+            gameState: data.state.map?.gameState,
+            hero: data.state.hero?.at(playerId),
+            items: data.state.items?.at(playerId),
+            time: data.state.map?.clockTime,
+        });
+    }
 );
 
 log.info("gsi", "Starting GSI server on port 9001");

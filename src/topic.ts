@@ -1,8 +1,10 @@
+/* eslint-disable sort-keys */
 import { DeepReadonly } from "ts-essentials";
 import Event from "./classes/data/Event";
 import GsiData from "./gsi/GsiData";
 import PlayerItems from "./classes/data/PlayerItems";
 import Topic from "./classes/engine/Topic";
+import Voice from "@discordjs/voice";
 
 const gsiData = {
     gsiData: new Topic<DeepReadonly<GsiData>>("gsiData"),
@@ -22,12 +24,14 @@ const effects = {
 };
 
 const discord = {
-    discordBotSecret: new Topic<string>("registerDiscordBotSecret"),
     discordGuildId: new Topic<string>("registerDiscordGuild"),
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
-
+    // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
-    discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
+        "discordSubscriptionTopic"
+    ),
 };
 
 /**
@@ -37,6 +41,7 @@ const discord = {
  * in which case it can be declared inside the module
  */
 export default {
+    studentId: new Topic<string>("studentId"),
     ...gsiData,
     ...effects,
     ...gsi,
