@@ -14,7 +14,7 @@ function generateConfigFile(userId: string) {
                 "utf8"
             )
             // TODO use a hash of your userId as the auth token
-            .replace("your_auth_token", userId)
+            .replace(/insert_discord_id_here/g, userId)
     );
 }
 
@@ -45,12 +45,32 @@ function handleConfigureInteraction(
 function handleCoachMeInteraction(
     interaction: ChatInputCommandInteraction<CacheType>
 ) {
-    engine.startCoachingSession(interaction.user.id);
+    if (interaction.channel?.isVoiceBased && interaction.guildId) {
+        engine.startCoachingSession(
+            interaction.user.id,
+            interaction.guildId,
+            interaction.channelId
+        );
+        interaction.reply({
+            content:
+                "Starting...\n\nMake sure you have used the config command to add the Game State Integration configuration file to your computer",
+            ephemeral: true,
+        });
+    } else {
+        interaction.reply({
+            content: "Bot must be started in voice-based guild channel",
+            ephemeral: true,
+        });
+    }
 }
 
 function handleStopInteraction(
     interaction: ChatInputCommandInteraction<CacheType>
 ) {
+    interaction.reply({
+        content: "Ending...",
+        ephemeral: true,
+    });
     engine.stopCoachingSession(interaction.user.id);
 }
 

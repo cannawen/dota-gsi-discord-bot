@@ -34,7 +34,7 @@ const allCommands = [
         const data = await rest.put(
             Routes.applicationGuildCommands(
                 "761897641591701524", // Application id
-                process.env.HARD_CODED_GUILD_ID!
+                "761903068127428649" // Hard coded guild id
             ),
             {
                 body: allCommands.map((cmd) => cmd.toJSON()),

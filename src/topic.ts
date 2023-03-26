@@ -10,8 +10,6 @@ const gsiData = {
 };
 
 const gsi = {
-    gsiAuthToken: new Topic<string>("authToken"),
-
     alive: new Topic<boolean>("alive"),
     events: new Topic<DeepReadonly<Event[]>>("events"),
     inGame: new Topic<boolean>("inGame"),
@@ -22,6 +20,9 @@ const gsi = {
 const effects = {
     playAudioFile: new Topic<string>("playAudioFile"),
     playTts: new Topic<string>("playTts"),
+
+    registerStudentId: new Topic<string>("registerStudent"),
+    unregisterStudentId: new Topic<string>("unregisterStudent"),
 };
 
 const discord = {
@@ -31,8 +32,12 @@ const discord = {
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
-    // slash commands
-    discordCoachMe: new Topic<string | undefined>("discordCoachMe"),
+};
+
+const appState = {
+    currentlyCoachedStudentIds: new Topic<DeepReadonly<Set<string>>>(
+        "currentlyCoachedStudentIds"
+    ),
 };
 
 /**
@@ -46,4 +51,5 @@ export default {
     ...effects,
     ...gsi,
     ...discord,
+    ...appState,
 };

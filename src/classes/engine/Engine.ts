@@ -60,7 +60,7 @@ const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
 
 class Engine {
     private rules: Rule[] = [];
-    private db = new FactStore();
+    protected db = new FactStore();
 
     public register = (
         label: Rule["label"],
