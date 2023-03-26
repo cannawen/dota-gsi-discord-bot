@@ -1,0 +1,7 @@
+# fly.toml file generated for dota-coach on 2023-03-26T19:13:54-04:00
+
+app = "dota-coach"
+primary_region = "yyz"
+
+[env]
+  PORT = "8080"
