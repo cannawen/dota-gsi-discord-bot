@@ -13,8 +13,6 @@
         "start:dev": "npx nodemon",
         "test": "jest",
         "test:dev": "jest --watchAll",
-        "dig": "mitmdump -C mitmproxy-flows/dead-respawn-dig-shovel",
-        "rosh": "mitmdump -C mitmproxy-flows/rosh/rosh_fallen_1095 && mitmdump -C mitmproxy-flows/rosh/rosh_maybe && mitmdump -C mitmproxy-flows/rosh/rosh_up",
         "water-rune": "mitmdump -C mitmproxy-flows/water_runes"
     },
     "author": "",
