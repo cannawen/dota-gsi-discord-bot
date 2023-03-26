@@ -54,15 +54,11 @@ engine.register(
 
 engine.register(
     "discord/play_next",
-    [
-        topic.discordReadyToPlayAudio,
-        topic.discordAudioQueue,
-        discordSubscriptionTopic,
-    ],
+    [topic.discordReadyToPlayAudio, topic.audioQueue, discordSubscriptionTopic],
     (get) => {
         const ready = get(topic.discordReadyToPlayAudio)!;
         const subscription = get(discordSubscriptionTopic)!;
-        const audioQueue = [...get(topic.discordAudioQueue)!];
+        const audioQueue = [...get(topic.audioQueue)!];
 
         if (ready && audioQueue.length > 0) {
             const filePath = audioQueue.pop()!;
@@ -70,7 +66,7 @@ engine.register(
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return [
-                new Fact(topic.discordAudioQueue, audioQueue),
+                new Fact(topic.audioQueue, audioQueue),
                 new Fact(topic.discordReadyToPlayAudio, false),
             ];
         }

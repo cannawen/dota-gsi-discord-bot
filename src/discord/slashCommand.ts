@@ -1,21 +1,33 @@
 import { CacheType, ChatInputCommandInteraction, Events } from "discord.js";
 import Command from "./Command";
+import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
 import log from "../log";
 import path from "path";
 import topicDiscord from "./topicDiscord";
 
+function hashStudentId(userId: string) {
+    const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
+    if (key) {
+        return CryptoJS.HmacSHA256(userId, key).toString();
+    } else {
+        log.error(
+            "discord",
+            "Unable to find %s environment variable, so continuing without hashing. Check your .env file",
+            "STUDENT_ID_HASH_PRIVATE_KEY"
+        );
+        return userId;
+    }
+}
+
 function generateConfigFile(userId: string) {
-    return (
-        fs
-            .readFileSync(
-                path.join(__dirname, "../../data/configInstructions.txt"),
-                "utf8"
-            )
-            // TODO use a hash of your userId as the auth token
-            .replace(/insert_discord_id_here/g, userId)
-    );
+    return fs
+        .readFileSync(
+            path.join(__dirname, "../../data/configInstructions.txt"),
+            "utf8"
+        )
+        .replace(/insert_student_id_here/g, userId);
 }
 
 function handleConfigureInteraction(
@@ -23,7 +35,7 @@ function handleConfigureInteraction(
 ) {
     interaction
         .reply({
-            content: generateConfigFile(interaction.user.id),
+            content: generateConfigFile(hashStudentId(interaction.user.id)),
             ephemeral: true,
         })
         .catch((e) => {
@@ -47,7 +59,7 @@ function handleCoachMeInteraction(
 ) {
     if (interaction.channel?.isVoiceBased && interaction.guildId) {
         engine.startCoachingSession(
-            interaction.user.id,
+            hashStudentId(interaction.user.id),
             interaction.guildId,
             interaction.channelId
         );
@@ -71,7 +83,7 @@ function handleStopInteraction(
         content: "Ending...",
         ephemeral: true,
     });
-    engine.stopCoachingSession(interaction.user.id);
+    engine.stopCoachingSession(hashStudentId(interaction.user.id));
 }
 
 engine.register(

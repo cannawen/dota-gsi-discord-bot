@@ -31,7 +31,7 @@ const discord = {
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
-    discordAudioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
 };
 
 const appState = {
