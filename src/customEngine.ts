@@ -55,9 +55,11 @@ class CustomEngine extends Engine {
                 studentId
             );
         });
+    }
 
-        this.sessions.delete(studentId);
+    public lostVoiceConnection(studentId: string) {
         log.info("rules", "Deleting database for student %s", studentId);
+        this.sessions.delete(studentId);
     }
 }
 

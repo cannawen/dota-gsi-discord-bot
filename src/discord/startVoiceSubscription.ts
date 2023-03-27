@@ -49,8 +49,21 @@ engine.register(
         });
 
         connection.on(Voice.VoiceConnectionStatus.Ready, () => {
-            log.info("discord", "VoiceConnection ready to play audio!".green);
+            log.info(
+                "discord",
+                "VoiceConnection ready to play audio for student %s!".green,
+                studentId
+            );
             engine.readyToPlayAudio(studentId, true);
+        });
+
+        connection.on(Voice.VoiceConnectionStatus.Destroyed, () => {
+            log.info(
+                "discord",
+                "VoiceConnection destroyed for student %s",
+                emColor(studentId)
+            );
+            engine.lostVoiceConnection(studentId);
         });
 
         const player = Voice.createAudioPlayer();
