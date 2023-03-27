@@ -1,5 +1,4 @@
 import axios from "axios";
-import engine from "../customEngine";
 import Fact from "../engine/Fact";
 import fs = require("fs");
 import log from "../log";
@@ -59,9 +58,7 @@ function createTtsFile(ttsString: string) {
     }
 }
 
-engine.register(
-    new Rule("effect/playTts", [topic.playTts], (get) => [
-        new Fact(topic.playTts, undefined),
-        createTtsFile(get(topic.playTts)!),
-    ])
-);
+export default new Rule("effect/playTts", [topic.playTts], (get) => [
+    new Fact(topic.playTts, undefined),
+    createTtsFile(get(topic.playTts)!),
+]);

@@ -58,16 +58,14 @@ function handleNeutralItem(
     }
 }
 
-engine.register(
-    new Rule(
-        "assistant/neutral_item",
-        [topic.alive, topic.items, topic.time],
-        (get) =>
-            handleNeutralItem(
-                get(topic.alive)!,
-                get(topic.items)!,
-                get(lastNeutralReminderTimeTopic),
-                get(topic.time)!
-            )
-    )
+export default new Rule(
+    "assistant/neutral_item",
+    [topic.alive, topic.items, topic.time],
+    (get) =>
+        handleNeutralItem(
+            get(topic.alive)!,
+            get(topic.items)!,
+            get(lastNeutralReminderTimeTopic),
+            get(topic.time)!
+        )
 );

@@ -8,6 +8,7 @@ import fs from "fs";
 import gsi = require("node-gsi");
 import log from "./log";
 import path = require("path");
+import Rule from "./engine/Rule";
 
 dotenv.config();
 
@@ -17,7 +18,16 @@ function importAll(directory: string) {
         // .js and not .ts because it gets transpiled in /build directory
         .filter((file) => file.endsWith(".js"))
         .map((file) => path.join(dirPath, file))
-        .forEach((filePath) => require(filePath));
+        .map((filePath) => require(filePath))
+        // register modules that return a `Rule` or array of `Rule`s
+        .forEach((module) => {
+            const rulesArray = Array.isArray(module.default)
+                ? module.default
+                : [module.default];
+            rulesArray
+                .filter((m: unknown) => m instanceof Rule)
+                .forEach((rule: Rule) => engine.register(rule));
+        });
 }
 
 importAll("assistants");

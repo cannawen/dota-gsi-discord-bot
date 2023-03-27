@@ -20,7 +20,7 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
         false
     );
 
-engine.register(
+export default [
     new Rule("gsi/events/new", [topic.gsiData], (get) => {
         // Events from gsi server last for about 10 seconds
         // But we want to debounce events for our app
@@ -45,14 +45,12 @@ engine.register(
                 return new Fact(topic.events, undefined);
             }
         }
-    })
-);
+    }),
 
-// If we are no longer in a game, reset all events
-engine.register(
+    // If we are no longer in a game, reset all events
     new Rule("gsi/events/reset_all", [topic.inGame], (get) => {
         if (!get(topic.inGame)) {
             return new Fact(allEventsTopic, undefined);
         }
-    })
-);
+    }),
+];

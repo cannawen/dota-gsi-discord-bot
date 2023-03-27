@@ -1,6 +1,5 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
-import engine from "../customEngine";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import Topic from "../engine/Topic";
@@ -19,10 +18,10 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
     );
 }
 
-// When an event notifies us that roshan is killed
-// Set roshan maybe time to 8 minutes from now
-// Set roshan alibe time to 11 minutes from now
-engine.register(
+export default [
+    // When an event notifies us that roshan is killed
+    // Set roshan maybe time to 8 minutes from now
+    // Set roshan alibe time to 11 minutes from now
     new Rule(
         "assistant/roshan/killed_event/set_future_audio_state",
         [topic.time, topic.events],
@@ -41,12 +40,10 @@ engine.register(
                 ];
             }
         }
-    )
-);
+    ),
 
-// When the game time matches when roshan might be alive
-// Play audio and reset roshan maybe alive time state
-engine.register(
+    // When the game time matches when roshan might be alive
+    // Play audio and reset roshan maybe alive time state
     new Rule(
         "assistant/roshan/maybe_alive_time/play_audio",
         [topic.time, roshanMaybeTimeTopic],
@@ -58,12 +55,10 @@ engine.register(
                 ];
             }
         }
-    )
-);
+    ),
 
-// When the game time matches when roshan should be alive
-// Play audio and reset roshan alive time state
-engine.register(
+    // When the game time matches when roshan should be alive
+    // Play audio and reset roshan alive time state
     new Rule(
         "assistant/roshan/alive_time/play_audio",
         [topic.time, roshanAliveTimeTopic],
@@ -75,11 +70,9 @@ engine.register(
                 ];
             }
         }
-    )
-);
+    ),
 
-// When we are no longer in a game, reset all our roshan timers
-engine.register(
+    // When we are no longer in a game, reset all our roshan timers
     new Rule("assistant/roshan/reset", [topic.inGame], (get) => {
         if (!get(topic.inGame)) {
             return [
@@ -87,5 +80,5 @@ engine.register(
                 new Fact(roshanMaybeTimeTopic, undefined),
             ];
         }
-    })
-);
+    }),
+];
