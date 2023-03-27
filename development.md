@@ -1,16 +1,29 @@
 # Development
 
+-   Make sure your `node --version` is at least v18.15.0
+-   `npm install`
+-   `npm run build`
+-   `npm start`
 -   `npm run start:dev` or `npm run test:dev` for hot reloading
--   `npm run lint` to identify & fix linting issues
--   When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version, use `npm update`
 
 ## Node and Typescript
 
 When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `build` directory
 
-## Discord
+## Dependencies
 
--   Discord / commands are to to be registered separately. Run `npm run discord-commands` to update commands
+### node-gsi
+
+-   When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version, use `npm update`
+
+### Discord
+
+-   Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
+-   Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
+-   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs
+-   Create a `.env` file by copying `sample.env` and add your bot secret key to `DISCORD_CLIENT_TOKEN`
+-   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY`
+-   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
 -   (See here for details)[https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration]
 
 ## Logging
@@ -43,6 +56,7 @@ Goal: to develop the app without having dota open
 -   add new gsi configuration to point to mitmproxy at "http://localhost:8080/gsi" (instead of port 9001)
 -   run mitmproxy (instructions below)
 -   mitmproxy will capture all network calls from gsi and pass it through to our app, and we can save the network calls to replay in the future.
+-   You may need to change the token stored in the files to have it send to your discord user
 
 ### run proxy behind the scenes
 
@@ -64,6 +78,7 @@ see `mitmproxy-flows` folders for currently saved flows
 
 ## Code Formatting
 
+-   `npm run lint` and `npm run format` to identify & fix linting issues
 -   Using many `eslint` rules [(src 1)](https://eslint.org/docs/latest/rules/) [(src 2)](https://eslint-config.netlify.app/rules/yield-star-spacing)
 -   Add to Visual Studio Code `settings.json` to auto-format [(src)](https://daveceddia.com/vscode-use-eslintrc/#:~:text=Configure%20VSCode%20Settings%20to%20use%20ESLint%20for%20Formatting&text=Click%20that%20tiny%20icon%20in,paper%20with%20a%20little%20arrow.&text=The%20first%20one%20turns%20on,it%2C%20we're%20done.)
 

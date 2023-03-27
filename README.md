@@ -2,32 +2,17 @@
 
 Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (rune spawning, stack timing, etc.). Guaranteed to raise your MMR by 3154 or your money back!
 
-## Start application
+## Using the bot
 
--   Make sure your `node --version` is at least v18.15.0
--   `npm install`
--   `npm start`
+-   [Add the bot to your server](https://discord.com/api/oauth2/authorize?client_id=761897641591701524&permissions=36701184&scope=bot) (you must have admin privileges or share this link with an admin)
+-   Go to a Voice channel and type `/config`
+-   Go to Steam Library -> Right click Dota 2 -> Properties -> Local Files -> Browse... make a folder `game/dota/cfg/gamestate_integration/` and copy/paste a text file `gamestate_integration_dota2-*.cfg` (from above) into it
+-   Steam Library -> Right click Dota 2 -> Properties -> General -> Launch Options -> Add `-gamestateintegration` to launch options
+-   Type /coachme in the voice channel or /stop
 
 ### Development
 
 [See here for details](./development.md)
-
-## Dependencies
-
-### Dota 2 Game State Integration
-
-Steam Library -> Right click Dota 2 -> Properties
-
--   -> General -> Launch Options -> Add `-gamestateintegration` to launch options
--   -> Local Files -> Browse... mkdir `game/dota/cfg/gamestate_integration/` and copy/paste `gamestate_integration_dota2-*.cfg` file into it
-
-### Discord
-
--   Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
--   Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
--   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498)
--   Create a `.env` file with from copying `sample.env` and add your bot secret key to `DISCORD_CLIENT_TOKEN`
--   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY`
 
 ## Product Management
 
