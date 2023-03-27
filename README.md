@@ -12,7 +12,8 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 
 ### Development
 
-[See here for details](./development.md)
+-   The exciting part of the app that actually does stuff is in `/src/assistants`
+-   [See here for details](./development.md)
 
 ## Product Management
 
