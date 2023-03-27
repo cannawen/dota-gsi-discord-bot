@@ -3,6 +3,7 @@ import engine from "../customEngine";
 import Fact from "../classes/engine/Fact";
 import Item from "../classes/data/Item";
 import PlayerItems from "../classes/data/PlayerItems";
+import Rule from "../classes/engine/Rule";
 import Topic from "../classes/engine/Topic";
 import topic from "../topic";
 
@@ -58,13 +59,15 @@ function handleNeutralItem(
 }
 
 engine.register(
-    "assistant/neutral_item",
-    [topic.alive, topic.items, topic.time],
-    (get) =>
-        handleNeutralItem(
-            get(topic.alive)!,
-            get(topic.items)!,
-            get(lastNeutralReminderTimeTopic),
-            get(topic.time)!
-        )
+    new Rule(
+        "assistant/neutral_item",
+        [topic.alive, topic.items, topic.time],
+        (get) =>
+            handleNeutralItem(
+                get(topic.alive)!,
+                get(topic.items)!,
+                get(lastNeutralReminderTimeTopic),
+                get(topic.time)!
+            )
+    )
 );

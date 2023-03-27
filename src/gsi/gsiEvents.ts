@@ -2,6 +2,7 @@ import deepEqual from "deep-equal";
 import engine from "../customEngine";
 import Event from "../classes/data/Event";
 import Fact from "../classes/engine/Fact";
+import Rule from "../classes/engine/Rule";
 import Topic from "../classes/engine/Topic";
 import topic from "../topic";
 
@@ -19,35 +20,39 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
         false
     );
 
-engine.register("gsi/events/new", [topic.gsiData], (get) => {
-    // Events from gsi server last for about 10 seconds
-    // But we want to debounce events for our app
-    // And only send unique events downstream
-    const events = get(topic.gsiData)?.events;
-    if (events && events.length > 0) {
-        const allEvents = get(allEventsTopic) || [];
-        // Filter GSI events for new events we have never seen before
-        const newEvents = events
-            .map(Event.create)
-            .filter((event) => neverSeenBefore(allEvents, event));
+engine.register(
+    new Rule("gsi/events/new", [topic.gsiData], (get) => {
+        // Events from gsi server last for about 10 seconds
+        // But we want to debounce events for our app
+        // And only send unique events downstream
+        const events = get(topic.gsiData)?.events;
+        if (events && events.length > 0) {
+            const allEvents = get(allEventsTopic) || [];
+            // Filter GSI events for new events we have never seen before
+            const newEvents = events
+                .map(Event.create)
+                .filter((event) => neverSeenBefore(allEvents, event));
 
-        // If there is a new event we have not seen before
-        if (newEvents.length > 0) {
-            // Add it to allEventsTopic and return it as a new topics.event
-            return [
-                new Fact(allEventsTopic, allEvents.concat(newEvents)),
-                new Fact(topic.events, newEvents),
-            ];
-        } else {
-            // Reset topics.event
-            return new Fact(topic.events, undefined);
+            // If there is a new event we have not seen before
+            if (newEvents.length > 0) {
+                // Add it to allEventsTopic and return it as a new topics.event
+                return [
+                    new Fact(allEventsTopic, allEvents.concat(newEvents)),
+                    new Fact(topic.events, newEvents),
+                ];
+            } else {
+                // Reset topics.event
+                return new Fact(topic.events, undefined);
+            }
         }
-    }
-});
+    })
+);
 
 // If we are no longer in a game, reset all events
-engine.register("gsi/events/reset_all", [topic.inGame], (get) => {
-    if (!get(topic.inGame)) {
-        return new Fact(allEventsTopic, undefined);
-    }
-});
+engine.register(
+    new Rule("gsi/events/reset_all", [topic.inGame], (get) => {
+        if (!get(topic.inGame)) {
+            return new Fact(allEventsTopic, undefined);
+        }
+    })
+);

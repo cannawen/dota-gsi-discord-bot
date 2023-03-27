@@ -4,6 +4,7 @@ import Fact from "../classes/engine/Fact";
 import fs = require("fs");
 import log from "../log";
 import path = require("path");
+import Rule from "../classes/engine/Rule";
 import topic from "../topic";
 
 const TTS_DIRECTORY = "audio/tts-cache";
@@ -58,7 +59,9 @@ function createTtsFile(ttsString: string) {
     }
 }
 
-engine.register("effect/playTts", [topic.playTts], (get) => [
-    new Fact(topic.playTts, undefined),
-    createTtsFile(get(topic.playTts)!),
-]);
+engine.register(
+    new Rule("effect/playTts", [topic.playTts], (get) => [
+        new Fact(topic.playTts, undefined),
+        createTtsFile(get(topic.playTts)!),
+    ])
+);

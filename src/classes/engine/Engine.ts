@@ -28,17 +28,7 @@ const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
 class Engine {
     private rules: Rule[] = [];
 
-    public register = (
-        label: Rule["label"],
-        given: Rule["given"],
-        then: Rule["then"]
-    ) => {
-        const rule = {
-            label: label,
-            // eslint-disable-next-line sort-keys
-            given: given,
-            then: then,
-        };
+    public register = (rule: Rule) => {
         log.info("rules", "Registering new rule %s", rule.label.yellow);
         this.rules.push(rule);
     };
