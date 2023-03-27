@@ -1,30 +1,28 @@
-import dotenv = require("dotenv");
-dotenv.config();
-
-// Enabled GSI
-import "./gsi/gsiEvents";
-import "./gsi/gsiGameState";
-import "./gsi/gsiHero";
-import "./gsi/gsiItems";
-import "./gsi/gsiTime";
-
-// Enabled assistants
-import "./assistants/roshan";
-import "./assistants/runes";
-import "./assistants/neutralItem";
-
-// Enabled effects
-import "./effects/playAudio";
-import "./effects/playTts";
-
-// Discord
 import "./discord/client";
 import "./discord/startVoiceSubscription";
 import "./discord/playAudioQueue";
 
+import dotenv = require("dotenv");
 import engine from "./customEngine";
+import fs from "fs";
 import gsi = require("node-gsi");
 import log from "./log";
+import path = require("path");
+
+dotenv.config();
+
+function importAll(directory: string) {
+    const dirPath = path.join(__dirname, directory);
+    fs.readdirSync(dirPath)
+        // .js and not .ts because it gets transpiled in /build directory
+        .filter((file) => file.endsWith(".js"))
+        .map((file) => path.join(dirPath, file))
+        .forEach((filePath) => require(filePath));
+}
+
+importAll("assistants");
+importAll("effects");
+importAll("gsi");
 
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
