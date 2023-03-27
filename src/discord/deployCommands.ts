@@ -32,10 +32,7 @@ const allCommands = [
 
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
-            Routes.applicationGuildCommands(
-                "761897641591701524", // Application id
-                "761903068127428649" // Hard coded guild id
-            ),
+            Routes.applicationCommands("761897641591701524"), // Application id
             {
                 body: allCommands.map((cmd) => cmd.toJSON()),
             }
