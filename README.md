@@ -4,7 +4,7 @@ Use Dota 2's Game State Integration API to make helpful announcements in a disco
 
 ## Using the bot
 
--   [Add the bot to your server](https://discord.com/api/oauth2/authorize?client_id=761897641591701524&permissions=36701184&scope=bot) (you must have admin privileges or share this link with an admin)
+-   [Add the bot to your server](https://discord.com/api/oauth2/authorize?client_id=1089945324757454950&permissions=36701184&scope=bot) (you must have admin privileges or share this link with an admin)
 -   Go to a Voice channel and type `/config`
 -   Go to Steam Library -> Right click Dota 2 -> Properties -> Local Files -> Browse... make a folder `game/dota/cfg/gamestate_integration/` and copy/paste a text file `gamestate_integration_dota2-*.cfg` (from above) into it
 -   Steam Library -> Right click Dota 2 -> Properties -> General -> Launch Options -> Add `-gamestateintegration` to launch options
