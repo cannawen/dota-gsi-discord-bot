@@ -8,7 +8,7 @@ dotenv.config();
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(
-    process.env.DISCORD_CLIENT_TOKEN!
+    process.env.DISCORD_BOT_TOKEN!
 );
 
 const allCommands = [
@@ -32,7 +32,10 @@ const allCommands = [
 
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
-            Routes.applicationCommands("761897641591701524"), // Application id
+            // Development application id
+            Routes.applicationCommands("761897641591701524"),
+            // Production application id
+            // Routes.applicationCommands("1089945324757454950"),
             {
                 body: allCommands.map((cmd) => cmd.toJSON()),
             }

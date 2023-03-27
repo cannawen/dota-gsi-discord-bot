@@ -3,7 +3,7 @@ import Command from "./Command";
 import handleSlashCommands from "./slashCommands";
 import log from "../log";
 
-const botSecretKey = process.env.DISCORD_CLIENT_TOKEN;
+const botSecretKey = process.env.DISCORD_BOT_TOKEN;
 
 const discordClient = new Discord.Client({
     // eslint-disable-next-line no-magic-numbers
