@@ -1,8 +1,8 @@
-import Item from "../gsi-data-classes/Item";
-import neutralItemRule from "./neutralItem";
-import PlayerItems from "../gsi-data-classes/PlayerItems";
-import Rule from "../engine/Rule";
-import Topic from "../engine/Topic";
+import Item from "../../gsi-data-classes/Item";
+import neutralItemRule from "../neutralItem";
+import PlayerItems from "../../gsi-data-classes/PlayerItems";
+import Rule from "../../engine/Rule";
+import Topic from "../../engine/Topic";
 
 describe("neutral item", () => {
     test("should return a rule", () => {
@@ -24,6 +24,7 @@ describe("neutral item", () => {
             );
         });
     });
+
     describe("not alive", () => {
         test("reset last neutral reminder time", () => {
             const f = <T>(t: Topic<T>) => {
