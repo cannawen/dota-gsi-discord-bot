@@ -8,7 +8,10 @@ dotenv.config();
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(
+    // Development bot token
     process.env.DISCORD_BOT_TOKEN!
+    // Production bot token
+    // process.env.DISCORD_BOT_TOKEN_PROD!
 );
 
 const allCommands = [
