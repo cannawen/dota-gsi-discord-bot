@@ -10,6 +10,17 @@ const getFn =
     <T>(t: Topic<T>): T =>
         input[t.label] as T;
 
+const expectEngine = (
+    rule: Rule,
+    ins: { [keys: string]: unknown },
+    outs: { [keys: string]: unknown }
+) => {
+    const result = rule.then(getFn(ins));
+    Object.keys(outs).forEach((k) => {
+        expect(result).toContainFact(k, outs[k]);
+    });
+};
+
 const noItems = new PlayerItems(
     [],
     [],
@@ -31,34 +42,30 @@ describe("neutral item", () => {
 
     describe("no neutral item", () => {
         test("reset last neutral reminder time", () => {
-            const result = neutralItemRule.then(
-                getFn({
+            expectEngine(
+                neutralItemRule,
+                {
                     alive: true,
                     items: noItems,
-                    time: 50,
                     lastNeutralReminderTimeTopic: 5,
-                })
-            );
-            expect(result).toContainFact(
-                "lastNeutralReminderTimeTopic",
-                undefined
+                    time: 50,
+                },
+                { lastNeutralReminderTimeTopic: undefined }
             );
         });
     });
 
     describe("not alive", () => {
         test("reset last neutral reminder time", () => {
-            const result = neutralItemRule.then(
-                getFn({
+            expectEngine(
+                neutralItemRule,
+                {
                     alive: false,
                     items: trustyShovelNeutralSlot,
                     time: 50,
                     lastNeutralReminderTimeTopic: 5,
-                })
-            );
-            expect(result).toContainFact(
-                "lastNeutralReminderTimeTopic",
-                undefined
+                },
+                { lastNeutralReminderTimeTopic: undefined }
             );
         });
     });
