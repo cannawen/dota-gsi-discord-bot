@@ -15,5 +15,5 @@
         "sourceMap": true
     },
     "include": ["./src/**/*.ts", "jest.d.ts", "./data/*"],
-    "exclude": ["**/__tests__/*"]
+    "exclude": ["**/__tests__/*", "**/__mocks__/*"]
 }
