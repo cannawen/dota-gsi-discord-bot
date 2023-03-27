@@ -8,13 +8,16 @@ RUN apt-get update; apt install -y curl python-is-python3 pkg-config build-essen
     /tmp/node-build-master/bin/node-build "${NODE_VERSION}" /usr/local/node && \
 rm -rf /tmp/node-build-master
 
+RUN apt -y install git
+
 RUN mkdir /app
 WORKDIR /app
 
 COPY . .
 
-RUN npm install && npm run build
-
+RUN npm install 
+RUN npm update
+RUN npm run build
 
 FROM debian:bullseye-slim
 

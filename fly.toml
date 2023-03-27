@@ -6,7 +6,7 @@ primary_region = "yyz"
 [env]
   HOST = "0.0.0.0"
   PORT = "8080"
-  SERVER_URL = "https://dota-coach.fly.dev/gsi"
+  SERVER_URL = "http://dota-coach.fly.dev/gsi"
 
 [http_service]
   internal_port = 8080
