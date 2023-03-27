@@ -1,8 +1,28 @@
+import { DeepReadonly } from "ts-essentials";
 import Item from "../../gsi-data-classes/Item";
 import neutralItemRule from "../neutralItem";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import Rule from "../../engine/Rule";
 import Topic from "../../engine/Topic";
+
+const getFn =
+    (input: { [keys: string]: unknown }) =>
+    <T>(t: Topic<T>): T =>
+        input[t.label] as T;
+
+const noItems = new PlayerItems(
+    [],
+    [],
+    null,
+    null
+) as DeepReadonly<PlayerItems>;
+
+const trustyShovelNeutralSlot = new PlayerItems(
+    [],
+    [],
+    new Item("item_trusty_shovel", "", 0),
+    null
+);
 
 describe("neutral item", () => {
     test("should return a rule", () => {
@@ -11,14 +31,15 @@ describe("neutral item", () => {
 
     describe("no neutral item", () => {
         test("reset last neutral reminder time", () => {
-            const f = <T>(t: Topic<T>) => {
-                if (t.label === "alive") return true;
-                if (t.label === "items")
-                    return new PlayerItems([], [], null, null);
-                if (t.label === "time") return 50;
-                if (t.label === "lastNeutralReminderTimeTopic") return 5;
-            };
-            expect(neutralItemRule.then(f as any)).toContainFact(
+            const result = neutralItemRule.then(
+                getFn({
+                    alive: true,
+                    items: noItems,
+                    time: 50,
+                    lastNeutralReminderTimeTopic: 5,
+                })
+            );
+            expect(result).toContainFact(
                 "lastNeutralReminderTimeTopic",
                 undefined
             );
@@ -27,19 +48,15 @@ describe("neutral item", () => {
 
     describe("not alive", () => {
         test("reset last neutral reminder time", () => {
-            const f = <T>(t: Topic<T>) => {
-                if (t.label === "alive") return false;
-                if (t.label === "items")
-                    return new PlayerItems(
-                        [],
-                        [],
-                        new Item("item_trusty_shovel", "", 0),
-                        null
-                    );
-                if (t.label === "time") return 50;
-                if (t.label === "lastNeutralReminderTimeTopic") return 5;
-            };
-            expect(neutralItemRule.then(f as any)).toContainFact(
+            const result = neutralItemRule.then(
+                getFn({
+                    alive: false,
+                    items: trustyShovelNeutralSlot,
+                    time: 50,
+                    lastNeutralReminderTimeTopic: 5,
+                })
+            );
+            expect(result).toContainFact(
                 "lastNeutralReminderTimeTopic",
                 undefined
             );
