@@ -48,15 +48,16 @@ class CustomEngine extends Engine {
     public stopCoachingSession(studentId: string) {
         this.withDb(studentId, (db) => {
             const subscription = db.get(topic.discordSubscriptionTopic);
-            const success = subscription?.connection.destroy();
-            if (success) {
-                log.info("discord", "Successfully destroyed voice connection");
-            } else {
-                log.error("discord", "Unable to destroy voice connection".red);
-            }
+            subscription?.connection.destroy();
+            log.info(
+                "discord",
+                "Destroying voice connection for student %s",
+                studentId
+            );
         });
 
         this.sessions.delete(studentId);
+        log.info("rules", "Deleting database for student %s", studentId);
     }
 }
 
