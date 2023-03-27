@@ -20,16 +20,23 @@ function hashStudentId(userId: string) {
 }
 
 function generateConfigFile(userId: string) {
-    return fs
-        .readFileSync(
-            path.join(__dirname, "../../data/configInstructions.txt"),
-            "utf8"
-        )
-        .replace(
-            /DOTA_SERVER_URL/,
-            process.env.SERVER_URL || "http://localhost:9001/gsi"
-        )
-        .replace(/insert_student_id_here/g, userId);
+    const serverUrl = process.env.SERVER_URL;
+    if (serverUrl) {
+        return fs
+            .readFileSync(
+                path.join(__dirname, "../../data/configInstructions.txt"),
+                "utf8"
+            )
+            .replace(/SERVER_URL/, serverUrl)
+            .replace(/STUDENT_ID/, userId);
+    } else {
+        log.error(
+            "discord",
+            "Unable to generate config file. Ensure %s is set in env",
+            "SERVER_URL"
+        );
+        return "Unable to generate config file due to missing SERVER_URL environment variable. Please notify bot owner";
+    }
 }
 
 function handleConfig(interaction: ChatInputCommandInteraction<CacheType>) {

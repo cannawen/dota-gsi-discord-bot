@@ -60,6 +60,16 @@ server.events.on(
 );
 
 // eslint-disable-next-line no-magic-numbers
-const port = Number(process.env.PORT) || 9001;
-server.listen(port, process.env.HOST || "127.0.0.1");
-log.info("gsi", `Starting GSI server on port ${port}`);
+const port = process.env.PORT;
+const host = process.env.HOST;
+if (port && host) {
+    server.listen(Number(port), host);
+    log.info("gsi", "Starting GSI server on port %s", port.magenta);
+} else {
+    log.error(
+        "gsi",
+        "Unable to start GSI server with port %s and host %s. Check your environment variables",
+        port,
+        host
+    );
+}

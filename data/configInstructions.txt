@@ -1,9 +1,9 @@
-Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-insert_student_id_here.cfg`. This associates your discord id with your machine running dota, so if you log into a different discord account or start using a different computer, you will have to go through this process again.
+Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-coach.cfg`. This associates your discord id with your machine running dota, so if you log into a different discord account or start using a different computer, you will have to go through this process again.
 
 ```
 "Dota 2 Coach Configuration"
 {
-    "uri" "DOTA_SERVER_URL"
+    "uri" "SERVER_URL"
     "timeout" "5.0"
     "buffer" "0.5"
     "throttle" "0.5"
@@ -23,7 +23,7 @@ Copy the configuration below and save it into `game/dota/cfg/gamestate_integrati
     }
     "auth"
     {
-        "token" "insert_student_id_here"
+        "token" "STUDENT_ID"
     }
 }
 ```
