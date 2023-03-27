@@ -37,12 +37,11 @@ expect.extend({
 
     toContainFact(actual, label, value) {
         const actualArr = Array.isArray(actual) ? actual : [actual];
-        const isFactsArray = actualArr.reduce(
-            (memo, actual) => memo && actual instanceof Fact,
-            true
-        );
-        if (!isFactsArray) {
-            throw new Error("Actual value must be all be of type Fact");
+        const factArray = actualArr.filter((fact) => fact instanceof Fact);
+        if (factArray.length === 0) {
+            throw new Error(
+                "Actual value must be all be of type Fact. Currently not handling Promise<Fact>"
+            );
         }
 
         const fact = (actualArr as Fact<unknown>[]).find(

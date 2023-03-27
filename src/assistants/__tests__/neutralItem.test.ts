@@ -21,14 +21,14 @@ const expectEngine = (
     });
 };
 
-const noItems = new PlayerItems(
+const NO_ITEMS = new PlayerItems(
     [],
     [],
     null,
     null
 ) as DeepReadonly<PlayerItems>;
 
-const trustyShovelNeutralSlot = new PlayerItems(
+const SHOVEL_NEUTRAL_SLOT = new PlayerItems(
     [],
     [],
     new Item("item_trusty_shovel", "", 0),
@@ -46,7 +46,7 @@ describe("neutral item", () => {
                 neutralItemRule,
                 {
                     alive: true,
-                    items: noItems,
+                    items: NO_ITEMS,
                     lastNeutralReminderTimeTopic: 5,
                     time: 50,
                 },
@@ -61,9 +61,9 @@ describe("neutral item", () => {
                 neutralItemRule,
                 {
                     alive: false,
-                    items: trustyShovelNeutralSlot,
-                    time: 50,
+                    items: SHOVEL_NEUTRAL_SLOT,
                     lastNeutralReminderTimeTopic: 5,
+                    time: 50,
                 },
                 { lastNeutralReminderTimeTopic: undefined }
             );
