@@ -1,7 +1,7 @@
 import { Dota2GameState } from "node-gsi";
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
-import Rule from "../classes/engine/Rule";
+import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import topic from "../topic";
 
 engine.register(

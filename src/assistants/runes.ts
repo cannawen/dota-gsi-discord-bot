@@ -1,6 +1,6 @@
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
-import Rule from "../classes/engine/Rule";
+import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import topic from "../topic";
 
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;

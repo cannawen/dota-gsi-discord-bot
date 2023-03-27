@@ -1,10 +1,10 @@
 import { DeepReadonly } from "ts-essentials";
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
-import Item from "../classes/data/Item";
-import PlayerItems from "../classes/data/PlayerItems";
-import Rule from "../classes/engine/Rule";
-import Topic from "../classes/engine/Topic";
+import Fact from "../engine/Fact";
+import Item from "../gsi-data-classes/Item";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
+import Rule from "../engine/Rule";
+import Topic from "../engine/Topic";
 import topic from "../topic";
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];

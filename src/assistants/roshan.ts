@@ -1,9 +1,9 @@
-import Event, { EventType } from "../classes/data/Event";
+import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
-import Rule from "../classes/engine/Rule";
-import Topic from "../classes/engine/Topic";
+import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
+import Topic from "../engine/Topic";
 import topic from "../topic";
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;

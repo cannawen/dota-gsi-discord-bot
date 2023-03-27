@@ -1,5 +1,5 @@
 import Fact from "./Fact";
-import log from "../../log";
+import log from "../log";
 import Topic from "./Topic";
 
 export default class FactStore {

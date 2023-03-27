@@ -1,9 +1,9 @@
 /* eslint-disable sort-keys */
 import { DeepReadonly } from "ts-essentials";
-import Event from "./classes/data/Event";
+import Event from "./gsi-data-classes/Event";
 import GsiData from "./gsi/GsiData";
-import PlayerItems from "./classes/data/PlayerItems";
-import Topic from "./classes/engine/Topic";
+import PlayerItems from "./gsi-data-classes/PlayerItems";
+import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
 
 const gsiData = {

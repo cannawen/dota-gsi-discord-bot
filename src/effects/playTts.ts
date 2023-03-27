@@ -1,10 +1,10 @@
 import axios from "axios";
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
+import Fact from "../engine/Fact";
 import fs = require("fs");
 import log from "../log";
 import path = require("path");
-import Rule from "../classes/engine/Rule";
+import Rule from "../engine/Rule";
 import topic from "../topic";
 
 const TTS_DIRECTORY = "audio/tts-cache";

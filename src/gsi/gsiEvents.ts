@@ -1,9 +1,9 @@
 import deepEqual from "deep-equal";
 import engine from "../customEngine";
-import Event from "../classes/data/Event";
-import Fact from "../classes/engine/Fact";
-import Rule from "../classes/engine/Rule";
-import Topic from "../classes/engine/Topic";
+import Event from "../gsi-data-classes/Event";
+import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
+import Topic from "../engine/Topic";
 import topic from "../topic";
 
 /**

@@ -1,7 +1,7 @@
 import engine from "../customEngine";
-import Fact from "../classes/engine/Fact";
-import PlayerItems from "../classes/data/PlayerItems";
-import Rule from "../classes/engine/Rule";
+import Fact from "../engine/Fact";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
+import Rule from "../engine/Rule";
 import topic from "../topic";
 
 engine.register(

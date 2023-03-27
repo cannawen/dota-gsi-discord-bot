@@ -4,7 +4,7 @@ import colors from "@colors/colors";
 import deepEqual from "deep-equal";
 import Fact from "./Fact";
 import FactStore from "./FactStore";
-import log from "../../log";
+import log from "../log";
 import Rule from "./Rule";
 import Topic from "./Topic";
 
