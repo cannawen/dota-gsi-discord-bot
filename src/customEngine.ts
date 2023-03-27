@@ -2,6 +2,7 @@ import Engine from "./classes/engine/Engine";
 import Fact from "./classes/engine/Fact";
 import FactStore from "./classes/engine/FactStore";
 import GsiData from "./gsi/GsiData";
+import log from "./log";
 import topic from "./topic";
 
 class CustomEngine extends Engine {
@@ -45,6 +46,16 @@ class CustomEngine extends Engine {
     }
 
     public stopCoachingSession(studentId: string) {
+        this.withDb(studentId, (db) => {
+            const subscription = db.get(topic.discordSubscriptionTopic);
+            const success = subscription?.connection.destroy();
+            if (success) {
+                log.info("discord", "Successfully destroyed voice connection");
+            } else {
+                log.error("discord", "Unable to destroy voice connection".red);
+            }
+        });
+
         this.sessions.delete(studentId);
     }
 }
