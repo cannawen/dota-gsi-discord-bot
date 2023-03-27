@@ -59,7 +59,7 @@ Goal: to develop the app without having dota open
 
 ### replay some file
 
-`mitmdump -C flow_file`  
+`mitmdump -nC flow_file`  
 see `mitmproxy-flows` folders for currently saved flows
 
 ## Code Formatting

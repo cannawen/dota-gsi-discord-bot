@@ -12,9 +12,9 @@
         "start:dev": "npx nodemon",
         "test": "jest",
         "test:dev": "jest --watchAll",
-        "rune-canna": "mitmdump -C mitmproxy-flows/water-rune_canna",
-        "rune-wrath": "mitmdump -C mitmproxy-flows/water-rune_wrath",
-        "dig-canna": "mitmdump -C mitmproxy-flows/die-respawn-dig-dig_canna"
+        "rune-canna": "mitmdump -nC mitmproxy-flows/water-rune_canna",
+        "rune-wrath": "mitmdump -nC mitmproxy-flows/water-rune_wrath",
+        "dig-canna": "mitmdump -nC mitmproxy-flows/die-respawn-dig-dig_canna"
     },
     "author": "",
     "license": "ISC",
