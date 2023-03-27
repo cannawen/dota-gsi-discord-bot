@@ -35,18 +35,36 @@ expect.extend({
         };
     },
 
-    toBeFact(actual, label, value) {
-        if (!(actual instanceof Fact)) {
-            throw new Error("Actual value must be a Fact");
+    toContainFact(actual, label, value) {
+        const actualArr = Array.isArray(actual) ? actual : [actual];
+        const isFactsArray = actualArr.reduce(
+            (memo, actual) => memo && actual instanceof Fact,
+            true
+        );
+        if (!isFactsArray) {
+            throw new Error("Actual value must be all be of type Fact");
         }
-        const pass =
-            actual.topic.label === label && deepEqual(actual.value, value);
+
+        const fact = (actualArr as Fact<unknown>[]).find(
+            (f) => f.topic.label === label
+        );
+
+        let message: string;
+        const factExists = fact !== undefined;
+        message = factExists
+            ? `Fact ${label} exists `
+            : `Fact ${label} does not exist `;
+        const correctValue = fact?.value === value;
+        message += correctValue
+            ? `with value ${value}`
+            : `with incorrect value ${fact?.value} (expected ${value})`;
+        const pass = factExists && correctValue;
 
         return {
             pass,
             message: pass
-                ? () => `expected Fact ${label} not to contain ${value}`
-                : () => `expected Fact ${label} to contain ${value}`,
+                ? () => `${message}. Response should not contain such fact.`
+                : () => `${message}`,
         };
     },
 });

@@ -214,7 +214,6 @@
             }
         ],
         "no-unneeded-ternary": ["warn", { "defaultAssignment": true }],
-        "operator-assignment": ["warn", "never"],
         "prefer-object-spread": "warn",
         "sort-keys": [
             "warn",

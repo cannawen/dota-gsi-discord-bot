@@ -5,7 +5,7 @@ declare global {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;
             setContaining(expected: T extends Set<infer V> ? V[] : never): R;
-            toBeFact(label: string, value: unknown): R;
+            toContainFact(label: string, value: unknown): R;
         }
 
         interface Expect {
@@ -15,7 +15,7 @@ declare global {
         interface ExpectExtendMap {
             toBeWithinRange: MatcherFunction<[min: number, max: number]>;
             setContaining: MatcherFunction<[unknown[]]>;
-            toBeFact: MatcherFunction<[label: string, value: unknown]>;
+            toContainFact: MatcherFunction<[label: string, value: unknown]>;
         }
     }
 }
