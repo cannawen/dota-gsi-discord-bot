@@ -1,4 +1,4 @@
-Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-coach.cfg`. This associates your discord id with your machine running dota, so if you log into a different discord account or start using a different computer, you will have to go through this process again.
+Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-coach.cfg`. Make sure you start dota with the `-gamestateintegration` launch option
 
 ```
 "Dota 2 Coach Configuration"
