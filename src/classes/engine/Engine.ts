@@ -5,6 +5,7 @@ import deepEqual from "deep-equal";
 import Fact from "./Fact";
 import FactStore from "./FactStore";
 import log from "../../log";
+import Rule from "./Rule";
 import Topic from "./Topic";
 
 const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
@@ -15,21 +16,6 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
         }
     }
     return false;
-};
-
-type getFn = <T>(topic: Topic<T>) => T | undefined;
-
-type Rule = {
-    // label is only used for logging purposes
-    label: string;
-    given: Array<Topic<unknown>>;
-    then: (
-        get: getFn
-    ) =>
-        | Fact<unknown>
-        | Promise<Fact<unknown>>
-        | void
-        | Array<Fact<unknown> | Promise<Fact<unknown> | void>>;
 };
 
 function removeLineBreaks(s: string) {
