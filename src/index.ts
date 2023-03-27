@@ -61,5 +61,5 @@ server.events.on(
 
 // eslint-disable-next-line no-magic-numbers
 const port = Number(process.env.PORT) || 9001;
-server.listen(port);
+server.listen(port, process.env.HOST || "127.0.0.1");
 log.info("gsi", `Starting GSI server on port ${port}`);
