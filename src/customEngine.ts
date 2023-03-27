@@ -49,11 +49,6 @@ class CustomEngine extends Engine {
         this.withDb(studentId, (db) => {
             const subscription = db.get(topic.discordSubscriptionTopic);
             subscription?.connection.destroy();
-            log.info(
-                "discord",
-                "Destroying voice connection for student %s",
-                studentId
-            );
         });
     }
 

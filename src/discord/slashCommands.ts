@@ -86,7 +86,6 @@ function handleStop(interaction: ChatInputCommandInteraction<CacheType>) {
         content: "Ending...",
         ephemeral: true,
     });
-    // TODO have bot leave the channel
     engine.stopCoachingSession(hashStudentId(interaction.user.id));
 }
 
