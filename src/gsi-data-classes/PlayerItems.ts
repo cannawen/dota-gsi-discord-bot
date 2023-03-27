@@ -3,12 +3,12 @@ import gsi from "node-gsi";
 import Item from "./Item";
 
 export default class PlayerItems {
-    inventory: Array<Item | null> = [];
-    stash: Array<Item | null> = [];
-    neutral: Item | null = null;
-    teleport: Item | null = null;
+    public inventory: Array<Item | null> = [];
+    public stash: Array<Item | null> = [];
+    public neutral: Item | null = null;
+    public teleport: Item | null = null;
 
-    constructor(
+    public constructor(
         inventory: Array<Item | null>,
         stash: Array<Item | null>,
         neutral: Item | null,

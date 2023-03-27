@@ -1,5 +1,4 @@
 import { DeepReadonly } from "ts-essentials";
-import engine from "../customEngine";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";

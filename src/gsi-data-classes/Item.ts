@@ -9,9 +9,9 @@ const items = JSON.parse(
 const itemNames = new Map<string, string>(Object.entries(items));
 
 export default class Item {
-    id: string;
-    name: string;
-    cooldown?: number;
+    public id: string;
+    public name: string;
+    public cooldown?: number;
 
     public constructor(id: string, name: string, cooldown?: number) {
         this.id = id;

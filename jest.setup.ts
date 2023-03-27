@@ -1,3 +1,6 @@
+import deepEqual from "deep-equal";
+import Fact from "./src/engine/Fact";
+
 /* eslint-disable sort-keys */
 expect.extend({
     toBeWithinRange(actual, min, max) {
@@ -32,33 +35,18 @@ expect.extend({
         };
     },
 
-    // toBeAudio(actual, expected) {
-    //     if (!(actual instanceof EffectInfo)) {
-    //         throw new Error("Actual value must be a EffectInfo");
-    //     }
+    toBeFact(actual, label, value) {
+        if (!(actual instanceof Fact)) {
+            throw new Error("Actual value must be a Fact");
+        }
+        const pass =
+            actual.topic.label === label && deepEqual(actual.value, value);
 
-    //     const pass = actual.type == EffectType.AUDIO_FILE && actual.data == expected;
-
-    //     return {
-    //         pass,
-    //         message: pass
-    //             ? () => `expected to have different file name than ${actual.data}`
-    //             : () => `actual file name ${actual.data?.red} in audio file instead of ${expected.green}`,
-    //     };
-    // },
-
-    // toBeTTS(actual, expected) {
-    //     if (!(actual instanceof EffectInfo)) {
-    //         throw new Error("Actual value must be a EffectInfo");
-    //     }
-
-    //     const pass = actual.type == EffectType.TTS && actual.data == expected;
-
-    //     return {
-    //         pass,
-    //         message: pass
-    //             ? () => `expected to have different message than ${actual.data?.red}`
-    //             : () => `actual TTS message was ${actual.data?.red} instead of ${expected.green}`,
-    //     };
-    // },
+        return {
+            pass,
+            message: pass
+                ? () => `expected Fact ${label} not to contain ${value}`
+                : () => `expected Fact ${label} to contain ${value}`,
+        };
+    },
 });

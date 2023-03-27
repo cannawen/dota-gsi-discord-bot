@@ -5,8 +5,7 @@ declare global {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;
             setContaining(expected: T extends Set<infer V> ? V[] : never): R;
-            // toBeAudio(fileName: string): R;
-            // toBeTTS(message: string): R;
+            toBeFact(label: string, value: unknown): R;
         }
 
         interface Expect {
@@ -14,10 +13,9 @@ declare global {
         }
 
         interface ExpectExtendMap {
-            // toBeAudio: MatcherFunction<[fileName: string]>;
-            // toBeTTS: MatcherFunction<[message: string]>;
             toBeWithinRange: MatcherFunction<[min: number, max: number]>;
             setContaining: MatcherFunction<[unknown[]]>;
+            toBeFact: MatcherFunction<[label: string, value: unknown]>;
         }
     }
 }
