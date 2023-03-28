@@ -1,4 +1,5 @@
 import "./discord/client";
+import "./frontend";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
