@@ -1,5 +1,6 @@
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
+import rules from "../rules";
 import topic from "../topic";
 
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
@@ -9,7 +10,7 @@ const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 // And the time is a multiple of 2 or 3 minutes
 // Play rune sound
 export default new Rule(
-    "assistant/runes",
+    rules.assistant.runes,
     [topic.inGame, topic.time],
     (get) => {
         const inGame = get(topic.inGame)!;

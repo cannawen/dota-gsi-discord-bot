@@ -4,6 +4,7 @@ import fs = require("fs");
 import log from "../log";
 import path = require("path");
 import Rule from "../engine/Rule";
+import rules from "../rules";
 import topic from "../topic";
 
 const TTS_DIRECTORY = "audio/tts-cache";
@@ -58,7 +59,7 @@ function createTtsFile(ttsString: string) {
     }
 }
 
-export default new Rule("effect/playTts", [topic.playTts], (get) => [
+export default new Rule(rules.effect.playTts, [topic.playTts], (get) => [
     new Fact(topic.playTts, undefined),
     createTtsFile(get(topic.playTts)!),
 ]);

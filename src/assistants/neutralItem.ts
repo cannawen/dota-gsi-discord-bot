@@ -3,6 +3,7 @@ import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
+import rules from "../rules";
 import Topic from "../engine/Topic";
 import topic from "../topic";
 
@@ -61,7 +62,7 @@ function handleNeutralItem(
 }
 
 export default new Rule(
-    "assistant/neutral_item",
+    rules.assistant.neutralItem,
     [topic.alive, topic.items, topic.time],
     (get) =>
         handleNeutralItem(

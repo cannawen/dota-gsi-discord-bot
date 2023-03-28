@@ -6,13 +6,14 @@ import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
 import log from "../../log";
 import Rule from "../../engine/Rule";
+import rules from "../../rules";
 import topic from "../../topic";
 import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 
 export default new Rule(
-    "discord/guild",
+    rules.discord.startVoiceSubscription,
     [topic.discordGuildId, topic.discordGuildChannelId, topic.studentId],
     (get) => {
         const guildId = get(topic.discordGuildId)!;

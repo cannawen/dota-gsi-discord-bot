@@ -1,19 +1,19 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
 import { getResults } from "../../__tests__/helpers";
 import roshanRules from "../roshan";
+import rules from "../../rules";
 
 const killedRule = roshanRules.find(
-    (rule) =>
-        rule.label === "assistant/roshan/killed_event/set_future_audio_state"
+    (rule) => rule.label === rules.assistant.roshan.killedEvent
 )!;
 const maybeAliveRule = roshanRules.find(
-    (rule) => rule.label === "assistant/roshan/maybe_alive_time/play_audio"
+    (rule) => rule.label === rules.assistant.roshan.maybeAliveTime
 )!;
 const aliveRule = roshanRules.find(
-    (rule) => rule.label === "assistant/roshan/alive_time/play_audio"
+    (rule) => rule.label === rules.assistant.roshan.aliveTime
 )!;
 const resetRule = roshanRules.find(
-    (rule) => rule.label === "assistant/roshan/reset"
+    (rule) => rule.label === rules.assistant.roshan.reset
 )!;
 
 describe("roshan", () => {

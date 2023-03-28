@@ -2,6 +2,7 @@ import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
+import rules from "../rules";
 import Topic from "../engine/Topic";
 import topic from "../topic";
 
@@ -23,7 +24,7 @@ export default [
     // Set roshan maybe time to 8 minutes from now
     // Set roshan alibe time to 11 minutes from now
     new Rule(
-        "assistant/roshan/killed_event/set_future_audio_state",
+        rules.assistant.roshan.killedEvent,
         [topic.time, topic.events],
         (get) => {
             if (roshanWasKilled(get(topic.events)!)) {
@@ -45,7 +46,7 @@ export default [
     // When the game time is past when roshan might be alive
     // Play audio and reset roshan maybe alive time state
     new Rule(
-        "assistant/roshan/maybe_alive_time/play_audio",
+        rules.assistant.roshan.maybeAliveTime,
         [topic.time, roshanMaybeTimeTopic],
         (get) => {
             if (get(topic.time)! >= get(roshanMaybeTimeTopic)!) {
@@ -60,7 +61,7 @@ export default [
     // When the game time is past when roshan should be alive
     // Play audio and reset roshan alive time state
     new Rule(
-        "assistant/roshan/alive_time/play_audio",
+        rules.assistant.roshan.aliveTime,
         [topic.time, roshanAliveTimeTopic],
         (get) => {
             if (get(topic.time)! >= get(roshanAliveTimeTopic)!) {
@@ -73,7 +74,7 @@ export default [
     ),
 
     // When we are no longer in a game, reset all our roshan timers
-    new Rule("assistant/roshan/reset", [topic.inGame], (get) => {
+    new Rule(rules.assistant.roshan.reset, [topic.inGame], (get) => {
         if (!get(topic.inGame)) {
             return [
                 new Fact(roshanAliveTimeTopic, undefined),

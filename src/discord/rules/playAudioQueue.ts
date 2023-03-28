@@ -2,13 +2,14 @@ import colors from "@colors/colors";
 import Fact from "../../engine/Fact";
 import log from "../../log";
 import Rule from "../../engine/Rule";
+import rules from "../../rules";
 import topic from "../../topic";
 import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 
 export default new Rule(
-    "discord/play_next",
+    rules.discord.playNext,
     [
         topic.discordReadyToPlayAudio,
         topic.audioQueue,

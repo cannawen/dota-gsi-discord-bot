@@ -5,6 +5,7 @@ import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import Topic from "../engine/Topic";
 import topic from "../topic";
+import rules from "../rules";
 
 /**
  * Note: right now events may overwrite each other if they have the same eventType and gameTime
@@ -21,7 +22,7 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
     );
 
 export default [
-    new Rule("gsi/events/new", [topic.gsiData], (get) => {
+    new Rule(rules.gsi.events.new, [topic.gsiData], (get) => {
         // Events from gsi server last for about 10 seconds
         // But we want to debounce events for our app
         // And only send unique events downstream
@@ -48,7 +49,7 @@ export default [
     }),
 
     // If we are no longer in a game, reset all events
-    new Rule("gsi/events/reset_all", [topic.inGame], (get) => {
+    new Rule(rules.gsi.events.reset, [topic.inGame], (get) => {
         if (!get(topic.inGame)) {
             return new Fact(allEventsTopic, undefined);
         }
