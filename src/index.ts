@@ -14,7 +14,7 @@ function registerRulesInDirectory(directory: string) {
     fs.readdirSync(dirPath)
         // .js and because it gets transpiled in /build directory
         // .ts and because during testing, it stays in the /src directory
-        // Kinda sketch that we need the || for tests only ...
+        // TODO Kinda sketch that we need the || for tests only ...
         .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
         .map((file) => path.join(dirPath, file))
         .map((filePath) => require(filePath))
