@@ -18,7 +18,6 @@
             "files": ["*.test.ts"],
             "rules": {
                 "@typescript-eslint/no-var-requires": ["off"],
-                "jest/expect-expect": ["off"],
                 "max-lines-per-function": ["off"]
             }
         }
