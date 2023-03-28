@@ -47,7 +47,10 @@ function handleNeutralItem(
 
     // If we have never reminded the user before
     // or if our last reminder time was more than 15 seconds ago
-    if (!lastReminderTime || time > lastReminderTime + TIME_BETWEEN_REMINDERS) {
+    if (
+        !lastReminderTime ||
+        time >= lastReminderTime + TIME_BETWEEN_REMINDERS
+    ) {
         // Remind the user
         // And update the last reminder time
         return [

@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 import deepEqual from "deep-equal";
 import Fact from "./src/engine/Fact";
 
@@ -36,11 +37,14 @@ expect.extend({
     },
 
     toContainFact(actual, label, value) {
+        if (actual === undefined) {
+            throw new Error("Received undefined instead of Fact");
+        }
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
         if (factArray.length === 0) {
             throw new Error(
-                "Actual value must be all be of type Fact. Currently not handling Promise<Fact>"
+                `Received ${actual}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
             );
         }
 
