@@ -1,17 +1,8 @@
 import { DeepReadonly } from "ts-essentials";
+import { getResults } from "../../__tests__/helpers";
 import Item from "../../gsi-data-classes/Item";
 import neutralItemRule from "../neutralItem";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
-import Rule from "../../engine/Rule";
-import Topic from "../../engine/Topic";
-
-const getFn =
-    (input: { [keys: string]: unknown }) =>
-    <T>(t: Topic<T>): T =>
-        input[t.label] as T;
-
-const getResults = (rule: Rule, db: { [keys: string]: unknown }) =>
-    rule.then(getFn(db));
 
 const NO_ITEMS = new PlayerItems(
     [],
