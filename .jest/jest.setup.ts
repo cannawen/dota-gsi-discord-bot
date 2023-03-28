@@ -1,6 +1,5 @@
 /* eslint-disable max-statements */
-import deepEqual from "deep-equal";
-import Fact from "./src/engine/Fact";
+import Fact from "../src/engine/Fact";
 
 /* eslint-disable sort-keys */
 expect.extend({
