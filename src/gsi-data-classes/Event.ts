@@ -6,11 +6,10 @@ import gsi from "node-gsi";
 // eslint-disable-next-line no-shadow
 export enum EventType {
     AegisPickedUp = "aegis_picked_up",
-    BountyRunePickedUp = "bounty_rune_pickup",
+    BountyRunePickup = "bounty_rune_pickup",
     RoshanKilled = "roshan_killed",
     AegisDenied = "aegis_denied",
     Tip = "tip",
-    BountyPickup = "bounty_rune_pickup",
     CourierKilled = "courier_killed",
 }
 
