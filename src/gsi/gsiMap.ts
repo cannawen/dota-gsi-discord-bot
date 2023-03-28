@@ -5,7 +5,7 @@ import topic from "../topic";
 
 export default [
     new Rule("gsi/map->time", [topic.gsiData], (get) => [
-        new Fact(topic.time, get(topic.gsiData)!.map?.gameTime),
+        new Fact(topic.time, get(topic.gsiData)!.map?.clockTime),
     ]),
     new Rule("gsi/map->game_state", [topic.gsiData], (get) => [
         new Fact(
