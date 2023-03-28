@@ -36,7 +36,7 @@ function handleNeutralItem(
     lastReminderTime: number | undefined,
     time: number
 ): Fact<unknown>[] | Fact<unknown> | void {
-    const validItems = [...items.stash, items.neutral]
+    const validItems = [...items.backpack, items.neutral]
         .filter(validNeutralItem)
         .filter(canCast);
     // If we are not alive or if we cannot cast any valid neutral items

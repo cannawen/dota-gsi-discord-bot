@@ -7,11 +7,13 @@ import PlayerItems from "../../gsi-data-classes/PlayerItems";
 const NO_ITEMS = new PlayerItems(
     [],
     [],
+    [],
     null,
     null
 ) as DeepReadonly<PlayerItems>;
 
 const TRUSTY_SHOVEL = new PlayerItems(
+    [],
     [],
     [],
     new Item("item_trusty_shovel", "Trusty Shovel", 0),
@@ -21,6 +23,7 @@ const TRUSTY_SHOVEL = new PlayerItems(
 const PIRATE_HAT = new PlayerItems(
     [],
     [],
+    [],
     new Item("item_pirate_hat", "Pirate Hat", 0),
     null
 );
@@ -28,20 +31,23 @@ const PIRATE_HAT = new PlayerItems(
 const SHOVEL_ON_COOLDOWN = new PlayerItems(
     [],
     [],
+    [],
     new Item("item_trusty_shovel", "Trusty Shovel", 1),
     null
 );
 
-const SHOVEL_ON_COOLDOWN_IN_STASH = new PlayerItems(
+const SHOVEL_ON_COOLDOWN_IN_BACKPACK = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
+    [],
     null,
     null
 );
 
-const SHOVEL_READY_IN_STASH = new PlayerItems(
+const SHOVEL_READY_IN_BACKPACK = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
+    [],
     null,
     null
 );
@@ -49,6 +55,7 @@ const SHOVEL_READY_IN_STASH = new PlayerItems(
 const TWO_NEUTRAL_ITEMS_ONE_READY_A = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
+    [],
     new Item("item_pirate_hat", "Pirate Hat", 1),
     null
 );
@@ -56,6 +63,7 @@ const TWO_NEUTRAL_ITEMS_ONE_READY_A = new PlayerItems(
 const TWO_NEUTRAL_ITEMS_ONE_READY_B = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
+    [],
     new Item("item_pirate_hat", "Pirate Hat", 0),
     null
 );
@@ -66,6 +74,7 @@ const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(
         new Item("item_trusty_shovel", "Trusty Shovel", 1),
         new Item("item_pirate_hat", "Pirate Hat", 0),
     ],
+    [],
     null,
     null
 );
@@ -180,11 +189,11 @@ describe("neutral item", () => {
             });
         });
 
-        describe("shovel is not ready in stash", () => {
+        describe("shovel is not ready in backpack", () => {
             test("invalidate reminder time", () => {
                 const result = getResults(neutralItemRule, {
                     alive: true,
-                    items: SHOVEL_ON_COOLDOWN_IN_STASH,
+                    items: SHOVEL_ON_COOLDOWN_IN_BACKPACK,
                     lastNeutralReminderTimeTopic: undefined,
                     time: 50,
                 });
@@ -195,11 +204,11 @@ describe("neutral item", () => {
             });
         });
 
-        describe("shovel is ready to dig in stash", () => {
+        describe("shovel is ready to dig in backpack", () => {
             test("play tts and update reminder time", () => {
                 const result = getResults(neutralItemRule, {
                     alive: true,
-                    items: SHOVEL_READY_IN_STASH,
+                    items: SHOVEL_READY_IN_BACKPACK,
                     lastNeutralReminderTimeTopic: undefined,
                     time: 50,
                 });
