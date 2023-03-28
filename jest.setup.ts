@@ -38,7 +38,7 @@ expect.extend({
 
     toContainFact(actual, label, value) {
         if (actual === undefined) {
-            throw new Error("Received undefined instead of Fact");
+            throw new Error("Did not recieve any Facts. Recieved undefined");
         }
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);

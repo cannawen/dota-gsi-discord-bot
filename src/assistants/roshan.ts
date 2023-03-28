@@ -42,13 +42,13 @@ export default [
         }
     ),
 
-    // When the game time matches when roshan might be alive
+    // When the game time is past when roshan might be alive
     // Play audio and reset roshan maybe alive time state
     new Rule(
         "assistant/roshan/maybe_alive_time/play_audio",
         [topic.time, roshanMaybeTimeTopic],
         (get) => {
-            if (get(topic.time) === get(roshanMaybeTimeTopic)) {
+            if (get(topic.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
                     new Fact(topic.playAudioFile, "audio/rosh-maybe.mp3"),
                     new Fact(roshanMaybeTimeTopic, undefined),
@@ -57,13 +57,13 @@ export default [
         }
     ),
 
-    // When the game time matches when roshan should be alive
+    // When the game time is past when roshan should be alive
     // Play audio and reset roshan alive time state
     new Rule(
         "assistant/roshan/alive_time/play_audio",
         [topic.time, roshanAliveTimeTopic],
         (get) => {
-            if (get(topic.time) === get(roshanAliveTimeTopic)) {
+            if (get(topic.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
                     new Fact(topic.playAudioFile, "audio/rosh-alive.mp3"),
                     new Fact(roshanAliveTimeTopic, undefined),
