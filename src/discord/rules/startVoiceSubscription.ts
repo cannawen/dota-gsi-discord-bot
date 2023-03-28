@@ -7,18 +7,18 @@ import Fact from "../../engine/Fact";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
-import topic from "../../topic";
+import topics from "../../topics";
 import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 
 export default new Rule(
     rules.discord.startVoiceSubscription,
-    [topic.discordGuildId, topic.discordGuildChannelId, topic.studentId],
+    [topics.discordGuildId, topics.discordGuildChannelId, topics.studentId],
     (get) => {
-        const guildId = get(topic.discordGuildId)!;
-        const channelId = get(topic.discordGuildChannelId)!;
-        const studentId = get(topic.studentId)!;
+        const guildId = get(topics.discordGuildId)!;
+        const channelId = get(topics.discordGuildChannelId)!;
+        const studentId = get(topics.studentId)!;
 
         const guild = client.guilds.cache.find((g) => g.id === guildId);
         if (!guild) {
@@ -88,8 +88,8 @@ export default new Rule(
         const subscription = connection.subscribe(player);
 
         return [
-            new Fact(topic.discordReadyToPlayAudio, false),
-            new Fact(topic.discordSubscriptionTopic, subscription),
+            new Fact(topics.discordReadyToPlayAudio, false),
+            new Fact(topics.discordSubscriptionTopic, subscription),
         ];
     }
 );

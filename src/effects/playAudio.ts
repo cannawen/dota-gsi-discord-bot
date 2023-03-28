@@ -2,24 +2,24 @@ import Fact from "../engine/Fact";
 import path from "path";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topic from "../topic";
+import topics from "../topics";
 
 export default new Rule(
     rules.effect.playAudio,
-    [topic.playAudioFile],
+    [topics.playAudioFile],
     (get) => {
-        const queue = [...(get(topic.audioQueue) || [])];
+        const queue = [...(get(topics.audioQueue) || [])];
         const fileName = path.join(
             __dirname,
             "../../",
-            get(topic.playAudioFile)!
+            get(topics.playAudioFile)!
         );
 
         queue.push(fileName);
 
         return [
-            new Fact(topic.audioQueue, queue),
-            new Fact(topic.playAudioFile, undefined),
+            new Fact(topics.audioQueue, queue),
+            new Fact(topics.playAudioFile, undefined),
         ];
     }
 );

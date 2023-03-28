@@ -5,7 +5,7 @@ import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import Topic from "../engine/Topic";
-import topic from "../topic";
+import topics from "../topics";
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
 const TIME_BETWEEN_REMINDERS = 15;
@@ -55,7 +55,7 @@ function handleNeutralItem(
         // Remind the user
         // And update the last reminder time
         return [
-            new Fact(topic.playTts, "dig"),
+            new Fact(topics.playTts, "dig"),
             new Fact(lastNeutralReminderTimeTopic, time),
         ];
     }
@@ -63,12 +63,12 @@ function handleNeutralItem(
 
 export default new Rule(
     rules.assistant.neutralItem,
-    [topic.alive, topic.items, topic.time],
+    [topics.alive, topics.items, topics.time],
     (get) =>
         handleNeutralItem(
-            get(topic.alive)!,
-            get(topic.items)!,
+            get(topics.alive)!,
+            get(topics.items)!,
             get(lastNeutralReminderTimeTopic),
-            get(topic.time)!
+            get(topics.time)!
         )
 );

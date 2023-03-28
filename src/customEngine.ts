@@ -3,7 +3,7 @@ import Fact from "./engine/Fact";
 import FactStore from "./engine/FactStore";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
-import topic from "./topic";
+import topics from "./topics";
 
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
@@ -22,13 +22,13 @@ class CustomEngine extends Engine {
 
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topic.gsiData, data))
+            this.set(db, new Fact(topics.gsiData, data))
         );
     }
 
     public readyToPlayAudio(studentId: string, ready: boolean) {
         this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topic.discordReadyToPlayAudio, ready))
+            this.set(db, new Fact(topics.discordReadyToPlayAudio, ready))
         );
     }
 
@@ -39,15 +39,15 @@ class CustomEngine extends Engine {
     ) {
         this.sessions.set(studentId, new FactStore());
         this.withDb(studentId, (db) => {
-            this.set(db, new Fact(topic.studentId, studentId));
-            this.set(db, new Fact(topic.discordGuildId, guildId));
-            this.set(db, new Fact(topic.discordGuildChannelId, channelId));
+            this.set(db, new Fact(topics.studentId, studentId));
+            this.set(db, new Fact(topics.discordGuildId, guildId));
+            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
         });
     }
 
     public stopCoachingSession(studentId: string) {
         this.withDb(studentId, (db) => {
-            const subscription = db.get(topic.discordSubscriptionTopic);
+            const subscription = db.get(topics.discordSubscriptionTopic);
             subscription?.connection.destroy();
         });
     }

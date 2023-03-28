@@ -1,7 +1,7 @@
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topic from "../topic";
+import topics from "../topics";
 
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
@@ -11,17 +11,17 @@ const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 // Play rune sound
 export default new Rule(
     rules.assistant.runes,
-    [topic.inGame, topic.time],
+    [topics.inGame, topics.time],
     (get) => {
-        const inGame = get(topic.inGame)!;
-        const time = get(topic.time)!;
+        const inGame = get(topics.inGame)!;
+        const time = get(topics.time)!;
         if (
             inGame &&
             time > 0 &&
             (time % RIVER_RUNE_SPAWN_INTERVAL === 0 ||
                 time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
         ) {
-            return new Fact(topic.playAudioFile, "audio/rune-sound.mp3");
+            return new Fact(topics.playAudioFile, "audio/rune-sound.mp3");
         }
     }
 );

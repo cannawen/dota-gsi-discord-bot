@@ -5,7 +5,7 @@ import log from "../log";
 import path = require("path");
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topic from "../topic";
+import topics from "../topics";
 
 const TTS_DIRECTORY = "audio/tts-cache";
 if (!fs.existsSync(TTS_DIRECTORY)) {
@@ -19,7 +19,7 @@ function ttsPath(ttsString: string) {
 function createTtsFile(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
         log.verbose("effect", "Found cached TTS %s", ttsString);
-        return new Fact(topic.playAudioFile, ttsPath(ttsString));
+        return new Fact(topics.playAudioFile, ttsPath(ttsString));
     } else {
         log.verbose("effect", "Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
@@ -41,7 +41,7 @@ function createTtsFile(ttsString: string) {
                                 );
                                 resolve(
                                     new Fact(
-                                        topic.playAudioFile,
+                                        topics.playAudioFile,
                                         ttsPath(ttsString)
                                     )
                                 );
@@ -59,7 +59,7 @@ function createTtsFile(ttsString: string) {
     }
 }
 
-export default new Rule(rules.effect.playTts, [topic.playTts], (get) => [
-    new Fact(topic.playTts, undefined),
-    createTtsFile(get(topic.playTts)!),
+export default new Rule(rules.effect.playTts, [topics.playTts], (get) => [
+    new Fact(topics.playTts, undefined),
+    createTtsFile(get(topics.playTts)!),
 ]);

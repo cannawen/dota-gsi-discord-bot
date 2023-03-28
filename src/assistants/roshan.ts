@@ -4,7 +4,7 @@ import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import Topic from "../engine/Topic";
-import topic from "../topic";
+import topics from "../topics";
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
@@ -25,10 +25,10 @@ export default [
     // Set roshan alibe time to 11 minutes from now
     new Rule(
         rules.assistant.roshan.killedEvent,
-        [topic.time, topic.events],
+        [topics.time, topics.events],
         (get) => {
-            if (roshanWasKilled(get(topic.events)!)) {
-                const time = get(topic.time)!;
+            if (roshanWasKilled(get(topics.events)!)) {
+                const time = get(topics.time)!;
                 return [
                     new Fact(
                         roshanMaybeTimeTopic,
@@ -47,11 +47,11 @@ export default [
     // Play audio and reset roshan maybe alive time state
     new Rule(
         rules.assistant.roshan.maybeAliveTime,
-        [topic.time, roshanMaybeTimeTopic],
+        [topics.time, roshanMaybeTimeTopic],
         (get) => {
-            if (get(topic.time)! >= get(roshanMaybeTimeTopic)!) {
+            if (get(topics.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
-                    new Fact(topic.playAudioFile, "audio/rosh-maybe.mp3"),
+                    new Fact(topics.playAudioFile, "audio/rosh-maybe.mp3"),
                     new Fact(roshanMaybeTimeTopic, undefined),
                 ];
             }
@@ -62,11 +62,11 @@ export default [
     // Play audio and reset roshan alive time state
     new Rule(
         rules.assistant.roshan.aliveTime,
-        [topic.time, roshanAliveTimeTopic],
+        [topics.time, roshanAliveTimeTopic],
         (get) => {
-            if (get(topic.time)! >= get(roshanAliveTimeTopic)!) {
+            if (get(topics.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
-                    new Fact(topic.playAudioFile, "audio/rosh-alive.mp3"),
+                    new Fact(topics.playAudioFile, "audio/rosh-alive.mp3"),
                     new Fact(roshanAliveTimeTopic, undefined),
                 ];
             }
@@ -74,8 +74,8 @@ export default [
     ),
 
     // When we are no longer in a game, reset all our roshan timers
-    new Rule(rules.assistant.roshan.reset, [topic.inGame], (get) => {
-        if (!get(topic.inGame)) {
+    new Rule(rules.assistant.roshan.reset, [topics.inGame], (get) => {
+        if (!get(topics.inGame)) {
             return [
                 new Fact(roshanAliveTimeTopic, undefined),
                 new Fact(roshanMaybeTimeTopic, undefined),
