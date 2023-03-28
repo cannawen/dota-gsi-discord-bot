@@ -20,45 +20,71 @@ const NO_ITEMS = new PlayerItems(
     null
 ) as DeepReadonly<PlayerItems>;
 
-const SHOVEL_NEUTRAL_SLOT_NO_COOLDOWN = new PlayerItems(
+const TRUSTY_SHOVEL = new PlayerItems(
     [],
     [],
     new Item("item_trusty_shovel", "Trusty Shovel", 0),
     null
 );
 
-const PIRATE_HAT_NEUTRAL_SLOT_NO_COOLDOWN = new PlayerItems(
+const PIRATE_HAT = new PlayerItems(
     [],
     [],
     new Item("item_pirate_hat", "Pirate Hat", 0),
     null
 );
 
+const SHOVEL_ON_COOLDOWN = new PlayerItems(
+    [],
+    [],
+    new Item("item_trusty_shovel", "Trusty Shovel", 1),
+    null
+);
+
+const SHOVEL_ON_COOLDOWN_IN_STASH = new PlayerItems(
+    [],
+    [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
+    null,
+    null
+);
+
+const SHOVEL_READY_IN_STASH = new PlayerItems(
+    [],
+    [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
+    null,
+    null
+);
+
+const TWO_NEUTRAL_ITEMS_ONE_READY_A = new PlayerItems(
+    [],
+    [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
+    new Item("item_pirate_hat", "Pirate Hat", 1),
+    null
+);
+
+const TWO_NEUTRAL_ITEMS_ONE_READY_B = new PlayerItems(
+    [],
+    [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
+    new Item("item_pirate_hat", "Pirate Hat", 0),
+    null
+);
+
+const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(
+    [],
+    [
+        new Item("item_trusty_shovel", "Trusty Shovel", 1),
+        new Item("item_pirate_hat", "Pirate Hat", 0),
+    ],
+    null,
+    null
+);
+
 describe("neutral item", () => {
-    test("should return a rule", () => {
-        expect(neutralItemRule).toBeInstanceOf(Rule);
-    });
-
-    describe("no neutral item", () => {
-        test("reset last neutral reminder time", () => {
-            const result = getResults(neutralItemRule, {
-                alive: true,
-                items: NO_ITEMS,
-                lastNeutralReminderTimeTopic: 5,
-                time: 50,
-            });
-            expect(result).toContainFact(
-                "lastNeutralReminderTimeTopic",
-                undefined
-            );
-        });
-    });
-
-    describe("not alive", () => {
-        test("reset last neutral reminder time", () => {
+    describe("player is dead", () => {
+        test("invalidate reminder time", () => {
             const result = getResults(neutralItemRule, {
                 alive: false,
-                items: SHOVEL_NEUTRAL_SLOT_NO_COOLDOWN,
+                items: TRUSTY_SHOVEL,
                 lastNeutralReminderTimeTopic: 5,
                 time: 50,
             });
@@ -69,12 +95,120 @@ describe("neutral item", () => {
         });
     });
 
-    describe("alive with a pirate hat that has 0 cooldown", () => {
-        describe("never reminded before", () => {
+    describe("player is alive", () => {
+        describe("no neutral item", () => {
+            test("invalidate reminder time", () => {
+                const result = getResults(neutralItemRule, {
+                    alive: true,
+                    items: NO_ITEMS,
+                    lastNeutralReminderTimeTopic: 5,
+                    time: 50,
+                });
+                expect(result).toContainFact(
+                    "lastNeutralReminderTimeTopic",
+                    undefined
+                );
+            });
+        });
+
+        describe("pirate hat is ready to dig", () => {
+            describe("never reminded before", () => {
+                test("play tts and update reminder time", () => {
+                    const result = getResults(neutralItemRule, {
+                        alive: true,
+                        items: PIRATE_HAT,
+                        lastNeutralReminderTimeTopic: undefined,
+                        time: 50,
+                    });
+                    expect(result).toContainFact(
+                        "lastNeutralReminderTimeTopic",
+                        50
+                    );
+                    expect(result).toContainFact("playTts", "dig");
+                });
+            });
+        });
+
+        describe("shovel is ready to dig", () => {
+            describe("never reminded before", () => {
+                test("play tts and update reminder time", () => {
+                    const result = getResults(neutralItemRule, {
+                        alive: true,
+                        items: TRUSTY_SHOVEL,
+                        lastNeutralReminderTimeTopic: undefined,
+                        time: 50,
+                    });
+                    expect(result).toContainFact(
+                        "lastNeutralReminderTimeTopic",
+                        50
+                    );
+                    expect(result).toContainFact("playTts", "dig");
+                });
+            });
+            describe("reminded 1 second ago", () => {
+                test("do not change any state", () => {
+                    const result = getResults(neutralItemRule, {
+                        alive: true,
+                        items: TRUSTY_SHOVEL,
+                        lastNeutralReminderTimeTopic: 49,
+                        time: 50,
+                    });
+                    expect(result).toBeUndefined();
+                });
+            });
+
+            describe("reminded 15 seonds ago", () => {
+                test("play tts and update reminder time", () => {
+                    const result = getResults(neutralItemRule, {
+                        alive: true,
+                        items: TRUSTY_SHOVEL,
+                        lastNeutralReminderTimeTopic: 35,
+                        time: 50,
+                    });
+                    expect(result).toContainFact(
+                        "lastNeutralReminderTimeTopic",
+                        50
+                    );
+                    expect(result).toContainFact("playTts", "dig");
+                });
+            });
+        });
+
+        describe("shovel is not ready", () => {
+            test("invalidate reminder time", () => {
+                const result = getResults(neutralItemRule, {
+                    alive: true,
+                    items: SHOVEL_ON_COOLDOWN,
+                    lastNeutralReminderTimeTopic: undefined,
+                    time: 50,
+                });
+                expect(result).toContainFact(
+                    "lastNeutralReminderTimeTopic",
+                    undefined
+                );
+            });
+        });
+
+        describe("shovel is not ready in stash", () => {
+            test("invalidate reminder time", () => {
+                const result = getResults(neutralItemRule, {
+                    alive: true,
+                    items: SHOVEL_ON_COOLDOWN_IN_STASH,
+                    lastNeutralReminderTimeTopic: undefined,
+                    time: 50,
+                });
+                expect(result).toContainFact(
+                    "lastNeutralReminderTimeTopic",
+                    undefined
+                );
+            });
+        });
+
+        describe("shovel is ready to dig in stash", () => {
             test("play tts and update reminder time", () => {
                 const result = getResults(neutralItemRule, {
                     alive: true,
-                    items: PIRATE_HAT_NEUTRAL_SLOT_NO_COOLDOWN,
+                    items: SHOVEL_READY_IN_STASH,
                     lastNeutralReminderTimeTopic: undefined,
                     time: 50,
                 });
@@ -85,49 +219,44 @@ describe("neutral item", () => {
                 expect(result).toContainFact("playTts", "dig");
             });
         });
-    });
 
-    describe("alive with a shovel that has 0 cooldown", () => {
-        describe("never reminded before", () => {
+        describe("two neutral items, one of which is ready to cast", () => {
             test("play tts and update reminder time", () => {
-                const result = getResults(neutralItemRule, {
+                const resultA = getResults(neutralItemRule, {
                     alive: true,
-                    items: SHOVEL_NEUTRAL_SLOT_NO_COOLDOWN,
+                    items: TWO_NEUTRAL_ITEMS_ONE_READY_A,
                     lastNeutralReminderTimeTopic: undefined,
                     time: 50,
                 });
-                expect(result).toContainFact(
+                expect(resultA).toContainFact(
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(result).toContainFact("playTts", "dig");
-            });
-        });
-        describe("reminded 1 second ago", () => {
-            test("do not play tts and do not update reminder time", () => {
-                const result = getResults(neutralItemRule, {
-                    alive: true,
-                    items: SHOVEL_NEUTRAL_SLOT_NO_COOLDOWN,
-                    lastNeutralReminderTimeTopic: 49,
-                    time: 50,
-                });
-                expect(result).toBeUndefined();
-            });
-        });
+                expect(resultA).toContainFact("playTts", "dig");
 
-        describe("reminded 15 seonds ago", () => {
-            test("play tts and update reminder time", () => {
-                const result = getResults(neutralItemRule, {
+                const resultB = getResults(neutralItemRule, {
                     alive: true,
-                    items: SHOVEL_NEUTRAL_SLOT_NO_COOLDOWN,
-                    lastNeutralReminderTimeTopic: 35,
+                    items: TWO_NEUTRAL_ITEMS_ONE_READY_B,
+                    lastNeutralReminderTimeTopic: undefined,
                     time: 50,
                 });
-                expect(result).toContainFact(
+                expect(resultB).toContainFact(
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(result).toContainFact("playTts", "dig");
+                expect(resultB).toContainFact("playTts", "dig");
+
+                const resultC = getResults(neutralItemRule, {
+                    alive: true,
+                    items: TWO_NEUTRAL_ITEMS_ONE_READY_C,
+                    lastNeutralReminderTimeTopic: undefined,
+                    time: 50,
+                });
+                expect(resultC).toContainFact(
+                    "lastNeutralReminderTimeTopic",
+                    50
+                );
+                expect(resultC).toContainFact("playTts", "dig");
             });
         });
     });
