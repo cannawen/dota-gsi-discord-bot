@@ -1,7 +1,4 @@
 import "./discord/client";
-import "./discord/startVoiceSubscription";
-import "./discord/playAudioQueue";
-
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
@@ -12,7 +9,7 @@ import Rule from "./engine/Rule";
 
 dotenv.config();
 
-function importAll(directory: string) {
+function registerRulesInDirectory(directory: string) {
     const dirPath = path.join(__dirname, directory);
     fs.readdirSync(dirPath)
         // .js and not .ts because it gets transpiled in /build directory
@@ -30,9 +27,10 @@ function importAll(directory: string) {
         });
 }
 
-importAll("assistants");
-importAll("effects");
-importAll("gsi");
+registerRulesInDirectory("assistants");
+registerRulesInDirectory("discord/rules");
+registerRulesInDirectory("effects");
+registerRulesInDirectory("gsi");
 
 const debug = process.env.GSI_DEBUG === "true";
 const server = new gsi.Dota2GSIServer("/gsi", debug);
