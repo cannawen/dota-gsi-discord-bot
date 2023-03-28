@@ -66,7 +66,7 @@ expect.extend({
         return {
             pass,
             message: pass
-                ? () => `${message}. Response should not contain such fact.`
+                ? () => `${message}. Expected to contain no such fact.`
                 : () => `${message}`,
         };
     },
