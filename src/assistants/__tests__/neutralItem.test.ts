@@ -113,7 +113,7 @@ describe("neutral item", () => {
 
         describe("pirate hat is ready to dig", () => {
             describe("never reminded before", () => {
-                test("play tts and update reminder time", () => {
+                test("update reminder time, but do not play tts", () => {
                     const result = getResults(neutralItemRule, {
                         alive: true,
                         items: PIRATE_HAT,
@@ -124,14 +124,14 @@ describe("neutral item", () => {
                         "lastNeutralReminderTimeTopic",
                         50
                     );
-                    expect(result).toContainFact("playTts", "dig");
+                    expect(result).not.toContainFact("playTts", "dig");
                 });
             });
         });
 
         describe("shovel is ready to dig", () => {
             describe("never reminded before", () => {
-                test("play tts and update reminder time", () => {
+                test("update reminder time, but do not play tts", () => {
                     const result = getResults(neutralItemRule, {
                         alive: true,
                         items: TRUSTY_SHOVEL,
@@ -142,7 +142,7 @@ describe("neutral item", () => {
                         "lastNeutralReminderTimeTopic",
                         50
                     );
-                    expect(result).toContainFact("playTts", "dig");
+                    expect(result).not.toContainFact("playTts", "dig");
                 });
             });
             describe("reminded 1 second ago", () => {
@@ -209,7 +209,7 @@ describe("neutral item", () => {
                 const result = getResults(neutralItemRule, {
                     alive: true,
                     items: SHOVEL_READY_IN_BACKPACK,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(result).toContainFact(
@@ -225,7 +225,7 @@ describe("neutral item", () => {
                 const resultA = getResults(neutralItemRule, {
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_A,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultA).toContainFact(
@@ -237,7 +237,7 @@ describe("neutral item", () => {
                 const resultB = getResults(neutralItemRule, {
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_B,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultB).toContainFact(
@@ -249,7 +249,7 @@ describe("neutral item", () => {
                 const resultC = getResults(neutralItemRule, {
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_C,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultC).toContainFact(
