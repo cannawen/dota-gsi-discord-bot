@@ -12,8 +12,10 @@ dotenv.config();
 function registerRulesInDirectory(directory: string) {
     const dirPath = path.join(__dirname, directory);
     fs.readdirSync(dirPath)
-        // .js and not .ts because it gets transpiled in /build directory
-        .filter((file) => file.endsWith(".js"))
+        // .js and because it gets transpiled in /build directory
+        // .ts and because during testing, it stays in the /src directory
+        // Kinda sketch that we need the or for tests ...
+        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
         .map((file) => path.join(dirPath, file))
         .map((filePath) => require(filePath))
         // register modules that return a `Rule` or array of `Rule`s
