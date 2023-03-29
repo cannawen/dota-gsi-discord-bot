@@ -7,7 +7,7 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-const TTS_DIRECTORY = "audio/tts-cache";
+const TTS_DIRECTORY = "resources/audio/tts-cache";
 if (!fs.existsSync(TTS_DIRECTORY)) {
     fs.mkdirSync(TTS_DIRECTORY);
 }

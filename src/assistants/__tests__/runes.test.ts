@@ -30,7 +30,7 @@ describe("runes", () => {
                 });
                 expect(results).toContainFact(
                     "playAudioFile",
-                    "audio/rune-sound.mp3"
+                    "resources/audio/rune-sound.mp3"
                 );
             });
         });
@@ -42,7 +42,7 @@ describe("runes", () => {
                 });
                 expect(results).toContainFact(
                     "playAudioFile",
-                    "audio/rune-sound.mp3"
+                    "resources/audio/rune-sound.mp3"
                 );
             });
         });
@@ -54,7 +54,7 @@ describe("runes", () => {
                 });
                 expect(results).toContainFact(
                     "playAudioFile",
-                    "audio/rune-sound.mp3"
+                    "resources/audio/rune-sound.mp3"
                 );
             });
         });

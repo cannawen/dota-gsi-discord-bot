@@ -21,7 +21,10 @@ export default new Rule(
             (time % RIVER_RUNE_SPAWN_INTERVAL === 0 ||
                 time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
         ) {
-            return new Fact(topics.playAudioFile, "audio/rune-sound.mp3");
+            return new Fact(
+                topics.playAudioFile,
+                "resources/audio/rune-sound.mp3"
+            );
         }
     }
 );

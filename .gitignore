@@ -3,4 +3,4 @@ node_modules
 build/
 combined.log
 error.log
-audio/tts-cache
+resources/audio/tts-cache

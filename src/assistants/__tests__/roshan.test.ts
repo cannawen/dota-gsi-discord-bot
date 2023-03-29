@@ -68,7 +68,7 @@ describe("roshan", () => {
             });
             expect(results).toContainFact(
                 "playAudioFile",
-                "audio/rosh-maybe.mp3"
+                "resources/audio/rosh-maybe.mp3"
             );
             expect(results).toContainFact("roshanMaybeTimeTopic", undefined);
         });
@@ -79,7 +79,7 @@ describe("roshan", () => {
             });
             expect(results).toContainFact(
                 "playAudioFile",
-                "audio/rosh-maybe.mp3"
+                "resources/audio/rosh-maybe.mp3"
             );
             expect(results).toContainFact("roshanMaybeTimeTopic", undefined);
         });
@@ -107,7 +107,7 @@ describe("roshan", () => {
             });
             expect(results).toContainFact(
                 "playAudioFile",
-                "audio/rosh-alive.mp3"
+                "resources/audio/rosh-alive.mp3"
             );
             expect(results).toContainFact("roshanAliveTimeTopic", undefined);
         });
@@ -118,7 +118,7 @@ describe("roshan", () => {
             });
             expect(results).toContainFact(
                 "playAudioFile",
-                "audio/rosh-alive.mp3"
+                "resources/audio/rosh-alive.mp3"
             );
             expect(results).toContainFact("roshanAliveTimeTopic", undefined);
         });

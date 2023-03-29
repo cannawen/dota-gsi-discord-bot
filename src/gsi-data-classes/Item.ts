@@ -4,7 +4,7 @@ import gsi from "node-gsi";
 import path from "path";
 
 const items = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../../data/items.json"), "utf8")
+    fs.readFileSync(path.join(__dirname, "../../resources/items.json"), "utf8")
 );
 const itemNames = new Map<string, string>(Object.entries(items));
 

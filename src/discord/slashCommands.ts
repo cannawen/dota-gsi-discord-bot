@@ -24,7 +24,7 @@ function generateConfigFile(userId: string) {
     if (serverUrl) {
         return fs
             .readFileSync(
-                path.join(__dirname, "../../data/configInstructions.txt"),
+                path.join(__dirname, "../../resources/configInstructions.txt"),
                 "utf8"
             )
             .replace(/SERVER_URL/, serverUrl)

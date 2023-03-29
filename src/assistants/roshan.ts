@@ -51,7 +51,10 @@ export default [
         (get) => {
             if (get(topics.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
-                    new Fact(topics.playAudioFile, "audio/rosh-maybe.mp3"),
+                    new Fact(
+                        topics.playAudioFile,
+                        "resources/audio/rosh-maybe.mp3"
+                    ),
                     new Fact(roshanMaybeTimeTopic, undefined),
                 ];
             }
@@ -66,7 +69,10 @@ export default [
         (get) => {
             if (get(topics.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
-                    new Fact(topics.playAudioFile, "audio/rosh-alive.mp3"),
+                    new Fact(
+                        topics.playAudioFile,
+                        "resources/audio/rosh-alive.mp3"
+                    ),
                     new Fact(roshanAliveTimeTopic, undefined),
                 ];
             }
