@@ -12,9 +12,12 @@
         "start:dev": "npx nodemon",
         "test": "jest",
         "test:dev": "jest --watchAll",
+        "dig-canna": "mitmdump -nC mitmproxy-flows/die-respawn-dig_canna",
+        "dig-canna-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/die-respawn-dig_canna",
         "rune-canna": "mitmdump -nC mitmproxy-flows/water-rune_canna",
+        "rune-canna-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/water-rune_canna",
         "rune-wrath": "mitmdump -nC mitmproxy-flows/water-rune_wrath",
-        "dig-canna": "mitmdump -nC mitmproxy-flows/die-respawn-dig-dig_canna"
+        "rune-wrath-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/water-rune_wrath"
     },
     "author": "",
     "license": "ISC",
