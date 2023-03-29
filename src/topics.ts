@@ -25,6 +25,7 @@ const effects = {
     audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
     playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),
     privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
+    playInterruptingAudioFile: new Topic<string>("playInterruptingAudioFile"),
 };
 
 const discord = {

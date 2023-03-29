@@ -18,6 +18,7 @@ const effect = {
     playTts: "effect/playTts",
     playAudio: "effect/playAudio",
     playPrivateAudio: "effect/playPrivateAudio",
+    playInterruptingAudio: "effect/playInterruptingAudio",
 };
 
 const gsi = {
