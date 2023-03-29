@@ -21,9 +21,16 @@
             function loop() {
                 fetchAndPlay().then(() => setTimeout(loop, 500));
             }
+
+            function startCoaching(e) {
+                e.target.remove();
+                document.getElementById("coaching").style.display = "block";
+                loop();
+            }
         </script>
     </head>
     <body>
-        <button onClick="loop()">START COACHING</button>
+        <button onClick="startCoaching(event)">START COACHING</button>
+        <div id="coaching" style="display: none">Coaching...</div>
     </body>
 </html>
