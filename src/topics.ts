@@ -16,6 +16,7 @@ const gsi = {
     inGame: new Topic<boolean>("inGame"),
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     time: new Topic<number>("time"),
+    paused: new Topic<boolean>("paused"),
 };
 
 const effects = {

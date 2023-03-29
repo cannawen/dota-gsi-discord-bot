@@ -30,6 +30,7 @@ const gsi = {
     map: {
         time: "gsi/map->time",
         inGame: "gsi/map->game_state",
+        paused: "gsi/map->paused",
     },
 };
 

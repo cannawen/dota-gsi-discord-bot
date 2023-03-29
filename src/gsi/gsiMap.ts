@@ -30,4 +30,7 @@ export default [
     new Rule(rules.gsi.map.inGame, [topics.gsiData], (get) => [
         new Fact(topics.inGame, inGame(get(topics.gsiData)!.map?.gameState)),
     ]),
+    new Rule(rules.gsi.map.paused, [topics.gsiData], (get) => [
+        new Fact(topics.paused, get(topics.gsiData)!.map?.paused),
+    ]),
 ];
