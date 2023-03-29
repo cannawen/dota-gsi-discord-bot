@@ -22,7 +22,7 @@ export default new Rule(
                 time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
         ) {
             return new Fact(
-                topics.playAudioFile,
+                topics.playPrivateAudioFile,
                 "resources/audio/rune-sound.mp3"
             );
         }
