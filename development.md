@@ -1,14 +1,16 @@
 # Development
 
--   Make sure your `node --version` is at least v18.15.0
 -   `npm install`
 -   `npm run build`
 -   `npm start`
+---
+-   Make sure your `node --version` is at least v18.15.0
 -   `npm run start:dev` or `npm run test:dev` for hot reloading
+-   `fly deploy` to deploy to fly.io
 
 ## Node and Typescript
 
-When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `build` directory
+When `npm start` is run, it will first run `tsc` which will transpile typescript files in the `src` directory to javascript in the `build` directory. `rimraf` is used to `rm -rf` the build directory between builds
 
 ## Dependencies
 
@@ -24,7 +26,7 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   Create a `.env` file by copying `sample.env` and add your bot secret key to `DISCORD_BOT_TOKEN`
 -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY`
 -   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
--   (See here for details)[https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration]
+-   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
 
 ## Logging
 
@@ -75,6 +77,11 @@ Goal: to develop the app without having dota open
 
 `mitmdump -nC flow_file`  
 see `mitmproxy-flows` folders for currently saved flows
+
+### replay some file and redirect to a different host
+
+The flows are set to localhost:9001, but we want to send the requests to dota-coach.fly.dev
+`mitmdump -M "|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi" -nC flow_file`  
 
 ## Code Formatting
 
