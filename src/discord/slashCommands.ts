@@ -27,7 +27,7 @@ function generateConfigFile(userId: string) {
                 path.join(__dirname, "../../resources/configInstructions.txt"),
                 "utf8"
             )
-            .replace(/SERVER_URL/, serverUrl)
+            .replace(/SERVER_URL/g, serverUrl)
             .replace(/STUDENT_ID/, userId);
     } else {
         log.error(
@@ -62,20 +62,23 @@ function handleConfig(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function handleCoachMe(interaction: ChatInputCommandInteraction<CacheType>) {
-    if (interaction.channel?.isVoiceBased && interaction.guildId) {
+    if (interaction.channel?.isVoiceBased() && interaction.guildId) {
+        const studentId = hashStudentId(interaction.user.id);
         engine.startCoachingSession(
-            hashStudentId(interaction.user.id),
+            studentId,
             interaction.guildId,
             interaction.channelId
         );
+        const privateUrl = `${process.env.SERVER_URL}/coach/${studentId}/`;
+        const instructionUrl = `${process.env.SERVER_URL}/instructions`;
         interaction.reply({
-            content:
-                "Starting...\n\nMake sure you have used the config command to add the Game State Integration configuration file to your computer",
+            content: `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have set up the bot first using ${instructionUrl}`,
             ephemeral: true,
         });
     } else {
         interaction.reply({
-            content: "Bot must be started in voice-based guild channel",
+            content:
+                "Bot must be started in voice-based channel. Click 'Open Chat' beside a voice channel and try /coachme again",
             ephemeral: true,
         });
     }

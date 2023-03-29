@@ -1,9 +1,9 @@
-Copy the configuration below and save it into `game/dota/cfg/gamestate_integration/gamestate_integration_dota2-coach.cfg`. Make sure you start dota with the `-gamestateintegration` launch option
+See SERVER_URL/instructions for how to set up the bot, using the configuration file below
 
 ```
 "Dota 2 Coach Configuration"
 {
-    "uri" "SERVER_URL"
+    "uri" "SERVER_URL/gsi"
     "timeout" "5.0"
     "buffer" "0.5"
     "throttle" "0.5"

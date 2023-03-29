@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Setup Instructions</title>
+        <script></script>
+    </head>
+    <body>
+        <h1>How to set up Dota Coach</h1>
+        (You only have to do this once)
+        <ol>
+            <li>
+                <a
+                    href="https://discord.com/oauth2/authorize?client_id=1089945324757454950&permissions=36701184&scope=bot"
+                    >Add bot to your server</a
+                >
+                (you must be an admin)
+            </li>
+            <li>Go to any channel and type /config</li>
+            <li>
+                Open a text editor and save the config file as
+                gamestate_integration_dota2-coach.cfg on your desktop
+            </li>
+            <li>Open your Steam library</li>
+            <li>Right click Dota 2, click "Properties"</li>
+            <li>Make sure you are on "General" on the left sidebar</li>
+            <li>Add -gamestateintegration to the launch options</li>
+            <li>Click on "Local Files" on the left sidebar</li>
+            <li>Click "Browse..."</li>
+            <li>Open game/data/cfg</li>
+            <li>
+                If it does not already exist, create a new folder called
+                gamestate_integration
+            </li>
+            <li>Drag and drop the file from step 3 into this new folder</li>
+            <li>Restart Steam</li>
+        </ol>
+        <h1>How to start dota coach</h1>
+        (You must do this every time)
+        <ol>
+            <li>Go to a voice channel chat and type /coachme</li>
+            <li>
+                Join the voice channel to recieve general tips (i.e. rosh
+                respawn time) and click the link provided to recieve private
+                tips (i.e. reminder to use your Trusty Shovel)
+            </li>
+            <li>
+                When you are done, you must type /stop to have the bot leave the
+                channel
+            </li>
+        </ol>
+        <h1>Note</h1>
+        A new version of the bot is deployed daily at 3am Eastern time. If you
+        are playing a game at this time, the bot will stop talking to you and
+        you must type /coachme again. It may forget some things that happened
+        before the restart (like roshan time)
+    </body>
+</html>

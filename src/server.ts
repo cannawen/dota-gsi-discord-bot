@@ -1,7 +1,7 @@
+import engine from "./customEngine";
 import express from "express";
 import gsiParser from "./gsiParser";
 import path from "path";
-import engine from "./customEngine";
 
 const app = express();
 
@@ -14,6 +14,12 @@ app.use(
 
 app.get("/", (req, res) => {
     res.status(200).send("hello :3");
+});
+
+app.get("/instructions", (req, res) => {
+    res.status(200).sendFile(
+        path.join(__dirname, "../resources/instructions.html")
+    );
 });
 
 app.get("/coach/:studentId/", (req, res) => {
