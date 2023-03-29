@@ -8,7 +8,10 @@ import "../index";
 
 describe("during app startup", () => {
     test("should register all rules with engine", () => {
-        // 6 for assistants, 2 for discord, 3 for effects, 6 for gsi
-        expect(engine.register).toHaveBeenCalledTimes(17);
+        // 7 for assistants
+        // 2 for discord
+        // 3 for effects
+        // 6 for gsi
+        expect(engine.register).toHaveBeenCalledTimes(18);
     });
 });
