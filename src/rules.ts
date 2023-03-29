@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const assistant = {
     neutralItem: "assistant/neutral_item",
     roshan: {
@@ -19,6 +20,7 @@ const effect = {
     playAudio: "effect/playAudio",
     playPrivateAudio: "effect/playPrivateAudio",
     playInterruptingAudio: "effect/playInterruptingAudio",
+    stopAudio: "effect/stopAudio",
 };
 
 const gsi = {
