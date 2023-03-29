@@ -1,12 +1,14 @@
+// TODO export a non-connected discord client, and only start it here
 import "./discord/client";
-import "./frontend";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
 import gsi = require("node-gsi");
+import gsiParser from "./gsiParser";
 import log from "./log";
 import path = require("path");
 import Rule from "./engine/Rule";
+import server from "./server";
 
 dotenv.config();
 
@@ -35,10 +37,7 @@ registerRulesInDirectory("discord/rules");
 registerRulesInDirectory("effects");
 registerRulesInDirectory("gsi");
 
-const debug = process.env.GSI_DEBUG === "true";
-const server = new gsi.Dota2GSIServer("/gsi", debug);
-
-server.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
+gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
     engine.setGsi(data.auth, {
@@ -53,7 +52,7 @@ server.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
 // run all logic on the items of one of the players only (from 0-9)
 // needs to be 6 for mitmproxy die-respawn-dig-dig_canna to run properly
 const playerId = 6;
-server.events.on(
+gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
         engine.setGsi(data.auth, {
@@ -69,8 +68,9 @@ server.events.on(
 const port = process.env.PORT;
 const host = process.env.HOST;
 if (port && host) {
-    server.listen(Number(port), host);
-    log.info("gsi", "Starting GSI server on port %s", port.magenta);
+    server.listen(Number(port), host, () => {
+        log.info("server", "Starting server on %s", `http://${host}:${port}`);
+    });
 } else {
     log.error(
         "gsi",
