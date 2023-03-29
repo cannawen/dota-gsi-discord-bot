@@ -1,6 +1,7 @@
 import express from "express";
 import gsiParser from "./gsiParser";
 import path from "path";
+import engine from "./customEngine";
 
 const app = express();
 
@@ -23,10 +24,12 @@ app.get("/coach/:studentId/", (req, res) => {
 
 app.get("/coach/:studentId/poll", (req, res) => {
     const id = req.params.studentId;
-
-    res.status(200).json([
-        Math.random() > 0.85 ? "resources/audio/rune-sound.mp3" : null,
-    ]);
+    const nextAudio = engine.handleNextPrivateAudio(id);
+    if (nextAudio) {
+        res.status(200).json([nextAudio]);
+    } else {
+        res.status(200).json([null]);
+    }
 });
 
 app.head("/gsi", (req, res) => {

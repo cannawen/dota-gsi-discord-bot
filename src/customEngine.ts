@@ -10,12 +10,12 @@ class CustomEngine extends Engine {
 
     private withDb(
         studentId: string | null,
-        effectFn: (db: FactStore) => void
+        effectFn: (db: FactStore) => unknown
     ) {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
-                effectFn(db);
+                return effectFn(db);
             }
         }
     }
@@ -55,6 +55,18 @@ class CustomEngine extends Engine {
     public lostVoiceConnection(studentId: string) {
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);
+    }
+
+    public handleNextPrivateAudio(studentId: string) {
+        return this.withDb(studentId, (db) => {
+            const queue = db.get(topics.privateAudioQueue);
+            if (queue && queue.length > 0) {
+                const newQueue = [...queue];
+                const nextFile = newQueue.pop()!;
+                db.set(new Fact(topics.privateAudioQueue, newQueue));
+                return nextFile;
+            }
+        }) as string | void;
     }
 }
 

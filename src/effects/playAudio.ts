@@ -4,6 +4,9 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
+/**
+ * The actual playing happens in discord/playAudioQueue
+ */
 export default new Rule(
     rules.effect.playAudio,
     [topics.playAudioFile],

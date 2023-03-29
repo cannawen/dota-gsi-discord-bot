@@ -9,12 +9,7 @@ export default new Rule(
     [topics.playPrivateAudioFile],
     (get) => {
         const queue = [...(get(topics.privateAudioQueue) || [])];
-        const fileName = path.join(
-            __dirname,
-            "../../",
-            get(topics.playPrivateAudioFile)!
-        );
-
+        const fileName = get(topics.playPrivateAudioFile)!;
         queue.push(fileName);
 
         return [
