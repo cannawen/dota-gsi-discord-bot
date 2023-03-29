@@ -5,30 +5,35 @@ import path from "path";
 
 const app = express();
 
-app.use(express.json());
+app.set("strict routing", true);
+app.set("x-powered-by", false);
 
-app.use(
+const router = express.Router({ strict: true });
+
+router.use(express.json());
+
+router.use(
     "/resources/audio",
     express.static(path.join(__dirname, "../resources/audio"))
 );
 
-app.get("/", (req, res) => {
+router.get("/", (req, res) => {
     res.status(200).send("hello :3");
 });
 
-app.get("/instructions", (req, res) => {
+router.get("/instructions", (req, res) => {
     res.status(200).sendFile(
         path.join(__dirname, "../resources/instructions.html")
     );
 });
 
-app.get("/coach/:studentId/", (req, res) => {
+router.get("/coach/:studentId/", (req, res) => {
     res.status(200).sendFile(
         path.join(__dirname, "../resources/studentPage.html")
     );
 });
 
-app.get("/coach/:studentId/poll", (req, res) => {
+router.get("/coach/:studentId/poll", (req, res) => {
     const id = req.params.studentId;
     const nextAudio = engine.handleNextPrivateAudio(id);
     if (nextAudio) {
@@ -38,13 +43,15 @@ app.get("/coach/:studentId/poll", (req, res) => {
     }
 });
 
-app.head("/gsi", (req, res) => {
+router.head("/gsi", (req, res) => {
     res.status(200).send();
 });
 
-app.post("/gsi", (req, res) => {
+router.post("/gsi", (req, res) => {
     gsiParser.feedState(req.body);
     res.status(200).send();
 });
+
+app.use("/", router);
 
 export default app;
