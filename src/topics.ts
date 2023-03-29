@@ -19,8 +19,11 @@ const gsi = {
 };
 
 const effects = {
-    playAudioFile: new Topic<string>("playAudioFile"),
     playTts: new Topic<string>("playTts"),
+    playAudioFile: new Topic<string>("playAudioFile"),
+    audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),
+    privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
 };
 
 const discord = {
@@ -28,7 +31,6 @@ const discord = {
     discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
-    audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
     discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
         "discordSubscriptionTopic"
     ),

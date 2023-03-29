@@ -56,7 +56,7 @@ function handleNeutralItem(
         // Remind the user
         // And update the last reminder time
         return [
-            new Fact(topics.playTts, "dig"),
+            new Fact(topics.playPrivateAudioFile, "resources/audio/dig.mp3"),
             new Fact(lastNeutralReminderTimeTopic, time),
         ];
     }

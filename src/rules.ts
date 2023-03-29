@@ -15,8 +15,9 @@ const discord = {
 };
 
 const effect = {
-    playAudio: "effect/playAudio",
     playTts: "effect/playTts",
+    playAudio: "effect/playAudio",
+    playPrivateAudio: "effect/playPrivateAudio",
 };
 
 const gsi = {

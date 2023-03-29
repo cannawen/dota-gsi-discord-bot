@@ -124,7 +124,10 @@ describe("neutral item", () => {
                         "lastNeutralReminderTimeTopic",
                         50
                     );
-                    expect(result).not.toContainFact("playTts", "dig");
+                    expect(result).not.toContainFact(
+                        "playPrivateAudioFileFile",
+                        "resources/audio/dig.mp3"
+                    );
                 });
             });
         });
@@ -142,7 +145,10 @@ describe("neutral item", () => {
                         "lastNeutralReminderTimeTopic",
                         50
                     );
-                    expect(result).not.toContainFact("playTts", "dig");
+                    expect(result).not.toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/dig.mp3"
+                    );
                 });
             });
             describe("reminded 1 second ago", () => {
@@ -169,7 +175,10 @@ describe("neutral item", () => {
                         "lastNeutralReminderTimeTopic",
                         50
                     );
-                    expect(result).toContainFact("playTts", "dig");
+                    expect(result).toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/dig.mp3"
+                    );
                 });
             });
         });
@@ -216,7 +225,10 @@ describe("neutral item", () => {
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(result).toContainFact("playTts", "dig");
+                expect(result).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/dig.mp3"
+                );
             });
         });
 
@@ -232,7 +244,10 @@ describe("neutral item", () => {
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(resultA).toContainFact("playTts", "dig");
+                expect(resultA).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/dig.mp3"
+                );
 
                 const resultB = getResults(neutralItemRule, {
                     alive: true,
@@ -244,7 +259,10 @@ describe("neutral item", () => {
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(resultB).toContainFact("playTts", "dig");
+                expect(resultB).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/dig.mp3"
+                );
 
                 const resultC = getResults(neutralItemRule, {
                     alive: true,
@@ -256,7 +274,10 @@ describe("neutral item", () => {
                     "lastNeutralReminderTimeTopic",
                     50
                 );
-                expect(resultC).toContainFact("playTts", "dig");
+                expect(resultC).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/dig.mp3"
+                );
             });
         });
     });
