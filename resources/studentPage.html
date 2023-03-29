@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Wow so fancy</title>
+        <script>
+            function start() {
+                setInterval(() => {
+                    fetch("./poll")
+                        .then((res) => res.json())
+                        .then((res) => {
+                            if (res[0]) {
+                                const f = new Audio("/" + res[0]);
+                                f.play();
+                            }
+                        });
+                }, 500);
+            }
+        </script>
+    </head>
+    <body>
+        <button onClick="start()">GO</button>
+    </body>
+</html>
