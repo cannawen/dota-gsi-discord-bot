@@ -1,3 +1,5 @@
-const server = jest.fn();
+const server = {
+    listen: jest.fn(),
+};
 
 export default server;
