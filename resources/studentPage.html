@@ -2,21 +2,28 @@
     <head>
         <title>Wow so fancy</title>
         <script>
-            function start() {
-                setInterval(() => {
-                    fetch("./poll")
-                        .then((res) => res.json())
-                        .then((res) => {
+            function fetchAndPlay() {
+                return fetch("./poll")
+                    .then((res) => res.json())
+                    .then((res) => {
+                        return new Promise((resolve) => {
                             if (res[0]) {
                                 const f = new Audio("/" + res[0]);
+                                f.addEventListener("ended", resolve);
                                 f.play();
+                            } else {
+                                resolve();
                             }
                         });
-                }, 500);
+                    });
+            }
+
+            function loop() {
+                fetchAndPlay().then(() => setTimeout(loop, 500));
             }
         </script>
     </head>
     <body>
-        <button onClick="start()">GO</button>
+        <button onClick="loop()">GO</button>
     </body>
 </html>
