@@ -9,6 +9,7 @@ const assistant = {
     },
     runes: "assistant/runes",
     pause: "assistant/pause",
+    goldReminder: "assistant/gold_reminder",
 };
 
 const discord = {
@@ -35,6 +36,9 @@ const gsi = {
         time: "gsi/map->time",
         inGame: "gsi/map->game_state",
         paused: "gsi/map->paused",
+    },
+    player: {
+        gold: "gsi/player->gold",
     },
 };
 

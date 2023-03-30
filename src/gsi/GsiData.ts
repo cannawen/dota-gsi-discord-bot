@@ -9,6 +9,7 @@ type GsiData = {
     hero: gsi.IHero | null;
     items: gsi.IItemContainer | null;
     map: gsi.IMap | null;
+    player: gsi.IPlayer | null;
 };
 
 export default GsiData;

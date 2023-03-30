@@ -1,4 +1,5 @@
 /* eslint-disable max-statements */
+import deepEqual from "deep-equal";
 import Fact from "../src/engine/Fact";
 
 /* eslint-disable sort-keys */
@@ -56,7 +57,7 @@ expect.extend({
         message = factExists
             ? `Fact ${label} exists `
             : `Fact ${label} does not exist `;
-        const correctValue = fact?.value === value;
+        const correctValue = deepEqual(fact?.value, value);
         message += correctValue
             ? `with value ${value}`
             : `with incorrect value ${fact?.value} (expected ${value})`;
