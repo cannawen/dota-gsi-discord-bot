@@ -8,6 +8,7 @@ const assistant = {
         reset: "assistant/roshan/reset",
     },
     runes: "assistant/runes",
+    pause: "assistant/pause",
 };
 
 const discord = {
