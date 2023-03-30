@@ -1,6 +1,7 @@
 import engine from "./customEngine";
 import express from "express";
 import gsiParser from "./gsiParser";
+import log from "./log";
 import path from "path";
 
 const app = express();
@@ -37,6 +38,7 @@ router.get("/coach/:studentId/poll", (req, res) => {
     const id = req.params.studentId;
     const nextAudio = engine.handleNextPrivateAudio(id);
     if (nextAudio) {
+        log.info("effect", "Playing private audio %s", nextAudio.blue);
         res.status(200).json([nextAudio]);
     } else {
         res.status(200).json([null]);

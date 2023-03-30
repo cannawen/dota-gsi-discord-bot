@@ -1,4 +1,5 @@
 import Fact from "../engine/Fact";
+import log from "../log";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -13,6 +14,7 @@ export default new Rule(
     (get) => {
         const file = get(topics.effect.playInterruptingAudioFile)!;
         const subscription = get(topics.discord.discordSubscriptionTopic)!;
+        log.info("discord", "Playing interrupting audio %s", file.blue);
 
         subscription.player.play(Voice.createAudioResource(file));
         return new Fact(topics.effect.playInterruptingAudioFile, undefined);
