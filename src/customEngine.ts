@@ -20,6 +20,19 @@ class CustomEngine extends Engine {
         }
     }
 
+    private alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
+        return Object.entries(this.sessions).reduce((memo, [_, db]) => {
+            const existingGuildId = db.get(topics.discord.discordGuildId);
+            const existingChannelId = db.get(
+                topics.discord.discordGuildChannelId
+            );
+            return (
+                memo ||
+                (existingGuildId === guildId && existingChannelId === channelId)
+            );
+        }, false);
+    }
+
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
             this.set(db, new Fact(topics.gsi.allData, data))
@@ -43,11 +56,15 @@ class CustomEngine extends Engine {
         this.sessions.set(studentId, new FactStore());
         this.withDb(studentId, (db) => {
             this.set(db, new Fact(topics.studentId, studentId));
-            this.set(db, new Fact(topics.discord.discordGuildId, guildId));
-            this.set(
-                db,
-                new Fact(topics.discord.discordGuildChannelId, channelId)
-            );
+            // Do not connect again if bot is already connected to a voice channel
+            // (through someone else's /coachme)
+            if (!this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
+                this.set(db, new Fact(topics.discord.discordGuildId, guildId));
+                this.set(
+                    db,
+                    new Fact(topics.discord.discordGuildChannelId, channelId)
+                );
+            }
         });
     }
 
