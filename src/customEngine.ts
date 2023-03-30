@@ -22,13 +22,16 @@ class CustomEngine extends Engine {
 
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topics.gsiData, data))
+            this.set(db, new Fact(topics.gsi.allData, data))
         );
     }
 
     public readyToPlayAudio(studentId: string, ready: boolean) {
         this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topics.discordReadyToPlayAudio, ready))
+            this.set(
+                db,
+                new Fact(topics.discord.discordReadyToPlayAudio, ready)
+            )
         );
     }
 
@@ -40,14 +43,19 @@ class CustomEngine extends Engine {
         this.sessions.set(studentId, new FactStore());
         this.withDb(studentId, (db) => {
             this.set(db, new Fact(topics.studentId, studentId));
-            this.set(db, new Fact(topics.discordGuildId, guildId));
-            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
+            this.set(db, new Fact(topics.discord.discordGuildId, guildId));
+            this.set(
+                db,
+                new Fact(topics.discord.discordGuildChannelId, channelId)
+            );
         });
     }
 
     public stopCoachingSession(studentId: string) {
         this.withDb(studentId, (db) => {
-            const subscription = db.get(topics.discordSubscriptionTopic);
+            const subscription = db.get(
+                topics.discord.discordSubscriptionTopic
+            );
             subscription?.connection.destroy();
         });
     }
@@ -59,11 +67,11 @@ class CustomEngine extends Engine {
 
     public handleNextPrivateAudio(studentId: string) {
         return this.withDb(studentId, (db) => {
-            const queue = db.get(topics.privateAudioQueue);
+            const queue = db.get(topics.effect.privateAudioQueue);
             if (queue && queue.length > 0) {
                 const newQueue = [...queue];
                 const nextFile = newQueue.pop()!;
-                db.set(new Fact(topics.privateAudioQueue, newQueue));
+                db.set(new Fact(topics.effect.privateAudioQueue, newQueue));
                 return nextFile;
             }
         }) as string | void;
