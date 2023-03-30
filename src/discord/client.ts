@@ -25,12 +25,10 @@ discordClient.on("ready", (client) => {
 discordClient.on(Events.InteractionCreate, (interaction) => {
     if (!interaction.isChatInputCommand()) return;
 
-    log.info(
-        "discord",
-        "Handling slash command interaction %s",
-        interaction.commandName
-    );
-    switch (interaction.commandName) {
+    const commandName = interaction.commandName;
+
+    log.info("discord", "Handling slash command interaction %s", commandName);
+    switch (commandName) {
         case SlashCommandName.config:
             handle.config(interaction);
             break;
@@ -44,8 +42,12 @@ discordClient.on(Events.InteractionCreate, (interaction) => {
             log.error(
                 "discord",
                 "Unable to handle interaction %s",
-                interaction.commandName
+                commandName
             );
+            interaction.reply({
+                content: `Unable to handle command ${commandName}. Please try again later`,
+                ephemeral: true,
+            });
             break;
     }
 });
