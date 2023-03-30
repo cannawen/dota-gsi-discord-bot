@@ -19,7 +19,11 @@
             }
 
             function loop() {
-                fetchAndPlay().then(() => setTimeout(loop, 500));
+                try {
+                    fetchAndPlay().then(() => setTimeout(loop, 500));
+                } catch (error) {
+                    loop();
+                }
             }
 
             function startCoaching(e) {

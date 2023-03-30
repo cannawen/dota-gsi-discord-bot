@@ -8,7 +8,7 @@ export default new Rule("glhf", [topics.gsi.time, topics.gsi.inGame], (get) => {
     if (inGame && time === 0) {
         return new Fact(
             topics.effect.playPrivateAudioFile,
-            "resources/audio/glhf"
+            "resources/audio/glhf.mp3"
         );
     }
 });
