@@ -5,14 +5,14 @@ import topics from "../topics";
 
 export default new Rule(
     rules.effect.stopAudio,
-    [topics.stopAudio, topics.discordSubscriptionTopic],
+    [topics.effect.stopAudio, topics.discord.discordSubscriptionTopic],
     (get) => {
-        const stop = get(topics.stopAudio)!;
-        const subscription = get(topics.discordSubscriptionTopic)!;
+        const stop = get(topics.effect.stopAudio)!;
+        const subscription = get(topics.discord.discordSubscriptionTopic)!;
 
         if (stop) {
             subscription.player.stop();
         }
-        return new Fact(topics.stopAudio, undefined);
+        return new Fact(topics.effect.stopAudio, undefined);
     }
 );

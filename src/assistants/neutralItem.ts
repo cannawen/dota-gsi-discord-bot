@@ -56,7 +56,10 @@ function handleNeutralItem(
         // Remind the user
         // And update the last reminder time
         return [
-            new Fact(topics.playPrivateAudioFile, "resources/audio/dig.mp3"),
+            new Fact(
+                topics.effect.playPrivateAudioFile,
+                "resources/audio/dig.mp3"
+            ),
             new Fact(lastNeutralReminderTimeTopic, time),
         ];
     }
@@ -64,12 +67,12 @@ function handleNeutralItem(
 
 export default new Rule(
     rules.assistant.neutralItem,
-    [topics.alive, topics.items, topics.time],
+    [topics.gsi.alive, topics.gsi.items, topics.gsi.time],
     (get) =>
         handleNeutralItem(
-            get(topics.alive)!,
-            get(topics.items)!,
+            get(topics.gsi.alive)!,
+            get(topics.gsi.items)!,
             get(lastNeutralReminderTimeTopic),
-            get(topics.time)!
+            get(topics.gsi.time)!
         )
 );

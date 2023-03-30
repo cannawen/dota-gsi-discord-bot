@@ -14,10 +14,14 @@ const emColor = colors.cyan;
 
 export default new Rule(
     rules.discord.startVoiceSubscription,
-    [topics.discordGuildId, topics.discordGuildChannelId, topics.studentId],
+    [
+        topics.discord.discordGuildId,
+        topics.discord.discordGuildChannelId,
+        topics.studentId,
+    ],
     (get) => {
-        const guildId = get(topics.discordGuildId)!;
-        const channelId = get(topics.discordGuildChannelId)!;
+        const guildId = get(topics.discord.discordGuildId)!;
+        const channelId = get(topics.discord.discordGuildChannelId)!;
         const studentId = get(topics.studentId)!;
 
         const guild = client.guilds.cache.find((g) => g.id === guildId);
@@ -88,8 +92,8 @@ export default new Rule(
         const subscription = connection.subscribe(player);
 
         return [
-            new Fact(topics.discordReadyToPlayAudio, false),
-            new Fact(topics.discordSubscriptionTopic, subscription),
+            new Fact(topics.discord.discordReadyToPlayAudio, false),
+            new Fact(topics.discord.discordSubscriptionTopic, subscription),
         ];
     }
 );

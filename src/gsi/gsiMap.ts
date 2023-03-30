@@ -24,13 +24,16 @@ function inGame(state: Dota2GameState | undefined) {
 }
 
 export default [
-    new Rule(rules.gsi.map.time, [topics.gsiData], (get) => [
-        new Fact(topics.time, get(topics.gsiData)!.map?.clockTime),
+    new Rule(rules.gsi.map.time, [topics.gsi.allData], (get) => [
+        new Fact(topics.gsi.time, get(topics.gsi.allData)!.map?.clockTime),
     ]),
-    new Rule(rules.gsi.map.inGame, [topics.gsiData], (get) => [
-        new Fact(topics.inGame, inGame(get(topics.gsiData)!.map?.gameState)),
+    new Rule(rules.gsi.map.inGame, [topics.gsi.allData], (get) => [
+        new Fact(
+            topics.gsi.inGame,
+            inGame(get(topics.gsi.allData)!.map?.gameState)
+        ),
     ]),
-    new Rule(rules.gsi.map.paused, [topics.gsiData], (get) => [
-        new Fact(topics.paused, get(topics.gsiData)!.map?.paused),
+    new Rule(rules.gsi.map.paused, [topics.gsi.allData], (get) => [
+        new Fact(topics.gsi.paused, get(topics.gsi.allData)!.map?.paused),
     ]),
 ];

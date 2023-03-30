@@ -25,10 +25,10 @@ export default [
     // Set roshan alibe time to 11 minutes from now
     new Rule(
         rules.assistant.roshan.killedEvent,
-        [topics.time, topics.events],
+        [topics.gsi.time, topics.gsi.events],
         (get) => {
-            if (roshanWasKilled(get(topics.events)!)) {
-                const time = get(topics.time)!;
+            if (roshanWasKilled(get(topics.gsi.events)!)) {
+                const time = get(topics.gsi.time)!;
                 return [
                     new Fact(
                         roshanMaybeTimeTopic,
@@ -47,12 +47,12 @@ export default [
     // Play audio and reset roshan maybe alive time state
     new Rule(
         rules.assistant.roshan.maybeAliveTime,
-        [topics.time, roshanMaybeTimeTopic],
+        [topics.gsi.time, roshanMaybeTimeTopic],
         (get) => {
-            if (get(topics.time)! >= get(roshanMaybeTimeTopic)!) {
+            if (get(topics.gsi.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
                     new Fact(
-                        topics.playAudioFile,
+                        topics.effect.playAudioFile,
                         "resources/audio/rosh-maybe.mp3"
                     ),
                     new Fact(roshanMaybeTimeTopic, undefined),
@@ -65,12 +65,12 @@ export default [
     // Play audio and reset roshan alive time state
     new Rule(
         rules.assistant.roshan.aliveTime,
-        [topics.time, roshanAliveTimeTopic],
+        [topics.gsi.time, roshanAliveTimeTopic],
         (get) => {
-            if (get(topics.time)! >= get(roshanAliveTimeTopic)!) {
+            if (get(topics.gsi.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
                     new Fact(
-                        topics.playAudioFile,
+                        topics.effect.playAudioFile,
                         "resources/audio/rosh-alive.mp3"
                     ),
                     new Fact(roshanAliveTimeTopic, undefined),
@@ -80,8 +80,8 @@ export default [
     ),
 
     // When we are no longer in a game, reset all our roshan timers
-    new Rule(rules.assistant.roshan.reset, [topics.inGame], (get) => {
-        if (!get(topics.inGame)) {
+    new Rule(rules.assistant.roshan.reset, [topics.gsi.inGame], (get) => {
+        if (!get(topics.gsi.inGame)) {
             return [
                 new Fact(roshanAliveTimeTopic, undefined),
                 new Fact(roshanMaybeTimeTopic, undefined),

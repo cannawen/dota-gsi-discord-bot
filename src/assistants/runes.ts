@@ -11,10 +11,10 @@ const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 // Play rune sound
 export default new Rule(
     rules.assistant.runes,
-    [topics.inGame, topics.time],
+    [topics.gsi.inGame, topics.gsi.time],
     (get) => {
-        const inGame = get(topics.inGame)!;
-        const time = get(topics.time)!;
+        const inGame = get(topics.gsi.inGame)!;
+        const time = get(topics.gsi.time)!;
         if (
             inGame &&
             time > 0 &&
@@ -22,7 +22,7 @@ export default new Rule(
                 time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
         ) {
             return new Fact(
-                topics.playPrivateAudioFile,
+                topics.effect.playPrivateAudioFile,
                 "resources/audio/rune-sound.mp3"
             );
         }

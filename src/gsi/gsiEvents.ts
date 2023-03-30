@@ -22,11 +22,11 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
     );
 
 export default [
-    new Rule(rules.gsi.events.new, [topics.gsiData], (get) => {
+    new Rule(rules.gsi.events.new, [topics.gsi.allData], (get) => {
         // Events from gsi server last for about 10 seconds
         // But we want to debounce events for our app
         // And only send unique events downstream
-        const events = get(topics.gsiData)?.events;
+        const events = get(topics.gsi.allData)?.events;
         if (events && events.length > 0) {
             const allEvents = get(allEventsTopic) || [];
             // Filter GSI events for new events we have never seen before
@@ -39,18 +39,18 @@ export default [
                 // Add it to allEventsTopic and return it as a new topics.event
                 return [
                     new Fact(allEventsTopic, allEvents.concat(newEvents)),
-                    new Fact(topics.events, newEvents),
+                    new Fact(topics.gsi.events, newEvents),
                 ];
             } else {
                 // Reset topics.event
-                return new Fact(topics.events, undefined);
+                return new Fact(topics.gsi.events, undefined);
             }
         }
     }),
 
     // If we are no longer in a game, reset all events
-    new Rule(rules.gsi.events.reset, [topics.inGame], (get) => {
-        if (!get(topics.inGame)) {
+    new Rule(rules.gsi.events.reset, [topics.gsi.inGame], (get) => {
+        if (!get(topics.gsi.inGame)) {
             return new Fact(allEventsTopic, undefined);
         }
     }),

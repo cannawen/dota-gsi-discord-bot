@@ -6,11 +6,8 @@ import PlayerItems from "./gsi-data-classes/PlayerItems";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
 
-const gsiData = {
-    gsiData: new Topic<DeepReadonly<GsiData>>("gsiData"),
-};
-
 const gsi = {
+    allData: new Topic<DeepReadonly<GsiData>>("allData"),
     alive: new Topic<boolean>("alive"),
     events: new Topic<DeepReadonly<Event[]>>("events"),
     inGame: new Topic<boolean>("inGame"),
@@ -20,10 +17,10 @@ const gsi = {
     gold: new Topic<number>("gold"),
 };
 
-const effects = {
+const effect = {
     playTts: new Topic<string>("playTts"),
     playAudioFile: new Topic<string>("playAudioFile"),
-    audioQueue: new Topic<DeepReadonly<string[]>>("discordAudioQueue"),
+    audioQueue: new Topic<DeepReadonly<string[]>>("audioQueue"),
     playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),
     privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
     playInterruptingAudioFile: new Topic<string>("playInterruptingAudioFile"),
@@ -48,8 +45,7 @@ const discord = {
  */
 export default {
     studentId: new Topic<string>("studentId"),
-    ...gsiData,
-    ...effects,
-    ...gsi,
-    ...discord,
+    effect,
+    gsi,
+    discord,
 };

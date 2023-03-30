@@ -11,14 +11,14 @@ const emColor = colors.cyan;
 export default new Rule(
     rules.discord.playNext,
     [
-        topics.discordReadyToPlayAudio,
-        topics.audioQueue,
-        topics.discordSubscriptionTopic,
+        topics.discord.discordReadyToPlayAudio,
+        topics.effect.audioQueue,
+        topics.discord.discordSubscriptionTopic,
     ],
     (get) => {
-        const ready = get(topics.discordReadyToPlayAudio)!;
-        const subscription = get(topics.discordSubscriptionTopic)!;
-        const audioQueue = [...get(topics.audioQueue)!];
+        const ready = get(topics.discord.discordReadyToPlayAudio)!;
+        const subscription = get(topics.discord.discordSubscriptionTopic)!;
+        const audioQueue = [...get(topics.effect.audioQueue)!];
 
         if (ready && audioQueue.length > 0) {
             const filePath = audioQueue.pop()!;
@@ -26,8 +26,8 @@ export default new Rule(
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return [
-                new Fact(topics.audioQueue, audioQueue),
-                new Fact(topics.discordReadyToPlayAudio, false),
+                new Fact(topics.effect.audioQueue, audioQueue),
+                new Fact(topics.discord.discordReadyToPlayAudio, false),
             ];
         }
     }

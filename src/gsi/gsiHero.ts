@@ -5,6 +5,10 @@ import topics from "../topics";
 
 export default new Rule(
     rules.gsi.heroAlive,
-    [topics.gsiData],
-    (get) => new Fact(topics.alive, get(topics.gsiData)!.hero?.alive || false)
+    [topics.gsi.allData],
+    (get) =>
+        new Fact(
+            topics.gsi.alive,
+            get(topics.gsi.allData)!.hero?.alive || false
+        )
 );
