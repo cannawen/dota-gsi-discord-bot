@@ -8,22 +8,32 @@ import Voice from "@discordjs/voice";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
-    alive: new Topic<boolean>("alive"),
+
+    // events
     events: new Topic<DeepReadonly<Event[]>>("events"),
-    inGame: new Topic<boolean>("inGame"),
+    // hero
+    alive: new Topic<boolean>("alive"),
+    // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
+    // map
+    inGame: new Topic<boolean>("inGame"),
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),
+    // player
     gold: new Topic<number>("gold"),
 };
 
 const effect = {
     playTts: new Topic<string>("playTts"),
-    playAudioFile: new Topic<string>("playAudioFile"),
-    audioQueue: new Topic<DeepReadonly<string[]>>("audioQueue"),
+
+    playPublicAudioFile: new Topic<string>("playPublicAudioFile"),
+    publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
+
     playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),
     privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
+
     playInterruptingAudioFile: new Topic<string>("playInterruptingAudioFile"),
+
     stopAudio: new Topic<boolean>("stopAudio"),
 };
 

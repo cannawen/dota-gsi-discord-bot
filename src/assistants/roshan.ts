@@ -52,7 +52,7 @@ export default [
             if (get(topics.gsi.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
                     new Fact(
-                        topics.effect.playAudioFile,
+                        topics.effect.playPublicAudioFile,
                         "resources/audio/rosh-maybe.mp3"
                     ),
                     new Fact(roshanMaybeTimeTopic, undefined),
@@ -70,7 +70,7 @@ export default [
             if (get(topics.gsi.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
                     new Fact(
-                        topics.effect.playAudioFile,
+                        topics.effect.playPublicAudioFile,
                         "resources/audio/rosh-alive.mp3"
                     ),
                     new Fact(roshanAliveTimeTopic, undefined),

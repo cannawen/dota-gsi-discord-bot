@@ -19,7 +19,7 @@ function ttsPath(ttsString: string) {
 function createTtsFile(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
         log.verbose("effect", "Found cached TTS %s", ttsString);
-        return new Fact(topics.effect.playAudioFile, ttsPath(ttsString));
+        return new Fact(topics.effect.playPublicAudioFile, ttsPath(ttsString));
     } else {
         log.verbose("effect", "Processing TTS string '%s'", ttsString);
         const encodedAudio = encodeURIComponent(ttsString);
@@ -41,7 +41,7 @@ function createTtsFile(ttsString: string) {
                                 );
                                 resolve(
                                     new Fact(
-                                        topics.effect.playAudioFile,
+                                        topics.effect.playPublicAudioFile,
                                         ttsPath(ttsString)
                                     )
                                 );

@@ -12,13 +12,13 @@ export default new Rule(
     rules.discord.playNext,
     [
         topics.discord.discordReadyToPlayAudio,
-        topics.effect.audioQueue,
+        topics.effect.publicAudioQueue,
         topics.discord.discordSubscriptionTopic,
     ],
     (get) => {
         const ready = get(topics.discord.discordReadyToPlayAudio)!;
         const subscription = get(topics.discord.discordSubscriptionTopic)!;
-        const audioQueue = [...get(topics.effect.audioQueue)!];
+        const audioQueue = [...get(topics.effect.publicAudioQueue)!];
 
         if (ready && audioQueue.length > 0) {
             const filePath = audioQueue.pop()!;
@@ -26,7 +26,7 @@ export default new Rule(
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return [
-                new Fact(topics.effect.audioQueue, audioQueue),
+                new Fact(topics.effect.publicAudioQueue, audioQueue),
                 new Fact(topics.discord.discordReadyToPlayAudio, false),
             ];
         }

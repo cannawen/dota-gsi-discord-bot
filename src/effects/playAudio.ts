@@ -9,20 +9,20 @@ import topics from "../topics";
  */
 export default new Rule(
     rules.effect.playAudio,
-    [topics.effect.playAudioFile],
+    [topics.effect.playPublicAudioFile],
     (get) => {
-        const queue = [...(get(topics.effect.audioQueue) || [])];
+        const queue = [...(get(topics.effect.publicAudioQueue) || [])];
         const fileName = path.join(
             __dirname,
             "../../",
-            get(topics.effect.playAudioFile)!
+            get(topics.effect.playPublicAudioFile)!
         );
 
         queue.push(fileName);
 
         return [
-            new Fact(topics.effect.audioQueue, queue),
-            new Fact(topics.effect.playAudioFile, undefined),
+            new Fact(topics.effect.publicAudioQueue, queue),
+            new Fact(topics.effect.playPublicAudioFile, undefined),
         ];
     }
 );
