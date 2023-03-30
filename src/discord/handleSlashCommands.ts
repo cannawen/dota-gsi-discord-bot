@@ -70,9 +70,8 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
             interaction.channelId
         );
         const privateUrl = `${process.env.SERVER_URL}/coach/${studentId}/`;
-        const instructionUrl = `${process.env.SERVER_URL}/instructions`;
         interaction.reply({
-            content: `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have set up the bot first using ${instructionUrl}`,
+            content: `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`,
             ephemeral: true,
         });
     } else {
