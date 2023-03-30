@@ -1,7 +1,7 @@
 import Discord, { Events } from "discord.js";
-import Command from "./Command";
-import handleSlashCommands from "./slashCommands";
+import handle from "./handleSlashCommands";
 import log from "../log";
+import SlashCommandName from "./SlashCommandName";
 
 const botSecretKey = process.env.DISCORD_BOT_TOKEN;
 
@@ -31,14 +31,14 @@ discordClient.on(Events.InteractionCreate, (interaction) => {
         interaction.commandName
     );
     switch (interaction.commandName) {
-        case Command.config:
-            handleSlashCommands.handleConfig(interaction);
+        case SlashCommandName.config:
+            handle.config(interaction);
             break;
-        case Command.coachme:
-            handleSlashCommands.handleCoachMe(interaction);
+        case SlashCommandName.coachme:
+            handle.coachMe(interaction);
             break;
-        case Command.stop:
-            handleSlashCommands.handleStop(interaction);
+        case SlashCommandName.stop:
+            handle.stop(interaction);
             break;
         default:
             log.error(

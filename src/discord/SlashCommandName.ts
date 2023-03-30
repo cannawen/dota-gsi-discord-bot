@@ -1,7 +1,7 @@
-enum Command {
+enum SlashCommandName {
     config = "config",
     coachme = "coachme",
     stop = "stop",
 }
 
-export default Command;
+export default SlashCommandName;

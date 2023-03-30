@@ -39,7 +39,7 @@ function generateConfigFile(userId: string) {
     }
 }
 
-function handleConfig(interaction: ChatInputCommandInteraction<CacheType>) {
+function config(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction
         .reply({
             content: generateConfigFile(hashStudentId(interaction.user.id)),
@@ -61,7 +61,7 @@ function handleConfig(interaction: ChatInputCommandInteraction<CacheType>) {
         });
 }
 
-function handleCoachMe(interaction: ChatInputCommandInteraction<CacheType>) {
+function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     if (interaction.channel?.isVoiceBased() && interaction.guildId) {
         const studentId = hashStudentId(interaction.user.id);
         engine.startCoachingSession(
@@ -84,7 +84,7 @@ function handleCoachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     }
 }
 
-function handleStop(interaction: ChatInputCommandInteraction<CacheType>) {
+function stop(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
         content: "Ending...",
         ephemeral: true,
@@ -92,8 +92,12 @@ function handleStop(interaction: ChatInputCommandInteraction<CacheType>) {
     engine.stopCoachingSession(hashStudentId(interaction.user.id));
 }
 
+/**
+ * These functions are used in `discord/client.ts`
+ */
 export default {
-    handleConfig,
-    handleCoachMe,
-    handleStop,
+    config,
+    // eslint-disable-next-line sort-keys
+    coachMe,
+    stop,
 };

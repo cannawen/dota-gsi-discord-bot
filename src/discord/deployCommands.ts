@@ -1,10 +1,10 @@
 import { REST, Routes, SlashCommandBuilder } from "discord.js";
 import dotenv = require("dotenv");
-import Command from "./Command";
+import SlashCommandName from "./SlashCommandName";
 dotenv.config();
 
 // This file should be run every time the definitions of the slash commands change
-// `npm run discord-commands`
+// `npm run discord`
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(
@@ -16,15 +16,15 @@ const rest = new REST({ version: "10" }).setToken(
 
 const allCommands = [
     new SlashCommandBuilder()
-        .setName(Command.config)
+        .setName(SlashCommandName.config)
         .setDescription(
             "Replies with your Dota 2 Game State Integration configuration file"
         ),
     new SlashCommandBuilder()
-        .setName(Command.coachme)
+        .setName(SlashCommandName.coachme)
         .setDescription("Start coaching me"),
     new SlashCommandBuilder()
-        .setName(Command.stop)
+        .setName(SlashCommandName.stop)
         .setDescription("Stop coaching me"),
 ];
 
