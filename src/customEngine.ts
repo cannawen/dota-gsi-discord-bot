@@ -37,7 +37,10 @@ class CustomEngine extends Engine {
         }, false);
     }
 
-    private setDefaultAssistantConfig(studentId: string) {
+    private setAssistantConfig(
+        studentId: string,
+        publicAnnouncementsOn: boolean
+    ) {
         const dirPath = path.join(__dirname, "assistants");
         fs.readdirSync(dirPath)
             .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
@@ -46,8 +49,19 @@ class CustomEngine extends Engine {
             .forEach((module) => {
                 const topic = module.configTopic as Topic<Config>;
                 const config = module.defaultConfig as Config;
-                if (topic && config) {
-                    engine.setConfig(studentId, topic, config);
+                if (
+                    !publicAnnouncementsOn &&
+                    (config === Config.PUBLIC ||
+                        config === Config.PUBLIC_INTERRUPTING)
+                ) {
+                    log.info(
+                        "rules",
+                        "Not setting public announcement %s for %s",
+                        topic.label,
+                        studentId
+                    );
+                } else if (topic && config) {
+                    this.setConfig(studentId, topic, config);
                 } else {
                     log.error(
                         "rules",
@@ -83,18 +97,21 @@ class CustomEngine extends Engine {
         channelId: string
     ) {
         this.sessions.set(studentId, new FactStore());
-        this.setDefaultAssistantConfig(studentId);
         this.withDb(studentId, (db) => {
             this.set(db, new Fact(topics.studentId, studentId));
-            // Do not connect again if bot is already connected to a voice channel
-            // (through someone else's /coachme)
-            if (!this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
-                this.set(db, new Fact(topics.discord.discordGuildId, guildId));
-                this.set(
-                    db,
-                    new Fact(topics.discord.discordGuildChannelId, channelId)
-                );
+
+            if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
+                // If already connected, disable public assistant annoucnements
+                this.setAssistantConfig(studentId, false);
+            } else {
+                this.setAssistantConfig(studentId, true);
             }
+
+            this.set(db, new Fact(topics.discord.discordGuildId, guildId));
+            this.set(
+                db,
+                new Fact(topics.discord.discordGuildChannelId, channelId)
+            );
         });
     }
 
