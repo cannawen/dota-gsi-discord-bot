@@ -1,6 +1,6 @@
-import { Config, configToEffectTopic } from "../configTopics";
+import Config from "../configTopics";
 import Fact from "../engine/Fact";
-import Rule from "../engine/Rule";
+import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
@@ -14,12 +14,11 @@ export const defaultConfig = Config.PRIVATE;
 // If we have a time greater than 0 and are in a game
 // And the time is a multiple of 2 or 3 minutes
 // Play rune sound
-export default new Rule(
+export default new RuleConfigurable(
     rules.assistant.runes,
-    [configTopic, topics.gsi.inGame, topics.gsi.time],
-    (get) => {
-        const effect = configToEffectTopic[get(configTopic)!];
-        if (!effect) return;
+    configTopic,
+    [topics.gsi.inGame, topics.gsi.time],
+    (get, effect) => {
         const inGame = get(topics.gsi.inGame)!;
         const time = get(topics.gsi.time)!;
         if (

@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { Config, configToEffectTopic } from "../configTopics";
+import Config from "../configTopics";
 import Fact from "../engine/Fact";
-import Rule from "../engine/Rule";
+import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
@@ -13,13 +13,11 @@ const REMINDER_INCREMENT = 500;
 
 const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
 
-export default new Rule(
+export default new RuleConfigurable(
     rules.assistant.goldReminder,
-    [configTopic, topics.gsi.gold, topics.gsi.inGame],
-    (get) => {
-        const effect = configToEffectTopic[get(configTopic)!];
-
-        if (!effect) return;
+    configTopic,
+    [topics.gsi.gold, topics.gsi.inGame],
+    (get, effect) => {
         if (!get(topics.gsi.inGame)!) return;
 
         const gold = get(topics.gsi.gold)!;

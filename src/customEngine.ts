@@ -1,4 +1,4 @@
-import { Config } from "./configTopics";
+import Config from "./configTopics";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import FactStore from "./engine/FactStore";

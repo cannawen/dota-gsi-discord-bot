@@ -4,7 +4,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-export enum Config {
+enum Config {
     PUBLIC = "PUBLIC",
     PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
     PRIVATE = "PRIVATE",
@@ -33,3 +33,5 @@ export function registerConfig(ruleName: string, topic: Topic<Config>) {
         })
     );
 }
+
+export default Config;

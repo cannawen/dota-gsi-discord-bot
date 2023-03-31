@@ -1,9 +1,9 @@
-import { Config, configToEffectTopic } from "../configTopics";
+import Config from "../configTopics";
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
-import Rule from "../engine/Rule";
+import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
@@ -67,18 +67,16 @@ function handleNeutralItem(
     }
 }
 
-export default new Rule(
+export default new RuleConfigurable(
     rules.assistant.neutralItem,
-    [configTopic, topics.gsi.alive, topics.gsi.items, topics.gsi.time],
-    (get) => {
-        const effect = configToEffectTopic[get(configTopic)!];
-        if (!effect) return;
-        return handleNeutralItem(
+    configTopic,
+    [topics.gsi.alive, topics.gsi.items, topics.gsi.time],
+    (get, effect) =>
+        handleNeutralItem(
             get(topics.gsi.alive)!,
             get(topics.gsi.items)!,
             get(lastNeutralReminderTimeTopic),
             get(topics.gsi.time)!,
             effect
-        );
-    }
+        )
 );

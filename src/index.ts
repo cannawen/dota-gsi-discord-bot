@@ -1,5 +1,7 @@
 // TODO export a non-connected discord client, and only start it here
 import "./discord/client";
+
+import Config, { registerConfig } from "./configTopics";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
@@ -9,7 +11,6 @@ import log from "./log";
 import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
-import { Config, registerConfig } from "./configTopics";
 import Topic from "./engine/Topic";
 
 dotenv.config();
