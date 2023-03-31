@@ -4,3 +4,4 @@ build/
 combined.log
 error.log
 resources/audio/tts-cache
+bot.code-workspace
