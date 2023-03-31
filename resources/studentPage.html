@@ -12,6 +12,9 @@
                                 const f = new Audio("/" + res.nextAudio);
                                 f.addEventListener("ended", resolve);
                                 f.play();
+                            } else if (res.configUpdated) {
+                                getConfig();
+                                resolve();
                             } else {
                                 resolve();
                             }

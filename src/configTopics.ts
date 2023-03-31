@@ -3,6 +3,7 @@ import log from "./log";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import Fact from "./engine/Fact";
 
 enum Config {
     PUBLIC = "PUBLIC",
@@ -22,15 +23,13 @@ export const configDb = new Map<string, Topic<Config>>();
 
 export function registerConfig(ruleName: string, topic: Topic<Config>) {
     configDb.set(ruleName, topic);
+
     engine.register(
-        new Rule(`${ruleName}_config`, [topic], (get) => {
-            log.info(
-                "rules",
-                "Updating %s config to %s",
-                ruleName,
-                get(topic)!
-            );
-        })
+        new Rule(
+            `${ruleName}_config`,
+            [topic],
+            (_) => new Fact(topics.configUpdated, true)
+        )
     );
 }
 

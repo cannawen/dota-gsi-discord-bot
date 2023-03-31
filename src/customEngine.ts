@@ -115,6 +115,17 @@ class CustomEngine extends Engine {
             | undefined;
     }
 
+    public pollConfigUpdateAndReset(studentId: string) {
+        return this.withDb(studentId, (db) => {
+            if (db.get(topics.configUpdated)) {
+                this.set(db, new Fact(topics.configUpdated, undefined));
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
             this.set(db, new Fact(topics.gsi.allData, data))

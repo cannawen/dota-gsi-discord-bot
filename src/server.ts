@@ -57,11 +57,14 @@ router.post("/coach/:studentId/config/:rule/:effect", (req, res) => {
 router.get("/coach/:studentId/poll", (req, res) => {
     const id = req.params.studentId;
     const nextAudio = engine.handleNextPrivateAudio(id);
+    const configUpdated = engine.pollConfigUpdateAndReset(id);
     if (nextAudio) {
         log.info("effect", "Playing private audio %s", nextAudio.blue);
         res.status(200).json({ nextAudio: nextAudio });
+    } else if (configUpdated) {
+        res.status(200).json({ configUpdated: true });
     } else {
-        res.status(200).json([null]);
+        res.status(200).send([null]);
     }
 });
 
