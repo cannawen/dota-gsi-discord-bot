@@ -7,7 +7,7 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>("assistant/roshan");
+export const configTopic = new Topic<Config>("roshan");
 export const defaultConfig = Config.PUBLIC;
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;

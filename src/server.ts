@@ -1,10 +1,9 @@
-import Config, { configDb } from "./configTopics";
+import { configDb } from "./configTopics";
 import engine from "./customEngine";
 import express from "express";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
-import Topic from "./engine/Topic";
 
 const app = express();
 
@@ -37,14 +36,38 @@ router.get("/coach/:studentId/", (req, res) => {
 });
 
 router.get("/coach/:studentId/config", (req, res) => {
-    const foo = Array.from(configDb)
-        .map(([_, topic]) => topic)
-        .map((topic) => [
-            topic.label,
-            engine.getConfig(req.params.studentId, topic),
-        ]);
+    res.status(200).json(
+        Array.from(configDb)
+            .map(([_, topic]) => topic)
+            .map((topic) => [
+                topic.label,
+                engine.getConfig(req.params.studentId, topic),
+            ])
+    );
+});
 
-    res.status(200).json(foo);
+router.post("/coach/:studentId/config/make-public/:rule", (req, res) => {
+    const rule = req.params.rule;
+    const studentId = req.params.studentId;
+    log.info("frontend", "Making %s rule public for %s", rule, studentId);
+    engine.changeConfigToPublic(studentId, rule);
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/config/make-private/:rule", (req, res) => {
+    const rule = req.params.rule;
+    const studentId = req.params.studentId;
+    log.info("frontend", "Making %s rule private for %s", rule, studentId);
+    engine.changeConfigToPrivate(studentId, rule);
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/config/disable/:rule", (req, res) => {
+    const rule = req.params.rule;
+    const studentId = req.params.studentId;
+    log.info("frontend", "Disabling %s rule for %s", rule, studentId);
+    engine.changeConfigToDisabled(studentId, rule);
+    res.status(200).send();
 });
 
 router.get("/coach/:studentId/poll", (req, res) => {

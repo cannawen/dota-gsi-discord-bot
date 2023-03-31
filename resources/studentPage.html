@@ -34,17 +34,17 @@
 
             function makePublic(e) {
                 const rule = e.target.id;
-                console.log("Making " + rule + " public");
+                fetch(`./config/make-public/${rule}`, { method: "POST" });
             }
 
             function makePrivate(e) {
                 const rule = e.target.id;
-                console.log("Making " + rule + " private");
+                fetch(`./config/make-private/${rule}`, { method: "POST" });
             }
 
             function disable(e) {
                 const rule = e.target.id;
-                console.log("Disabling " + rule);
+                fetch(`./config/disable/${rule}`, { method: "POST" });
             }
 
             function getConfig() {

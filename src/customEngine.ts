@@ -8,6 +8,7 @@ import log from "./log";
 import path from "path";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import { configDb } from "./configTopics";
 
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
@@ -74,6 +75,21 @@ class CustomEngine extends Engine {
 
     private setConfig(studentId: string, topic: Topic<Config>, config: Config) {
         this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
+    }
+
+    public changeConfigToPublic(studentId: string, topicLabel: string) {
+        const topic = configDb.get(topicLabel)!;
+        this.setConfig(studentId, topic, Config.PUBLIC);
+    }
+
+    public changeConfigToPrivate(studentId: string, topicLabel: string) {
+        const topic = configDb.get(topicLabel)!;
+        this.setConfig(studentId, topic, Config.PRIVATE);
+    }
+
+    public changeConfigToDisabled(studentId: string, topicLabel: string) {
+        const topic = configDb.get(topicLabel)!;
+        this.setConfig(studentId, topic, Config.NONE);
     }
 
     public getConfig(studentId: string, topic: Topic<Config>) {

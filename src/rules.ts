@@ -1,16 +1,19 @@
 /* eslint-disable sort-keys */
+
+// Cannot add a slash if we are sending the id over to front end
+// Due to network thinking the slash is the start of a new route
 const assistant = {
-    neutralItem: "assistant/neutral_item",
+    neutralItem: "neutral_item",
     roshan: {
-        killedEvent: "assistant/roshan/killed_event/set_future_audio_state",
-        maybeAliveTime: "assistant/roshan/maybe_alive_time/play_audio",
-        aliveTime: "assistant/roshan/alive_time/play_audio",
-        reset: "assistant/roshan/reset",
+        killedEvent: "roshan/killed_event/set_future_audio_state",
+        maybeAliveTime: "roshan/maybe_alive_time/play_audio",
+        aliveTime: "roshan/alive_time/play_audio",
+        reset: "roshan/reset",
     },
-    runes: "assistant/runes",
-    pause: "assistant/pause",
-    goldReminder: "assistant/gold_reminder",
-    glhf: "assistant/glhf",
+    runes: "runes",
+    pause: "pause",
+    goldReminder: "gold_reminder",
+    glhf: "glhf",
 };
 
 const discord = {
