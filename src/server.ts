@@ -36,7 +36,7 @@ router.get("/coach/:studentId/", (req, res) => {
     );
 });
 
-router.get("/config/:studentId", (req, res) => {
+router.get("/coach/:studentId/config", (req, res) => {
     const foo = Array.from(configDb)
         .map(([_, topic]) => topic)
         .map((topic) => [

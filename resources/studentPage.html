@@ -31,10 +31,36 @@
                 document.getElementById("coaching").style.display = "block";
                 loop();
             }
+
+            function getConfig() {
+                fetch("./config")
+                    .then((res) => res.json())
+                    .then((res) => {
+                        const message = res.reduce((memo, config) => {
+                            return (
+                                memo + `<div>${JSON.stringify(config)}</div>`
+                            );
+                        }, "<div>Your coaching preferences:</div><br/>");
+                        const explanation = [
+                            "PRIVATE means playing only on this site",
+                            "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
+                            "null means this rule is disabled.</div>",
+                            "<br/>",
+                            "If you are seeing null, perhaps you have not started /coachme or perhaps a different user is already playing public audio on the same voice channel",
+                        ].reduce((memo, text) => {
+                            return memo + `<div>${text}</div>`;
+                        }, "");
+                        document.getElementById("config").innerHTML =
+                            message + "<br/>" + explanation;
+                    });
+            }
         </script>
     </head>
-    <body>
+    <body onload="getConfig()">
         <button onClick="startCoaching(event)">START COACHING</button>
-        <div id="coaching" style="display: none">Coaching...</div>
+        <div style="background-color: green; display: none" id="coaching">
+            Coaching...
+        </div>
+        <div id="config"></div>
     </body>
 </html>
