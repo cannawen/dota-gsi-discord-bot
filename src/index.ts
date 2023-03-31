@@ -9,6 +9,8 @@ import log from "./log";
 import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
+import { Config, registerConfig } from "./configTopics";
+import Topic from "./engine/Topic";
 
 dotenv.config();
 
@@ -32,10 +34,22 @@ function registerRulesInDirectory(directory: string) {
         });
 }
 
+function registerAssistantConfig() {
+    const dirPath = path.join(__dirname, "assistants");
+    fs.readdirSync(dirPath)
+        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+        .map((file) => path.join(dirPath, file))
+        .map((filePath) => require(filePath))
+        .map((module) => module.configTopic as Topic<Config>)
+        .forEach((topic) => registerConfig(topic.label, topic));
+}
+
 registerRulesInDirectory("assistants");
 registerRulesInDirectory("discord/rules");
 registerRulesInDirectory("effects");
 registerRulesInDirectory("gsi");
+
+registerAssistantConfig();
 
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine

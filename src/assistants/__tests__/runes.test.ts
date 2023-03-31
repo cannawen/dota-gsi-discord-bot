@@ -1,10 +1,12 @@
 import { getResults } from "../../__tests__/helpers";
+import rules from "../../rules";
 import runesRule from "../runes";
 
 describe("runes", () => {
     describe("not in game", () => {
         test("do nothing", () => {
             const results = getResults(runesRule, {
+                [rules.assistant.runes]: "PRIVATE",
                 inGame: false,
                 time: 3 * 2 * 60,
             });
@@ -16,6 +18,7 @@ describe("runes", () => {
         describe("time 0:00", () => {
             test("do nothing", () => {
                 const results = getResults(runesRule, {
+                    [rules.assistant.runes]: "PRIVATE",
                     inGame: true,
                     time: 0,
                 });
@@ -25,6 +28,7 @@ describe("runes", () => {
         describe("time 2:00", () => {
             test("play rune sound", () => {
                 const results = getResults(runesRule, {
+                    [rules.assistant.runes]: "PRIVATE",
                     inGame: true,
                     time: 2 * 60,
                 });
@@ -37,6 +41,7 @@ describe("runes", () => {
         describe("time 3:00", () => {
             test("play rune sound", () => {
                 const results = getResults(runesRule, {
+                    [rules.assistant.runes]: "PRIVATE",
                     inGame: true,
                     time: 3 * 60,
                 });
@@ -49,6 +54,7 @@ describe("runes", () => {
         describe("time 6:00", () => {
             test("play rune sound", () => {
                 const results = getResults(runesRule, {
+                    [rules.assistant.runes]: "PRIVATE",
                     inGame: true,
                     time: 3 * 60,
                 });

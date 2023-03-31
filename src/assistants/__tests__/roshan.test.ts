@@ -21,6 +21,7 @@ describe("roshan", () => {
         describe("roshan killed", () => {
             test("set reminders 8 and 11 minutes from now", () => {
                 const results = getResults(killedRule, {
+                    "assistant/roshan": "PUBLIC",
                     time: 100,
                     events: [new Event(EventType.RoshanKilled, 200)],
                 });
@@ -38,6 +39,7 @@ describe("roshan", () => {
         describe("bounty rune picked up", () => {
             test("do nothing", () => {
                 const results = getResults(killedRule, {
+                    "assistant/roshan": "PUBLIC",
                     time: 100,
                     events: [new Event(EventType.BountyRunePickup, 200)],
                 });
@@ -49,6 +51,7 @@ describe("roshan", () => {
     describe("roshan maybe time", () => {
         test("maybe time not set - do nothing", () => {
             const results = getResults(maybeAliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 99,
                 roshanMaybeTimeTopic: undefined,
             });
@@ -56,6 +59,7 @@ describe("roshan", () => {
         });
         test("not yet time - do nothing", () => {
             const results = getResults(maybeAliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 99,
                 roshanMaybeTimeTopic: 100,
             });
@@ -63,6 +67,7 @@ describe("roshan", () => {
         });
         test("correct time - play audio and reset time", () => {
             const results = getResults(maybeAliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 100,
                 roshanMaybeTimeTopic: 100,
             });
@@ -74,6 +79,7 @@ describe("roshan", () => {
         });
         test("past the correct time - play audio and reset time", () => {
             const results = getResults(maybeAliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 101,
                 roshanMaybeTimeTopic: 100,
             });
@@ -88,6 +94,7 @@ describe("roshan", () => {
     describe("roshan alive time", () => {
         test("alive time not set - do nothing", () => {
             const results = getResults(aliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 99,
                 roshanAliveTimeTopic: undefined,
             });
@@ -95,6 +102,7 @@ describe("roshan", () => {
         });
         test("not yet time - do nothing", () => {
             const results = getResults(aliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 99,
                 roshanAliveTimeTopic: 100,
             });
@@ -102,6 +110,7 @@ describe("roshan", () => {
         });
         test("correct time - play audio and reset time", () => {
             const results = getResults(aliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 100,
                 roshanAliveTimeTopic: 100,
             });
@@ -113,6 +122,7 @@ describe("roshan", () => {
         });
         test("past the correct time - play audio and reset time", () => {
             const results = getResults(aliveRule, {
+                "assistant/roshan": "PUBLIC",
                 time: 101,
                 roshanAliveTimeTopic: 100,
             });
@@ -127,6 +137,7 @@ describe("roshan", () => {
     describe("in game?", () => {
         test("false - reset times", () => {
             const results = getResults(resetRule, {
+                "assistant/roshan": "PUBLIC",
                 inGame: false,
             });
             expect(results).toContainFact("roshanMaybeTimeTopic", undefined);
@@ -135,6 +146,7 @@ describe("roshan", () => {
 
         test("true - do nothing", () => {
             const results = getResults(resetRule, {
+                "assistant/roshan": "PUBLIC",
                 inGame: true,
             });
             expect(results).toBeUndefined();

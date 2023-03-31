@@ -1,3 +1,4 @@
+import { Config, configToEffectTopic } from "../configTopics";
 import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
@@ -5,6 +6,9 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
+
+export const configTopic = new Topic<Config>("assistant/roshan");
+export const defaultConfig = Config.PUBLIC;
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
@@ -25,8 +29,11 @@ export default [
     // Set roshan alibe time to 11 minutes from now
     new Rule(
         rules.assistant.roshan.killedEvent,
-        [topics.gsi.time, topics.gsi.events],
+        [configTopic, topics.gsi.time, topics.gsi.events],
         (get) => {
+            const effect = configToEffectTopic[get(configTopic)!];
+            if (!effect) return;
+
             if (roshanWasKilled(get(topics.gsi.events)!)) {
                 const time = get(topics.gsi.time)!;
                 return [
@@ -47,14 +54,14 @@ export default [
     // Play audio and reset roshan maybe alive time state
     new Rule(
         rules.assistant.roshan.maybeAliveTime,
-        [topics.gsi.time, roshanMaybeTimeTopic],
+        [configTopic, topics.gsi.time, roshanMaybeTimeTopic],
         (get) => {
+            const effect = configToEffectTopic[get(configTopic)!];
+            if (!effect) return;
+
             if (get(topics.gsi.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
-                    new Fact(
-                        topics.effect.playPublicAudioFile,
-                        "resources/audio/rosh-maybe.mp3"
-                    ),
+                    new Fact(effect, "resources/audio/rosh-maybe.mp3"),
                     new Fact(roshanMaybeTimeTopic, undefined),
                 ];
             }
@@ -65,14 +72,14 @@ export default [
     // Play audio and reset roshan alive time state
     new Rule(
         rules.assistant.roshan.aliveTime,
-        [topics.gsi.time, roshanAliveTimeTopic],
+        [configTopic, topics.gsi.time, roshanAliveTimeTopic],
         (get) => {
+            const effect = configToEffectTopic[get(configTopic)!];
+            if (!effect) return;
+
             if (get(topics.gsi.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
-                    new Fact(
-                        topics.effect.playPublicAudioFile,
-                        "resources/audio/rosh-alive.mp3"
-                    ),
+                    new Fact(effect, "resources/audio/rosh-alive.mp3"),
                     new Fact(roshanAliveTimeTopic, undefined),
                 ];
             }

@@ -10,6 +10,7 @@ const assistant = {
     runes: "assistant/runes",
     pause: "assistant/pause",
     goldReminder: "assistant/gold_reminder",
+    glhf: "assistant/glhf",
 };
 
 const discord = {

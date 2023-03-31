@@ -1,8 +1,12 @@
+import { Config } from "./configTopics";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import FactStore from "./engine/FactStore";
+import fs from "fs";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
+import path from "path";
+import Topic from "./engine/Topic";
 import topics from "./topics";
 
 class CustomEngine extends Engine {
@@ -33,6 +37,31 @@ class CustomEngine extends Engine {
         }, false);
     }
 
+    private setDefaultAssistantConfig(studentId: string) {
+        const dirPath = path.join(__dirname, "assistants");
+        fs.readdirSync(dirPath)
+            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+            .map((file) => path.join(dirPath, file))
+            .map((filePath) => require(filePath))
+            .forEach((module) => {
+                const topic = module.configTopic as Topic<Config>;
+                const config = module.defaultConfig as Config;
+                if (topic && config) {
+                    engine.setConfig(studentId, topic, config);
+                } else {
+                    log.error(
+                        "rules",
+                        "No default configuration for %s",
+                        topic.label
+                    );
+                }
+            });
+    }
+
+    private setConfig(studentId: string, topic: Topic<Config>, config: Config) {
+        this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
+    }
+
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
             this.set(db, new Fact(topics.gsi.allData, data))
@@ -54,6 +83,7 @@ class CustomEngine extends Engine {
         channelId: string
     ) {
         this.sessions.set(studentId, new FactStore());
+        this.setDefaultAssistantConfig(studentId);
         this.withDb(studentId, (db) => {
             this.set(db, new Fact(topics.studentId, studentId));
             // Do not connect again if bot is already connected to a voice channel
