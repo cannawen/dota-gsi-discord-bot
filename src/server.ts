@@ -1,8 +1,10 @@
+import Config, { configDb } from "./configTopics";
 import engine from "./customEngine";
 import express from "express";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
+import Topic from "./engine/Topic";
 
 const app = express();
 
@@ -32,6 +34,17 @@ router.get("/coach/:studentId/", (req, res) => {
     res.status(200).sendFile(
         path.join(__dirname, "../resources/studentPage.html")
     );
+});
+
+router.get("/config/:studentId", (req, res) => {
+    const foo = Array.from(configDb)
+        .map(([_, topic]) => topic)
+        .map((topic) => [
+            topic.label,
+            engine.getConfig(req.params.studentId, topic),
+        ]);
+
+    res.status(200).json(foo);
 });
 
 router.get("/coach/:studentId/poll", (req, res) => {

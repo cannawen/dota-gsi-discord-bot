@@ -76,6 +76,12 @@ class CustomEngine extends Engine {
         this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
     }
 
+    public getConfig(studentId: string, topic: Topic<Config>) {
+        return this.withDb(studentId, (db) => db.get(topic)) as
+            | Config
+            | undefined;
+    }
+
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
             this.set(db, new Fact(topics.gsi.allData, data))

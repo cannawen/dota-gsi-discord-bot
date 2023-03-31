@@ -18,10 +18,10 @@ export const configToEffectTopic = {
     [Config.NONE]: undefined,
 };
 
-const config = new Map<string, Topic<Config>>();
+export const configDb = new Map<string, Topic<Config>>();
 
 export function registerConfig(ruleName: string, topic: Topic<Config>) {
-    config.set(ruleName, topic);
+    configDb.set(ruleName, topic);
     engine.register(
         new Rule(`${ruleName}_config`, [topic], (get) => {
             log.info(
