@@ -46,27 +46,11 @@ router.get("/coach/:studentId/config", (req, res) => {
     );
 });
 
-router.post("/coach/:studentId/config/make-public/:rule", (req, res) => {
-    const rule = req.params.rule;
+router.post("/coach/:studentId/config/:rule/:effect", (req, res) => {
     const studentId = req.params.studentId;
-    log.info("frontend", "Making %s rule public for %s", rule, studentId);
-    engine.changeConfigToPublic(studentId, rule);
-    res.status(200).send();
-});
-
-router.post("/coach/:studentId/config/make-private/:rule", (req, res) => {
     const rule = req.params.rule;
-    const studentId = req.params.studentId;
-    log.info("frontend", "Making %s rule private for %s", rule, studentId);
-    engine.changeConfigToPrivate(studentId, rule);
-    res.status(200).send();
-});
-
-router.post("/coach/:studentId/config/disable/:rule", (req, res) => {
-    const rule = req.params.rule;
-    const studentId = req.params.studentId;
-    log.info("frontend", "Disabling %s rule for %s", rule, studentId);
-    engine.changeConfigToDisabled(studentId, rule);
+    const effect = req.params.effect;
+    engine.changeConfig(studentId, rule, effect);
     res.status(200).send();
 });
 

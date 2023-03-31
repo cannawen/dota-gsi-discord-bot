@@ -77,19 +77,36 @@ class CustomEngine extends Engine {
         this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
     }
 
-    public changeConfigToPublic(studentId: string, topicLabel: string) {
-        const topic = configDb.get(topicLabel)!;
-        this.setConfig(studentId, topic, Config.PUBLIC);
-    }
+    public changeConfig(studentId: string, topicLabel: string, effect: string) {
+        log.info(
+            "rules",
+            "Changing %s rule to %s for %s",
+            topicLabel,
+            effect,
+            studentId
+        );
 
-    public changeConfigToPrivate(studentId: string, topicLabel: string) {
         const topic = configDb.get(topicLabel)!;
-        this.setConfig(studentId, topic, Config.PRIVATE);
-    }
 
-    public changeConfigToDisabled(studentId: string, topicLabel: string) {
-        const topic = configDb.get(topicLabel)!;
-        this.setConfig(studentId, topic, Config.NONE);
+        let safeEffect;
+        if (effect === Config.PUBLIC) {
+            safeEffect = Config.PUBLIC;
+        } else if (effect === Config.PRIVATE) {
+            safeEffect = Config.PRIVATE;
+        } else if (effect === Config.NONE) {
+            safeEffect = Config.NONE;
+        } else {
+            log.error(
+                "frontend",
+                "Cannot configure rule %s to effect %s for student %s",
+                topicLabel,
+                effect,
+                studentId
+            );
+        }
+
+        this.setConfig(studentId, topic, safeEffect || Config.NONE);
+        console.log(this.getConfig(studentId, topic));
     }
 
     public getConfig(studentId: string, topic: Topic<Config>) {
