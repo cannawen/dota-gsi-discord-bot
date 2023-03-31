@@ -59,7 +59,7 @@ router.get("/coach/:studentId/poll", (req, res) => {
     const nextAudio = engine.handleNextPrivateAudio(id);
     if (nextAudio) {
         log.info("effect", "Playing private audio %s", nextAudio.blue);
-        res.status(200).json([nextAudio]);
+        res.status(200).json({ nextAudio: nextAudio });
     } else {
         res.status(200).json([null]);
     }
