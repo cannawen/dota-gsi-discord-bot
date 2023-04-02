@@ -103,7 +103,7 @@ if (port && host) {
 
 function handleShutdown() {
     log.info("app", "Shutdown signal received.");
-    log.info("app", "Closing http server.");
+    engine.notifyRestart();
     httpServer?.close(() => {
         log.info("app", "Http server closed.");
         process.exit(0);

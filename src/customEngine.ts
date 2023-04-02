@@ -196,6 +196,19 @@ class CustomEngine extends Engine {
             }
         }) as string | void;
     }
+
+    public notifyRestart() {
+        this.sessions.forEach((db, studentId) => {
+            log.info("app", "Notify %s of restart", studentId);
+            this.set(
+                db,
+                new Fact(
+                    topics.effect.playInterruptingAudioFile,
+                    "resources/audio/restart.mp3"
+                )
+            );
+        });
+    }
 }
 
 const engine = new CustomEngine();

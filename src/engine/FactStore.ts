@@ -17,6 +17,10 @@ export default class FactStore {
         }
     };
 
+    /**
+     * Directly setting on a fact store will bypass the engine logic
+     * @param fact
+     */
     public set = (fact: Fact<unknown>) => {
         this.facts.set(fact.topic, fact);
     };

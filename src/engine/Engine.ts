@@ -33,10 +33,11 @@ class Engine {
         this.rules.push(rule);
     };
 
-    // Currently only way to set on this database is to create a custom subclass
-    // This is because our app's only dynamic input is from GSI data
-    // and any other database change must be triggered by that.
-    // This will change in the future from discord interactions
+    /**
+     * Currently only way to set on this database is to create a custom subclass
+     * @param db
+     * @param newFact
+     */
     protected set = (db: FactStore, newFact: Fact<unknown>) => {
         const changedTopics = new Set<Topic<unknown>>();
 
@@ -69,6 +70,8 @@ class Engine {
             // and there none of the givens are `undefined`
             // Note: anyone can still `set` a fact to be undefined,
             // But it will not be propogated downstream
+            // Note: this is why it is safe to do a !
+            // when we get any topics from the db if they are in the given array
             if (
                 doesIntersect(changedTopics, rule.given) &&
                 topicsAllDefined(rule.given, db)
