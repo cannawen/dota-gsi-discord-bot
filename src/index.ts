@@ -23,6 +23,7 @@ function registerRulesInDirectory(directory: string) {
         // TODO Kinda sketch that we need the || for tests only ...
         .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
         .map((file) => path.join(dirPath, file))
+        // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
         // register modules that return a `Rule` or array of `Rule`s
         .forEach((module) => {
@@ -40,6 +41,7 @@ function registerAssistantConfig() {
     fs.readdirSync(dirPath)
         .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
         .map((file) => path.join(dirPath, file))
+        // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
         .map((module) => module.configTopic as Topic<Config>)
         .forEach((topic) => registerConfig(topic.label, topic));
@@ -66,7 +68,7 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
 
 // If we are looking at a replay or as an observer,
 // run all logic on the items of one of the players only (from 0-9)
-// needs to be 6 for mitmproxy die-respawn-dig-dig_canna to run properly
+// needs to be 6 for mitmproxy die-respawn-dig_canna to run properly
 const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
@@ -81,7 +83,6 @@ gsiParser.events.on(
     }
 );
 
-// eslint-disable-next-line no-magic-numbers
 const port = process.env.PORT;
 const host = process.env.HOST;
 if (port && host) {

@@ -13,6 +13,7 @@ const REMINDER_INCREMENT = 500;
 
 const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
 
+// TODO may have to use time as well so it is not so chatty when hovering around a threshold
 export default new RuleConfigurable(
     rules.assistant.goldReminder,
     configTopic,

@@ -1,4 +1,5 @@
 import Config from "./configTopics";
+import { configDb } from "./configTopics";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import FactStore from "./engine/FactStore";
@@ -8,7 +9,6 @@ import log from "./log";
 import path from "path";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import { configDb } from "./configTopics";
 
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
@@ -38,7 +38,7 @@ class CustomEngine extends Engine {
         }, false);
     }
 
-    private setAssistantConfig(
+    private setDefaultAssistantConfig(
         studentId: string,
         publicAnnouncementsOn: boolean
     ) {
@@ -74,6 +74,13 @@ class CustomEngine extends Engine {
     }
 
     private setConfig(studentId: string, topic: Topic<Config>, config: Config) {
+        log.info(
+            "rules",
+            "Setting config %s for topic %s, studentId %s",
+            config.yellow,
+            topic.label.yellow,
+            studentId
+        );
         this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
     }
 
@@ -81,8 +88,8 @@ class CustomEngine extends Engine {
         log.info(
             "rules",
             "Changing %s rule to %s for %s",
-            topicLabel,
-            effect,
+            topicLabel.yellow,
+            effect.yellow,
             studentId
         );
 
@@ -97,8 +104,8 @@ class CustomEngine extends Engine {
             safeEffect = Config.NONE;
         } else {
             log.error(
-                "frontend",
-                "Cannot configure rule %s to effect %s for student %s",
+                "app",
+                "Cannot configure rule %s to effect %s for student %s. Defaulting to NONE",
                 topicLabel,
                 effect,
                 studentId
@@ -106,7 +113,6 @@ class CustomEngine extends Engine {
         }
 
         this.setConfig(studentId, topic, safeEffect || Config.NONE);
-        console.log(this.getConfig(studentId, topic));
     }
 
     public getConfig(studentId: string, topic: Topic<Config>) {
@@ -152,9 +158,9 @@ class CustomEngine extends Engine {
 
             if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
                 // If already connected, disable public assistant annoucnements
-                this.setAssistantConfig(studentId, false);
+                this.setDefaultAssistantConfig(studentId, false);
             } else {
-                this.setAssistantConfig(studentId, true);
+                this.setDefaultAssistantConfig(studentId, true);
             }
 
             this.set(db, new Fact(topics.discord.discordGuildId, guildId));

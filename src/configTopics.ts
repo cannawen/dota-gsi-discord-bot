@@ -1,9 +1,8 @@
 import engine from "./customEngine";
-import log from "./log";
+import Fact from "./engine/Fact";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import Fact from "./engine/Fact";
 
 enum Config {
     PUBLIC = "PUBLIC",

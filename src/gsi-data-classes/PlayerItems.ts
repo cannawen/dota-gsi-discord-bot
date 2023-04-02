@@ -9,6 +9,7 @@ export default class PlayerItems {
     public neutral: Item | null = null;
     public teleport: Item | null = null;
 
+    // eslint-disable-next-line max-params
     public constructor(
         inventory: Array<Item | null>,
         backpack: Array<Item | null>,

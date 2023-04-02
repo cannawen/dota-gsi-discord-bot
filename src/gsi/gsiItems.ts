@@ -5,7 +5,7 @@ import rules from "../rules";
 import topics from "../topics";
 
 export default new Rule(rules.gsi.playerItems, [topics.gsi.allData], (get) => {
-    const items = get(topics.gsi.allData)?.items;
+    const items = get(topics.gsi.allData)!.items;
     if (items) {
         return new Fact(topics.gsi.items, PlayerItems.create(items));
     } else {

@@ -3,7 +3,6 @@ import Topic from "./Topic";
 /**
  * A `Fact` describes a topic and value (i.e. Time is the number 5)
  */
-
 export default class Fact<Type> {
     public topic: Topic<Type>;
     public value: Type;

@@ -26,7 +26,7 @@ export default [
         // Events from gsi server last for about 10 seconds
         // But we want to debounce events for our app
         // And only send unique events downstream
-        const events = get(topics.gsi.allData)?.events;
+        const events = get(topics.gsi.allData)!.events;
         if (events && events.length > 0) {
             const allEvents = get(allEventsTopic) || [];
             // Filter GSI events for new events we have never seen before
@@ -50,7 +50,7 @@ export default [
 
     // If we are no longer in a game, reset all events
     new Rule(rules.gsi.events.reset, [topics.gsi.inGame], (get) => {
-        if (!get(topics.gsi.inGame)) {
+        if (!get(topics.gsi.inGame)!) {
             return new Fact(allEventsTopic, undefined);
         }
     }),

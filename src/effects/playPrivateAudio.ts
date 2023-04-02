@@ -1,5 +1,4 @@
 import Fact from "../engine/Fact";
-import path from "path";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
