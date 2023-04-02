@@ -7,6 +7,7 @@ import engine from "./customEngine";
 import fs from "fs";
 import gsi = require("node-gsi");
 import gsiParser from "./gsiParser";
+import http from "http";
 import log from "./log";
 import path = require("path");
 import Rule from "./engine/Rule";
@@ -85,15 +86,34 @@ gsiParser.events.on(
 
 const port = process.env.PORT;
 const host = process.env.HOST;
+let httpServer: http.Server;
+
 if (port && host) {
-    server.listen(Number(port), host, () => {
-        log.info("server", "Starting server on %s", `http://${host}:${port}`);
+    httpServer = server.listen(Number(port), host, () => {
+        log.info("app", "Starting server on %s", `http://${host}:${port}`);
     });
 } else {
     log.error(
-        "gsi",
+        "app",
         "Unable to start GSI server with port %s and host %s. Check your environment variables",
         port,
         host
     );
 }
+
+function handleShutdown() {
+    log.info("app", "Shutdown signal received.");
+    log.info("app", "Closing http server.");
+    httpServer?.close(() => {
+        log.info("app", "Http server closed.");
+        process.exit(0);
+    });
+}
+
+process.on("SIGTERM", () => {
+    handleShutdown();
+});
+
+process.on("SIGINT", () => {
+    handleShutdown();
+});
