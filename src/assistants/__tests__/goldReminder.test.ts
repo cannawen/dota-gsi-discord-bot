@@ -37,7 +37,7 @@ describe("gold reminder", () => {
                     });
                     expect(results).toContainFact(
                         "playPrivateAudioFile",
-                        "resources/audio/gold.mp3"
+                        "resources/audio/money.mp3"
                     );
                     expect(results).toContainFact("lastGoldMultiplierTopic", 1);
                 });
@@ -62,7 +62,7 @@ describe("gold reminder", () => {
                         });
                         expect(results).toContainFact(
                             "playPrivateAudioFile",
-                            "resources/audio/gold.mp3"
+                            "resources/audio/money.mp3"
                         );
                         expect(results).toContainFact(
                             "lastGoldMultiplierTopic",
