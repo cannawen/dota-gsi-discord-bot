@@ -3,7 +3,9 @@
 -   `npm install`
 -   `npm run build`
 -   `npm start`
+
 ---
+
 -   Make sure your `node --version` is at least v18.15.0
 -   `npm run start:dev` or `npm run test:dev` for hot reloading
 -   `fly deploy` to deploy to fly.io
@@ -27,6 +29,13 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY`
 -   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
 -   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
+
+## Redis (Optional)
+
+-   Using redis to persist state across restarts with Fly + Upstash Redis integration
+-   [Install Redis](https://redis.io/docs/getting-started/)
+-   To start local redis db, `redis-server` with env var `REDIS_URL` as `redis://localhost`
+-   To connect to remote redis db locally, `fly redis connect` with env variable `REDIS_URL` as `redis://${username}:${password}@127.0.0.1:16379` (probably don't ever want to do this though)
 
 ## Logging
 
@@ -81,7 +90,7 @@ see `mitmproxy-flows` folders for currently saved flows
 ### replay some file and redirect to a different host
 
 The flows are set to localhost:9001, but we want to send the requests to dota-coach.fly.dev
-`mitmdump -M "|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi" -nC flow_file`  
+`mitmdump -M "|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi" -nC flow_file`
 
 ## Code Formatting
 

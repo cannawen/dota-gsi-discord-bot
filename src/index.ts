@@ -102,19 +102,16 @@ if (port && host) {
     );
 }
 
-// engine.notifyStartup();
-// persistence.persistData().then(() => {
-//     persistence.readData();
-// });
+engine.notifyStartup();
 
 function handleShutdown() {
     log.info("app", "Shutdown signal received.");
-    // engine.notifyShutdown().then(() => {
-    httpServer?.close(() => {
-        log.info("app", "Http server closed.");
-        process.exit(0);
+    engine.notifyShutdown().then(() => {
+        httpServer?.close(() => {
+            log.info("app", "Http server closed.");
+            process.exit(0);
+        });
     });
-    // });
 }
 
 process.on("SIGTERM", () => {
