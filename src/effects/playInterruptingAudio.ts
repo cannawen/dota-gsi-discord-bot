@@ -14,7 +14,7 @@ export default new Rule(
     (get) => {
         const file = get(topics.effect.playInterruptingAudioFile)!;
         const subscription = get(topics.discord.discordSubscriptionTopic)!;
-        log.info("discord", "Playing interrupting audio %s", file.blue);
+        log.info("discord", "Playing interrupting audio %s", file.magenta);
 
         subscription.player.play(Voice.createAudioResource(file));
         return new Fact(topics.effect.playInterruptingAudioFile, undefined);
