@@ -93,7 +93,7 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
 
 function help(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: `Version ${process.env.GIT_REVISION}`,
+        content: `Version ${process.env.GIT_REVISION}. See ${process.env.SERVER_URL}/instructions for setup instructions`,
         ephemeral: true,
     });
 }

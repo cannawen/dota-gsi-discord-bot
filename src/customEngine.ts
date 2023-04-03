@@ -75,7 +75,7 @@ class CustomEngine extends Engine {
     }
 
     private setConfig(studentId: string, topic: Topic<Config>, config: Config) {
-        log.info(
+        log.verbose(
             "rules",
             "Setting config %s for topic %s, studentId %s",
             config.yellow,
@@ -204,7 +204,7 @@ class CustomEngine extends Engine {
         });
     }
 
-    public async notifyRestart() {
+    public async notifyShutdown() {
         await persistence.persistData();
         this.sessions.forEach((db, studentId) => {
             log.info("app", "Notify %s of restart", studentId);

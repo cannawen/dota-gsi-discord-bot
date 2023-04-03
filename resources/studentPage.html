@@ -64,17 +64,17 @@
                             return (
                                 memo +
                                 `<div>
-                                    ${configString}
                                     <button id="${configInput[0]}" onClick="makePublic(event)">Make public</button>
                                     <button id="${configInput[0]}" onClick="makePrivate(event)">Make private</button>
                                     <button id="${configInput[0]}" onClick="disable(event)">Disable</button>
+                                    ${configString}
                                 </div>`
                             );
                         }, "<div>Your coaching preferences:</div><br/>");
                         const explanation = [
                             "PRIVATE means playing only on this site",
                             "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
-                            "null means this rule is disabled.</div>",
+                            "null or NONE means this rule is disabled</div>",
                             "<br/>",
                             "If you are seeing null, perhaps you have not started /coachme or perhaps a different user is already playing public audio on the same voice channel",
                         ].reduce((memo, text) => {
@@ -87,7 +87,7 @@
         </script>
     </head>
     <body onload="getConfig()">
-        <button onClick="stopAudio()">Reset all audio</button>
+        <button onClick="stopAudio()">Stop all audio</button>
         <button onClick="startCoaching(event)">START COACHING</button>
         <div style="background-color: green; display: none" id="coaching">
             Coaching...
