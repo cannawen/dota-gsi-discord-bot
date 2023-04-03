@@ -38,6 +38,9 @@ discordClient.on(Events.InteractionCreate, (interaction) => {
         case SlashCommandName.stop:
             handle.stop(interaction);
             break;
+        case SlashCommandName.help:
+            handle.help(interaction);
+            break;
         default:
             log.error(
                 "discord",

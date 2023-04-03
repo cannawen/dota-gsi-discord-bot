@@ -91,12 +91,19 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
     engine.stopCoachingSession(hashStudentId(interaction.user.id));
 }
 
+function help(interaction: ChatInputCommandInteraction<CacheType>) {
+    interaction.reply({
+        content: `Version ${process.env.GIT_REVISION}`,
+        ephemeral: true,
+    });
+}
+
 /**
  * These functions are used in `discord/client.ts`
  */
 export default {
     config,
-    // eslint-disable-next-line sort-keys
     coachMe,
     stop,
+    help,
 };

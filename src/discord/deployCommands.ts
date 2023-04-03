@@ -26,6 +26,9 @@ const allCommands = [
     new SlashCommandBuilder()
         .setName(SlashCommandName.stop)
         .setDescription("Stop coaching me"),
+    new SlashCommandBuilder()
+        .setName(SlashCommandName.help)
+        .setDescription("Help!"),
 ];
 
 // and deploy your commands!
