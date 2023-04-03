@@ -27,8 +27,17 @@ export default new RuleConfigurable(
 
         // Should spend gold
         if (newMultiplier > oldMultiplier) {
+            let audioFileName: string;
+            if (gold <= 1000) {
+                audioFileName = "money";
+            } else if (gold <= 2000) {
+                audioFileName = "lot-of-money";
+            } else {
+                audioFileName = "really-lot-of-money";
+            }
+
             return [
-                new Fact(effect, "resources/audio/gold.mp3"),
+                new Fact(effect, `resources/audio/${audioFileName}.mp3`),
                 new Fact(lastGoldMultiplierTopic, newMultiplier),
             ];
             // Spent gold

@@ -18,11 +18,21 @@ describe("gold reminder", () => {
     describe("in game", () => {
         describe("has more than 500 gold", () => {
             describe("has not reminded before", () => {
+                test("should not remind about 0 gold", () => {
+                    const results = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        inGame: true,
+                        gold: 0,
+                        lastGoldMultiplierTopic: undefined,
+                    });
+                    expect(results).toBeUndefined();
+                });
+
                 test("should remind player to spend gold & store 500 level reminder", () => {
                     const results = getResults(rule, {
                         [rules.assistant.goldReminder]: "PRIVATE",
                         inGame: true,
-                        gold: 501,
+                        gold: 500,
                         lastGoldMultiplierTopic: undefined,
                     });
                     expect(results).toContainFact(
@@ -37,7 +47,7 @@ describe("gold reminder", () => {
                     const results = getResults(rule, {
                         [rules.assistant.goldReminder]: "PRIVATE",
                         inGame: true,
-                        gold: 501,
+                        gold: 500,
                         lastGoldMultiplierTopic: 1,
                     });
                     expect(results).toBeUndefined();
@@ -47,7 +57,7 @@ describe("gold reminder", () => {
                         const results = getResults(rule, {
                             [rules.assistant.goldReminder]: "PRIVATE",
                             inGame: true,
-                            gold: 1001,
+                            gold: 1000,
                             lastGoldMultiplierTopic: 1,
                         });
                         expect(results).toContainFact(
@@ -63,12 +73,42 @@ describe("gold reminder", () => {
             });
         });
 
+        describe("has 1500-2000 gold", () => {
+            test("should play lot of money track", () => {
+                const results = getResults(rule, {
+                    [rules.assistant.goldReminder]: "PRIVATE",
+                    inGame: true,
+                    gold: 1500,
+                    lastGoldMultiplierTopic: 2,
+                });
+                expect(results).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/lot-of-money.mp3"
+                );
+            });
+        });
+
+        describe("has 2500+ gold", () => {
+            test("should play really lot of money track", () => {
+                const results = getResults(rule, {
+                    [rules.assistant.goldReminder]: "PRIVATE",
+                    inGame: true,
+                    gold: 2500,
+                    lastGoldMultiplierTopic: 4,
+                });
+                expect(results).toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/really-lot-of-money.mp3"
+                );
+            });
+        });
+
         describe("player spends gold", () => {
             test("should reset reminder", () => {
                 const results = getResults(rule, {
                     [rules.assistant.goldReminder]: "PRIVATE",
                     inGame: true,
-                    gold: 501,
+                    gold: 500,
                     lastGoldMultiplierTopic: 5,
                 });
                 expect(results).toContainFact("lastGoldMultiplierTopic", 1);
