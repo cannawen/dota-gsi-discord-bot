@@ -9,6 +9,7 @@ import log from "./log";
 import path from "path";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import persistence from "./persistence";
 
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
@@ -197,7 +198,14 @@ class CustomEngine extends Engine {
         }) as string | void;
     }
 
-    public notifyRestart() {
+    public notifyStartup() {
+        persistence.readData().then(() => {
+            console.log("started up!");
+        });
+    }
+
+    public async notifyRestart() {
+        await persistence.persistData();
         this.sessions.forEach((db, studentId) => {
             log.info("app", "Notify %s of restart", studentId);
             this.set(

@@ -1,11 +1,11 @@
-import redis from "redis";
+import { createClient } from "redis";
 
 const redisUrl = process.env.REDIS_URL;
 
 async function persistData() {
     if (!redisUrl) return;
 
-    const client = redis.createClient({
+    const client = createClient({
         url: redisUrl,
     });
     await client.connect();
@@ -18,7 +18,7 @@ async function persistData() {
 async function readData() {
     if (!redisUrl) return;
 
-    const client = redis.createClient({
+    const client = createClient({
         url: redisUrl,
     });
     await client.connect();

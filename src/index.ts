@@ -13,6 +13,7 @@ import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
+import persistence from "./persistence";
 
 dotenv.config();
 
@@ -101,13 +102,19 @@ if (port && host) {
     );
 }
 
+// engine.notifyStartup();
+// persistence.persistData().then(() => {
+//     persistence.readData();
+// });
+
 function handleShutdown() {
     log.info("app", "Shutdown signal received.");
-    engine.notifyRestart();
+    // engine.notifyRestart().then(() => {
     httpServer?.close(() => {
         log.info("app", "Http server closed.");
         process.exit(0);
     });
+    // });
 }
 
 process.on("SIGTERM", () => {
