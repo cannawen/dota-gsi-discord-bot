@@ -217,6 +217,14 @@ class CustomEngine extends Engine {
             );
         });
     }
+
+    public stopAudio(studentId: string) {
+        this.withDb(studentId, (db) => {
+            this.set(db, new Fact(topics.effect.stopAudio, true));
+            this.set(db, new Fact(topics.effect.privateAudioQueue, undefined));
+            this.set(db, new Fact(topics.effect.publicAudioQueue, undefined));
+        });
+    }
 }
 
 const engine = new CustomEngine();

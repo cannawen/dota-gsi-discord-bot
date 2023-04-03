@@ -30,6 +30,10 @@
                 }
             }
 
+            function stopAudio() {
+                fetch("./stop-audio");
+            }
+
             function startCoaching(e) {
                 e.target.remove();
                 document.getElementById("coaching").style.display = "block";
@@ -83,6 +87,7 @@
         </script>
     </head>
     <body onload="getConfig()">
+        <button onClick="stopAudio()">Reset all audio</button>
         <button onClick="startCoaching(event)">START COACHING</button>
         <div style="background-color: green; display: none" id="coaching">
             Coaching...

@@ -68,6 +68,11 @@ router.get("/coach/:studentId/poll", (req, res) => {
     }
 });
 
+router.get("/coach/:studentId/stop-audio", (req, res) => {
+    engine.stopAudio(req.params.studentId);
+    res.status(200).send();
+});
+
 router.head("/gsi", (req, res) => {
     res.status(200).send();
 });
