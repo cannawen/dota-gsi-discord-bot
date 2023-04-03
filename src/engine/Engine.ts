@@ -29,7 +29,7 @@ class Engine {
     private rules: Rule[] = [];
 
     public register = (rule: Rule) => {
-        log.info("rules", "Registering new rule %s", rule.label.yellow);
+        log.verbose("rules", "Registering new rule %s", rule.label.yellow);
         this.rules.push(rule);
     };
 

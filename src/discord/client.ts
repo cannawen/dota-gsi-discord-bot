@@ -19,7 +19,7 @@ discordClient.login(botSecretKey).catch((e: Discord.DiscordjsError) => {
 });
 
 discordClient.on("ready", (client) => {
-    log.info("discord", "Discord ready with user: %s", client.user.tag.cyan);
+    log.info("discord", "Discord ready with bot: %s", client.user.tag.cyan);
 });
 
 discordClient.on(Events.InteractionCreate, (interaction) => {
