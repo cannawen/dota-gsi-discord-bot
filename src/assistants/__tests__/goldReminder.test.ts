@@ -1,16 +1,16 @@
+import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
 import rule from "../goldReminder";
 import rules from "../../rules";
 
-// TODO do not expose lastGoldMultiplierTopic through tests
+// TODO not sure if `[state[1].topic.label]: state[1].value` is preferable to exposing lastGold topic
 describe("gold reminder", () => {
     describe("not in game", () => {
         test("should not remind player to spend gold", () => {
             const results = getResults(rule, {
                 [rules.assistant.goldReminder]: "PRIVATE",
                 inGame: false,
-                gold: 501,
-                lastGoldMultiplierTopic: undefined,
+                gold: 500,
             });
             expect(results).toBeUndefined();
         });
@@ -23,7 +23,6 @@ describe("gold reminder", () => {
                 time: 9 * 60,
                 inGame: true,
                 gold: 0,
-                lastGoldMultiplierTopic: undefined,
             });
             expect(results).toBeUndefined();
         });
@@ -37,62 +36,52 @@ describe("gold reminder", () => {
                             time: 9 * 60,
                             inGame: true,
                             gold: 500,
-                            lastGoldMultiplierTopic: undefined,
                         });
                         expect(results).toContainFact(
                             "playPrivateAudioFile",
                             "resources/audio/money.mp3"
                         );
-                        expect(results).toContainFact(
-                            "lastGoldMultiplierTopic",
-                            1
-                        );
                     });
                 });
                 describe("has reminded before at the same level", () => {
                     test("should not remind player to spend gold", () => {
+                        const state = getResults(rule, {
+                            [rules.assistant.goldReminder]: "PRIVATE",
+                            time: 9 * 60,
+                            inGame: true,
+                            gold: 500,
+                        }) as Fact<unknown>[];
                         const results = getResults(rule, {
                             [rules.assistant.goldReminder]: "PRIVATE",
                             time: 9 * 60,
                             inGame: true,
                             gold: 500,
-                            lastGoldMultiplierTopic: 1,
+                            [state[1].topic.label]: state[1].value,
                         });
                         expect(results).toBeUndefined();
                     });
                     describe("has more than 1000 gold", () => {
                         test("should remind player to spend gold & store 1000 level reminder", () => {
+                            const state = getResults(rule, {
+                                [rules.assistant.goldReminder]: "PRIVATE",
+                                time: 9 * 60,
+                                inGame: true,
+                                gold: 500,
+                            }) as Fact<unknown>[];
                             const results = getResults(rule, {
                                 [rules.assistant.goldReminder]: "PRIVATE",
                                 time: 9 * 60,
                                 inGame: true,
                                 gold: 1000,
-                                lastGoldMultiplierTopic: 1,
+                                [state[1].topic.label]: state[1].value,
                             });
                             expect(results).toContainFact(
                                 "playPrivateAudioFile",
                                 "resources/audio/money.mp3"
                             );
-                            expect(results).toContainFact(
-                                "lastGoldMultiplierTopic",
-                                2
-                            );
                         });
                     });
                 });
-            });
-        });
-
-        describe("at 10 minutes", () => {
-            test("should scale multiplier", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.goldReminder]: "PRIVATE",
-                    time: 10 * 60,
-                    inGame: true,
-                    gold: 1000,
-                    lastGoldMultiplierTopic: 2,
-                });
-                expect(results).toContainFact("lastGoldMultiplierTopic", 1);
             });
         });
 
@@ -104,7 +93,6 @@ describe("gold reminder", () => {
                         time: 11 * 60,
                         inGame: true,
                         gold: 500,
-                        lastGoldMultiplierTopic: 0,
                     });
                     expect(results).toBeUndefined;
                 });
@@ -114,13 +102,11 @@ describe("gold reminder", () => {
                         time: 11 * 60,
                         inGame: true,
                         gold: 1000,
-                        lastGoldMultiplierTopic: 0,
                     });
                     expect(results).toContainFact(
                         "playPrivateAudioFile",
                         "resources/audio/money.mp3"
                     );
-                    expect(results).toContainFact("lastGoldMultiplierTopic", 1);
                 });
             });
         });
@@ -134,7 +120,6 @@ describe("gold reminder", () => {
                             time: 31 * 60,
                             inGame: true,
                             gold: 3000,
-                            lastGoldMultiplierTopic: 0,
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
@@ -146,17 +131,12 @@ describe("gold reminder", () => {
                             time: 31 * 60,
                             inGame: true,
                             gold: 3500,
-                            lastGoldMultiplierTopic: 0,
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
                         expect(results).toContainFact(
                             "playPrivateAudioFile",
                             "resources/audio/money.mp3"
-                        );
-                        expect(results).toContainFact(
-                            "lastGoldMultiplierTopic",
-                            1
                         );
                     });
                 });
@@ -170,7 +150,6 @@ describe("gold reminder", () => {
                             time: 31 * 60,
                             inGame: true,
                             gold: 500,
-                            lastGoldMultiplierTopic: 0,
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
@@ -182,7 +161,6 @@ describe("gold reminder", () => {
                             time: 31 * 60,
                             inGame: true,
                             gold: 1000,
-                            lastGoldMultiplierTopic: 0,
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
@@ -190,25 +168,27 @@ describe("gold reminder", () => {
                             "playPrivateAudioFile",
                             "resources/audio/money.mp3"
                         );
-                        expect(results).toContainFact(
-                            "lastGoldMultiplierTopic",
-                            1
-                        );
                     });
                 });
             });
         });
 
         describe("player spends gold", () => {
-            test("should reset reminder", () => {
+            test("should not remind", () => {
+                const state = getResults(rule, {
+                    [rules.assistant.goldReminder]: "PRIVATE",
+                    time: 9 * 60,
+                    inGame: true,
+                    gold: 2000,
+                }) as Fact<unknown>[];
                 const results = getResults(rule, {
                     [rules.assistant.goldReminder]: "PRIVATE",
                     time: 9 * 60,
                     inGame: true,
                     gold: 500,
-                    lastGoldMultiplierTopic: 2,
+                    [state[1].topic.label]: state[1].value,
                 });
-                expect(results).toContainFact("lastGoldMultiplierTopic", 1);
+                expect(results).toBeUndefined;
             });
         });
     });
