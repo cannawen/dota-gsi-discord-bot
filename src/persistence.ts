@@ -12,6 +12,7 @@ async function saveData(allData: string) {
         const client = createClient({
             url: redisUrl,
             socket: {
+                family: 6,
                 reconnectStrategy: false,
             },
         });
@@ -31,6 +32,7 @@ async function readData() {
         const client = createClient({
             url: redisUrl,
             socket: {
+                family: 6,
                 reconnectStrategy: false,
             },
         });
