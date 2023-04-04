@@ -30,10 +30,10 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.killedEvent,
         configTopic,
-        [topics.gsi.time, topics.gsi.events],
+        [topics.time, topics.events],
         (get, _) => {
-            if (roshanWasKilled(get(topics.gsi.events)!)) {
-                const time = get(topics.gsi.time)!;
+            if (roshanWasKilled(get(topics.events)!)) {
+                const time = get(topics.time)!;
                 return [
                     new Fact(
                         roshanMaybeTimeTopic,
@@ -53,9 +53,9 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.maybeAliveTime,
         configTopic,
-        [topics.gsi.time, roshanMaybeTimeTopic],
+        [topics.time, roshanMaybeTimeTopic],
         (get, effect) => {
-            if (get(topics.gsi.time)! >= get(roshanMaybeTimeTopic)!) {
+            if (get(topics.time)! >= get(roshanMaybeTimeTopic)!) {
                 return [
                     new Fact(effect, "resources/audio/rosh-maybe.mp3"),
                     new Fact(roshanMaybeTimeTopic, undefined),
@@ -69,9 +69,9 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.aliveTime,
         configTopic,
-        [topics.gsi.time, roshanAliveTimeTopic],
+        [topics.time, roshanAliveTimeTopic],
         (get, effect) => {
-            if (get(topics.gsi.time)! >= get(roshanAliveTimeTopic)!) {
+            if (get(topics.time)! >= get(roshanAliveTimeTopic)!) {
                 return [
                     new Fact(effect, "resources/audio/rosh-alive.mp3"),
                     new Fact(roshanAliveTimeTopic, undefined),
@@ -84,9 +84,9 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.reset,
         configTopic,
-        [topics.gsi.inGame],
+        [topics.inGame],
         (get, _) => {
-            if (!get(topics.gsi.inGame)) {
+            if (!get(topics.inGame)) {
                 return [
                     new Fact(roshanAliveTimeTopic, undefined),
                     new Fact(roshanMaybeTimeTopic, undefined),

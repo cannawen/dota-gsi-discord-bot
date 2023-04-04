@@ -17,11 +17,11 @@ const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
 export default new RuleConfigurable(
     rules.assistant.goldReminder,
     configTopic,
-    [topics.gsi.gold, topics.gsi.inGame],
+    [topics.gold, topics.inGame],
     (get, effect) => {
-        if (!get(topics.gsi.inGame)!) return;
+        if (!get(topics.inGame)!) return;
 
-        const gold = get(topics.gsi.gold)!;
+        const gold = get(topics.gold)!;
         const oldMultiplier = get(lastGoldMultiplierTopic) || 0;
         const newMultiplier = Math.floor(gold / REMINDER_INCREMENT);
 

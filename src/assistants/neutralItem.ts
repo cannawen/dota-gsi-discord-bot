@@ -38,12 +38,12 @@ function canCast(item: Item | null): boolean {
 export default new RuleConfigurable(
     rules.assistant.neutralItem,
     configTopic,
-    [topics.gsi.alive, topics.gsi.items, topics.gsi.time],
+    [topics.alive, topics.items, topics.time],
     (get, effect) => {
-        const alive = get(topics.gsi.alive)!;
-        const items = get(topics.gsi.items)!;
+        const alive = get(topics.alive)!;
+        const items = get(topics.items)!;
         const lastReminderTime = get(lastNeutralReminderTimeTopic);
-        const time = get(topics.gsi.time)!;
+        const time = get(topics.time)!;
 
         const validItems = [...items.backpack, items.neutral]
             .filter(validNeutralItem)

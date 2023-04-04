@@ -28,10 +28,8 @@ class CustomEngine extends Engine {
 
     private alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
         return Object.entries(this.sessions).reduce((memo, [_, db]) => {
-            const existingGuildId = db.get(topics.discord.discordGuildId);
-            const existingChannelId = db.get(
-                topics.discord.discordGuildChannelId
-            );
+            const existingGuildId = db.get(topics.discordGuildId);
+            const existingChannelId = db.get(topics.discordGuildChannelId);
             return (
                 memo ||
                 (existingGuildId === guildId && existingChannelId === channelId)
@@ -135,16 +133,13 @@ class CustomEngine extends Engine {
 
     public setGsi(studentId: string | null, data: GsiData) {
         this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topics.gsi.allData, data))
+            this.set(db, new Fact(topics.allData, data))
         );
     }
 
     public readyToPlayAudio(studentId: string, ready: boolean) {
         this.withDb(studentId, (db) =>
-            this.set(
-                db,
-                new Fact(topics.discord.discordReadyToPlayAudio, ready)
-            )
+            this.set(db, new Fact(topics.discordReadyToPlayAudio, ready))
         );
     }
 
@@ -164,19 +159,14 @@ class CustomEngine extends Engine {
                 this.setDefaultAssistantConfig(studentId, true);
             }
 
-            this.set(db, new Fact(topics.discord.discordGuildId, guildId));
-            this.set(
-                db,
-                new Fact(topics.discord.discordGuildChannelId, channelId)
-            );
+            this.set(db, new Fact(topics.discordGuildId, guildId));
+            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
         });
     }
 
     public stopCoachingSession(studentId: string) {
         this.withDb(studentId, (db) => {
-            const subscription = db.get(
-                topics.discord.discordSubscriptionTopic
-            );
+            const subscription = db.get(topics.discordSubscriptionTopic);
             subscription?.connection.destroy();
         });
     }
@@ -188,11 +178,11 @@ class CustomEngine extends Engine {
 
     public handleNextPrivateAudio(studentId: string) {
         return this.withDb(studentId, (db) => {
-            const queue = db.get(topics.effect.privateAudioQueue);
+            const queue = db.get(topics.privateAudioQueue);
             if (queue && queue.length > 0) {
                 const newQueue = [...queue];
                 const nextFile = newQueue.pop()!;
-                db.set(new Fact(topics.effect.privateAudioQueue, newQueue));
+                db.set(new Fact(topics.privateAudioQueue, newQueue));
                 return nextFile;
             }
         }) as string | void;
@@ -217,17 +207,15 @@ class CustomEngine extends Engine {
             this.set(
                 db,
                 new Fact(
-                    topics.effect.playInterruptingAudioFile,
+                    topics.playInterruptingAudioFile,
                     "resources/audio/restart.mp3"
                 )
             );
             const data = {
                 [topics.studentId.label]: studentId,
-                [topics.discord.discordGuildId.label]: db.get(
-                    topics.discord.discordGuildId
-                ),
-                [topics.discord.discordGuildChannelId.label]: db.get(
-                    topics.discord.discordGuildChannelId
+                [topics.discordGuildId.label]: db.get(topics.discordGuildId),
+                [topics.discordGuildChannelId.label]: db.get(
+                    topics.discordGuildChannelId
                 ),
             };
 
@@ -238,9 +226,9 @@ class CustomEngine extends Engine {
 
     public stopAudio(studentId: string) {
         this.withDb(studentId, (db) => {
-            this.set(db, new Fact(topics.effect.stopAudio, true));
-            this.set(db, new Fact(topics.effect.privateAudioQueue, undefined));
-            this.set(db, new Fact(topics.effect.publicAudioQueue, undefined));
+            this.set(db, new Fact(topics.stopAudio, true));
+            this.set(db, new Fact(topics.privateAudioQueue, undefined));
+            this.set(db, new Fact(topics.publicAudioQueue, undefined));
         });
     }
 }

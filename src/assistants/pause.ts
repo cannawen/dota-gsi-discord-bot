@@ -11,13 +11,13 @@ export const defaultConfig = Config.PUBLIC_INTERRUPTING;
 export default new RuleConfigurable(
     rules.assistant.pause,
     configTopic,
-    [topics.gsi.paused],
+    [topics.paused],
     (get, effect) => {
-        const paused = get(topics.gsi.paused)!;
+        const paused = get(topics.paused)!;
         if (paused) {
             return new Fact(effect, "resources/audio/jeopardy.mp3");
         } else {
-            return new Fact(topics.effect.stopAudio, true);
+            return new Fact(topics.stopAudio, true);
         }
     }
 );

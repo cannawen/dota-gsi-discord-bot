@@ -5,15 +5,15 @@ import topics from "../topics";
 
 export default new Rule(
     rules.effect.playPrivateAudio,
-    [topics.effect.playPrivateAudioFile],
+    [topics.playPrivateAudioFile],
     (get) => {
-        const queue = [...(get(topics.effect.privateAudioQueue) || [])];
-        const fileName = get(topics.effect.playPrivateAudioFile)!;
+        const queue = [...(get(topics.privateAudioQueue) || [])];
+        const fileName = get(topics.playPrivateAudioFile)!;
         queue.push(fileName);
 
         return [
-            new Fact(topics.effect.privateAudioQueue, queue),
-            new Fact(topics.effect.playPrivateAudioFile, undefined),
+            new Fact(topics.privateAudioQueue, queue),
+            new Fact(topics.playPrivateAudioFile, undefined),
         ];
     }
 );

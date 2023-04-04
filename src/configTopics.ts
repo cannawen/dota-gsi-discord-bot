@@ -12,9 +12,9 @@ enum Config {
 }
 
 export const configToEffectTopic = {
-    [Config.PUBLIC]: topics.effect.playPublicAudioFile,
-    [Config.PUBLIC_INTERRUPTING]: topics.effect.playInterruptingAudioFile,
-    [Config.PRIVATE]: topics.effect.playPrivateAudioFile,
+    [Config.PUBLIC]: topics.playPublicAudioFile,
+    [Config.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
+    [Config.PRIVATE]: topics.playPrivateAudioFile,
     [Config.NONE]: undefined,
 };
 

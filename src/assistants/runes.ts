@@ -17,10 +17,10 @@ export const defaultConfig = Config.PRIVATE;
 export default new RuleConfigurable(
     rules.assistant.runes,
     configTopic,
-    [topics.gsi.inGame, topics.gsi.time],
+    [topics.inGame, topics.time],
     (get, effect) => {
-        const inGame = get(topics.gsi.inGame)!;
-        const time = get(topics.gsi.time)!;
+        const inGame = get(topics.inGame)!;
+        const time = get(topics.time)!;
         if (
             inGame &&
             time > 0 &&

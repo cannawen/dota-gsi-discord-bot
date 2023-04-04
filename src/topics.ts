@@ -56,7 +56,7 @@ const discord = {
 export default {
     studentId: new Topic<string>("studentId"),
     configUpdated: new Topic<boolean>("configUpdated"),
-    effect,
-    gsi,
-    discord,
+    ...effect,
+    ...gsi,
+    ...discord,
 };

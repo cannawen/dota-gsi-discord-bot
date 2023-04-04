@@ -11,10 +11,10 @@ export const defaultConfig = Config.PRIVATE;
 export default new RuleConfigurable(
     rules.assistant.glhf,
     configTopic,
-    [topics.gsi.time, topics.gsi.inGame],
+    [topics.time, topics.inGame],
     (get, effect) => {
-        const time = get(topics.gsi.time)!;
-        const inGame = get(topics.gsi.inGame)!;
+        const time = get(topics.time)!;
+        const inGame = get(topics.inGame)!;
         if (inGame && time === 0) {
             return new Fact(effect, "resources/audio/glhf.mp3");
         }
