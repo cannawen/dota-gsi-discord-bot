@@ -1,4 +1,3 @@
-/* eslint-disable max-classes-per-file */
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
@@ -15,27 +14,27 @@ export const defaultConfig = Config.PRIVATE;
 const SMALL_REMINDER_INCREMENT = 500;
 const LARGE_REMINDER_INCREMENT = 1000;
 
-const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
+const lastRemindedGoldTopic = new Topic<number>("lastRemindedGoldTopic");
 
 function handle(
     gold: number,
-    oldMultiplier: number,
+    lastRemindedGold: number,
     reminderIncrement: number,
     effect: Topic<string>
 ) {
     const newMultiplier = Math.floor(gold / reminderIncrement);
+    const oldMultiplier = Math.floor(lastRemindedGold / reminderIncrement);
 
     if (newMultiplier > oldMultiplier) {
         return [
             new Fact(effect, `resources/audio/money.mp3`),
-            new Fact(lastGoldMultiplierTopic, newMultiplier),
+            new Fact(lastRemindedGoldTopic, gold),
         ];
     } else if (oldMultiplier > newMultiplier) {
-        return new Fact(lastGoldMultiplierTopic, newMultiplier);
+        return new Fact(lastRemindedGoldTopic, gold);
     }
 }
 
-// TODO refactor to use last gold reminded on instead of multiplier
 export default new RuleConfigurable(
     rules.assistant.goldReminder,
     configTopic,
@@ -45,27 +44,19 @@ export default new RuleConfigurable(
 
         const time = get(topics.time)!;
         const gold = get(topics.gold)!;
-        const oldMultiplier = get(lastGoldMultiplierTopic) || 0;
-
-        if (time === 10 * 60) {
-            const scaledMultiplier = Math.floor(
-                oldMultiplier /
-                    (LARGE_REMINDER_INCREMENT / SMALL_REMINDER_INCREMENT)
-            );
-            return new Fact(lastGoldMultiplierTopic, scaledMultiplier);
-        }
+        const lastRemindedGold = get(lastRemindedGoldTopic) || 0;
 
         if (time < 10 * 60) {
             return handle(
                 gold,
-                oldMultiplier,
+                lastRemindedGold,
                 SMALL_REMINDER_INCREMENT,
                 effect
             );
         } else if (time < 30 * 60) {
             return handle(
                 gold,
-                oldMultiplier,
+                lastRemindedGold,
                 LARGE_REMINDER_INCREMENT,
                 effect
             );
@@ -76,14 +67,14 @@ export default new RuleConfigurable(
             if (buybackCooldown === 0) {
                 return handle(
                     gold - buybackCost,
-                    oldMultiplier,
+                    lastRemindedGold,
                     LARGE_REMINDER_INCREMENT,
                     effect
                 );
             } else {
                 return handle(
                     gold,
-                    oldMultiplier,
+                    lastRemindedGold,
                     LARGE_REMINDER_INCREMENT,
                     effect
                 );

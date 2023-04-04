@@ -86,6 +86,24 @@ describe("gold reminder", () => {
         });
 
         describe("10-30 minutes", () => {
+            describe("reminded at 2000 gold pre-10 minutes", () => {
+                test("should not remind at 2000 gold post-10 minutes", () => {
+                    const state = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 9 * 60,
+                        inGame: true,
+                        gold: 2000,
+                    }) as Fact<unknown>[];
+                    const results = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 11 * 60,
+                        inGame: true,
+                        gold: 2000,
+                        [state[1].topic.label]: state[1].value,
+                    });
+                    expect(results).toBeUndefined;
+                });
+            });
             describe("should remind on 1000 increments", () => {
                 test("less than 1000 gold, do not remind", () => {
                     const results = getResults(rule, {
