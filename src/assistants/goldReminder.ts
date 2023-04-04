@@ -12,40 +12,91 @@ export const configTopic = new Topic<Config>(
 );
 export const defaultConfig = Config.PRIVATE;
 
-const REMINDER_INCREMENT = 500;
+const SMALL_REMINDER_INCREMENT = 500;
+const LARGE_REMINDER_INCREMENT = 1000;
 
 const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
 
-// TODO may have to use time as well so it is not so chatty when hovering around a threshold
+function handlePre10Minute(
+    gold: number,
+    oldMultiplier: number,
+    effect: Topic<string>
+) {
+    const newMultiplier = Math.floor(gold / SMALL_REMINDER_INCREMENT);
+
+    if (newMultiplier > oldMultiplier) {
+        return [
+            new Fact(effect, `resources/audio/money.mp3`),
+            new Fact(lastGoldMultiplierTopic, newMultiplier),
+        ];
+    } else if (oldMultiplier > newMultiplier) {
+        return new Fact(lastGoldMultiplierTopic, newMultiplier);
+    }
+}
+
+function handle10To30Minute(
+    gold: number,
+    oldMultiplier: number,
+    effect: Topic<string>
+) {
+    const newMultiplier = Math.floor(gold / LARGE_REMINDER_INCREMENT);
+    if (newMultiplier > oldMultiplier) {
+        return [
+            new Fact(effect, `resources/audio/money.mp3`),
+            new Fact(lastGoldMultiplierTopic, newMultiplier),
+        ];
+    } else if (oldMultiplier > newMultiplier) {
+        return new Fact(lastGoldMultiplierTopic, newMultiplier);
+    }
+}
+
+function handle30PlusMinutes(
+    gold: number,
+    oldMultiplier: number,
+    effect: Topic<string>,
+    buybackCost: number,
+    buybackCooldown: number
+) {
+    if (buybackCooldown === 0) {
+        const usableGold = gold - buybackCost;
+        return handle10To30Minute(usableGold, oldMultiplier, effect);
+    } else {
+        return handle10To30Minute(gold, oldMultiplier, effect);
+    }
+}
+
+// TODO refactor to use last gold reminded on instead of multiplier
 export default new RuleConfigurable(
     rules.assistant.goldReminder,
     configTopic,
-    [topics.gold, topics.inGame],
+    [topics.gold, topics.inGame, topics.time],
     (get, effect) => {
         if (!get(topics.inGame)!) return;
 
+        const time = get(topics.time)!;
         const gold = get(topics.gold)!;
         const oldMultiplier = get(lastGoldMultiplierTopic) || 0;
-        const newMultiplier = Math.floor(gold / REMINDER_INCREMENT);
 
-        // Should spend gold
-        if (newMultiplier > oldMultiplier) {
-            let audioFileName: string;
-            if (gold <= 1000) {
-                audioFileName = "money";
-            } else if (gold <= 2000) {
-                audioFileName = "lot-of-money";
-            } else {
-                audioFileName = "really-lot-of-money";
-            }
+        if (time === 10 * 60) {
+            const scaledMultiplier = Math.floor(
+                oldMultiplier /
+                    (LARGE_REMINDER_INCREMENT / SMALL_REMINDER_INCREMENT)
+            );
+            return new Fact(lastGoldMultiplierTopic, scaledMultiplier);
+        }
 
-            return [
-                new Fact(effect, `resources/audio/${audioFileName}.mp3`),
-                new Fact(lastGoldMultiplierTopic, newMultiplier),
-            ];
-            // Spent gold
-        } else if (oldMultiplier > newMultiplier) {
-            return new Fact(lastGoldMultiplierTopic, newMultiplier);
+        if (time < 10 * 60) {
+            return handlePre10Minute(gold, oldMultiplier, effect);
+        } else if (time < 30 * 60) {
+            return handle10To30Minute(gold, oldMultiplier, effect);
+        } else {
+            return handle30PlusMinutes(
+                gold,
+                oldMultiplier,
+                effect,
+                get(topics.buybackCost)!,
+                get(topics.buybackCooldown)!
+            );
         }
     }
 );

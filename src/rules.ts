@@ -34,7 +34,11 @@ const gsi = {
         new: "gsi/events/new",
         reset: "gsi/events/reset_all",
     },
-    heroAlive: "gsi/hero->alive",
+    hero: {
+        alive: "gsi/hero->alive",
+        buybackCost: "gsi/hero->buyback_cost",
+        buybackCooldown: "gsi/hero->buyback_cooldown",
+    },
     playerItems: "gsi/items->PlayerItems",
     map: {
         time: "gsi/map->time",

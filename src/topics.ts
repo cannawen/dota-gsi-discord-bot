@@ -21,6 +21,8 @@ const gsi = {
     paused: new Topic<boolean>("paused"),
     // player
     gold: new Topic<number>("gold"),
+    buybackCost: new Topic<number>("buybackCost"),
+    buybackCooldown: new Topic<number>("buybackCooldown"),
 };
 
 const effect = {

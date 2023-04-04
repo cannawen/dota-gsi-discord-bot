@@ -12,7 +12,7 @@ describe("during app startup", () => {
         const assistantConfigCount = 6;
         const discordRuleCount = 2;
         const effectRuleCount = 5;
-        const gsiRuleCount = 8;
+        const gsiRuleCount = 10;
         expect(engine.register).toHaveBeenCalledTimes(
             assistantRuleCount +
                 assistantConfigCount +
