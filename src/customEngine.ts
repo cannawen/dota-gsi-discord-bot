@@ -199,15 +199,21 @@ class CustomEngine extends Engine {
     }
 
     public notifyStartup() {
-        persistence.readData().then(() => {
-            console.log("started up!");
+        persistence.readData().then((data) => {
+            if (!data) return;
+            const d = JSON.parse(data);
+            log.info("app", "JSONified as %s", d);
+            // TODO hydrate this into sessions
         });
     }
 
     public async notifyShutdown() {
-        await persistence.persistData();
+        const allData: {
+            [key: string]: { [key: string]: string | undefined };
+        } = {};
+
         this.sessions.forEach((db, studentId) => {
-            log.info("app", "Notify %s of restart", studentId);
+            log.info("app", "Notify %s of shutdown", studentId);
             this.set(
                 db,
                 new Fact(
@@ -215,7 +221,19 @@ class CustomEngine extends Engine {
                     "resources/audio/restart.mp3"
                 )
             );
+            const data = {
+                [topics.studentId.label]: studentId,
+                [topics.discord.discordGuildId.label]: db.get(
+                    topics.discord.discordGuildId
+                ),
+                [topics.discord.discordGuildChannelId.label]: db.get(
+                    topics.discord.discordGuildChannelId
+                ),
+            };
+
+            allData[studentId] = data;
         });
+        await persistence.saveData(JSON.stringify(allData));
     }
 
     public stopAudio(studentId: string) {

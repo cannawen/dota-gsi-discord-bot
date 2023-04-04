@@ -1,10 +1,12 @@
 import { createClient } from "redis";
 import dotenv = require("dotenv");
+import log from "./log";
 dotenv.config();
 
 const redisUrl = process.env.REDIS_URL;
 
-async function persistData() {
+async function saveData(allData: string) {
+    log.info("app", "Saving data in redis %s", allData.magenta);
     const client = createClient({
         url: redisUrl,
         socket: {
@@ -15,7 +17,7 @@ async function persistData() {
 
     await client.connect();
 
-    await client.set("mykey", "Hello from node redis", { EX: 3600 });
+    await client.set("restore", allData, { EX: 3600 });
 
     await client.quit();
 }
@@ -31,13 +33,17 @@ async function readData() {
 
     await client.connect();
 
-    const myKeyValue = await client.get("mykey");
-    console.log(myKeyValue);
+    const myKeyValue = await client.get("restore").then((data) => {
+        log.info("app", "Reading data from redis %s", data?.magenta);
+        return data;
+    });
 
-    await client.quit();
+    client.quit();
+
+    return myKeyValue;
 }
 
 export default {
-    persistData,
+    saveData,
     readData,
 };

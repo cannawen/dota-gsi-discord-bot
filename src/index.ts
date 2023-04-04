@@ -106,11 +106,14 @@ engine.notifyStartup();
 
 function handleShutdown() {
     log.info("app", "Shutdown signal received.");
+    httpServer?.close(() => {
+        log.info("app", "Http server closed.");
+    });
     engine.notifyShutdown().then(() => {
-        httpServer?.close(() => {
-            log.info("app", "Http server closed.");
+        // Wait 5 seconds for discord to finish playing restart audio
+        setTimeout(() => {
             process.exit(0);
-        });
+        }, 5000);
     });
 }
 
