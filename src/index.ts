@@ -13,7 +13,6 @@ import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
-import persistence from "./persistence";
 
 dotenv.config();
 

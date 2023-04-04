@@ -50,7 +50,8 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
     -   GSI that takes data form Valve's Game State integration and parses it to a form we can use (Time, Items)
     -   Assistants (Roshan, Runes) that use that take that data and returns an effect (Audio file, Text to speech)
     -   An Effect that knows how to execute the desired effect (playing audio on discord)
--   These three sections communicate via a single key-value database where a `Topic<T>` points to a `Fact<T>`
+-   These three sections communicate via a key-value database `FactStore` (one per student) where a `Topic<T>.label` points to a `Fact<T>`
+-   A `Topic<T>` has a flag `persist`. If set to true, the value will be restored after a restart
 -   A `Topic<T>` is the concept of a type of data (i.e. `Time is a number` or `AudioFile is a string`)
 -   A `Fact<T>` is the combination of a Topic and a concrete value (i.e. `Time is the number 5` or `AudioFile is the string foo.mp3`)
 -   A module may register a rule with the `Engine` by telling it what topics it is interested in, and what code to execute when the values of those topics change. If any interested topics' values are `undefined`, the rule will not be executed.

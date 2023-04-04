@@ -33,6 +33,32 @@ class Engine {
         this.rules.push(rule);
     };
 
+    private processRule(db: FactStore, rule: Rule) {
+        // Process the rule
+        const out = rule.then((topic) => db.get(topic));
+        if (!out) {
+            return;
+        }
+
+        // Process any database changes as a result of this rule being applied
+        const arrOut = Array.isArray(out) ? out : [out];
+        log.debug("rules", "Start rule\t%s", rule.label.yellow);
+        arrOut.forEach((factOrFactPromise) => {
+            if (factOrFactPromise instanceof Promise) {
+                // Is a promise of a fact (or undefined), set fact when promise is returned
+                factOrFactPromise.then((fact) => {
+                    if (fact) {
+                        this.set(db, fact);
+                    }
+                });
+            } else {
+                // Is a fact, set fact now
+                this.set(db, factOrFactPromise);
+            }
+        });
+        log.debug("rules", "End rule  \t%s", rule.label);
+    }
+
     /**
      * Currently only way to set on this database is to create a custom subclass
      * @param db
@@ -65,6 +91,13 @@ class Engine {
             db.set(newFact);
         }
 
+        this.processChangedRules(db, changedTopics);
+    };
+
+    private processChangedRules(
+        db: FactStore,
+        changedTopics: Set<Topic<unknown>>
+    ) {
         this.rules.forEach((rule) => {
             // If a topic that a rule is interested in has changed
             // and there none of the givens are `undefined`
@@ -76,30 +109,18 @@ class Engine {
                 doesIntersect(changedTopics, rule.given) &&
                 topicsAllDefined(rule.given, db)
             ) {
-                // Process the rule
-                const out = rule.then((topic) => db.get(topic));
-                if (!out) {
-                    return;
-                }
-
-                // Process any database changes as a result of this rule being applied
-                const arrOut = Array.isArray(out) ? out : [out];
-                log.debug("rules", "Start rule\t%s", rule.label.yellow);
-                arrOut.forEach((factOrFactPromise) => {
-                    if (factOrFactPromise instanceof Promise) {
-                        factOrFactPromise.then((fact) => {
-                            if (fact) {
-                                this.set(db, fact);
-                            }
-                        });
-                    } else {
-                        this.set(db, factOrFactPromise);
-                    }
-                });
-                log.debug("rules", "End rule  \t%s", rule.label);
+                this.processRule(db, rule);
             }
         });
-    };
+    }
+
+    protected processAllRules(db: FactStore) {
+        this.rules.forEach((rule) => {
+            if (topicsAllDefined(rule.given, db)) {
+                this.processRule(db, rule);
+            }
+        });
+    }
 }
 
 export default Engine;

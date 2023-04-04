@@ -189,15 +189,26 @@ class CustomEngine extends Engine {
     }
 
     public notifyStartup() {
-        persistence.readData().then((data) => {
-            if (!data) return;
-            const d = JSON.parse(data);
-            log.info("app", "JSONified as %s", d);
-            // TODO hydrate this into sessions
+        persistence.readData().then((dataString) => {
+            if (!dataString) return;
+            const data = JSON.parse(dataString) as {
+                [key: string]: { [key: string]: unknown };
+            };
+            Object.entries(data).forEach(([key, value]) => {
+                const db = new FactStore();
+                this.sessions.set(key, db);
+                db.setPersistentFacts(value);
+
+                // TODO do this after discord client is ready
+                setTimeout(() => {
+                    this.processAllRules(db);
+                }, 2000);
+            });
         });
     }
 
     public async notifyShutdown() {
+        const allData: { [key: string]: unknown } = {};
         this.sessions.forEach((db, studentId) => {
             log.info("app", "Notify %s of shutdown", studentId);
             this.set(
@@ -207,9 +218,10 @@ class CustomEngine extends Engine {
                     "resources/audio/restart.mp3"
                 )
             );
+            allData[studentId] = db.getPersistentFacts();
         });
         // TODO get all topics with persist: true
-        await persistence.saveData(JSON.stringify({}));
+        await persistence.saveData(JSON.stringify(allData));
     }
 
     public stopAudio(studentId: string) {
