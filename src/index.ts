@@ -116,10 +116,6 @@ function handleShutdown() {
     });
 }
 
-process.on("SIGTERM", () => {
-    handleShutdown();
-});
-
 process.on("SIGINT", () => {
     handleShutdown();
 });
