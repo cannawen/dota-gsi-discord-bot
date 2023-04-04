@@ -17,12 +17,13 @@ const LARGE_REMINDER_INCREMENT = 1000;
 
 const lastGoldMultiplierTopic = new Topic<number>("lastGoldMultiplierTopic");
 
-function handlePre10Minute(
+function handle(
     gold: number,
     oldMultiplier: number,
+    reminderIncrement: number,
     effect: Topic<string>
 ) {
-    const newMultiplier = Math.floor(gold / SMALL_REMINDER_INCREMENT);
+    const newMultiplier = Math.floor(gold / reminderIncrement);
 
     if (newMultiplier > oldMultiplier) {
         return [
@@ -31,37 +32,6 @@ function handlePre10Minute(
         ];
     } else if (oldMultiplier > newMultiplier) {
         return new Fact(lastGoldMultiplierTopic, newMultiplier);
-    }
-}
-
-function handle10To30Minute(
-    gold: number,
-    oldMultiplier: number,
-    effect: Topic<string>
-) {
-    const newMultiplier = Math.floor(gold / LARGE_REMINDER_INCREMENT);
-    if (newMultiplier > oldMultiplier) {
-        return [
-            new Fact(effect, `resources/audio/money.mp3`),
-            new Fact(lastGoldMultiplierTopic, newMultiplier),
-        ];
-    } else if (oldMultiplier > newMultiplier) {
-        return new Fact(lastGoldMultiplierTopic, newMultiplier);
-    }
-}
-
-function handle30PlusMinutes(
-    gold: number,
-    oldMultiplier: number,
-    effect: Topic<string>,
-    buybackCost: number,
-    buybackCooldown: number
-) {
-    if (buybackCooldown === 0) {
-        const usableGold = gold - buybackCost;
-        return handle10To30Minute(usableGold, oldMultiplier, effect);
-    } else {
-        return handle10To30Minute(gold, oldMultiplier, effect);
     }
 }
 
@@ -86,17 +56,38 @@ export default new RuleConfigurable(
         }
 
         if (time < 10 * 60) {
-            return handlePre10Minute(gold, oldMultiplier, effect);
-        } else if (time < 30 * 60) {
-            return handle10To30Minute(gold, oldMultiplier, effect);
-        } else {
-            return handle30PlusMinutes(
+            return handle(
                 gold,
                 oldMultiplier,
-                effect,
-                get(topics.buybackCost)!,
-                get(topics.buybackCooldown)!
+                SMALL_REMINDER_INCREMENT,
+                effect
             );
+        } else if (time < 30 * 60) {
+            return handle(
+                gold,
+                oldMultiplier,
+                LARGE_REMINDER_INCREMENT,
+                effect
+            );
+        } else {
+            const buybackCost = get(topics.buybackCost)!;
+            const buybackCooldown = get(topics.buybackCooldown)!;
+
+            if (buybackCooldown === 0) {
+                return handle(
+                    gold - buybackCost,
+                    oldMultiplier,
+                    LARGE_REMINDER_INCREMENT,
+                    effect
+                );
+            } else {
+                return handle(
+                    gold,
+                    oldMultiplier,
+                    LARGE_REMINDER_INCREMENT,
+                    effect
+                );
+            }
         }
     }
 );
