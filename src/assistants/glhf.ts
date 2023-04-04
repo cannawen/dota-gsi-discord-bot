@@ -5,7 +5,7 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.glhf);
+export const configTopic = new Topic<Config>(rules.assistant.glhf, true);
 export const defaultConfig = Config.PRIVATE;
 
 export default new RuleConfigurable(

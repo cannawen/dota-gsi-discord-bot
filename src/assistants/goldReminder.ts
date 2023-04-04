@@ -6,7 +6,10 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.goldReminder);
+export const configTopic = new Topic<Config>(
+    rules.assistant.goldReminder,
+    true
+);
 export const defaultConfig = Config.PRIVATE;
 
 const REMINDER_INCREMENT = 500;

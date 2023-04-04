@@ -3,11 +3,13 @@
  */
 
 export default class Topic<Type> {
-    public label: string;
+    public readonly label: string;
+    public readonly persist: boolean;
     // The following variable is not used, but is only here for type-checking reasons
     private _type: Type | undefined;
 
-    public constructor(label: string) {
+    public constructor(label: string, persist?: boolean) {
         this.label = label;
+        this.persist = persist || false;
     }
 }

@@ -5,7 +5,7 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.pause);
+export const configTopic = new Topic<Config>(rules.assistant.pause, true);
 export const defaultConfig = Config.PUBLIC_INTERRUPTING;
 
 export default new RuleConfigurable(

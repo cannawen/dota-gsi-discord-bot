@@ -38,8 +38,11 @@ const effect = {
 };
 
 const discord = {
-    discordGuildId: new Topic<string>("registerDiscordGuild"),
-    discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel"),
+    discordGuildId: new Topic<string>("registerDiscordGuild", true),
+    discordGuildChannelId: new Topic<string>(
+        "registerDiscordGuildChannel",
+        true
+    ),
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
@@ -54,7 +57,7 @@ const discord = {
  * in which case it can be declared inside the module
  */
 export default {
-    studentId: new Topic<string>("studentId"),
+    studentId: new Topic<string>("studentId", true),
     configUpdated: new Topic<boolean>("configUpdated"),
     ...effect,
     ...gsi,

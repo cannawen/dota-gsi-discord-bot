@@ -7,14 +7,14 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>("roshan");
+export const configTopic = new Topic<Config>("roshan", true);
 export const defaultConfig = Config.PUBLIC;
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic");
-const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic");
+const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic", true);
+const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic", true);
 
 function roshanWasKilled(events: DeepReadonly<Event[]>) {
     return events.reduce(

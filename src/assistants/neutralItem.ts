@@ -1,14 +1,12 @@
 import Config from "../configTopics";
-import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
-import PlayerItems from "../gsi-data-classes/PlayerItems";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.neutralItem);
+export const configTopic = new Topic<Config>(rules.assistant.neutralItem, true);
 export const defaultConfig = Config.PRIVATE;
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
