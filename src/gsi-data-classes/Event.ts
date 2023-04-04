@@ -14,8 +14,8 @@ export enum EventType {
 }
 
 export default class Event {
-    type: EventType;
-    time: number;
+    public readonly type: EventType;
+    public readonly time: number;
 
     /**
      *

@@ -3,11 +3,11 @@ import gsi from "node-gsi";
 import Item from "./Item";
 
 export default class PlayerItems {
-    public inventory: Array<Item | null> = [];
-    public backpack: Array<Item | null> = [];
-    public stash: Array<Item | null> = [];
-    public neutral: Item | null = null;
-    public teleport: Item | null = null;
+    public readonly inventory: Array<Item | null> = [];
+    public readonly backpack: Array<Item | null> = [];
+    public readonly stash: Array<Item | null> = [];
+    public readonly neutral: Item | null = null;
+    public readonly teleport: Item | null = null;
 
     // eslint-disable-next-line max-params
     public constructor(
