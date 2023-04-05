@@ -23,6 +23,7 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
     );
 }
 
+// TODO first and last rules do not need to be configruable
 export default [
     // When an event notifies us that roshan is killed
     // Set roshan maybe time to 8 minutes from now

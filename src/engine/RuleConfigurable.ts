@@ -1,4 +1,5 @@
 import Config, { configToEffectTopic } from "../configTopics";
+import log from "../log";
 import Fact from "./Fact";
 import Rule from "./Rule";
 import Topic from "./Topic";
@@ -22,6 +23,8 @@ class RuleConfigurable extends Rule {
             const effect = configToEffectTopic[config];
             if (effect) {
                 return then(get, effect);
+            } else {
+                log.error("rules", "No effect found for %s", configTopic.label);
             }
         });
     }

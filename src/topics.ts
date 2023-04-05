@@ -13,6 +13,8 @@ const gsi = {
     events: new Topic<DeepReadonly<Event[]>>("events"),
     // hero
     alive: new Topic<boolean>("alive"),
+    buybackCost: new Topic<number>("buybackCost"),
+    buybackCooldown: new Topic<number>("buybackCooldown"),
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     // map
@@ -21,8 +23,6 @@ const gsi = {
     paused: new Topic<boolean>("paused"),
     // player
     gold: new Topic<number>("gold"),
-    buybackCost: new Topic<number>("buybackCost"),
-    buybackCooldown: new Topic<number>("buybackCooldown"),
 };
 
 const effect = {

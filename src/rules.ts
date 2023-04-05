@@ -3,6 +3,10 @@
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 const assistant = {
+    buyback: {
+        availability: "buyback/availability",
+        warnNoBuyback: "buyback/warn_no_buyback",
+    },
     neutralItem: "neutral_item",
     roshan: {
         killedEvent: "roshan/killed_event/set_future_audio_state",
@@ -34,20 +38,10 @@ const gsi = {
         new: "gsi/events/new",
         reset: "gsi/events/reset_all",
     },
-    hero: {
-        alive: "gsi/hero->alive",
-        buybackCost: "gsi/hero->buyback_cost",
-        buybackCooldown: "gsi/hero->buyback_cooldown",
-    },
+    hero: "gsi/hero",
     playerItems: "gsi/items->PlayerItems",
-    map: {
-        time: "gsi/map->time",
-        inGame: "gsi/map->game_state",
-        paused: "gsi/map->paused",
-    },
-    player: {
-        gold: "gsi/player->gold",
-    },
+    map: "gsi/map",
+    player: "gsi/player",
 };
 
 export default {

@@ -8,14 +8,15 @@ import "../index";
 
 describe("during app startup", () => {
     test("should register all rules with engine", () => {
-        const assistantRuleCount = 9;
-        const assistantConfigCount = 6;
+        const assistantCount = 7;
+        const assistantExcessRuleCount = 4;
         const discordRuleCount = 2;
         const effectRuleCount = 5;
-        const gsiRuleCount = 10;
+        const gsiRuleCount = 6;
         expect(engine.register).toHaveBeenCalledTimes(
-            assistantRuleCount +
-                assistantConfigCount +
+            // One for the main rule, one for the configuration rule
+            assistantCount * 2 +
+                assistantExcessRuleCount +
                 discordRuleCount +
                 effectRuleCount +
                 gsiRuleCount
