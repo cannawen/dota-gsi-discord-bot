@@ -103,19 +103,23 @@ if (port && host) {
 
 engine.notifyStartup();
 
+let shuttingDown = false;
+
 function handleShutdown() {
     log.info("app", "Shutdown signal received.");
-    httpServer?.close(() => {
-        log.info("app", "Http server closed.");
-    });
-    engine.notifyShutdown();
-    // TODO fix. Wait 4 seconds for discord to finish playing restart audio
-    setTimeout(() => {
-        engine.stopAllCoachingSessions();
-        process.exit(0);
-    }, 4000);
+    if (!shuttingDown) {
+        shuttingDown = true;
+        httpServer?.close(() => {
+            log.info("app", "Http server closed.");
+        });
+        engine.notifyShutdown();
+        // TODO fix. Wait 4 seconds for discord to finish playing restart audio
+        setTimeout(() => {
+            engine.stopAllCoachingSessions();
+            process.exit(0);
+        }, 4000);
+    }
 }
 
-process.on("SIGINT", () => {
-    handleShutdown();
-});
+process.on("SIGINT", handleShutdown);
+process.on("SIGTERM", handleShutdown);
