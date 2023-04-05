@@ -25,9 +25,18 @@ function handle(
     const newMultiplier = Math.floor(gold / reminderIncrement);
     const oldMultiplier = Math.floor(lastRemindedGold / reminderIncrement);
 
+    let fileName: string;
+    if (gold <= 1000) {
+        fileName = "money";
+    } else if (gold <= 2000) {
+        fileName = "lot-of-money";
+    } else {
+        fileName = "really-lot-of-money";
+    }
+
     if (newMultiplier > oldMultiplier) {
         return [
-            new Fact(effect, `resources/audio/money.mp3`),
+            new Fact(effect, `resources/audio/${fileName}.mp3`),
             new Fact(lastRemindedGoldTopic, gold),
         ];
     } else if (oldMultiplier > newMultiplier) {

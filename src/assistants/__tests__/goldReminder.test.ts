@@ -4,6 +4,7 @@ import rule from "../goldReminder";
 import rules from "../../rules";
 
 // TODO not sure if `[state[1].topic.label]: state[1].value` is preferable to exposing lastGold topic
+// TODO forward all facts from previous state into new state. Perhaps refactor getResults to take in Fact[] to merge?
 describe("gold reminder", () => {
     describe("not in game", () => {
         test("should not remind player to spend gold", () => {
@@ -212,6 +213,49 @@ describe("gold reminder", () => {
                 );
             });
         });
+
+        describe("reminder intensity", () => {
+            describe("1000 gold over", () => {
+                test("mild intensity", () => {
+                    const results = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 9 * 60,
+                        inGame: true,
+                        gold: 1000,
+                    });
+                    expect(results).toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/money.mp3"
+                    );
+                });
+            });
+            describe("2000 gold over", () => {
+                test("medium intensity", () => {
+                    const results = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 9 * 60,
+                        inGame: true,
+                        gold: 2000,
+                    });
+                    expect(results).toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/lot-of-money.mp3"
+                    );
+                });
+            });
+            describe("3000 gold over", () => {
+                test("high intensity", () => {
+                    const results = getResults(rule, {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 9 * 60,
+                        inGame: true,
+                        gold: 3000,
+                    });
+                    expect(results).toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/really-lot-of-money.mp3"
+                    );
+                });
             });
         });
     });
