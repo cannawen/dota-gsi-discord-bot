@@ -3,6 +3,8 @@
 app = "dota-coach"
 primary_region = "yyz"
 
+kill_timeout = 60
+
 [env]
   HOST = "0.0.0.0"
   PORT = "8080"
