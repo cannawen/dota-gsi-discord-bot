@@ -115,6 +115,6 @@ function handleShutdown() {
     }, 5000);
 }
 
-process.once("SIGINT", () => {
+process.on("SIGINT", () => {
     handleShutdown();
 });
