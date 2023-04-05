@@ -101,7 +101,7 @@ describe("gold reminder", () => {
                         gold: 2000,
                         [state[1].topic.label]: state[1].value,
                     });
-                    expect(results).toBeUndefined;
+                    expect(results).toBeUndefined();
                 });
             });
             describe("should remind on 1000 increments", () => {
@@ -112,7 +112,7 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 500,
                     });
-                    expect(results).toBeUndefined;
+                    expect(results).toBeUndefined();
                 });
                 test("more than 1000 gold, remind", () => {
                     const results = getResults(rule, {
@@ -141,7 +141,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
-                        expect(results).toBeUndefined;
+                        expect(results).toBeUndefined();
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
@@ -171,7 +171,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
-                        expect(results).toBeUndefined;
+                        expect(results).toBeUndefined();
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
@@ -206,7 +206,12 @@ describe("gold reminder", () => {
                     gold: 500,
                     [state[1].topic.label]: state[1].value,
                 });
-                expect(results).toBeUndefined;
+                expect(results).not.toContainFact(
+                    "playPrivateAudioFile",
+                    "resources/audio/money.mp3"
+                );
+            });
+        });
             });
         });
     });
