@@ -1,3 +1,5 @@
-const client = jest.fn();
+const client = {
+    start: jest.fn().mockResolvedValue(""),
+};
 
 export default client;

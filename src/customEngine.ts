@@ -7,9 +7,10 @@ import fs from "fs";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
 import path from "path";
+import persistence from "./persistence";
+import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import persistence from "./persistence";
 
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
@@ -171,12 +172,6 @@ class CustomEngine extends Engine {
         });
     }
 
-    public stopAllCoachingSessions() {
-        Array.from(this.sessions.keys()).forEach((id) =>
-            this.stopCoachingSession(id)
-        );
-    }
-
     public lostVoiceConnection(studentId: string) {
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);
@@ -199,33 +194,62 @@ class CustomEngine extends Engine {
         const data = JSON.parse(dataString) as {
             [key: string]: { [key: string]: unknown };
         };
+
         Object.entries(data).forEach(([key, value]) => {
             const db = new FactStore();
             this.sessions.set(key, db);
             db.setPersistentFacts(value);
-
-            // TODO do this after discord client is ready
-            setTimeout(() => {
-                this.processAllRules(db);
-            }, 5000);
+            this.processAllRules(db);
         });
     }
 
     public notifyShutdown() {
-        const allData: { [key: string]: unknown } = {};
-        this.sessions.forEach((db, studentId) => {
-            log.info("app", "Notify %s of shutdown", studentId);
-            this.set(
-                db,
-                new Fact(
-                    topics.playInterruptingAudioFile,
-                    "resources/audio/restart.mp3"
+        return new Promise<void>((res, rej) => {
+            const allData: { [key: string]: unknown } = {};
+            this.sessions.forEach((db, studentId) => {
+                allData[studentId] = db.getPersistentFacts();
+                log.info("app", "Notify %s of shutdown", studentId);
+                this.set(
+                    db,
+                    new Fact(
+                        topics.playInterruptingAudioFile,
+                        "resources/audio/restart.mp3"
+                    )
+                );
+            });
+
+            const expectedReadyCount = this.sessions.size;
+            if (expectedReadyCount === 0) {
+                res();
+            }
+            let readyCount = 0;
+
+            this.register(
+                new Rule(
+                    "wait for all audio to be done playing",
+                    [topics.discordReadyToPlayAudio],
+                    (get) => {
+                        if (get(topics.discordReadyToPlayAudio)!) {
+                            readyCount++;
+                            log.info(
+                                "app",
+                                "Finished notifying %s of shutdown",
+                                get(topics.studentId)
+                            );
+                        }
+                        if (readyCount === expectedReadyCount) {
+                            res();
+                        }
+                    }
                 )
             );
-            allData[studentId] = db.getPersistentFacts();
+
+            persistence.saveData(JSON.stringify(allData));
+        }).finally(() => {
+            Array.from(this.sessions.keys()).forEach((id) =>
+                this.stopCoachingSession(id)
+            );
         });
-        // TODO get all topics with persist: true
-        persistence.saveData(JSON.stringify(allData));
     }
 
     public stopAudio(studentId: string) {

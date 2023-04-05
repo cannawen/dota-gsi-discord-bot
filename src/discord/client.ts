@@ -5,54 +5,107 @@ import SlashCommandName from "./SlashCommandName";
 
 const botSecretKey = process.env.DISCORD_BOT_TOKEN;
 
-const discordClient = new Discord.Client({
-    // eslint-disable-next-line no-magic-numbers
-    intents: [131071],
-});
+class DiscordClient {
+    private client = new Discord.Client({
+        // eslint-disable-next-line no-magic-numbers
+        intents: [131071],
+    });
 
-discordClient.login(botSecretKey).catch((e: Discord.DiscordjsError) => {
-    log.error(
-        "discord",
-        "Error logging into Discord. Check your .env file - %s",
-        e.message
-    );
-});
+    public start() {
+        this.setupInteractions();
+        return Promise.all([this.setup(), this.ready()]);
+    }
 
-discordClient.on("ready", (client) => {
-    log.info("discord", "Discord ready with bot: %s", client.user.tag.cyan);
-});
+    public findChannel(guildId: string, channelId: string) {
+        const guild = this.client.guilds.cache.find((g) => g.id === guildId);
+        if (!guild) {
+            log.error("discord", "Unable to find guild with id %s.", guildId);
+            return;
+        }
 
-discordClient.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isChatInputCommand()) return;
-
-    const commandName = interaction.commandName;
-
-    log.info("discord", "Handling slash command interaction %s", commandName);
-    switch (commandName) {
-        case SlashCommandName.config:
-            handle.config(interaction);
-            break;
-        case SlashCommandName.coachme:
-            handle.coachMe(interaction);
-            break;
-        case SlashCommandName.stop:
-            handle.stop(interaction);
-            break;
-        case SlashCommandName.help:
-            handle.help(interaction);
-            break;
-        default:
+        const channel = guild.channels.cache.find((c) => c.id === channelId);
+        if (!channel) {
             log.error(
                 "discord",
-                "Unable to handle interaction %s",
+                "Unable to find channel with id %s in guild %s",
+                channelId,
+                guild.name
+            );
+            return;
+        }
+
+        log.info(
+            "discord",
+            "Discord ready with guild: %s channel: %s",
+            guild.name.cyan,
+            channel.name.cyan
+        );
+        return channel;
+    }
+
+    private setup() {
+        return this.client
+            .login(botSecretKey)
+            .catch((e: Discord.DiscordjsError) => {
+                log.error(
+                    "discord",
+                    "Error logging into Discord. Check your .env file - %s",
+                    e.message
+                );
+            });
+    }
+
+    private ready() {
+        return new Promise<void>((res, rej) => {
+            this.client.once(Events.ClientReady, (client) => {
+                res();
+                log.info(
+                    "discord",
+                    "Discord ready with bot: %s",
+                    client.user.tag.cyan
+                );
+            });
+        });
+    }
+
+    private setupInteractions() {
+        this.client.on(Events.InteractionCreate, (interaction) => {
+            if (!interaction.isChatInputCommand()) return;
+
+            const commandName = interaction.commandName;
+
+            log.info(
+                "discord",
+                "Handling slash command interaction %s",
                 commandName
             );
-            interaction.reply({
-                content: `Unable to handle command ${commandName}. Please try again later`,
-                ephemeral: true,
-            });
-            break;
+            switch (commandName) {
+                case SlashCommandName.config:
+                    handle.config(interaction);
+                    break;
+                case SlashCommandName.coachme:
+                    handle.coachMe(interaction);
+                    break;
+                case SlashCommandName.stop:
+                    handle.stop(interaction);
+                    break;
+                case SlashCommandName.help:
+                    handle.help(interaction);
+                    break;
+                default:
+                    log.error(
+                        "discord",
+                        "Unable to handle interaction %s",
+                        commandName
+                    );
+                    interaction.reply({
+                        content: `Unable to handle command ${commandName}. Please try again later`,
+                        ephemeral: true,
+                    });
+                    break;
+            }
+        });
     }
-});
+}
 
-export default discordClient;
+export default new DiscordClient();

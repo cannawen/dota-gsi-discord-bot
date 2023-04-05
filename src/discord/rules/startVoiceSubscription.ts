@@ -20,29 +20,14 @@ export default new Rule(
         const channelId = get(topics.discordGuildChannelId)!;
         const studentId = get(topics.studentId)!;
 
-        const guild = client.guilds.cache.find((g) => g.id === guildId);
-        if (!guild) {
-            log.error("discord", "Unable to find guild with id %s.", guildId);
-            return;
-        }
-
-        const channel = guild.channels.cache.find((c) => c.id === channelId);
+        const channel = client.findChannel(guildId, channelId);
         if (!channel) {
             log.error(
                 "discord",
-                "Unable to find channel with id %s in guild %s",
-                channelId,
-                guild.name
+                "Not attempting to start Voice.PlayerSubscription".red
             );
             return;
         }
-
-        log.info(
-            "discord",
-            "Discord ready with guild: %s channel: %s",
-            emColor(guild.name),
-            emColor(channel.name)
-        );
 
         const connection = Voice.joinVoiceChannel({
             adapterCreator: channel.guild.voiceAdapterCreator,

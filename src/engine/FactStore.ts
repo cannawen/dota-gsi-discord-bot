@@ -25,15 +25,23 @@ export default class FactStore {
         this.facts.set(fact.topic.label, fact);
     };
 
+    /**
+     *
+     * @returns map of all facts where the topic has persist=true
+     */
     public getPersistentFacts() {
-        return Array.from(this.facts)
-            .filter(([_key, value]) => value.topic.persist)
-            .reduce((memo: { [key: string]: unknown }, [key, value]) => {
-                memo[key] = value.value;
+        return Array.from(this.facts.values())
+            .filter((fact) => fact.topic.persist)
+            .reduce((memo: { [key: string]: unknown }, fact) => {
+                memo[fact.topic.label] = fact.value;
                 return memo;
             }, {});
     }
 
+    /**
+     * TODO: not super sure about what's happening with types here; especially when we deserialize Classes
+     * @param data facts to be turned into `Fact` objects
+     */
     public setPersistentFacts(data: { [key: string]: unknown }) {
         Object.entries(data)
             .map(([key, value]) => new Fact(new Topic(key, true), value))

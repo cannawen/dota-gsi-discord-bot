@@ -1,7 +1,5 @@
-// TODO export a non-connected discord client, and only start it here
-import "./discord/client";
-
 import Config, { registerConfig } from "./configTopics";
+import discordClient from "./discord/client";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
@@ -101,7 +99,9 @@ if (port && host) {
     );
 }
 
-engine.notifyStartup();
+discordClient.start().then(() => {
+    engine.notifyStartup();
+});
 
 let shuttingDown = false;
 
@@ -112,12 +112,9 @@ function handleShutdown() {
         httpServer?.close(() => {
             log.info("app", "Http server closed.");
         });
-        engine.notifyShutdown();
-        // TODO fix. Wait 4 seconds for discord to finish playing restart audio
-        setTimeout(() => {
-            engine.stopAllCoachingSessions();
+        engine.notifyShutdown().finally(() => {
             process.exit(0);
-        }, 4000);
+        });
     }
 }
 
