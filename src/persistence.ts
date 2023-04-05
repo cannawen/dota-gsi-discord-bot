@@ -14,16 +14,21 @@ if (!dataPath) {
         "PERSISTENCE_DATA_PATH".red
     );
 }
-function saveData(allData: string) {
+
+function saveData(data: string) {
     if (dataPath) {
+        log.info("app", "Saving data %s", data);
         fs.mkdirSync(path.dirname(dataPath), { recursive: true });
-        fs.writeFileSync(dataPath, allData);
+        fs.writeFileSync(dataPath, data);
     }
 }
 
 function readData() {
     if (dataPath && fs.existsSync(dataPath)) {
-        return fs.readFileSync(dataPath, "utf8");
+        const data = fs.readFileSync(dataPath, "utf8");
+        fs.unlinkSync(dataPath);
+        log.info("app", "Reading data %s", data);
+        return data;
     }
 }
 
