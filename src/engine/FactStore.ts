@@ -38,6 +38,5 @@ export default class FactStore {
         Object.entries(data)
             .map(([key, value]) => new Fact(new Topic(key, true), value))
             .forEach(this.set);
-        console.log(this.facts);
     }
 }

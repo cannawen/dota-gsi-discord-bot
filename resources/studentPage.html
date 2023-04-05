@@ -7,7 +7,6 @@
                     .then((res) => res.json())
                     .then((res) => {
                         return new Promise((resolve) => {
-                            console.log(res);
                             if (res.nextAudio) {
                                 const f = new Audio("/" + res.nextAudio);
                                 f.addEventListener("ended", resolve);

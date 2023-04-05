@@ -189,25 +189,23 @@ class CustomEngine extends Engine {
     }
 
     public notifyStartup() {
-        persistence.readData().then((dataString) => {
-            if (!dataString) return;
-            const data = JSON.parse(dataString) as {
-                [key: string]: { [key: string]: unknown };
-            };
-            Object.entries(data).forEach(([key, value]) => {
-                const db = new FactStore();
-                this.sessions.set(key, db);
-                db.setPersistentFacts(value);
+        const dataString = persistence.readData() || "{}";
+        const data = JSON.parse(dataString) as {
+            [key: string]: { [key: string]: unknown };
+        };
+        Object.entries(data).forEach(([key, value]) => {
+            const db = new FactStore();
+            this.sessions.set(key, db);
+            db.setPersistentFacts(value);
 
-                // TODO do this after discord client is ready
-                setTimeout(() => {
-                    this.processAllRules(db);
-                }, 2000);
-            });
+            // TODO do this after discord client is ready
+            setTimeout(() => {
+                this.processAllRules(db);
+            }, 5000);
         });
     }
 
-    public async notifyShutdown() {
+    public notifyShutdown() {
         const allData: { [key: string]: unknown } = {};
         this.sessions.forEach((db, studentId) => {
             log.info("app", "Notify %s of shutdown", studentId);
@@ -221,7 +219,7 @@ class CustomEngine extends Engine {
             allData[studentId] = db.getPersistentFacts();
         });
         // TODO get all topics with persist: true
-        await persistence.saveData(JSON.stringify(allData));
+        persistence.saveData(JSON.stringify(allData));
     }
 
     public stopAudio(studentId: string) {

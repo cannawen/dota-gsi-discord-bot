@@ -30,13 +30,6 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
 -   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
 
-## Redis (Optional)
-
--   Using redis to persist state across restarts with Fly + Upstash Redis integration
--   [Install Redis](https://redis.io/docs/getting-started/)
--   To start local redis db, `redis-server` with env var `REDIS_URL` as `redis://localhost`
--   To connect to remote redis db locally, `fly redis connect` with env variable `REDIS_URL` as `redis://${username}:${password}@127.0.0.1:16379` (probably don't ever want to do this though)
-
 ## Logging
 
 -   Use winston loggers from `log.ts`. New "labels" are created for loggers on the fly

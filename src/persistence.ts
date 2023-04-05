@@ -1,54 +1,29 @@
 /* eslint-disable sort-keys */
-import { createClient } from "redis";
 import dotenv = require("dotenv");
+import fs from "fs";
+import path = require("path");
 import log from "./log";
 dotenv.config();
 
-const redisUrl = process.env.REDIS_URL;
+const dataPath = process.env.PERSISTENCE_DATA_PATH;
 
-async function saveData(allData: string) {
-    try {
-        log.info("app", "Saving data in redis %s", allData.magenta);
-        const client = createClient({
-            url: redisUrl,
-            socket: {
-                family: 6,
-                reconnectStrategy: false,
-            },
-        });
-
-        await client.connect();
-
-        await client.set("restore", allData, { EX: 3600 });
-
-        await client.quit();
-    } catch (error) {
-        log.warn("app", "Unable to save data to redis, %s", error);
+if (!dataPath) {
+    log.warn(
+        "app",
+        "%s not set; continuing but data will not be restored between restarts",
+        "PERSISTENCE_DATA_PATH".red
+    );
+}
+function saveData(allData: string) {
+    if (dataPath) {
+        fs.mkdirSync(path.dirname(dataPath), { recursive: true });
+        fs.writeFileSync(dataPath, allData);
     }
 }
 
-async function readData() {
-    try {
-        const client = createClient({
-            url: redisUrl,
-            socket: {
-                family: 6,
-                reconnectStrategy: false,
-            },
-        });
-
-        await client.connect();
-
-        const dataPromise = await client.get("restore").then((data) => {
-            log.info("app", "Reading data from redis %s", data?.magenta);
-            return data;
-        });
-
-        client.quit();
-
-        return dataPromise;
-    } catch (error) {
-        log.warn("app", "Unable to read data from redis, %s", error);
+function readData() {
+    if (dataPath && fs.existsSync(dataPath)) {
+        return fs.readFileSync(dataPath, "utf8");
     }
 }
 
