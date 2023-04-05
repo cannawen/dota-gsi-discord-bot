@@ -30,4 +30,4 @@ WORKDIR /app
 ENV NODE_ENV production
 ENV PATH /usr/local/node/bin:$PATH
 
-CMD [ "npm", "run", "start" ]
+CMD [ "node", "./build/index.js" ]
