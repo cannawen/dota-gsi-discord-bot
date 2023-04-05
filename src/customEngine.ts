@@ -171,6 +171,12 @@ class CustomEngine extends Engine {
         });
     }
 
+    public stopAllCoachingSessions() {
+        Array.from(this.sessions.keys()).forEach((id) =>
+            this.stopCoachingSession(id)
+        );
+    }
+
     public lostVoiceConnection(studentId: string) {
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);

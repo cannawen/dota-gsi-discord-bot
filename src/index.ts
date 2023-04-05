@@ -109,10 +109,11 @@ function handleShutdown() {
         log.info("app", "Http server closed.");
     });
     engine.notifyShutdown();
-    // TODO fix. Wait 5 seconds for discord to finish playing restart audio
+    // TODO fix. Wait 4 seconds for discord to finish playing restart audio
     setTimeout(() => {
+        engine.stopAllCoachingSessions();
         process.exit(0);
-    }, 5000);
+    }, 4000);
 }
 
 process.on("SIGINT", () => {
