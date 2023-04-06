@@ -84,8 +84,16 @@
                     });
             }
 
-            function debug() {
-                fetch("/debug", { method: "POST" });
+            function saveState() {
+                fetch("/saveState", { method: "POST" });
+            }
+
+            function readState() {
+                fetch("/readState", { method: "POST" });
+            }
+
+            function kill() {
+                fetch("/kill", { method: "POST" });
             }
         </script>
     </head>
@@ -108,8 +116,10 @@
         <br />
         <button onClick="stopAudio()">Stop all audio</button>
         <br />
-        <button onClick="debug()" style="visibility: hidden">
-            Print restart-persistent state on server (debug only)
-        </button>
+        <div style="display: none">
+            <button onClick="saveState()">save state</button>
+            <button onClick="readState()">read state</button>
+            <button onClick="kill()">kill</button>
+        </div>
     </body>
 </html>

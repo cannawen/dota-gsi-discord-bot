@@ -15,12 +15,17 @@ import topics from "./topics";
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
 
-    public printDebugState() {
+    public saveState() {
         const allData: { [key: string]: unknown } = {};
         this.sessions.forEach((db, studentId) => {
             allData[studentId] = db.getPersistentFactsAcrossRestarts();
         });
         log.info("app", JSON.stringify(allData));
+        persistence.saveData(JSON.stringify(allData));
+    }
+
+    public readState() {
+        this.notifyStartup();
     }
 
     private withDb(
