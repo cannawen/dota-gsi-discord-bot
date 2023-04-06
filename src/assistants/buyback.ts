@@ -40,10 +40,11 @@ export default [
     new RuleConfigurable(
         rules.assistant.buyback.warnNoBuyback,
         configTopic,
-        [hasBuybackTopic],
+        [hasBuybackTopic, topics.buybackCooldown],
         (get, effect) => {
             const hasBuyback = get(hasBuybackTopic)!;
-            if (!hasBuyback) {
+            const buybackCooldown = get(topics.buybackCooldown)!;
+            if (!hasBuyback && buybackCooldown === 0) {
                 return new Fact(effect, "resources/audio/buyback-warning.mp3");
             }
         }

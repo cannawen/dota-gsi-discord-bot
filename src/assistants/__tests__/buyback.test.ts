@@ -67,15 +67,28 @@ describe("buyback gold reminder", () => {
 
     describe("warn", () => {
         describe("hasBuybackTopic changed to false", () => {
-            test("play effect", () => {
-                const results = getResults(warnRule, {
-                    buyback: "PRIVATE",
-                    hasBuybackTopic: false,
+            describe("buyback not on cooldown", () => {
+                test("play effect", () => {
+                    const results = getResults(warnRule, {
+                        buyback: "PRIVATE",
+                        buybackCooldown: 0,
+                        hasBuybackTopic: false,
+                    });
+                    expect(results).toContainFact(
+                        "playPrivateAudioFile",
+                        "resources/audio/buyback-warning.mp3"
+                    );
                 });
-                expect(results).toContainFact(
-                    "playPrivateAudioFile",
-                    "resources/audio/buyback-warning.mp3"
-                );
+            });
+            describe("buyback on cooldown", () => {
+                test("do nothing", () => {
+                    const results = getResults(warnRule, {
+                        buyback: "PRIVATE",
+                        buybackCooldown: 1,
+                        hasBuybackTopic: false,
+                    });
+                    expect(results).toBeUndefined();
+                });
             });
         });
         describe("hasBuybackTopic changed to true", () => {
