@@ -180,6 +180,7 @@ class CustomEngine extends Engine {
 
     public stopCoachingSession(studentId: string) {
         this.withDb(studentId, (db) => {
+            log.info("discord", "Destroying subscription for %s", studentId);
             const subscription = db.get(topics.discordSubscriptionTopic);
             subscription?.connection.destroy();
         });
@@ -258,7 +259,7 @@ class CustomEngine extends Engine {
             );
 
             persistence.saveData(JSON.stringify(allData));
-        }).finally(() => {
+        }).then(() => {
             Array.from(this.sessions.keys()).forEach((id) =>
                 this.stopCoachingSession(id)
             );

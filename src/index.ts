@@ -106,13 +106,15 @@ discordClient.start().then(() => {
 let shuttingDown = false;
 
 function handleShutdown() {
-    log.info("app", "Shutdown signal received.");
+    log.info("app", "Shutdown signal received");
     if (!shuttingDown) {
+        log.info("app", "Start handling shutdown");
         shuttingDown = true;
         httpServer?.close(() => {
-            log.info("app", "Http server closed.");
+            log.info("app", "Http server closed");
         });
-        engine.notifyShutdown().finally(() => {
+        engine.notifyShutdown().then(() => {
+            log.info("app", "End handling shutdown");
             process.exit(0);
         });
     }
