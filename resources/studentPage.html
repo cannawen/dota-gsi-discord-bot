@@ -86,11 +86,22 @@
         </script>
     </head>
     <body onload="getConfig()">
-        <button onClick="stopAudio()">Stop all audio</button>
-        <button onClick="startCoaching(event)">START COACHING</button>
-        <div style="background-color: green; display: none" id="coaching">
+        <button
+            onClick="startCoaching(event)"
+            style="font-size: 5em; cursor: pointer"
+        >
+            START COACHING
+        </button>
+        <div
+            style="background-color: green; display: none; font-size: 5em"
+            id="coaching"
+        >
             Coaching...
         </div>
+        <br />
+        <br />
         <div id="config"></div>
+        <br />
+        <button onClick="stopAudio()">Stop all audio</button>
     </body>
 </html>
