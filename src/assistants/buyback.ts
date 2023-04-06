@@ -6,10 +6,14 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>("buyback", true);
+export const configTopic = new Topic<Config>("buyback", {
+    persistAcrossGames: true,
+    persistAcrossRestarts: true,
+});
 export const defaultConfig = Config.PRIVATE;
 
 const hasBuybackTopic = new Topic<boolean>("hasBuybackTopic");
+topics.registerTopic(hasBuybackTopic);
 
 export default [
     new Rule(

@@ -8,7 +8,10 @@ import topics from "../topics";
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 
-export const configTopic = new Topic<Config>(rules.assistant.runes, true);
+export const configTopic = new Topic<Config>(rules.assistant.runes, {
+    persistAcrossGames: true,
+    persistAcrossRestarts: true,
+});
 export const defaultConfig = Config.PRIVATE;
 
 // If we have a time greater than 0 and are in a game

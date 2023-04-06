@@ -21,6 +21,7 @@ export const configToEffectTopic = {
 export const configDb = new Map<string, Topic<Config>>();
 
 export function registerConfig(ruleName: string, topic: Topic<Config>) {
+    topics.registerTopic(topic);
     configDb.set(ruleName, topic);
 
     engine.register(

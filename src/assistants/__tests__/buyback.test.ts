@@ -12,7 +12,7 @@ const warnRule = rule.find(
 describe("buyback gold reminder", () => {
     describe("availablity", () => {
         describe("not in game", () => {
-            test("no actions", () => {
+            test("reset buyback state", () => {
                 const results = getResults(availabilityRule, { inGame: false });
                 expect(results).toBeUndefined();
             });

@@ -1,6 +1,6 @@
 import Config, { configToEffectTopic } from "../configTopics";
-import log from "../log";
 import Fact from "./Fact";
+import log from "../log";
 import Rule from "./Rule";
 import Topic from "./Topic";
 

@@ -6,7 +6,10 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.neutralItem, true);
+export const configTopic = new Topic<Config>(rules.assistant.neutralItem, {
+    persistAcrossGames: true,
+    persistAcrossRestarts: true,
+});
 export const defaultConfig = Config.PRIVATE;
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
@@ -15,6 +18,7 @@ const TIME_BETWEEN_REMINDERS = 15;
 const lastNeutralReminderTimeTopic = new Topic<number>(
     "lastNeutralReminderTimeTopic"
 );
+topics.registerTopic(lastNeutralReminderTimeTopic);
 
 function validNeutralItem(item: Item | null): boolean {
     if (!item) {

@@ -5,16 +5,19 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(
-    rules.assistant.goldReminder,
-    true
-);
+export const configTopic = new Topic<Config>(rules.assistant.goldReminder, {
+    persistAcrossGames: true,
+    persistAcrossRestarts: true,
+});
 export const defaultConfig = Config.PRIVATE;
 
 const SMALL_REMINDER_INCREMENT = 500;
 const LARGE_REMINDER_INCREMENT = 1000;
 
-const lastRemindedGoldTopic = new Topic<number>("lastRemindedGoldTopic");
+const lastRemindedGoldTopic = new Topic<number>("lastRemindedGoldTopic", {
+    persistAcrossRestarts: true,
+});
+topics.registerTopic(lastRemindedGoldTopic);
 
 function handle(
     gold: number,

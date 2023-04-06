@@ -16,6 +16,7 @@ const resetRule = roshanRules.find(
     (rule) => rule.label === rules.assistant.roshan.reset
 )!;
 
+// TODO first and last rules no longer config so we can remove some state for those tests
 describe("roshan", () => {
     describe("events", () => {
         describe("roshan killed", () => {

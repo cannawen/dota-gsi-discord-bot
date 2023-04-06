@@ -11,7 +11,9 @@ import topics from "../topics";
  * 4 players grabbing 4 bounty runes at the same time will only count as 1 event
  * `allEventsTopic` contains an array of all events seen so far
  */
-const allEventsTopic = new Topic<Event[] | undefined>("allEventsTopic", true);
+const allEventsTopic = new Topic<Event[] | undefined>("allEventsTopic", {
+    persistAcrossRestarts: true,
+});
 
 const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
     !allEvents.reduce(
