@@ -2,6 +2,7 @@ import Fact from "./Fact";
 import log from "../log";
 import Topic from "./Topic";
 import topics from "../topics";
+import PersistentTopic from "./PersistentTopic";
 
 export default class FactStore {
     private facts = new Map<string, Fact<unknown>>();
@@ -32,7 +33,12 @@ export default class FactStore {
      */
     public getPersistentFacts() {
         return Array.from(this.facts.values())
-            .filter((fact) => fact.topic.persistAcrossRestarts)
+            .filter((fact) => fact.topic instanceof PersistentTopic)
+            .filter(
+                (fact) =>
+                    (fact.topic as PersistentTopic<unknown>)
+                        .persistAcrossRestarts
+            )
             .reduce((memo: { [key: string]: unknown }, fact) => {
                 memo[fact.topic.label] = fact.value;
                 return memo;

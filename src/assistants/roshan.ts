@@ -2,13 +2,13 @@ import Event, { EventType } from "../gsi-data-classes/Event";
 import Config from "../configTopics";
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
+import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
-import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>("roshan", {
+export const configTopic = new PersistentTopic<Config>("roshan", {
     persistAcrossGames: true,
     persistAcrossRestarts: true,
 });
@@ -17,13 +17,19 @@ export const defaultConfig = Config.PUBLIC;
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanMaybeTimeTopic = new Topic<number>("roshanMaybeTimeTopic", {
-    persistAcrossRestarts: true,
-});
+const roshanMaybeTimeTopic = new PersistentTopic<number>(
+    "roshanMaybeTimeTopic",
+    {
+        persistAcrossRestarts: true,
+    }
+);
 topics.registerTopic(roshanMaybeTimeTopic);
-const roshanAliveTimeTopic = new Topic<number>("roshanAliveTimeTopic", {
-    persistAcrossRestarts: true,
-});
+const roshanAliveTimeTopic = new PersistentTopic<number>(
+    "roshanAliveTimeTopic",
+    {
+        persistAcrossRestarts: true,
+    }
+);
 topics.registerTopic(roshanAliveTimeTopic);
 
 function roshanWasKilled(events: DeepReadonly<Event[]>) {

@@ -1,14 +1,14 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
+import PersistentTopic from "../engine/PersistentTopic";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
-import Topic from "../engine/Topic";
 import topics from "../topics";
 
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 
-export const configTopic = new Topic<Config>(rules.assistant.runes, {
+export const configTopic = new PersistentTopic<Config>(rules.assistant.runes, {
     persistAcrossGames: true,
     persistAcrossRestarts: true,
 });

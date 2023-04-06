@@ -3,6 +3,7 @@ import { DeepReadonly } from "ts-essentials";
 import Event from "./gsi-data-classes/Event";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
+import PersistentTopic from "./engine/PersistentTopic";
 import PlayerItems from "./gsi-data-classes/PlayerItems";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
@@ -57,14 +58,17 @@ const effect = {
 };
 
 const discord = {
-    discordGuildId: new Topic<string>("registerDiscordGuild", {
+    discordGuildId: new PersistentTopic<string>("registerDiscordGuild", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
-    discordGuildChannelId: new Topic<string>("registerDiscordGuildChannel", {
-        persistAcrossGames: true,
-        persistAcrossRestarts: true,
-    }),
+    discordGuildChannelId: new PersistentTopic<string>(
+        "registerDiscordGuildChannel",
+        {
+            persistAcrossGames: true,
+            persistAcrossRestarts: true,
+        }
+    ),
     // playing audio
     discordReadyToPlayAudio: new Topic<boolean>("discordReadyToPlayAudio"),
     discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
@@ -73,7 +77,7 @@ const discord = {
 };
 
 const allTopics = {
-    studentId: new Topic<string>("studentId", {
+    studentId: new PersistentTopic<string>("studentId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),

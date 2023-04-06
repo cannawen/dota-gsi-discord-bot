@@ -1,12 +1,13 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
+import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>("buyback", {
+export const configTopic = new PersistentTopic<Config>("buyback", {
     persistAcrossGames: true,
     persistAcrossRestarts: true,
 });

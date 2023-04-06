@@ -1,11 +1,11 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
+import PersistentTopic from "../engine/PersistentTopic";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
-import Topic from "../engine/Topic";
 import topics from "../topics";
 
-export const configTopic = new Topic<Config>(rules.assistant.glhf, {
+export const configTopic = new PersistentTopic<Config>(rules.assistant.glhf, {
     persistAcrossGames: true,
     persistAcrossRestarts: true,
 });
