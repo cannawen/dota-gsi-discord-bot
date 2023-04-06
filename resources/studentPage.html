@@ -83,6 +83,10 @@
                             message + "<br/>" + explanation;
                     });
             }
+
+            function debug() {
+                fetch("/debug", { method: "POST" });
+            }
         </script>
     </head>
     <body onload="getConfig()">
@@ -103,5 +107,9 @@
         <div id="config"></div>
         <br />
         <button onClick="stopAudio()">Stop all audio</button>
+        <br />
+        <button onClick="debug()" style="visibility: hidden">
+            Print restart-persistent state on server (debug only)
+        </button>
     </body>
 </html>

@@ -15,6 +15,14 @@ import topics from "./topics";
 class CustomEngine extends Engine {
     private sessions: Map<string, FactStore> = new Map();
 
+    public printDebugState() {
+        const allData: { [key: string]: unknown } = {};
+        this.sessions.forEach((db, studentId) => {
+            allData[studentId] = db.getPersistentFactsAcrossRestarts();
+        });
+        log.info("app", JSON.stringify(allData));
+    }
+
     private withDb(
         studentId: string | null,
         effectFn: (db: FactStore) => unknown

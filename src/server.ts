@@ -19,6 +19,11 @@ router.use(
     express.static(path.join(__dirname, "../resources/audio"))
 );
 
+router.post("/debug", (req, res) => {
+    engine.printDebugState();
+    res.status(200).send();
+});
+
 router.get("/", (req, res) => {
     res.status(200).send("hello :3");
 });
