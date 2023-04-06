@@ -95,14 +95,4 @@ export default [
             }
         }
     ),
-
-    // When we are no longer in a game, reset all our roshan timers
-    new Rule(rules.assistant.roshan.reset, [topics.inGame], (get) => {
-        if (!get(topics.inGame)) {
-            return [
-                new Fact(roshanAliveTimeTopic, undefined),
-                new Fact(roshanMaybeTimeTopic, undefined),
-            ];
-        }
-    }),
 ];

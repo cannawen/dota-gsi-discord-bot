@@ -134,23 +134,4 @@ describe("roshan", () => {
             expect(results).toContainFact("roshanAliveTimeTopic", undefined);
         });
     });
-
-    describe("in game?", () => {
-        test("false - reset times", () => {
-            const results = getResults(resetRule, {
-                roshan: "PUBLIC",
-                inGame: false,
-            });
-            expect(results).toContainFact("roshanMaybeTimeTopic", undefined);
-            expect(results).toContainFact("roshanAliveTimeTopic", undefined);
-        });
-
-        test("true - do nothing", () => {
-            const results = getResults(resetRule, {
-                roshan: "PUBLIC",
-                inGame: true,
-            });
-            expect(results).toBeUndefined();
-        });
-    });
 });

@@ -162,6 +162,19 @@ class CustomEngine extends Engine {
 
             this.set(db, new Fact(topics.discordGuildId, guildId));
             this.set(db, new Fact(topics.discordGuildChannelId, channelId));
+
+            engine.register(
+                new Rule(
+                    "engine/reset_state_across_game",
+                    [topics.inGame],
+                    (get) => {
+                        const inGame = get(topics.inGame)!;
+                        if (!inGame) {
+                            db.removeNonPersistentGameState();
+                        }
+                    }
+                )
+            );
         });
     }
 
@@ -198,7 +211,7 @@ class CustomEngine extends Engine {
         Object.entries(data).forEach(([key, value]) => {
             const db = new FactStore();
             this.sessions.set(key, db);
-            db.setPersistentFacts(value);
+            db.setPersistentFactsAcrossRestarts(value);
             this.processAllRules(db);
         });
     }
@@ -207,7 +220,7 @@ class CustomEngine extends Engine {
         return new Promise<void>((res, rej) => {
             const allData: { [key: string]: unknown } = {};
             this.sessions.forEach((db, studentId) => {
-                allData[studentId] = db.getPersistentFacts();
+                allData[studentId] = db.getPersistentFactsAcrossRestarts();
                 log.info("app", "Notify %s of shutdown", studentId);
                 this.set(
                     db,
