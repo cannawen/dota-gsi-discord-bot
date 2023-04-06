@@ -163,7 +163,7 @@ class CustomEngine extends Engine {
             this.set(db, new Fact(topics.discordGuildId, guildId));
             this.set(db, new Fact(topics.discordGuildChannelId, channelId));
 
-            engine.register(
+            this.register(
                 new Rule(
                     "engine/reset_state_across_game",
                     [topics.inGame],
@@ -179,10 +179,23 @@ class CustomEngine extends Engine {
     }
 
     public stopCoachingSession(studentId: string) {
+        log.info("app", "Stop coaching command %s", studentId);
         this.withDb(studentId, (db) => {
-            log.info("discord", "Destroying subscription for %s", studentId);
             const subscription = db.get(topics.discordSubscriptionTopic);
-            subscription?.connection.destroy();
+            if (subscription) {
+                log.info(
+                    "discord",
+                    "Destroying subscription for %s",
+                    studentId
+                );
+                subscription?.connection.destroy();
+            } else {
+                log.error(
+                    "discord",
+                    "Student %s has no active voice subscription",
+                    studentId
+                );
+            }
         });
     }
 
