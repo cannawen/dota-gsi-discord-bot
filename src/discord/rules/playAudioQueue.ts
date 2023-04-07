@@ -25,10 +25,7 @@ export default new Rule(
             log.info("discord", "Playing %s", emColor(filePath));
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
-            return [
-                new Fact(topics.publicAudioQueue, audioQueue),
-                new Fact(topics.discordReadyToPlayAudio, false),
-            ];
+            return new Fact(topics.publicAudioQueue, audioQueue);
         }
     }
 );

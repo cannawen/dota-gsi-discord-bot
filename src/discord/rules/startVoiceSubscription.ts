@@ -44,7 +44,6 @@ export default new Rule(
                 "VoiceConnection ready to play audio for student %s!".green,
                 studentId
             );
-            engine.readyToPlayAudio(studentId, true);
         });
 
         connection.on(Voice.VoiceConnectionStatus.Destroyed, () => {
