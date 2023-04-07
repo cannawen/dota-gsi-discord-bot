@@ -17,6 +17,7 @@ const allEventsTopic = new PersistentTopic<Event[] | undefined>(
         persistAcrossRestarts: true,
     }
 );
+topics.registerTopic(allEventsTopic);
 
 const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
     !allEvents.reduce(
