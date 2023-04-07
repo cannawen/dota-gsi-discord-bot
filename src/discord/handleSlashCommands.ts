@@ -4,6 +4,7 @@ import engine from "../customEngine";
 import fs from "fs";
 import log from "../log";
 import path from "path";
+import Voice = require("@discordjs/voice");
 
 function hashStudentId(userId: string) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
@@ -88,7 +89,28 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
         content: "Ending...",
         ephemeral: true,
     });
-    engine.stopCoachingSession(hashStudentId(interaction.user.id));
+    const studentId = hashStudentId(interaction.user.id);
+    const guild = interaction.guild;
+    if (guild) {
+        const connection = Voice.joinVoiceChannel({
+            adapterCreator: guild.voiceAdapterCreator,
+            channelId: interaction.channelId,
+            guildId: guild.id,
+        });
+        log.info(
+            "discord",
+            "Destroying voice connection in guild %s channel id %s",
+            guild.name,
+            interaction.channelId
+        );
+        connection.destroy();
+    } else {
+        log.error(
+            "discord",
+            "Unable to destroy voice connection for %s; no guild from interaction",
+            studentId
+        );
+    }
 }
 
 function help(interaction: ChatInputCommandInteraction<CacheType>) {

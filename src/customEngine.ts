@@ -191,27 +191,6 @@ class CustomEngine extends Engine {
         });
     }
 
-    public stopCoachingSession(studentId: string) {
-        log.info("app", "Stop coaching command %s", studentId);
-        this.withDb(studentId, (db) => {
-            const subscription = db.get(topics.discordSubscriptionTopic);
-            if (subscription) {
-                log.info(
-                    "discord",
-                    "Destroying subscription for %s",
-                    studentId
-                );
-                subscription?.connection.destroy();
-            } else {
-                log.error(
-                    "discord",
-                    "Student %s has no active voice subscription",
-                    studentId
-                );
-            }
-        });
-    }
-
     public lostVoiceConnection(studentId: string) {
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);
@@ -285,10 +264,6 @@ class CustomEngine extends Engine {
             );
 
             persistence.saveData(JSON.stringify(allData));
-        }).then(() => {
-            Array.from(this.sessions.keys()).forEach((id) =>
-                this.stopCoachingSession(id)
-            );
         });
     }
 

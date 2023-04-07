@@ -24,15 +24,18 @@ export default new Rule(
         if (!channel) {
             log.error(
                 "discord",
-                "Not attempting to start Voice.PlayerSubscription".red
+                "Not attempting to start Voice.PlayerSubscription for %s; channel %s not found in guild %s",
+                studentId,
+                channelId,
+                guildId
             );
             return;
         }
 
         const connection = Voice.joinVoiceChannel({
             adapterCreator: channel.guild.voiceAdapterCreator,
-            channelId: channel.id,
-            guildId: channel.guild.id,
+            channelId: channelId,
+            guildId: guildId,
         });
 
         connection.on(Voice.VoiceConnectionStatus.Ready, () => {
