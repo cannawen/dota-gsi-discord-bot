@@ -9,8 +9,7 @@ import rules from "../rules";
 import topics from "../topics";
 
 export const configTopic = new PersistentTopic<Config>("roshan", {
-    persistAcrossGames: true,
-    persistAcrossRestarts: true,
+    persistForever: true,
 });
 export const defaultConfig = Config.PUBLIC;
 
@@ -39,7 +38,6 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
     );
 }
 
-// TODO first and last rules do not need to be configruable
 export default [
     // When an event notifies us that roshan is killed
     // Set roshan maybe time to 8 minutes from now

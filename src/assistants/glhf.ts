@@ -6,8 +6,7 @@ import rules from "../rules";
 import topics from "../topics";
 
 export const configTopic = new PersistentTopic<Config>(rules.assistant.glhf, {
-    persistAcrossGames: true,
-    persistAcrossRestarts: true,
+    persistForever: true,
 });
 export const defaultConfig = Config.PRIVATE;
 

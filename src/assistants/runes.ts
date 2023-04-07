@@ -9,8 +9,7 @@ const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 
 export const configTopic = new PersistentTopic<Config>(rules.assistant.runes, {
-    persistAcrossGames: true,
-    persistAcrossRestarts: true,
+    persistForever: true,
 });
 export const defaultConfig = Config.PRIVATE;
 

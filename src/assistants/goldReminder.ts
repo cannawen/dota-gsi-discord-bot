@@ -9,8 +9,7 @@ import topics from "../topics";
 export const configTopic = new PersistentTopic<Config>(
     rules.assistant.goldReminder,
     {
-        persistAcrossGames: true,
-        persistAcrossRestarts: true,
+        persistForever: true,
     }
 );
 export const defaultConfig = Config.PRIVATE;

@@ -10,8 +10,7 @@ import topics from "../topics";
 export const configTopic = new PersistentTopic<Config>(
     rules.assistant.neutralItem,
     {
-        persistAcrossGames: true,
-        persistAcrossRestarts: true,
+        persistForever: true,
     }
 );
 export const defaultConfig = Config.PRIVATE;

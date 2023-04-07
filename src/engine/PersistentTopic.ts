@@ -7,6 +7,7 @@ import Topic from "./Topic";
 export default class PersistentTopic<Type> extends Topic<Type> {
     public readonly persistAcrossRestarts: boolean;
     public readonly persistAcrossGames: boolean;
+    public readonly persistForever: boolean;
 
     /**
      * Create a topic
@@ -15,11 +16,18 @@ export default class PersistentTopic<Type> extends Topic<Type> {
      */
     public constructor(
         label: string,
-        opts?: { persistAcrossRestarts?: boolean; persistAcrossGames?: boolean }
+        opts?: {
+            persistAcrossRestarts?: boolean;
+            persistAcrossGames?: boolean;
+            persistForever?: boolean;
+        }
     ) {
         super(label);
 
-        this.persistAcrossRestarts = opts?.persistAcrossRestarts || false;
-        this.persistAcrossGames = opts?.persistAcrossGames || false;
+        this.persistAcrossRestarts =
+            opts?.persistAcrossRestarts || opts?.persistForever || false;
+        this.persistAcrossGames =
+            opts?.persistAcrossGames || opts?.persistForever || false;
+        this.persistForever = opts?.persistForever || false;
     }
 }
