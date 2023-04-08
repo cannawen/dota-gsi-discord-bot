@@ -29,6 +29,16 @@ class CustomEngine extends Engine {
         this.notifyStartup();
     }
 
+    private createFactStoreForStudent(studentId: string) {
+        const db = new PersistentFactStore();
+        this.set(db, new Fact(topics.studentId, studentId));
+
+        // Add to engine's active sessions
+        this.sessions.set(studentId, db);
+
+        return db;
+    }
+
     private withDb(
         studentId: string | null,
         effectFn: (db: FactStore) => unknown
@@ -156,16 +166,6 @@ class CustomEngine extends Engine {
         this.withDb(studentId, (db) =>
             this.set(db, new Fact(topics.discordReadyToPlayAudio, ready))
         );
-    }
-
-    private createFactStoreForStudent(studentId: string) {
-        const db = new PersistentFactStore();
-        this.set(db, new Fact(topics.studentId, studentId));
-
-        // Add to engine's active sessions
-        this.sessions.set(studentId, db);
-
-        return db;
     }
 
     public startCoachingSession(
