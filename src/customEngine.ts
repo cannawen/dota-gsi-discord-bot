@@ -8,12 +8,13 @@ import GsiData from "./gsi/GsiData";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";
+import PersistentFactStore from "./engine/PersistentFactStore";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
 class CustomEngine extends Engine {
-    private sessions: Map<string, FactStore> = new Map();
+    private sessions: Map<string, PersistentFactStore> = new Map();
 
     public saveState() {
         const allData: { [key: string]: unknown } = {};
@@ -158,7 +159,7 @@ class CustomEngine extends Engine {
     }
 
     private createFactStoreForStudent(studentId: string) {
-        const db = new FactStore();
+        const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
 
         // Add to engine's active sessions
