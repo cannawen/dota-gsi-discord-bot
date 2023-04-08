@@ -13,6 +13,9 @@ class DiscordClient {
 
     public start() {
         this.setupInteractions();
+        this.client.on(Events.Error, (error) => {
+            log.error("discord", "%s", error);
+        });
         return Promise.all([this.setup(), this.ready()]);
     }
 
@@ -36,7 +39,7 @@ class DiscordClient {
 
         log.info(
             "discord",
-            "Discord ready with guild: %s channel: %s",
+            "Found guild: %s channel: %s",
             guild.name.cyan,
             channel.name.cyan
         );

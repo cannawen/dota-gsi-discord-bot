@@ -2,7 +2,6 @@ import Config from "./configTopics";
 import { configDb } from "./configTopics";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
-import FactStore from "./engine/FactStore";
 import fs from "fs";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
@@ -16,6 +15,7 @@ import topics from "./topics";
 class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
+    // THIS IS FOR DEBUGGING ONLY
     public saveState() {
         const allData: { [key: string]: unknown } = {};
         this.sessions.forEach((db, studentId) => {
@@ -24,14 +24,41 @@ class CustomEngine extends Engine {
         log.info("app", JSON.stringify(allData));
         persistence.saveRestartData(JSON.stringify(allData));
     }
-
+    // THIS IS FOR DEBUGGING ONLY
     public readState() {
         this.notifyStartup();
+    }
+    // END DEBUGGING CODE
+
+    private getDefaultConfigPreferences(): { [key: string]: Config } {
+        const dirPath = path.join(__dirname, "assistants");
+        return fs
+            .readdirSync(dirPath)
+            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+            .map((file) => path.join(dirPath, file))
+            .map((filePath) => require(filePath))
+            .reduce((memo, module) => {
+                const topic = module.configTopic as Topic<Config>;
+                const config = module.defaultConfig as Config;
+                memo[topic.label] = config;
+                return memo;
+            }, {});
     }
 
     private createFactStoreForStudent(studentId: string) {
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
+
+        const dataString = persistence.readStudentData(studentId);
+        if (dataString) {
+            // User has started this app before; use saved preferences
+            const data = JSON.parse(dataString) as { [key: string]: unknown };
+            db.setJSONFacts(data);
+        } else {
+            // User has not used the app before
+            const data = this.getDefaultConfigPreferences();
+            db.setJSONFacts(data);
+        }
 
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
@@ -41,7 +68,7 @@ class CustomEngine extends Engine {
 
     private withDb(
         studentId: string | null,
-        effectFn: (db: FactStore) => unknown
+        effectFn: (db: PersistentFactStore) => unknown
     ) {
         if (studentId) {
             const db = this.sessions.get(studentId);
@@ -62,61 +89,7 @@ class CustomEngine extends Engine {
         }, false);
     }
 
-    private setDefaultAssistantConfig(
-        studentId: string,
-        publicAnnouncementsOn: boolean
-    ) {
-        const dirPath = path.join(__dirname, "assistants");
-        fs.readdirSync(dirPath)
-            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-            .map((file) => path.join(dirPath, file))
-            .map((filePath) => require(filePath))
-            .forEach((module) => {
-                const topic = module.configTopic as Topic<Config>;
-                const config = module.defaultConfig as Config;
-                if (
-                    !publicAnnouncementsOn &&
-                    (config === Config.PUBLIC ||
-                        config === Config.PUBLIC_INTERRUPTING)
-                ) {
-                    log.info(
-                        "rules",
-                        "Not setting public announcement %s for %s",
-                        topic.label,
-                        studentId
-                    );
-                } else if (topic && config) {
-                    this.setConfig(studentId, topic, config);
-                } else {
-                    log.error(
-                        "rules",
-                        "No default configuration for %s",
-                        topic.label
-                    );
-                }
-            });
-    }
-
-    private setConfig(studentId: string, topic: Topic<Config>, config: Config) {
-        log.verbose(
-            "rules",
-            "Setting config %s for topic %s, studentId %s",
-            config.yellow,
-            topic.label.yellow,
-            studentId
-        );
-        this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
-    }
-
     public changeConfig(studentId: string, topicLabel: string, effect: string) {
-        log.info(
-            "rules",
-            "Changing %s rule to %s for %s",
-            topicLabel.yellow,
-            effect.yellow,
-            studentId
-        );
-
         const topic = configDb.get(topicLabel)!;
 
         let safeEffect;
@@ -136,7 +109,17 @@ class CustomEngine extends Engine {
             );
         }
 
-        this.setConfig(studentId, topic, safeEffect || Config.NONE);
+        const config = safeEffect || Config.NONE;
+
+        log.verbose(
+            "rules",
+            "Setting topic %s for config %s, studentId %s",
+            topic.label.yellow,
+            config.yellow,
+            studentId
+        );
+
+        this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
     }
 
     public getConfig(studentId: string, topic: Topic<Config>) {
@@ -175,11 +158,11 @@ class CustomEngine extends Engine {
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
+        // TODO If another user is connected, disable public announcements
         if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
-            // If already connected, disable public assistant announcements
-            this.setDefaultAssistantConfig(studentId, false);
+            this.set(db, new Fact(topics.discordAudioEnabled, false));
         } else {
-            this.setDefaultAssistantConfig(studentId, true);
+            this.set(db, new Fact(topics.discordAudioEnabled, true));
         }
 
         this.set(db, new Fact(topics.discordGuildId, guildId));
@@ -192,14 +175,26 @@ class CustomEngine extends Engine {
                 (get) => {
                     const inGame = get(topics.inGame)!;
                     if (!inGame) {
-                        db.removeNonPersistentGameState();
+                        db.updatePersistentFactsAcrossGames();
                     }
                 }
             )
         );
     }
 
-    public lostVoiceConnection(studentId: string) {
+    public cleanupSession(studentId: string) {
+        // TODO should we save config on demand?
+        const facts = this.sessions.get(studentId)?.getPersistentForeverFacts();
+
+        log.info(
+            "app",
+            "Saving forever facts %s for student %s",
+            facts,
+            studentId
+        );
+
+        persistence.saveStudentData(studentId, JSON.stringify(facts));
+
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);
     }
@@ -223,17 +218,27 @@ class CustomEngine extends Engine {
         };
 
         Object.entries(data).forEach(([studentId, studentData]) => {
-            const db = this.createFactStoreForStudent(studentId);
-            db.setPersistentFactsAcrossRestarts(studentData);
-            this.processAllRules(db);
+            this.startCoachingSession(
+                studentId,
+                studentData[topics.discordGuildId.label] as string,
+                studentData[topics.discordGuildChannelId.label] as string
+            );
+            this.withDb(studentId, (db) => {
+                db.setJSONFacts(studentData);
+            });
         });
     }
 
-    public notifyShutdown() {
-        return new Promise<void>((res, rej) => {
-            const allData: { [key: string]: unknown } = {};
+    public handleShutdown() {
+        const allData: { [key: string]: unknown } = {};
+        // TODO make this a reduce
+        this.sessions.forEach((db, studentId) => {
+            allData[studentId] = db.getPersistentFactsAcrossRestarts();
+        });
+        persistence.saveRestartData(JSON.stringify(allData));
+
+        return new Promise<void>((resolve) => {
             this.sessions.forEach((db, studentId) => {
-                allData[studentId] = db.getPersistentFactsAcrossRestarts();
                 log.info("app", "Notify %s of shutdown", studentId);
                 this.set(
                     db,
@@ -243,13 +248,11 @@ class CustomEngine extends Engine {
                     )
                 );
             });
-
             const expectedReadyCount = this.sessions.size;
             if (expectedReadyCount === 0) {
-                res();
+                resolve();
             }
             let readyCount = 0;
-
             this.register(
                 new Rule(
                     "wait for all audio to be done playing",
@@ -264,13 +267,15 @@ class CustomEngine extends Engine {
                             );
                         }
                         if (readyCount === expectedReadyCount) {
-                            res();
+                            resolve();
                         }
                     }
                 )
             );
-
-            persistence.saveRestartData(JSON.stringify(allData));
+        }).then(() => {
+            Array.from(this.sessions.keys()).forEach((studentId) => {
+                this.cleanupSession(studentId);
+            });
         });
     }
 

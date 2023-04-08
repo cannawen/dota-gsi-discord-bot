@@ -58,12 +58,12 @@ const effect = {
 };
 
 const discord = {
-    discordGuildId: new PersistentTopic<string>("registerDiscordGuild", {
+    discordGuildId: new PersistentTopic<string>("discordGuildId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
     discordGuildChannelId: new PersistentTopic<string>(
-        "registerDiscordGuildChannel",
+        "discordGuildChannelId",
         {
             persistAcrossGames: true,
             persistAcrossRestarts: true,
@@ -74,6 +74,8 @@ const discord = {
     discordSubscriptionTopic: new Topic<Voice.PlayerSubscription>(
         "discordSubscriptionTopic"
     ),
+    // this is for if there are 2 people connected to the same voice channel
+    discordAudioEnabled: new Topic<boolean>("discordAudioEnabled"),
 };
 
 const allTopics = {

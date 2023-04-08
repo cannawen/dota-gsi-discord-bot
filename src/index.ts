@@ -113,12 +113,17 @@ function handleShutdown() {
         httpServer?.close(() => {
             log.info("app", "Http server closed");
         });
-        engine.notifyShutdown().then(() => {
-            log.info("app", "End handling shutdown");
+        engine.handleShutdown().then(() => {
+            log.info("app", "End handling shutdown gracefully");
             process.exit(0);
         });
+
+        setTimeout(() => {
+            log.error("app", "End handling shutdown UNGRACEFULLY".red);
+            process.exit(0);
+        }, 5000);
     }
 }
 
 process.on("SIGINT", handleShutdown);
-process.on("SIGTERM", handleShutdown);
+// process.on("SIGTERM", handleShutdown);

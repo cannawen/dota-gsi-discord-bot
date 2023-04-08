@@ -30,7 +30,7 @@ router.post("/readState", (req, res) => {
 });
 
 router.post("/kill", (req, res) => {
-    process.kill(process.pid, "SIGINT");
+    process.kill(process.pid, "SIGTERM");
     res.status(200).send();
 });
 

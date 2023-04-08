@@ -16,6 +16,7 @@ function ttsPath(ttsString: string) {
     return path.join(TTS_DIRECTORY, `${ttsString}.mp3`);
 }
 
+// TODO If we are going to be using TTS again, make sure we also take into account discordAudioEnabled
 function createTtsFile(ttsString: string) {
     if (fs.existsSync(ttsPath(ttsString))) {
         log.verbose("effect", "Found cached TTS %s", ttsString);

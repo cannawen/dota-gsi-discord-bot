@@ -6,4 +6,4 @@ error.log
 resources/audio/tts-cache
 bot.code-workspace
 dump.rdb
-data.json
+data/

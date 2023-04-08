@@ -8,10 +8,10 @@ dotenv.config();
 const dataPath = process.env.PERSISTENCE_DATA_PATH!;
 
 const RESTART_DATA_FILE_PATH = path.join(dataPath, "restartData.json");
-const USER_DATA_DIRECTORY_PATH = path.join(dataPath, "user");
+const STUDENT_DATA_DIRECTORY_PATH = path.join(dataPath, "student");
 
-if (!fs.existsSync(USER_DATA_DIRECTORY_PATH)) {
-    fs.mkdirSync(USER_DATA_DIRECTORY_PATH, {
+if (!fs.existsSync(STUDENT_DATA_DIRECTORY_PATH)) {
+    fs.mkdirSync(STUDENT_DATA_DIRECTORY_PATH, {
         recursive: true,
     });
 }
@@ -30,7 +30,28 @@ function readRestartData() {
     }
 }
 
+function readStudentData(studentId: string) {
+    const studentFile = path.join(
+        STUDENT_DATA_DIRECTORY_PATH,
+        `${studentId}.json`
+    );
+    if (fs.existsSync(studentFile)) {
+        return fs.readFileSync(studentFile, "utf8");
+    }
+}
+
+function saveStudentData(studentId: string, data: string) {
+    const studentFile = path.join(
+        STUDENT_DATA_DIRECTORY_PATH,
+        `${studentId}.json`
+    );
+    fs.writeFileSync(studentFile, data);
+}
+
 export default {
     saveRestartData,
     readRestartData,
+
+    saveStudentData,
+    readStudentData,
 };

@@ -18,6 +18,7 @@ export const configToEffectTopic = {
     [Config.NONE]: undefined,
 };
 
+// TODO do we need this configDb? Can we just find what we need out of registered topics?
 export const configDb = new Map<string, Topic<Config>>();
 
 export function registerConfig(ruleName: string, topic: Topic<Config>) {

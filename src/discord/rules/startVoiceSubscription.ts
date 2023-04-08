@@ -44,6 +44,8 @@ export default new Rule(
                 "VoiceConnection ready to play audio for student %s!".green,
                 studentId
             );
+            // Need this here to start the ready to play audio state as true
+            engine.readyToPlayAudio(studentId, true);
         });
 
         connection.on(Voice.VoiceConnectionStatus.Destroyed, () => {
@@ -52,7 +54,7 @@ export default new Rule(
                 "VoiceConnection destroyed for student %s",
                 emColor(studentId)
             );
-            engine.lostVoiceConnection(studentId);
+            engine.cleanupSession(studentId);
         });
 
         const player = Voice.createAudioPlayer();
@@ -74,9 +76,6 @@ export default new Rule(
 
         const subscription = connection.subscribe(player);
 
-        return [
-            new Fact(topics.discordReadyToPlayAudio, false),
-            new Fact(topics.discordSubscriptionTopic, subscription),
-        ];
+        return new Fact(topics.discordSubscriptionTopic, subscription);
     }
 );

@@ -7,13 +7,22 @@ import Voice = require("@discordjs/voice");
 
 export default new Rule(
     rules.effect.playInterruptingAudio,
-    [topics.playInterruptingAudioFile, topics.discordSubscriptionTopic],
+    [
+        topics.playInterruptingAudioFile,
+        topics.discordSubscriptionTopic,
+        topics.discordAudioEnabled,
+    ],
     (get) => {
-        const file = get(topics.playInterruptingAudioFile)!;
-        const subscription = get(topics.discordSubscriptionTopic)!;
-        log.info("discord", "Playing interrupting audio %s", file.magenta);
+        if (get(topics.discordAudioEnabled)!) {
+            const file = get(topics.playInterruptingAudioFile)!;
+            const subscription = get(topics.discordSubscriptionTopic)!;
+            log.info("discord", "Playing interrupting audio %s", file.magenta);
 
-        subscription.player.play(Voice.createAudioResource(file));
-        return new Fact(topics.playInterruptingAudioFile, undefined);
+            subscription.player.play(Voice.createAudioResource(file));
+
+            return new Fact(topics.playInterruptingAudioFile, undefined);
+        } else {
+            return new Fact(topics.playInterruptingAudioFile, undefined);
+        }
     }
 );
