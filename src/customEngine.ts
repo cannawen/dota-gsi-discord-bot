@@ -21,7 +21,7 @@ class CustomEngine extends Engine {
             allData[studentId] = db.getPersistentFactsAcrossRestarts();
         });
         log.info("app", JSON.stringify(allData));
-        persistence.saveData(JSON.stringify(allData));
+        persistence.saveRestartData(JSON.stringify(allData));
     }
 
     public readState() {
@@ -209,7 +209,7 @@ class CustomEngine extends Engine {
     }
 
     public notifyStartup() {
-        const dataString = persistence.readData() || "{}";
+        const dataString = persistence.readRestartData() || "{}";
         const data = JSON.parse(dataString) as {
             [key: string]: { [key: string]: unknown };
         };
@@ -263,7 +263,7 @@ class CustomEngine extends Engine {
                 )
             );
 
-            persistence.saveData(JSON.stringify(allData));
+            persistence.saveRestartData(JSON.stringify(allData));
         });
     }
 

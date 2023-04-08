@@ -10,7 +10,7 @@ kill_timeout = 60
   PORT = "8080"
   SERVER_URL = "http://dota-coach.fly.dev"
   NODE_ENV = "production"
-  PERSISTENCE_DATA_PATH = "/data/data.json"
+  PERSISTENCE_DATA_PATH = "/data"
 
 [http_service]
   internal_port = 8080
