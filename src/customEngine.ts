@@ -12,6 +12,22 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
+function defaultConfigs(): Fact<Config>[] {
+    const dirPath = path.join(__dirname, "assistants");
+
+    return fs
+        .readdirSync(dirPath)
+        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+        .map((file) => path.join(dirPath, file))
+        .map((filePath) => require(filePath))
+        .reduce((memo, module) => {
+            const topic = module.configTopic as Topic<Config>;
+            const config = module.defaultConfig as Config;
+            memo.push(new Fact(topic, config));
+            return memo;
+        }, []);
+}
+
 class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
@@ -30,34 +46,19 @@ class CustomEngine extends Engine {
     }
     // END DEBUGGING CODE
 
-    private getDefaultConfigPreferences(): { [key: string]: Config } {
-        const dirPath = path.join(__dirname, "assistants");
-        return fs
-            .readdirSync(dirPath)
-            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-            .map((file) => path.join(dirPath, file))
-            .map((filePath) => require(filePath))
-            .reduce((memo, module) => {
-                const topic = module.configTopic as Topic<Config>;
-                const config = module.defaultConfig as Config;
-                memo[topic.label] = config;
-                return memo;
-            }, {});
-    }
-
     private createFactStoreForStudent(studentId: string) {
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
 
-        const dataString = persistence.readStudentData(studentId);
-        if (dataString) {
-            // User has started this app before; use saved preferences
-            const data = JSON.parse(dataString) as { [key: string]: unknown };
-            db.deserializeAndSetFacts(data);
+        const savedPrederencesString = persistence.readStudentData(studentId);
+
+        if (savedPrederencesString) {
+            // User has started this app before; use saved values
+            const data = JSON.parse(savedPrederencesString);
+            db.setDeserializedFacts(data);
         } else {
-            // User has not used the app before
-            const data = this.getDefaultConfigPreferences();
-            db.deserializeAndSetFacts(data);
+            // User has not used the app before; set default values
+            defaultConfigs().map(db.set);
         }
 
         // Add to engine's active sessions
@@ -128,6 +129,12 @@ class CustomEngine extends Engine {
             | undefined;
     }
 
+    public resetConfig(studentId: string) {
+        this.withDb(studentId, (db) => {
+            defaultConfigs().map(db.set);
+        });
+    }
+
     public pollConfigUpdateAndReset(studentId: string) {
         return this.withDb(studentId, (db) => {
             if (db.get(topics.configUpdated)) {
@@ -186,7 +193,7 @@ class CustomEngine extends Engine {
         // TODO should we save config on demand?
         const facts = this.sessions.get(studentId)?.getPersistentForeverFacts();
 
-        log.info(
+        log.debug(
             "app",
             "Saving forever facts %s for student %s",
             facts,
@@ -224,7 +231,7 @@ class CustomEngine extends Engine {
                 studentData[topics.discordGuildChannelId.label] as string
             );
             this.withDb(studentId, (db) => {
-                db.deserializeAndSetFacts(studentData);
+                db.setDeserializedFacts(studentData);
             });
         });
     }

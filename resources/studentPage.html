@@ -29,10 +29,6 @@
                 }
             }
 
-            function stopAudio() {
-                fetch("./stop-audio");
-            }
-
             function startCoaching(e) {
                 e.target.remove();
                 document.getElementById("coaching").style.display = "block";
@@ -84,6 +80,14 @@
                     });
             }
 
+            function stopAudio() {
+                fetch("./stop-audio", { method: "POST" });
+            }
+
+            function resetConfig() {
+                fetch("./reset-config", { method: "POST" });
+            }
+
             function saveState() {
                 fetch("/saveState", { method: "POST" });
             }
@@ -114,6 +118,7 @@
         <br />
         <div id="config"></div>
         <br />
+        <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
         <br />
         <div style="display: none">

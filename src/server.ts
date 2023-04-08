@@ -83,8 +83,13 @@ router.get("/coach/:studentId/poll", (req, res) => {
     }
 });
 
-router.get("/coach/:studentId/stop-audio", (req, res) => {
+router.post("/coach/:studentId/stop-audio", (req, res) => {
     engine.stopAudio(req.params.studentId);
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/reset-config", (req, res) => {
+    engine.resetConfig(req.params.studentId);
     res.status(200).send();
 });
 

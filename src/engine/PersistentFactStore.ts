@@ -51,7 +51,7 @@ export default class PersistentFactStore extends FactStore {
         );
     }
 
-    public deserializeAndSetFacts(data: { [key: string]: unknown }) {
+    public setDeserializedFacts(data: { [key: string]: unknown }) {
         Object.entries(data)
             .map(([key, value]) => new Fact(topics.findTopic(key), value))
             .forEach(this.set);
