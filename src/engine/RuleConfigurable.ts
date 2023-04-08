@@ -23,8 +23,6 @@ class RuleConfigurable extends Rule {
             const effect = configToEffectTopic[config];
             if (effect) {
                 return then(get, effect);
-            } else {
-                log.error("rules", "No effect found for %s", configTopic.label);
             }
         });
     }

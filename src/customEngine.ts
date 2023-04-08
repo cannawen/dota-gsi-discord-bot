@@ -157,38 +157,45 @@ class CustomEngine extends Engine {
         );
     }
 
+    private createFactStoreForStudent(studentId: string) {
+        const db = new FactStore();
+        this.set(db, new Fact(topics.studentId, studentId));
+
+        // Add to engine's active sessions
+        this.sessions.set(studentId, db);
+
+        return db;
+    }
+
     public startCoachingSession(
         studentId: string,
         guildId: string,
         channelId: string
     ) {
-        this.sessions.set(studentId, new FactStore());
-        this.withDb(studentId, (db) => {
-            this.set(db, new Fact(topics.studentId, studentId));
+        const db = this.createFactStoreForStudent(studentId);
 
-            if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
-                // If already connected, disable public assistant annoucnements
-                this.setDefaultAssistantConfig(studentId, false);
-            } else {
-                this.setDefaultAssistantConfig(studentId, true);
-            }
+        if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
+            // If already connected, disable public assistant announcements
+            this.setDefaultAssistantConfig(studentId, false);
+        } else {
+            this.setDefaultAssistantConfig(studentId, true);
+        }
 
-            this.set(db, new Fact(topics.discordGuildId, guildId));
-            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
+        this.set(db, new Fact(topics.discordGuildId, guildId));
+        this.set(db, new Fact(topics.discordGuildChannelId, channelId));
 
-            this.register(
-                new Rule(
-                    "engine/reset_state_across_game",
-                    [topics.inGame],
-                    (get) => {
-                        const inGame = get(topics.inGame)!;
-                        if (!inGame) {
-                            db.removeNonPersistentGameState();
-                        }
+        this.register(
+            new Rule(
+                "engine/reset_state_across_game",
+                [topics.inGame],
+                (get) => {
+                    const inGame = get(topics.inGame)!;
+                    if (!inGame) {
+                        db.removeNonPersistentGameState();
                     }
-                )
-            );
-        });
+                }
+            )
+        );
     }
 
     public lostVoiceConnection(studentId: string) {
@@ -214,10 +221,9 @@ class CustomEngine extends Engine {
             [key: string]: { [key: string]: unknown };
         };
 
-        Object.entries(data).forEach(([key, value]) => {
-            const db = new FactStore();
-            this.sessions.set(key, db);
-            db.setPersistentFactsAcrossRestarts(value);
+        Object.entries(data).forEach(([studentId, studentData]) => {
+            const db = this.createFactStoreForStudent(studentId);
+            db.setPersistentFactsAcrossRestarts(studentData);
             this.processAllRules(db);
         });
     }

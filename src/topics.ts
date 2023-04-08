@@ -78,8 +78,7 @@ const discord = {
 
 const allTopics = {
     studentId: new PersistentTopic<string>("studentId", {
-        persistAcrossGames: true,
-        persistAcrossRestarts: true,
+        persistForever: true,
     }),
     configUpdated: new Topic<boolean>("configUpdated"),
     ...effect,
