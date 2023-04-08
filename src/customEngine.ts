@@ -165,7 +165,6 @@ class CustomEngine extends Engine {
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
-        // TODO If another user is connected, disable public announcements
         if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
             this.set(db, new Fact(topics.discordAudioEnabled, false));
         } else {

@@ -50,6 +50,22 @@
                 fetch(`./config/${rule}/NONE`, { method: "POST" });
             }
 
+            function onLoad() {
+                getConfig();
+                getDiscordEnabled();
+            }
+
+            function getDiscordEnabled() {
+                fetch("./discordAudioEnabled")
+                    .then((res) => res.json())
+                    .then((res) => {
+                        if (res === false) {
+                            document.getElementById("warning").style.display =
+                                "block";
+                        }
+                    });
+            }
+
             function getConfig() {
                 fetch("./config")
                     .then((res) => res.json())
@@ -71,7 +87,7 @@
                             "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
                             "null or NONE means this rule is disabled</div>",
                             "<br/>",
-                            "If you are seeing null, perhaps you have not started /coachme or perhaps a different user is already playing public audio on the same voice channel",
+                            "If you are seeing null, perhaps you have not started /coachme",
                         ].reduce((memo, text) => {
                             return memo + `<div>${text}</div>`;
                         }, "");
@@ -101,7 +117,18 @@
             }
         </script>
     </head>
-    <body onload="getConfig()">
+    <body onload="onLoad()">
+        <div id="warning" style="display: none">
+            <div style="font-size: 3em; background-color: red">
+                PUBLIC AUDIO DISABLED
+            </div>
+            <div>
+                You may not be connected to any discord channels, or there may
+                be another student in the channel you are in
+            </div>
+            <br />
+            <br />
+        </div>
         <button
             onClick="startCoaching(event)"
             style="font-size: 5em; cursor: pointer"
