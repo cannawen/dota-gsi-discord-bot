@@ -53,11 +53,11 @@ class CustomEngine extends Engine {
         if (dataString) {
             // User has started this app before; use saved preferences
             const data = JSON.parse(dataString) as { [key: string]: unknown };
-            db.setJSONFacts(data);
+            db.deserializeAndSetFacts(data);
         } else {
             // User has not used the app before
             const data = this.getDefaultConfigPreferences();
-            db.setJSONFacts(data);
+            db.deserializeAndSetFacts(data);
         }
 
         // Add to engine's active sessions
@@ -224,7 +224,7 @@ class CustomEngine extends Engine {
                 studentData[topics.discordGuildChannelId.label] as string
             );
             this.withDb(studentId, (db) => {
-                db.setJSONFacts(studentData);
+                db.deserializeAndSetFacts(studentData);
             });
         });
     }

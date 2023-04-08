@@ -12,11 +12,11 @@ export default class PersistentTopic<Type> extends Topic<Type> {
     /**
      * Create a topic
      * @param label
-     * @param opts Optional params to mark if you want to persist data across restart or games (default is false)
+     * @param options Params to mark what kind of persistence you want (default is false)
      */
     public constructor(
         label: string,
-        opts?: {
+        options?: {
             persistAcrossRestarts?: boolean;
             persistAcrossGames?: boolean;
             persistForever?: boolean;
@@ -25,9 +25,9 @@ export default class PersistentTopic<Type> extends Topic<Type> {
         super(label);
 
         this.persistAcrossRestarts =
-            opts?.persistAcrossRestarts || opts?.persistForever || false;
+            options?.persistAcrossRestarts || options?.persistForever || false;
         this.persistAcrossGames =
-            opts?.persistAcrossGames || opts?.persistForever || false;
-        this.persistForever = opts?.persistForever || false;
+            options?.persistAcrossGames || options?.persistForever || false;
+        this.persistForever = options?.persistForever || false;
     }
 }
