@@ -80,18 +80,19 @@ const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(
     null
 );
 
-describe("neutral item", () => {
+// TODO do not expose lastNeutralItemDigReminderTimeTopic in tests
+describe("neutral item dig reminder", () => {
     describe("player is dead", () => {
         test("invalidate reminder time", () => {
             const result = getResults(neutralItemRule, {
-                [rules.assistant.neutralItem]: "PRIVATE",
+                [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                 alive: false,
                 items: TRUSTY_SHOVEL,
-                lastNeutralReminderTimeTopic: 5,
+                lastNeutralItemDigReminderTimeTopic: 5,
                 time: 50,
             });
             expect(result).toContainFact(
-                "lastNeutralReminderTimeTopic",
+                "lastNeutralItemDigReminderTimeTopic",
                 undefined
             );
         });
@@ -101,14 +102,14 @@ describe("neutral item", () => {
         describe("no neutral item", () => {
             test("invalidate reminder time", () => {
                 const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: NO_ITEMS,
-                    lastNeutralReminderTimeTopic: 5,
+                    lastNeutralItemDigReminderTimeTopic: 5,
                     time: 50,
                 });
                 expect(result).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     undefined
                 );
             });
@@ -118,14 +119,14 @@ describe("neutral item", () => {
             describe("never reminded before", () => {
                 test("update reminder time, but do not play tts", () => {
                     const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItem]: "PRIVATE",
+                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
                         items: PIRATE_HAT,
-                        lastNeutralReminderTimeTopic: undefined,
+                        lastNeutralItemDigReminderTimeTopic: undefined,
                         time: 50,
                     });
                     expect(result).toContainFact(
-                        "lastNeutralReminderTimeTopic",
+                        "lastNeutralItemDigReminderTimeTopic",
                         50
                     );
                     expect(result).not.toContainFact(
@@ -140,14 +141,14 @@ describe("neutral item", () => {
             describe("never reminded before", () => {
                 test("update reminder time, but do not play tts", () => {
                     const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItem]: "PRIVATE",
+                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
                         items: TRUSTY_SHOVEL,
-                        lastNeutralReminderTimeTopic: undefined,
+                        lastNeutralItemDigReminderTimeTopic: undefined,
                         time: 50,
                     });
                     expect(result).toContainFact(
-                        "lastNeutralReminderTimeTopic",
+                        "lastNeutralItemDigReminderTimeTopic",
                         50
                     );
                     expect(result).not.toContainFact(
@@ -159,10 +160,10 @@ describe("neutral item", () => {
             describe("reminded 1 second ago", () => {
                 test("do not change any state", () => {
                     const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItem]: "PRIVATE",
+                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
                         items: TRUSTY_SHOVEL,
-                        lastNeutralReminderTimeTopic: 49,
+                        lastNeutralItemDigReminderTimeTopic: 49,
                         time: 50,
                     });
                     expect(result).toBeUndefined();
@@ -172,14 +173,14 @@ describe("neutral item", () => {
             describe("reminded 15 seonds ago", () => {
                 test("play tts and update reminder time", () => {
                     const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItem]: "PRIVATE",
+                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
                         items: TRUSTY_SHOVEL,
-                        lastNeutralReminderTimeTopic: 35,
+                        lastNeutralItemDigReminderTimeTopic: 35,
                         time: 50,
                     });
                     expect(result).toContainFact(
-                        "lastNeutralReminderTimeTopic",
+                        "lastNeutralItemDigReminderTimeTopic",
                         50
                     );
                     expect(result).toContainFact(
@@ -193,14 +194,14 @@ describe("neutral item", () => {
         describe("shovel is not ready", () => {
             test("invalidate reminder time", () => {
                 const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: SHOVEL_ON_COOLDOWN,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralItemDigReminderTimeTopic: undefined,
                     time: 50,
                 });
                 expect(result).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     undefined
                 );
             });
@@ -209,14 +210,14 @@ describe("neutral item", () => {
         describe("shovel is not ready in backpack", () => {
             test("invalidate reminder time", () => {
                 const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: SHOVEL_ON_COOLDOWN_IN_BACKPACK,
-                    lastNeutralReminderTimeTopic: undefined,
+                    lastNeutralItemDigReminderTimeTopic: undefined,
                     time: 50,
                 });
                 expect(result).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     undefined
                 );
             });
@@ -225,14 +226,14 @@ describe("neutral item", () => {
         describe("shovel is ready to dig in backpack", () => {
             test("play tts and update reminder time", () => {
                 const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: SHOVEL_READY_IN_BACKPACK,
-                    lastNeutralReminderTimeTopic: 35,
+                    lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(result).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     50
                 );
                 expect(result).toContainFact(
@@ -245,14 +246,14 @@ describe("neutral item", () => {
         describe("two neutral items, one of which is ready to cast", () => {
             test("play tts and update reminder time", () => {
                 const resultA = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_A,
-                    lastNeutralReminderTimeTopic: 35,
+                    lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultA).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     50
                 );
                 expect(resultA).toContainFact(
@@ -261,14 +262,14 @@ describe("neutral item", () => {
                 );
 
                 const resultB = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_B,
-                    lastNeutralReminderTimeTopic: 35,
+                    lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultB).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     50
                 );
                 expect(resultB).toContainFact(
@@ -277,14 +278,14 @@ describe("neutral item", () => {
                 );
 
                 const resultC = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItem]: "PRIVATE",
+                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_C,
-                    lastNeutralReminderTimeTopic: 35,
+                    lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
                 });
                 expect(resultC).toContainFact(
-                    "lastNeutralReminderTimeTopic",
+                    "lastNeutralItemDigReminderTimeTopic",
                     50
                 );
                 expect(resultC).toContainFact(
