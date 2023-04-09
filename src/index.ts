@@ -100,7 +100,7 @@ if (port && host) {
 }
 
 discordClient.start().then(() => {
-    engine.notifyStartup();
+    engine.handleStartup();
 });
 
 let shuttingDown = false;

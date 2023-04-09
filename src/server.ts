@@ -56,12 +56,10 @@ router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
 
 router.get("/coach/:studentId/config", (req, res) => {
     res.status(200).json(
-        Array.from(configDb)
-            .map(([_, topic]) => topic)
-            .map((topic) => [
-                topic.label,
-                engine.getConfig(req.params.studentId, topic),
-            ])
+        Object.values(configDb).map((topic) => [
+            topic.label,
+            engine.getConfig(req.params.studentId, topic),
+        ])
     );
 });
 

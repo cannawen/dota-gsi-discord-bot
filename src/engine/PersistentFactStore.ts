@@ -2,7 +2,6 @@ import Fact from "./Fact";
 import FactStore from "./FactStore";
 import PersistentTopic from "./PersistentTopic";
 import Topic from "./Topic";
-import topics from "../topics";
 
 function filter(
     facts: Map<Topic<unknown>, Fact<unknown>>,
@@ -11,19 +10,28 @@ function filter(
         | "persistAcrossRestarts"
         | "persistForever"
 ) {
-    return Array.from(facts.values())
-        .filter((fact) => fact.topic instanceof PersistentTopic)
-        .filter(
-            (fact) => (fact.topic as PersistentTopic<unknown>)[persistenceParam]
-        );
+    return Object.values(facts).filter(
+        (fact) =>
+            fact.topic instanceof PersistentTopic &&
+            fact.topic[persistenceParam]
+    );
 }
 
-function serializeIntoMemo(
-    memo: { [key: string]: unknown },
-    fact: Fact<unknown>
-) {
-    memo[fact.topic.label] = fact.value;
-    return memo;
+export function factsToPlainObjects(facts: Fact<unknown>[]) {
+    return facts.reduce((memo: { [key: string]: unknown }, fact) => {
+        memo[fact.topic.label] = fact.value;
+        return memo;
+    }, {});
+}
+
+export function plainObjectsToFacts(objects: { [key: string]: unknown }) {
+    return Object.entries(objects).reduce(
+        (memo: Fact<unknown>[], [topicLabel, value]) => {
+            memo.push(new Fact(topics.findTopic(topicLabel), value));
+            return memo;
+        },
+        []
+    );
 }
 
 export default class PersistentFactStore extends FactStore {
@@ -38,22 +46,10 @@ export default class PersistentFactStore extends FactStore {
     }
 
     public getPersistentFactsAcrossRestarts() {
-        return filter(this.facts, "persistAcrossRestarts").reduce(
-            serializeIntoMemo,
-            {}
-        );
+        return filter(this.facts, "persistAcrossRestarts");
     }
 
     public getPersistentForeverFacts() {
-        return filter(this.facts, "persistForever").reduce(
-            serializeIntoMemo,
-            {}
-        );
-    }
-
-    public setDeserializedFacts(data: { [key: string]: unknown }) {
-        Object.entries(data)
-            .map(([key, value]) => new Fact(topics.findTopic(key), value))
-            .forEach(this.set);
+        return filter(this.facts, "persistForever");
     }
 }

@@ -1,3 +1,7 @@
+import PersistentFactStore, {
+    factsToPlainObjects,
+    plainObjectsToFacts,
+} from "./engine/PersistentFactStore";
 import Config from "./configTopics";
 import { configDb } from "./configTopics";
 import Engine from "./engine/Engine";
@@ -7,7 +11,6 @@ import GsiData from "./gsi/GsiData";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";
-import PersistentFactStore from "./engine/PersistentFactStore";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
@@ -37,7 +40,7 @@ class CustomEngine extends Engine {
     }
     // THIS IS FOR DEBUGGING ONLY
     public readState() {
-        this.notifyStartup();
+        this.handleStartup();
     }
     // END DEBUGGING CODE
 
@@ -45,12 +48,13 @@ class CustomEngine extends Engine {
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
 
-        const savedPrederencesString = persistence.readStudentData(studentId);
+        const savedPersistenceString = persistence.readStudentData(studentId);
 
-        if (savedPrederencesString) {
+        if (savedPersistenceString) {
             // User has started this app before; use saved values
-            const data = JSON.parse(savedPrederencesString);
-            db.setDeserializedFacts(data);
+            plainObjectsToFacts(JSON.parse(savedPersistenceString)).forEach(
+                (fact) => db.set(fact)
+            );
         } else {
             // User has not used the app before; set default values
             defaultConfigs().map(db.set);
@@ -162,19 +166,24 @@ class CustomEngine extends Engine {
 
     public startCoachingSession(
         studentId: string,
-        guildId: string,
-        channelId: string
+        guildId: string | undefined,
+        channelId: string | undefined
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
-        const alreadyConnected = this.alreadyConnectedToVoiceChannel(
-            guildId,
-            channelId
-        );
-        this.set(db, new Fact(topics.discordAudioEnabled, !alreadyConnected));
+        if (guildId && channelId) {
+            const alreadyConnected = this.alreadyConnectedToVoiceChannel(
+                guildId,
+                channelId
+            );
+            this.set(
+                db,
+                new Fact(topics.discordAudioEnabled, !alreadyConnected)
+            );
 
-        this.set(db, new Fact(topics.discordGuildId, guildId));
-        this.set(db, new Fact(topics.discordGuildChannelId, channelId));
+            this.set(db, new Fact(topics.discordGuildId, guildId));
+            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
+        }
 
         this.register(
             new Rule(
@@ -191,18 +200,18 @@ class CustomEngine extends Engine {
     }
 
     public cleanupSession(studentId: string) {
-        // TODO should we save config on demand?
-        const facts = this.sessions.get(studentId)?.getPersistentForeverFacts();
+        this.withDb(studentId, (db) => {
+            const facts = factsToPlainObjects(db.getPersistentForeverFacts());
 
-        log.debug(
-            "app",
-            "Saving forever facts %s for student %s",
-            facts,
-            studentId
-        );
+            log.debug(
+                "app",
+                "Saving forever facts %s for student %s",
+                facts,
+                studentId
+            );
 
-        persistence.saveStudentData(studentId, JSON.stringify(facts));
-
+            persistence.saveStudentData(studentId, JSON.stringify(facts));
+        });
         log.info("rules", "Deleting database for student %s", studentId);
         this.sessions.delete(studentId);
     }
@@ -219,28 +228,30 @@ class CustomEngine extends Engine {
         }) as string | void;
     }
 
-    public notifyStartup() {
+    public handleStartup() {
         const dataString = persistence.readRestartData() || "{}";
         const data = JSON.parse(dataString) as {
             [key: string]: { [key: string]: unknown };
         };
 
         Object.entries(data).forEach(([studentId, studentData]) => {
-            this.startCoachingSession(
-                studentId,
-                studentData[topics.discordGuildId.label] as string,
-                studentData[topics.discordGuildChannelId.label] as string
-            );
             this.withDb(studentId, (db) => {
-                db.setDeserializedFacts(studentData);
+                plainObjectsToFacts(studentData).map((fact) => db.set(fact));
+                this.startCoachingSession(
+                    studentId,
+                    db.get(topics.discordGuildId),
+                    db.get(topics.discordGuildChannelId)
+                );
             });
         });
     }
 
     private storePersistentFactsAcrossRestarts() {
-        const allData: { [key: string]: unknown } = {};
+        const allData: { [key: string]: { [key: string]: unknown } } = {};
         this.sessions.forEach((db, studentId) => {
-            allData[studentId] = db.getPersistentFactsAcrossRestarts();
+            allData[studentId] = factsToPlainObjects(
+                db.getPersistentFactsAcrossRestarts()
+            );
         });
         persistence.saveRestartData(JSON.stringify(allData));
     }
@@ -286,7 +297,7 @@ class CustomEngine extends Engine {
                 )
             );
         }).then(() => {
-            Array.from(this.sessions.keys()).forEach((studentId) => {
+            Object.keys(this.sessions).forEach((studentId) => {
                 this.cleanupSession(studentId);
             });
         });
