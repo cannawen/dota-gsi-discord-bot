@@ -3,8 +3,6 @@ import { getResults } from "../../__tests__/helpers";
 import rule from "../goldReminder";
 import rules from "../../rules";
 
-// TODO not sure if `[state[1].topic.label]: state[1].value` is preferable to exposing lastGold topic
-// TODO forward all facts from previous state into new state. Perhaps refactor getResults to take in Fact[] to merge?
 describe("gold reminder", () => {
     describe("not in game", () => {
         test("should not remind player to spend gold", () => {
@@ -52,13 +50,16 @@ describe("gold reminder", () => {
                             inGame: true,
                             gold: 500,
                         }) as Fact<unknown>[];
-                        const results = getResults(rule, {
-                            [rules.assistant.goldReminder]: "PRIVATE",
-                            time: 9 * 60,
-                            inGame: true,
-                            gold: 500,
-                            [state[1].topic.label]: state[1].value,
-                        });
+                        const results = getResults(
+                            rule,
+                            {
+                                [rules.assistant.goldReminder]: "PRIVATE",
+                                time: 9 * 60,
+                                inGame: true,
+                                gold: 500,
+                            },
+                            state
+                        );
                         expect(results).toBeUndefined();
                     });
                     describe("has more than 1000 gold", () => {
@@ -69,13 +70,16 @@ describe("gold reminder", () => {
                                 inGame: true,
                                 gold: 500,
                             }) as Fact<unknown>[];
-                            const results = getResults(rule, {
-                                [rules.assistant.goldReminder]: "PRIVATE",
-                                time: 9 * 60,
-                                inGame: true,
-                                gold: 1000,
-                                [state[1].topic.label]: state[1].value,
-                            });
+                            const results = getResults(
+                                rule,
+                                {
+                                    [rules.assistant.goldReminder]: "PRIVATE",
+                                    time: 9 * 60,
+                                    inGame: true,
+                                    gold: 1000,
+                                },
+                                state
+                            );
                             expect(results).toContainFact(
                                 "playPrivateAudioFile",
                                 "resources/audio/money.mp3"
@@ -95,13 +99,16 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 2000,
                     }) as Fact<unknown>[];
-                    const results = getResults(rule, {
-                        [rules.assistant.goldReminder]: "PRIVATE",
-                        time: 11 * 60,
-                        inGame: true,
-                        gold: 2000,
-                        [state[1].topic.label]: state[1].value,
-                    });
+                    const results = getResults(
+                        rule,
+                        {
+                            [rules.assistant.goldReminder]: "PRIVATE",
+                            time: 11 * 60,
+                            inGame: true,
+                            gold: 2000,
+                        },
+                        state
+                    );
                     expect(results).toBeUndefined();
                 });
             });
@@ -200,13 +207,16 @@ describe("gold reminder", () => {
                     inGame: true,
                     gold: 2000,
                 }) as Fact<unknown>[];
-                const results = getResults(rule, {
-                    [rules.assistant.goldReminder]: "PRIVATE",
-                    time: 9 * 60,
-                    inGame: true,
-                    gold: 500,
-                    [state[1].topic.label]: state[1].value,
-                });
+                const results = getResults(
+                    rule,
+                    {
+                        [rules.assistant.goldReminder]: "PRIVATE",
+                        time: 9 * 60,
+                        inGame: true,
+                        gold: 500,
+                    },
+                    state
+                );
                 expect(results).not.toContainFact(
                     "playPrivateAudioFile",
                     "resources/audio/money.mp3"
