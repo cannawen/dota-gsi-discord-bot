@@ -18,15 +18,15 @@ function filter(
     );
 }
 
-export function factsToPlainObjects(facts: Fact<unknown>[]) {
+export function factsToPlainObject(facts: Fact<unknown>[]) {
     return facts.reduce((memo: { [key: string]: unknown }, fact) => {
         memo[fact.topic.label] = fact.value;
         return memo;
     }, {});
 }
 
-export function plainObjectsToFacts(objects: { [key: string]: unknown }) {
-    return Object.entries(objects).reduce(
+export function plainObjectToFacts(object: { [key: string]: unknown }) {
+    return Object.entries(object).reduce(
         (memo: Fact<unknown>[], [topicLabel, value]) => {
             memo.push(new Fact(topicManager.findTopic(topicLabel), value));
             return memo;

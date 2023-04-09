@@ -1,6 +1,6 @@
 import PersistentFactStore, {
-    factsToPlainObjects,
-    plainObjectsToFacts,
+    factsToPlainObject,
+    plainObjectToFacts,
 } from "./engine/PersistentFactStore";
 import EffectConfig from "./EffectConfig";
 import Engine from "./engine/Engine";
@@ -52,7 +52,7 @@ class CustomEngine extends Engine {
 
         if (savedPersistenceString) {
             // User has started this app before; use saved values
-            plainObjectsToFacts(JSON.parse(savedPersistenceString)).forEach(
+            plainObjectToFacts(JSON.parse(savedPersistenceString)).forEach(
                 (fact) => db.set(fact)
             );
         } else {
@@ -204,7 +204,7 @@ class CustomEngine extends Engine {
 
     public cleanupSession(studentId: string) {
         this.withDb(studentId, (db) => {
-            const facts = factsToPlainObjects(db.getPersistentForeverFacts());
+            const facts = factsToPlainObject(db.getPersistentForeverFacts());
 
             log.debug(
                 "app",
@@ -239,7 +239,7 @@ class CustomEngine extends Engine {
 
         Object.entries(data).forEach(([studentId, studentData]) => {
             this.withDb(studentId, (db) => {
-                plainObjectsToFacts(studentData).map((fact) => db.set(fact));
+                plainObjectToFacts(studentData).map((fact) => db.set(fact));
                 this.startCoachingSession(
                     studentId,
                     db.get(topics.discordGuildId),
@@ -252,7 +252,7 @@ class CustomEngine extends Engine {
     private storePersistentFactsAcrossRestarts() {
         const allData: { [key: string]: { [key: string]: unknown } } = {};
         this.sessions.forEach((db, studentId) => {
-            allData[studentId] = factsToPlainObjects(
+            allData[studentId] = factsToPlainObject(
                 db.getPersistentFactsAcrossRestarts()
             );
         });

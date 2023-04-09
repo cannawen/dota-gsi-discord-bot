@@ -8,7 +8,7 @@ import "../index";
 
 describe("during app startup", () => {
     test("should register all rules with engine", () => {
-        const assistantCount = 7;
+        const assistantCount = 9;
         const assistantExcessRuleCount = 3;
         const discordRuleCount = 2;
         const effectRuleCount = 5;
