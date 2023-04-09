@@ -37,10 +37,10 @@ class TopicManager {
         return this.configTopics;
     }
 
-    public findTopic(label: string): Topic<unknown> {
+    public findTopic<T>(label: string): Topic<T> {
         const topic = this.topics.get(label);
         if (topic) {
-            return topic;
+            return topic as Topic<T>;
         } else {
             log.error("rules", "Unknown topic %s", label);
             throw new Error(`Unknown topic ${label}`);

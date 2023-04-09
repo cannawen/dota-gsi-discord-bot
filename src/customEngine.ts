@@ -97,9 +97,9 @@ class CustomEngine extends Engine {
     }
 
     public changeConfig(studentId: string, topicLabel: string, effect: string) {
-        const topic = topicManager.findTopic(topicLabel);
+        const topic = topicManager.findTopic<EffectConfig>(topicLabel);
 
-        let safeEffect;
+        let safeEffect: EffectConfig;
         if (effect === EffectConfig.PUBLIC) {
             safeEffect = EffectConfig.PUBLIC;
         } else if (effect === EffectConfig.PRIVATE) {
@@ -114,19 +114,20 @@ class CustomEngine extends Engine {
                 effect,
                 studentId
             );
+            safeEffect = EffectConfig.NONE;
         }
-
-        const config = safeEffect || EffectConfig.NONE;
 
         log.verbose(
             "rules",
             "Setting topic %s for config %s, studentId %s",
             topic.label.yellow,
-            config.yellow,
+            safeEffect.yellow,
             studentId
         );
 
-        this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
+        this.withDb(studentId, (db) =>
+            this.set(db, new Fact(topic, safeEffect))
+        );
     }
 
     public getConfig(studentId: string, topic: Topic<EffectConfig>) {
