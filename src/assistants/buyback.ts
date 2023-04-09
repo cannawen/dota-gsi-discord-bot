@@ -1,19 +1,15 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
-import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
-import Topic from "../engine/Topic";
+import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = new PersistentTopic<Config>("buyback", {
-    persistForever: true,
-});
+export const configTopic = topicManager.createConfigTopic("buyback");
 export const defaultConfig = Config.PRIVATE;
 
-const hasBuybackTopic = new Topic<boolean>("hasBuybackTopic");
-topics.registerTopic(hasBuybackTopic);
+const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
 
 export default [
     new Rule(

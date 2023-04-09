@@ -1,4 +1,4 @@
-import Config, { registerConfig } from "./configTopics";
+import Config, { registerConfigRule } from "./configTopics";
 import discordClient from "./discord/client";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
@@ -43,7 +43,7 @@ function registerAssistantConfig() {
         // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
         .map((module) => module.configTopic as Topic<Config>)
-        .forEach((topic) => registerConfig(topic.label, topic));
+        .forEach((topic) => registerConfigRule(topic.label, topic));
 }
 
 registerRulesInDirectory("assistants");
@@ -107,6 +107,11 @@ let shuttingDown = false;
 
 function handleShutdown() {
     log.info("app", "Shutdown signal received");
+    setTimeout(() => {
+        log.error("app", "End handling shutdown UNGRACEFULLY".red);
+        process.exit(0);
+    }, 5000);
+
     if (!shuttingDown) {
         log.info("app", "Start handling shutdown");
         shuttingDown = true;
@@ -117,11 +122,6 @@ function handleShutdown() {
             log.info("app", "End handling shutdown gracefully");
             process.exit(0);
         });
-
-        setTimeout(() => {
-            log.error("app", "End handling shutdown UNGRACEFULLY".red);
-            process.exit(0);
-        }, 5000);
     }
 }
 

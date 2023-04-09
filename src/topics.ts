@@ -2,27 +2,11 @@
 import { DeepReadonly } from "ts-essentials";
 import Event from "./gsi-data-classes/Event";
 import GsiData from "./gsi/GsiData";
-import log from "./log";
+import manager from "./engine/topicManager";
 import PersistentTopic from "./engine/PersistentTopic";
 import PlayerItems from "./gsi-data-classes/PlayerItems";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
-
-const topicMap: Map<string, Topic<unknown>> = new Map();
-
-function findTopic(label: string): Topic<unknown> {
-    const topic = topicMap.get(label);
-    if (topic) {
-        return topic;
-    } else {
-        log.error("rules", "Unknown topic %s", label);
-        throw new Error(`Unknown topic ${label}`);
-    }
-}
-
-function registerTopic(topic: Topic<unknown>) {
-    topicMap.set(topic.label, topic);
-}
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
@@ -86,7 +70,7 @@ const allTopics = {
     ...discord,
 };
 
-Object.values(allTopics).forEach(registerTopic);
+Object.values(allTopics).forEach((topic) => manager.registerTopic(topic));
 
 /**
  * These are topics that cross different modules
@@ -96,8 +80,5 @@ Object.values(allTopics).forEach(registerTopic);
  * BUT IT STILL NEEDS TO BE REGISTERED TO BE PERSISTED PROPERLY
  */
 export default {
-    findTopic,
-    registerTopic,
-
     ...allTopics,
 };

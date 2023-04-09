@@ -1,16 +1,16 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
-import PersistentTopic from "../engine/PersistentTopic";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
+import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 
-export const configTopic = new PersistentTopic<Config>(rules.assistant.runes, {
-    persistForever: true,
-});
+export const configTopic = topicManager.createConfigTopic(
+    rules.assistant.runes
+);
 export const defaultConfig = Config.PRIVATE;
 
 // If we have a time greater than 0 and are in a game

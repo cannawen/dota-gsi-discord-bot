@@ -6,30 +6,27 @@ import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
+import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = new PersistentTopic<Config>("roshan", {
-    persistForever: true,
-});
+export const configTopic = topicManager.createConfigTopic("roshan");
 export const defaultConfig = Config.PUBLIC;
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanMaybeTimeTopic = new PersistentTopic<number>(
+const roshanMaybeTimeTopic = topicManager.createTopic<number>(
     "roshanMaybeTimeTopic",
     {
         persistAcrossRestarts: true,
     }
 );
-topics.registerTopic(roshanMaybeTimeTopic);
-const roshanAliveTimeTopic = new PersistentTopic<number>(
+const roshanAliveTimeTopic = topicManager.createTopic<number>(
     "roshanAliveTimeTopic",
     {
         persistAcrossRestarts: true,
     }
 );
-topics.registerTopic(roshanAliveTimeTopic);
 
 function roshanWasKilled(events: DeepReadonly<Event[]>) {
     return events.reduce(

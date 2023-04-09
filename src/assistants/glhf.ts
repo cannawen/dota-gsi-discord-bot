@@ -1,13 +1,11 @@
 import Config from "../configTopics";
 import Fact from "../engine/Fact";
-import PersistentTopic from "../engine/PersistentTopic";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
+import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = new PersistentTopic<Config>(rules.assistant.glhf, {
-    persistForever: true,
-});
+export const configTopic = topicManager.createConfigTopic(rules.assistant.glhf);
 export const defaultConfig = Config.PRIVATE;
 
 export default new RuleConfigurable(

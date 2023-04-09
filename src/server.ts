@@ -1,9 +1,9 @@
-import { configDb } from "./configTopics";
 import engine from "./customEngine";
 import express from "express";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
+import topicManager from "./engine/topicManager";
 
 const app = express();
 
@@ -56,8 +56,9 @@ router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
 
 router.get("/coach/:studentId/config", (req, res) => {
     res.status(200).json(
-        Object.values(configDb).map((topic) => [
+        Object.values(topicManager.getConfigTopics()).map((topic) => [
             topic.label,
+            // TODO just one call to get all configs for a student
             engine.getConfig(req.params.studentId, topic),
         ])
     );

@@ -2,6 +2,7 @@ import Fact from "./Fact";
 import FactStore from "./FactStore";
 import PersistentTopic from "./PersistentTopic";
 import Topic from "./Topic";
+import topicManager from "./topicManager";
 
 function filter(
     facts: Map<Topic<unknown>, Fact<unknown>>,
@@ -27,7 +28,7 @@ export function factsToPlainObjects(facts: Fact<unknown>[]) {
 export function plainObjectsToFacts(objects: { [key: string]: unknown }) {
     return Object.entries(objects).reduce(
         (memo: Fact<unknown>[], [topicLabel, value]) => {
-            memo.push(new Fact(topics.findTopic(topicLabel), value));
+            memo.push(new Fact(topicManager.findTopic(topicLabel), value));
             return memo;
         },
         []

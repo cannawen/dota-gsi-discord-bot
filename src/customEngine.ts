@@ -3,7 +3,6 @@ import PersistentFactStore, {
     plainObjectsToFacts,
 } from "./engine/PersistentFactStore";
 import Config from "./configTopics";
-import { configDb } from "./configTopics";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import fs from "fs";
@@ -13,6 +12,7 @@ import path from "path";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
+import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
 function defaultConfigs(): Fact<Config>[] {
@@ -97,7 +97,7 @@ class CustomEngine extends Engine {
     }
 
     public changeConfig(studentId: string, topicLabel: string, effect: string) {
-        const topic = configDb.get(topicLabel)!;
+        const topic = topicManager.findTopic(topicLabel);
 
         let safeEffect;
         if (effect === Config.PUBLIC) {

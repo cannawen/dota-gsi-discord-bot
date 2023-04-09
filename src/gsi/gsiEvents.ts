@@ -4,6 +4,7 @@ import Fact from "../engine/Fact";
 import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import rules from "../rules";
+import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 /**
@@ -11,13 +12,12 @@ import topics from "../topics";
  * 4 players grabbing 4 bounty runes at the same time will only count as 1 event
  * `allEventsTopic` contains an array of all events seen so far
  */
-const allEventsTopic = new PersistentTopic<Event[] | undefined>(
+const allEventsTopic = topicManager.createTopic<Event[] | undefined>(
     "allEventsTopic",
     {
         persistAcrossRestarts: true,
     }
 );
-topics.registerTopic(allEventsTopic);
 
 const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
     !allEvents.reduce(
