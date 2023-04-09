@@ -8,6 +8,7 @@ const assistant = {
         warnNoBuyback: "buyback/warn_no_buyback",
     },
     neutralItemDigReminder: "neutral_item_dig_reminder",
+    neutralItemReminder: "neutral_item_reminder",
     roshan: {
         killedEvent: "roshan/killed_event/set_future_audio_state",
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
