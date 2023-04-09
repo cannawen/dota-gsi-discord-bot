@@ -1,5 +1,5 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import PersistentTopic from "../engine/PersistentTopic";
@@ -10,7 +10,7 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic("roshan");
-export const defaultConfig = Config.PUBLIC;
+export const defaultConfig = EffectConfig.PUBLIC;
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;

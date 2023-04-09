@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
@@ -6,7 +6,7 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(rules.assistant.glhf);
-export const defaultConfig = Config.PRIVATE;
+export const defaultConfig = EffectConfig.PRIVATE;
 
 export default new RuleConfigurable(
     rules.assistant.glhf,

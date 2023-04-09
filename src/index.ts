@@ -1,4 +1,4 @@
-import Config, { registerConfigRule } from "./configTopics";
+import EffectConfig, { registerEffectConfigRule } from "./EffectConfig";
 import discordClient from "./discord/client";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
@@ -42,8 +42,8 @@ function registerAssistantConfig() {
         .map((file) => path.join(dirPath, file))
         // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
-        .map((module) => module.configTopic as Topic<Config>)
-        .forEach((topic) => registerConfigRule(topic.label, topic));
+        .map((module) => module.configTopic as Topic<EffectConfig>)
+        .forEach((topic) => registerEffectConfigRule(topic.label, topic));
 }
 
 registerRulesInDirectory("assistants");

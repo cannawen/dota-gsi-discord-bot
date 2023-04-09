@@ -4,7 +4,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-enum Config {
+enum EffectConfig {
     PUBLIC = "PUBLIC",
     PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
     PRIVATE = "PRIVATE",
@@ -12,20 +12,23 @@ enum Config {
 }
 
 export const configToEffectTopic = {
-    [Config.PUBLIC]: topics.playPublicAudioFile,
-    [Config.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
-    [Config.PRIVATE]: topics.playPrivateAudioFile,
-    [Config.NONE]: undefined,
+    [EffectConfig.PUBLIC]: topics.playPublicAudioFile,
+    [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
+    [EffectConfig.PRIVATE]: topics.playPrivateAudioFile,
+    [EffectConfig.NONE]: undefined,
 };
 
-export function registerConfigRule(ruleName: string, topic: Topic<Config>) {
+export function registerEffectConfigRule(
+    ruleName: string,
+    topic: Topic<EffectConfig>
+) {
     engine.register(
         new Rule(
-            `${ruleName}_config`,
+            `${ruleName}_effect_config`,
             [topic],
             (_) => new Fact(topics.configUpdated, true)
         )
     );
 }
 
-export default Config;
+export default EffectConfig;

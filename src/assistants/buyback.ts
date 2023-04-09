@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
@@ -7,7 +7,7 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic("buyback");
-export const defaultConfig = Config.PRIVATE;
+export const defaultConfig = EffectConfig.PRIVATE;
 
 const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
 

@@ -1,13 +1,12 @@
-import Config, { configToEffectTopic } from "../configTopics";
+import EffectConfig, { configToEffectTopic } from "../EffectConfig";
 import Fact from "./Fact";
-import log from "../log";
 import Rule from "./Rule";
 import Topic from "./Topic";
 
 class RuleConfigurable extends Rule {
     constructor(
         label: string,
-        configTopic: Topic<Config>,
+        configTopic: Topic<EffectConfig>,
         given: Array<Topic<unknown>>,
         then: (
             get: <T>(topic: Topic<T>) => T | undefined,

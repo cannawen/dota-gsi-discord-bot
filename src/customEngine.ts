@@ -2,7 +2,7 @@ import PersistentFactStore, {
     factsToPlainObjects,
     plainObjectsToFacts,
 } from "./engine/PersistentFactStore";
-import Config from "./configTopics";
+import EffectConfig from "./EffectConfig";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import fs from "fs";
@@ -15,7 +15,7 @@ import Topic from "./engine/Topic";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
-function defaultConfigs(): Fact<Config>[] {
+function defaultConfigs(): Fact<EffectConfig>[] {
     const dirPath = path.join(__dirname, "assistants");
 
     return fs
@@ -24,8 +24,8 @@ function defaultConfigs(): Fact<Config>[] {
         .map((file) => path.join(dirPath, file))
         .map((filePath) => require(filePath))
         .reduce((memo, module) => {
-            const topic = module.configTopic as Topic<Config>;
-            const config = module.defaultConfig as Config;
+            const topic = module.configTopic as Topic<EffectConfig>;
+            const config = module.defaultConfig as EffectConfig;
             memo.push(new Fact(topic, config));
             return memo;
         }, []);
@@ -100,12 +100,12 @@ class CustomEngine extends Engine {
         const topic = topicManager.findTopic(topicLabel);
 
         let safeEffect;
-        if (effect === Config.PUBLIC) {
-            safeEffect = Config.PUBLIC;
-        } else if (effect === Config.PRIVATE) {
-            safeEffect = Config.PRIVATE;
-        } else if (effect === Config.NONE) {
-            safeEffect = Config.NONE;
+        if (effect === EffectConfig.PUBLIC) {
+            safeEffect = EffectConfig.PUBLIC;
+        } else if (effect === EffectConfig.PRIVATE) {
+            safeEffect = EffectConfig.PRIVATE;
+        } else if (effect === EffectConfig.NONE) {
+            safeEffect = EffectConfig.NONE;
         } else {
             log.error(
                 "app",
@@ -116,7 +116,7 @@ class CustomEngine extends Engine {
             );
         }
 
-        const config = safeEffect || Config.NONE;
+        const config = safeEffect || EffectConfig.NONE;
 
         log.verbose(
             "rules",
@@ -129,9 +129,9 @@ class CustomEngine extends Engine {
         this.withDb(studentId, (db) => this.set(db, new Fact(topic, config)));
     }
 
-    public getConfig(studentId: string, topic: Topic<Config>) {
+    public getConfig(studentId: string, topic: Topic<EffectConfig>) {
         return this.withDb(studentId, (db) => db.get(topic)) as
-            | Config
+            | EffectConfig
             | undefined;
     }
 

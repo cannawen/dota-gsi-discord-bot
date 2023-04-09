@@ -1,11 +1,11 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import log from "../log";
 import PersistentTopic from "./PersistentTopic";
 import Topic from "./Topic";
 
 class TopicManager {
     private readonly topics: Map<string, Topic<unknown>> = new Map();
-    private readonly configTopics: Topic<Config>[] = [];
+    private readonly configTopics: Topic<EffectConfig>[] = [];
 
     public createTopic<T>(
         label: string,
@@ -26,7 +26,9 @@ class TopicManager {
     }
 
     public createConfigTopic(label: string) {
-        const topic = this.createTopic<Config>(label, { persistForever: true });
+        const topic = this.createTopic<EffectConfig>(label, {
+            persistForever: true,
+        });
         this.configTopics.push(topic);
         return topic;
     }
@@ -45,6 +47,11 @@ class TopicManager {
         }
     }
 
+    /**
+     * This should only be used in this class or by `topics` file.
+     * Anyone else should create and register a topic via the `create` methods above
+     * @param topic
+     */
     public registerTopic(topic: Topic<unknown>) {
         this.topics.set(topic.label, topic);
     }

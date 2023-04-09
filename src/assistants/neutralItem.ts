@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import RuleConfigurable from "../engine/RuleConfigurable";
@@ -9,7 +9,7 @@ import topics from "../topics";
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.neutralItem
 );
-export const defaultConfig = Config.PRIVATE;
+export const defaultConfig = EffectConfig.PRIVATE;
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
 const TIME_BETWEEN_REMINDERS = 15;

@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
@@ -11,7 +11,7 @@ const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runes
 );
-export const defaultConfig = Config.PRIVATE;
+export const defaultConfig = EffectConfig.PRIVATE;
 
 // If we have a time greater than 0 and are in a game
 // And the time is a multiple of 2 or 3 minutes

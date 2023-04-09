@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
@@ -9,7 +9,7 @@ import topics from "../topics";
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.goldReminder
 );
-export const defaultConfig = Config.PRIVATE;
+export const defaultConfig = EffectConfig.PRIVATE;
 
 const SMALL_REMINDER_INCREMENT = 500;
 const LARGE_REMINDER_INCREMENT = 1000;

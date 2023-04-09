@@ -1,4 +1,4 @@
-import Config from "../configTopics";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
@@ -8,7 +8,7 @@ import topics from "../topics";
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.pause
 );
-export const defaultConfig = Config.PUBLIC_INTERRUPTING;
+export const defaultConfig = EffectConfig.PUBLIC_INTERRUPTING;
 
 export default new RuleConfigurable(
     rules.assistant.pause,
