@@ -130,10 +130,12 @@ class CustomEngine extends Engine {
         );
     }
 
-    public getConfig(studentId: string, topic: Topic<EffectConfig>) {
-        return this.withDb(studentId, (db) => db.get(topic)) as
-            | EffectConfig
-            | undefined;
+    public getEffectConfigs(studentId: string) {
+        return this.withDb(studentId, (db) =>
+            topicManager
+                .getConfigTopics()
+                .map((topic) => [topic.label, db.get(topic)])
+        );
     }
 
     public resetConfig(studentId: string) {

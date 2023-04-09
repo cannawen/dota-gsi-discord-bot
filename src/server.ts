@@ -55,13 +55,7 @@ router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
 });
 
 router.get("/coach/:studentId/config", (req, res) => {
-    res.status(200).json(
-        Object.values(topicManager.getConfigTopics()).map((topic) => [
-            topic.label,
-            // TODO just one call to get all configs for a student
-            engine.getConfig(req.params.studentId, topic),
-        ])
-    );
+    res.status(200).json(engine.getEffectConfigs(req.params.studentId));
 });
 
 router.post("/coach/:studentId/config/:rule/:effect", (req, res) => {

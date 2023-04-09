@@ -85,9 +85,9 @@
                         const explanation = [
                             "PRIVATE means playing only on this site",
                             "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
-                            "null or NONE means this rule is disabled</div>",
+                            "NONE means this rule is disabled</div>",
                             "<br/>",
-                            "If you are seeing null, perhaps you have not started /coachme",
+                            "If you are not seeing any preferences, perhaps you have not started /coachme",
                         ].reduce((memo, text) => {
                             return memo + `<div>${text}</div>`;
                         }, "");
