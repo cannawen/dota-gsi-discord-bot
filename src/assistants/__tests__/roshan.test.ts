@@ -12,17 +12,12 @@ const maybeAliveRule = roshanRules.find(
 const aliveRule = roshanRules.find(
     (rule) => rule.label === rules.assistant.roshan.aliveTime
 )!;
-const resetRule = roshanRules.find(
-    (rule) => rule.label === rules.assistant.roshan.reset
-)!;
 
-// TODO first and last rules no longer config so we can remove some state for those tests
 describe("roshan", () => {
     describe("events", () => {
         describe("roshan killed", () => {
             test("set reminders 8 and 11 minutes from now", () => {
                 const results = getResults(killedRule, {
-                    roshan: "PUBLIC",
                     time: 100,
                     events: [new Event(EventType.RoshanKilled, 200)],
                 });
@@ -40,7 +35,6 @@ describe("roshan", () => {
         describe("bounty rune picked up", () => {
             test("do nothing", () => {
                 const results = getResults(killedRule, {
-                    roshan: "PUBLIC",
                     time: 100,
                     events: [new Event(EventType.BountyRunePickup, 200)],
                 });
@@ -56,7 +50,7 @@ describe("roshan", () => {
                 time: 99,
                 roshanMaybeTimeTopic: undefined,
             });
-            expect(results).toBeUndefined;
+            expect(results).toBeUndefined();
         });
         test("not yet time - do nothing", () => {
             const results = getResults(maybeAliveRule, {
@@ -64,7 +58,7 @@ describe("roshan", () => {
                 time: 99,
                 roshanMaybeTimeTopic: 100,
             });
-            expect(results).toBeUndefined;
+            expect(results).toBeUndefined();
         });
         test("correct time - play audio and reset time", () => {
             const results = getResults(maybeAliveRule, {
@@ -99,7 +93,7 @@ describe("roshan", () => {
                 time: 99,
                 roshanAliveTimeTopic: undefined,
             });
-            expect(results).toBeUndefined;
+            expect(results).toBeUndefined();
         });
         test("not yet time - do nothing", () => {
             const results = getResults(aliveRule, {
@@ -107,7 +101,7 @@ describe("roshan", () => {
                 time: 99,
                 roshanAliveTimeTopic: 100,
             });
-            expect(results).toBeUndefined;
+            expect(results).toBeUndefined();
         });
         test("correct time - play audio and reset time", () => {
             const results = getResults(aliveRule, {
