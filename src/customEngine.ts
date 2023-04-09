@@ -33,12 +33,7 @@ class CustomEngine extends Engine {
 
     // THIS IS FOR DEBUGGING ONLY
     public saveState() {
-        const allData: { [key: string]: unknown } = {};
-        this.sessions.forEach((db, studentId) => {
-            allData[studentId] = db.getPersistentFactsAcrossRestarts();
-        });
-        log.info("app", JSON.stringify(allData));
-        persistence.saveRestartData(JSON.stringify(allData));
+        this.storePersistentFactsAcrossRestarts();
     }
     // THIS IS FOR DEBUGGING ONLY
     public readState() {
@@ -88,6 +83,13 @@ class CustomEngine extends Engine {
                 (existingGuildId === guildId && existingChannelId === channelId)
             );
         }, false);
+    }
+
+    isDiscordEnabled(studentId: string): boolean {
+        return this.withDb(
+            studentId,
+            (db) => db.get(topics.discordAudioEnabled)!
+        ) as boolean;
     }
 
     public changeConfig(studentId: string, topicLabel: string, effect: string) {
@@ -165,11 +167,11 @@ class CustomEngine extends Engine {
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
-        if (this.alreadyConnectedToVoiceChannel(guildId, channelId)) {
-            this.set(db, new Fact(topics.discordAudioEnabled, false));
-        } else {
-            this.set(db, new Fact(topics.discordAudioEnabled, true));
-        }
+        const alreadyConnected = this.alreadyConnectedToVoiceChannel(
+            guildId,
+            channelId
+        );
+        this.set(db, new Fact(topics.discordAudioEnabled, !alreadyConnected));
 
         this.set(db, new Fact(topics.discordGuildId, guildId));
         this.set(db, new Fact(topics.discordGuildChannelId, channelId));
@@ -235,26 +237,31 @@ class CustomEngine extends Engine {
         });
     }
 
-    public handleShutdown() {
+    private storePersistentFactsAcrossRestarts() {
         const allData: { [key: string]: unknown } = {};
-        // TODO make this a reduce
         this.sessions.forEach((db, studentId) => {
             allData[studentId] = db.getPersistentFactsAcrossRestarts();
         });
         persistence.saveRestartData(JSON.stringify(allData));
+    }
 
+    public handleShutdown() {
+        this.storePersistentFactsAcrossRestarts();
         return new Promise<void>((resolve) => {
+            let expectedReadyCount = 0;
             this.sessions.forEach((db, studentId) => {
                 log.info("app", "Notify %s of shutdown", studentId);
-                this.set(
-                    db,
-                    new Fact(
-                        topics.playInterruptingAudioFile,
-                        "resources/audio/restart.mp3"
-                    )
-                );
+                if (db.get(topics.discordAudioEnabled)) {
+                    expectedReadyCount++;
+                    this.set(
+                        db,
+                        new Fact(
+                            topics.playInterruptingAudioFile,
+                            "resources/audio/restart.mp3"
+                        )
+                    );
+                }
             });
-            const expectedReadyCount = this.sessions.size;
             if (expectedReadyCount === 0) {
                 resolve();
             }

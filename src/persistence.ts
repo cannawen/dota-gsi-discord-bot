@@ -5,7 +5,7 @@ import path = require("path");
 import log from "./log";
 dotenv.config();
 
-const dataPath = process.env.PERSISTENCE_DATA_PATH!;
+const dataPath = process.env.PERSISTENCE_DATA_PATH || "";
 
 const RESTART_DATA_FILE_PATH = path.join(dataPath, "restartData.json");
 const STUDENT_DATA_DIRECTORY_PATH = path.join(dataPath, "student");

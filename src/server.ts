@@ -51,8 +51,7 @@ router.get("/coach/:studentId/", (req, res) => {
 });
 
 router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
-    // TODO grab this from engine
-    res.status(200).json(true);
+    res.status(200).json(engine.isDiscordEnabled(req.params.studentId));
 });
 
 router.get("/coach/:studentId/config", (req, res) => {
