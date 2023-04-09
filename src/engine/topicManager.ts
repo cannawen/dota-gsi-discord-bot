@@ -15,6 +15,15 @@ class TopicManager {
             persistForever?: boolean;
         }
     ) {
+        if (this.topics.get(label)) {
+            log.error(
+                "app",
+                "Cannot create topic. One already exists with label %s",
+                label
+            );
+            throw new Error(`Cannot create topic ${label}`);
+        }
+
         let topic;
         if (options) {
             topic = new PersistentTopic<T>(label, options);
