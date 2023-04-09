@@ -1,6 +1,6 @@
 const engine = {
     register: jest.fn(),
-    notifyStartup: jest.fn(),
+    handleStartup: jest.fn(),
 };
 
 export default engine;

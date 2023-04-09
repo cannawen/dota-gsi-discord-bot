@@ -11,7 +11,7 @@ function filter(
         | "persistAcrossRestarts"
         | "persistForever"
 ) {
-    return Object.values(facts).filter(
+    return Array.from(facts.values()).filter(
         (fact) =>
             fact.topic instanceof PersistentTopic &&
             fact.topic[persistenceParam]

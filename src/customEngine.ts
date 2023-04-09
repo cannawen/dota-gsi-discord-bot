@@ -79,7 +79,7 @@ class CustomEngine extends Engine {
     }
 
     private alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
-        return Object.entries(this.sessions).reduce((memo, [_, db]) => {
+        return Array.from(this.sessions.values()).reduce((memo, db) => {
             const existingGuildId = db.get(topics.discordGuildId);
             const existingChannelId = db.get(topics.discordGuildChannelId);
             return (
@@ -298,7 +298,7 @@ class CustomEngine extends Engine {
                 )
             );
         }).then(() => {
-            Object.keys(this.sessions).forEach((studentId) => {
+            Array.from(this.sessions.keys()).forEach((studentId) => {
                 this.cleanupSession(studentId);
             });
         });
