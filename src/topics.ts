@@ -59,7 +59,10 @@ const discord = {
         "discordSubscriptionTopic"
     ),
     // this is for if there are 2 people connected to the same voice channel
-    discordAudioEnabled: new Topic<boolean>("discordAudioEnabled"),
+    discordAudioEnabled: new PersistentTopic<boolean>("discordAudioEnabled", {
+        persistAcrossGames: true,
+        persistAcrossRestarts: true,
+    }),
 };
 
 const allTopics = {
