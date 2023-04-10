@@ -42,42 +42,6 @@ class Engine {
         this.rules.push(rule);
     };
 
-    private processRule(db: FactStore, rule: Rule) {
-        // Process the rule
-        const out = rule.then((topic) => db.get(topic));
-        if (!out) {
-            return;
-        }
-
-        // Enqueue any database changes as a result of this rule being applied
-        const arrOut = Array.isArray(out) ? out : [out];
-        arrOut.forEach((fact) => {
-            this.factQueue.push({ db: db, fact: fact });
-        });
-
-        // eslint-disable-next-line no-loops/no-loops
-        while (this.factQueue.length > 0) {
-            log.debug("rules", "Start rule\t%s", rule.label.yellow);
-
-            const queueElement = this.factQueue.splice(0, 1)[0];
-            const factOrFactPromise = queueElement.fact;
-
-            if (factOrFactPromise instanceof Promise) {
-                // Is a promise of a fact (or undefined), set fact when promise is returned
-                factOrFactPromise.then((fact) => {
-                    if (fact) {
-                        this.set(db, fact);
-                    }
-                });
-            } else {
-                // Is a fact, set fact now
-                this.set(db, factOrFactPromise);
-            }
-
-            log.debug("rules", "End rule  \t%s", rule.label);
-        }
-    }
-
     /**
      * Currently only way to set on this database is to create a custom subclass
      * @param db
@@ -110,13 +74,6 @@ class Engine {
             db.set(newFact);
         }
 
-        this.processChangedRules(db, changedTopics);
-    };
-
-    private processChangedRules(
-        db: FactStore,
-        changedTopics: Set<Topic<unknown>>
-    ) {
         this.rules.forEach((rule) => {
             // If a topic that a rule is interested in has changed
             // and there none of the givens are `undefined`
@@ -128,18 +85,42 @@ class Engine {
                 doesIntersect(changedTopics, rule.given) &&
                 topicsAllDefined(rule.given, db)
             ) {
-                this.processRule(db, rule);
-            }
-        });
-    }
+                // Process the rule
+                const out = rule.then((topic) => db.get(topic));
+                if (!out) {
+                    return;
+                }
 
-    protected processAllRules(db: FactStore) {
-        this.rules.forEach((rule) => {
-            if (topicsAllDefined(rule.given, db)) {
-                this.processRule(db, rule);
+                // Enqueue any database changes as a result of this rule being applied
+                const arrOut = Array.isArray(out) ? out : [out];
+                arrOut.forEach((fact) => {
+                    this.factQueue.push({ db: db, fact: fact });
+                });
+
+                // eslint-disable-next-line no-loops/no-loops
+                while (this.factQueue.length > 0) {
+                    log.debug("rules", "Start rule\t%s", rule.label.yellow);
+
+                    const queueElement = this.factQueue.splice(0, 1)[0];
+                    const factOrFactPromise = queueElement.fact;
+
+                    if (factOrFactPromise instanceof Promise) {
+                        // Is a promise of a fact (or undefined), set fact when promise is returned
+                        factOrFactPromise.then((fact) => {
+                            if (fact) {
+                                this.set(db, fact);
+                            }
+                        });
+                    } else {
+                        // Is a fact, set fact now
+                        this.set(db, factOrFactPromise);
+                    }
+
+                    log.debug("rules", "End rule  \t%s", rule.label);
+                }
             }
         });
-    }
+    };
 }
 
 export default Engine;
