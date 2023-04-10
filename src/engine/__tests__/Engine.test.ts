@@ -23,12 +23,37 @@ describe("Engine", () => {
         numberTopic = new Topic<number>("number");
         addOneTopic = new Topic<boolean>("add one");
     });
-    test("register rule", () => {
+    test("register rule - add once", () => {
         sut.register(
             new Rule("rule", [numberTopic, addOneTopic], (get) => {
                 const number = get(numberTopic)!;
                 const addOne = get(addOneTopic)!;
                 if (addOne) {
+                    // Because addOneTopic is reset first
+                    // the number is only incremented once
+                    return [
+                        new Fact(addOneTopic, undefined),
+                        new Fact(numberTopic, number + 1),
+                    ];
+                }
+            })
+        );
+        sut.setPublic(db, new Fact(numberTopic, 0));
+        sut.setPublic(db, new Fact(addOneTopic, true));
+
+        expect(db.get(numberTopic)).toBe(1);
+        expect(db.get(addOneTopic)).toBeUndefined();
+    });
+
+    test("register rule - add twice", () => {
+        sut.register(
+            new Rule("rule", [numberTopic, addOneTopic], (get) => {
+                const number = get(numberTopic)!;
+                const addOne = get(addOneTopic)!;
+                if (addOne) {
+                    // Because numberTopic is returned first
+                    // addOneTopic is still true so it adds twice.
+                    // TODO: Is this weird behaviour the return order of facts matters?
                     return [
                         new Fact(numberTopic, number + 1),
                         new Fact(addOneTopic, undefined),
@@ -39,7 +64,7 @@ describe("Engine", () => {
         sut.setPublic(db, new Fact(numberTopic, 0));
         sut.setPublic(db, new Fact(addOneTopic, true));
 
-        expect(db.get(numberTopic)).toBe(1);
+        expect(db.get(numberTopic)).toBe(2);
         expect(db.get(addOneTopic)).toBeUndefined();
     });
 });

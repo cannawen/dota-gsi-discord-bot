@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-classes-per-file */
 import colors from "@colors/colors";
@@ -31,6 +32,10 @@ function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
 
 class Engine {
     private rules: Rule[] = [];
+    private factQueue: {
+        db: FactStore;
+        fact: Fact<unknown> | Promise<Fact<unknown> | void>;
+    }[] = [];
 
     public register = (rule: Rule) => {
         log.verbose("rules", "Registering new rule %s", rule.label.yellow);
@@ -44,10 +49,19 @@ class Engine {
             return;
         }
 
-        // Process any database changes as a result of this rule being applied
+        // Enqueue any database changes as a result of this rule being applied
         const arrOut = Array.isArray(out) ? out : [out];
-        log.debug("rules", "Start rule\t%s", rule.label.yellow);
-        arrOut.forEach((factOrFactPromise) => {
+        arrOut.forEach((fact) => {
+            this.factQueue.push({ db: db, fact: fact });
+        });
+
+        // eslint-disable-next-line no-loops/no-loops
+        while (this.factQueue.length > 0) {
+            log.debug("rules", "Start rule\t%s", rule.label.yellow);
+
+            const queueElement = this.factQueue.splice(0, 1)[0];
+            const factOrFactPromise = queueElement.fact;
+
             if (factOrFactPromise instanceof Promise) {
                 // Is a promise of a fact (or undefined), set fact when promise is returned
                 factOrFactPromise.then((fact) => {
@@ -59,8 +73,9 @@ class Engine {
                 // Is a fact, set fact now
                 this.set(db, factOrFactPromise);
             }
-        });
-        log.debug("rules", "End rule  \t%s", rule.label);
+
+            log.debug("rules", "End rule  \t%s", rule.label);
+        }
     }
 
     /**
