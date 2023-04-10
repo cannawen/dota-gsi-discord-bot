@@ -19,10 +19,7 @@ export default new Rule(
             log.info("discord", "Playing interrupting audio %s", file.magenta);
 
             subscription.player.play(Voice.createAudioResource(file));
-
-            return new Fact(topics.playInterruptingAudioFile, undefined);
-        } else {
-            return new Fact(topics.playInterruptingAudioFile, undefined);
         }
+        return new Fact(topics.playInterruptingAudioFile, undefined);
     }
 );
