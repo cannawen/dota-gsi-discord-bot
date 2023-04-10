@@ -1,8 +1,7 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
-import EffectConfig from "../EffectConfig";
 import { DeepReadonly } from "ts-essentials";
+import EffectConfig from "../EffectConfig";
 import Fact from "../engine/Fact";
-import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
