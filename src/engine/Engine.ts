@@ -30,6 +30,72 @@ function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
     );
 }
 
+function determineChangedTopics(db: FactStore, newFact: Fact<unknown>) {
+    const changedTopics = new Set<Topic<unknown>>();
+
+    const topic = newFact.topic;
+    const oldValue = db.get(topic);
+    const newValue = newFact.value;
+
+    if (!deepEqual(oldValue, newValue)) {
+        // Do not print out GSI data because it's too large
+        if (topic.label !== "gsiData") {
+            log.verbose(
+                "rules",
+                "%s : %s -> %s",
+                log.padToWithColor(topic.label.green, 15, true),
+                log.padToWithColor(
+                    // TODO: Weird cast to pass into colors
+                    removeLineBreaks(colors.gray(oldValue as any)),
+                    15,
+                    false
+                ),
+                removeLineBreaks(colors.green(newValue as string))
+            );
+        }
+        changedTopics.add(topic);
+    }
+    return changedTopics;
+}
+
+function applyRules(
+    db: FactStore,
+    rules: Rule[],
+    changedTopics: Set<Topic<unknown>>
+) {
+    const newFacts: {
+        db: FactStore;
+        fact: Fact<unknown> | Promise<Fact<unknown> | void>;
+    }[] = [];
+
+    rules.forEach((rule) => {
+        // If a topic that a rule is interested in has changed
+        // and there none of the givens are `undefined`
+        // Note: anyone can still `set` a fact to be undefined,
+        // But it will not be propogated downstream
+        // Note: this is why it is safe to do a !
+        // when we get any topics from the db if they are in the given array
+        if (
+            doesIntersect(changedTopics, rule.given) &&
+            topicsAllDefined(rule.given, db)
+        ) {
+            // Process the rule
+            const out = rule.then((topic) => db.get(topic));
+            if (!out) {
+                return;
+            }
+
+            // Enqueue any database changes as a result of this rule being applied
+            const arrOut = Array.isArray(out) ? out : [out];
+            arrOut.forEach((fact) => {
+                newFacts.push({ db: db, fact: fact });
+            });
+        }
+    });
+
+    return newFacts;
+}
+
 class Engine {
     private rules: Rule[] = [];
     private factQueue: {
@@ -44,82 +110,34 @@ class Engine {
 
     /**
      * Currently only way to set on this database is to create a custom subclass
-     * @param db
-     * @param newFact
+     * @param db db to use
+     * @param newFact fact that has changed
      */
     protected set = (db: FactStore, newFact: Fact<unknown>) => {
-        const changedTopics = new Set<Topic<unknown>>();
+        const changedTopics = determineChangedTopics(db, newFact);
 
-        const topic = newFact.topic;
-        const oldValue = db.get(topic);
-        const newValue = newFact.value;
+        db.set(newFact);
 
-        if (!deepEqual(oldValue, newValue)) {
-            // Do not print out GSI data because it's too large
-            if (topic.label !== "gsiData") {
-                log.verbose(
-                    "rules",
-                    "%s : %s -> %s",
-                    log.padToWithColor(topic.label.green, 15, true),
-                    log.padToWithColor(
-                        // TODO: Weird cast to pass into colors
-                        removeLineBreaks(colors.gray(oldValue as any)),
-                        15,
-                        false
-                    ),
-                    removeLineBreaks(colors.green(newValue as string))
-                );
-            }
-            changedTopics.add(topic);
-            db.set(newFact);
-        }
+        const newFacts = applyRules(db, this.rules, changedTopics);
+        this.factQueue = [...this.factQueue, ...newFacts];
 
-        this.rules.forEach((rule) => {
-            // If a topic that a rule is interested in has changed
-            // and there none of the givens are `undefined`
-            // Note: anyone can still `set` a fact to be undefined,
-            // But it will not be propogated downstream
-            // Note: this is why it is safe to do a !
-            // when we get any topics from the db if they are in the given array
-            if (
-                doesIntersect(changedTopics, rule.given) &&
-                topicsAllDefined(rule.given, db)
-            ) {
-                // Process the rule
-                const out = rule.then((topic) => db.get(topic));
-                if (!out) {
-                    return;
-                }
+        // eslint-disable-next-line no-loops/no-loops
+        while (this.factQueue.length > 0) {
+            const queueElement = this.factQueue.splice(0, 1)[0];
+            const factOrFactPromise = queueElement.fact;
 
-                // Enqueue any database changes as a result of this rule being applied
-                const arrOut = Array.isArray(out) ? out : [out];
-                arrOut.forEach((fact) => {
-                    this.factQueue.push({ db: db, fact: fact });
-                });
-
-                // eslint-disable-next-line no-loops/no-loops
-                while (this.factQueue.length > 0) {
-                    log.debug("rules", "Start rule\t%s", rule.label.yellow);
-
-                    const queueElement = this.factQueue.splice(0, 1)[0];
-                    const factOrFactPromise = queueElement.fact;
-
-                    if (factOrFactPromise instanceof Promise) {
-                        // Is a promise of a fact (or undefined), set fact when promise is returned
-                        factOrFactPromise.then((fact) => {
-                            if (fact) {
-                                this.set(db, fact);
-                            }
-                        });
-                    } else {
-                        // Is a fact, set fact now
-                        this.set(db, factOrFactPromise);
+            if (factOrFactPromise instanceof Promise) {
+                // Is a promise of a fact (or undefined), set fact when promise is returned
+                factOrFactPromise.then((fact) => {
+                    if (fact) {
+                        this.set(db, fact);
                     }
-
-                    log.debug("rules", "End rule  \t%s", rule.label);
-                }
+                });
+            } else {
+                // Is a fact, set fact now
+                this.set(db, factOrFactPromise);
             }
-        });
+        }
     };
 }
 
