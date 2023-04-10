@@ -1,5 +1,4 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
-import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
 import roshanRules from "../roshan";
 import rules from "../../rules";
@@ -17,13 +16,13 @@ const aliveRule = roshanRules.find(
 describe("roshan", () => {
     describe("events", () => {
         describe("roshan killed", () => {
-            let roshKilledState: Fact<unknown>[];
+            let roshKilledState: any;
 
             beforeEach(() => {
                 roshKilledState = getResults(killedRule, {
                     time: 100,
                     events: [new Event(EventType.RoshanKilled, 200)],
-                }) as Fact<unknown>[];
+                }) as any;
             });
 
             test("play maybe audio 8 minutes from now", () => {

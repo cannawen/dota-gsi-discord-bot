@@ -22,7 +22,8 @@
                 "max-nested-callbacks": ["off"],
                 "no-magic-numbers": ["off"],
                 "@typescript-eslint/no-non-null-assertion": ["off"],
-                "sort-keys": ["off"]
+                "sort-keys": ["off"],
+                "@typescript-eslint/no-explicit-any": ["off"]
             }
         }
     ],

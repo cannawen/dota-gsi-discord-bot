@@ -130,7 +130,7 @@ describe("neutral item dig reminder", () => {
                         50
                     );
                     expect(result).not.toContainFact(
-                        "playPrivateAudioFileFile",
+                        "playPrivateAudioFile",
                         "resources/audio/dig.mp3"
                     );
                 });

@@ -1,4 +1,3 @@
-import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
 import rule from "../goldReminder";
 import rules from "../../rules";
@@ -49,7 +48,7 @@ describe("gold reminder", () => {
                             time: 9 * 60,
                             inGame: true,
                             gold: 500,
-                        }) as Fact<unknown>[];
+                        }) as any;
                         const results = getResults(
                             rule,
                             {
@@ -69,7 +68,7 @@ describe("gold reminder", () => {
                                 time: 9 * 60,
                                 inGame: true,
                                 gold: 500,
-                            }) as Fact<unknown>[];
+                            }) as any;
                             const results = getResults(
                                 rule,
                                 {
@@ -98,7 +97,7 @@ describe("gold reminder", () => {
                         time: 9 * 60,
                         inGame: true,
                         gold: 2000,
-                    }) as Fact<unknown>[];
+                    }) as any;
                     const results = getResults(
                         rule,
                         {
@@ -206,7 +205,7 @@ describe("gold reminder", () => {
                     time: 9 * 60,
                     inGame: true,
                     gold: 2000,
-                }) as Fact<unknown>[];
+                }) as any;
                 const results = getResults(
                     rule,
                     {

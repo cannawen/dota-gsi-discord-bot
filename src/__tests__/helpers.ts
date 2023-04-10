@@ -11,11 +11,14 @@ const makeGetFunction =
 export const getResults = (
     rule: Rule,
     db: { [keys: string]: unknown },
-    previousState?: Fact<unknown>[]
+    previousState?: Fact<unknown>[] | Fact<unknown>
 ) => {
     if (previousState) {
+        const arrPreviousState = Array.isArray(previousState)
+            ? previousState
+            : [previousState];
         return rule.then(
-            makeGetFunction({ ...factsToPlainObject(previousState), ...db })
+            makeGetFunction({ ...factsToPlainObject(arrPreviousState), ...db })
         );
     } else {
         return rule.then(makeGetFunction(db));
