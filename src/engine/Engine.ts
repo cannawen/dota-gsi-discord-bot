@@ -8,7 +8,7 @@ import log from "../log";
 import Rule from "./Rule";
 import Topic from "./Topic";
 
-const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
+function doesIntersect<T>(set: Set<T>, arr: Array<T>): boolean {
     // eslint-disable-next-line no-loops/no-loops
     for (const item of arr) {
         if (set.has(item)) {
@@ -16,14 +16,18 @@ const doesIntersect = <T>(set: Set<T>, arr: Array<T>): boolean => {
         }
     }
     return false;
-};
+}
 
 function removeLineBreaks(s: string) {
     return s.replace(/(\r\n|\n|\r)/gm, "");
 }
 
-const topicsAllDefined = (topics: Topic<unknown>[], db: FactStore): boolean =>
-    topics.reduce((memo, topic) => memo && db.get(topic) !== undefined, true);
+function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
+    return topics.reduce(
+        (memo, topic) => memo && db.get(topic) !== undefined,
+        true
+    );
+}
 
 class Engine {
     private rules: Rule[] = [];
