@@ -39,7 +39,7 @@ function determineChangedTopics(db: FactStore, newFact: Fact<unknown>) {
 
     if (!deepEqual(oldValue, newValue)) {
         // Do not print out GSI data because it's too large
-        if (topic.label !== "gsiData") {
+        if (topic.label !== "allData") {
             log.verbose(
                 "rules",
                 "%s : %s -> %s",
