@@ -80,7 +80,7 @@ class CustomEngine extends Engine {
         }
     }
 
-    private alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
+    public alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
         return Array.from(this.sessions.values()).reduce((memo, db) => {
             const existingGuildId = db.get(topics.discordGuildId);
             const existingChannelId = db.get(topics.discordGuildChannelId);
@@ -91,7 +91,7 @@ class CustomEngine extends Engine {
         }, false);
     }
 
-    isDiscordEnabled(studentId: string): boolean {
+    public isDiscordEnabled(studentId: string): boolean {
         return this.withDb(
             studentId,
             (db) => db.get(topics.discordAudioEnabled)!
@@ -176,17 +176,10 @@ class CustomEngine extends Engine {
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
-        if (guildId && channelId) {
-            const alreadyConnected = this.alreadyConnectedToVoiceChannel(
-                guildId,
-                channelId
-            );
-            this.set(
-                db,
-                new Fact(topics.discordAudioEnabled, !alreadyConnected)
-            );
-
+        if (guildId) {
             this.set(db, new Fact(topics.discordGuildId, guildId));
+        }
+        if (channelId) {
             this.set(db, new Fact(topics.discordGuildChannelId, channelId));
         }
 
