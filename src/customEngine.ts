@@ -53,11 +53,11 @@ class CustomEngine extends Engine {
         if (savedPersistenceString) {
             // User has started this app before; use saved values
             plainObjectToFacts(JSON.parse(savedPersistenceString)).forEach(
-                (fact) => db.set(fact)
+                (fact) => this.set(db, fact)
             );
         } else {
             // User has not used the app before; set default values
-            defaultConfigs().map(db.set);
+            defaultConfigs().map((fact) => this.set(db, fact));
         }
 
         // Add to engine's active sessions
@@ -75,6 +75,8 @@ class CustomEngine extends Engine {
             if (db) {
                 return effectFn(db);
             }
+        } else {
+            log.error("rules", "no db found for student %s", studentId);
         }
     }
 
@@ -140,7 +142,7 @@ class CustomEngine extends Engine {
 
     public resetConfig(studentId: string) {
         this.withDb(studentId, (db) => {
-            defaultConfigs().map(db.set);
+            defaultConfigs().map((fact) => this.set(db, fact));
         });
     }
 
@@ -169,8 +171,8 @@ class CustomEngine extends Engine {
 
     public startCoachingSession(
         studentId: string,
-        guildId: string | undefined,
-        channelId: string | undefined
+        guildId?: string,
+        channelId?: string
     ) {
         const db = this.createFactStoreForStudent(studentId);
 
@@ -225,7 +227,7 @@ class CustomEngine extends Engine {
             if (queue && queue.length > 0) {
                 const newQueue = [...queue];
                 const nextFile = newQueue.pop()!;
-                db.set(new Fact(topics.privateAudioQueue, newQueue));
+                this.set(db, new Fact(topics.privateAudioQueue, newQueue));
                 return nextFile;
             }
         }) as string | void;
@@ -238,12 +240,10 @@ class CustomEngine extends Engine {
         };
 
         Object.entries(data).forEach(([studentId, studentData]) => {
+            this.startCoachingSession(studentId);
             this.withDb(studentId, (db) => {
-                plainObjectToFacts(studentData).map((fact) => db.set(fact));
-                this.startCoachingSession(
-                    studentId,
-                    db.get(topics.discordGuildId),
-                    db.get(topics.discordGuildChannelId)
+                plainObjectToFacts(studentData).map((fact) =>
+                    this.set(db, fact)
                 );
             });
         });
