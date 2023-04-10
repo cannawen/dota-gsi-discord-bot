@@ -182,19 +182,6 @@ class CustomEngine extends Engine {
         if (channelId) {
             this.set(db, new Fact(topics.discordGuildChannelId, channelId));
         }
-
-        this.register(
-            new Rule(
-                "engine/reset_state_across_game",
-                [topics.inGame],
-                (get) => {
-                    const inGame = get(topics.inGame)!;
-                    if (!inGame) {
-                        db.updatePersistentFactsAcrossGames();
-                    }
-                }
-            )
-        );
     }
 
     public cleanupSession(studentId: string) {
@@ -306,8 +293,29 @@ class CustomEngine extends Engine {
             this.set(db, new Fact(topics.publicAudioQueue, undefined));
         });
     }
+
+    public noLongerInGame(studentId: string) {
+        this.withDb(studentId, (db) => {
+            db.updatePersistentFactsAcrossGames();
+        });
+    }
 }
 
 const engine = new CustomEngine();
+
+engine.register(
+    new Rule(
+        "engine/reset_state_across_game",
+        [topics.inGame, topics.studentId],
+        (get) => {
+            const inGame = get(topics.inGame)!;
+            const studentId = get(topics.studentId)!;
+
+            if (!inGame) {
+                engine.noLongerInGame(studentId);
+            }
+        }
+    )
+);
 
 export default engine;
