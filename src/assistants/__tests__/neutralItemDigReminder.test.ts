@@ -17,24 +17,24 @@ const TRUSTY_SHOVEL = new PlayerItems(
     [],
     [],
     [],
-    new Item("item_trusty_shovel", "Trusty Shovel", 0),
-    null
+    null,
+    new Item("item_trusty_shovel", "Trusty Shovel", 0)
 );
 
 const PIRATE_HAT = new PlayerItems(
     [],
     [],
     [],
-    new Item("item_pirate_hat", "Pirate Hat", 0),
-    null
+    null,
+    new Item("item_pirate_hat", "Pirate Hat", 0)
 );
 
 const SHOVEL_ON_COOLDOWN = new PlayerItems(
     [],
     [],
     [],
-    new Item("item_trusty_shovel", "Trusty Shovel", 1),
-    null
+    null,
+    new Item("item_trusty_shovel", "Trusty Shovel", 1)
 );
 
 const SHOVEL_ON_COOLDOWN_IN_BACKPACK = new PlayerItems(
@@ -57,16 +57,16 @@ const TWO_NEUTRAL_ITEMS_ONE_READY_A = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
     [],
-    new Item("item_pirate_hat", "Pirate Hat", 1),
-    null
+    null,
+    new Item("item_pirate_hat", "Pirate Hat", 1)
 );
 
 const TWO_NEUTRAL_ITEMS_ONE_READY_B = new PlayerItems(
     [],
     [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
     [],
-    new Item("item_pirate_hat", "Pirate Hat", 0),
-    null
+    null,
+    new Item("item_pirate_hat", "Pirate Hat", 0)
 );
 
 const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(

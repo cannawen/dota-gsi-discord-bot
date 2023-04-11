@@ -4,7 +4,7 @@ import gsi from "node-gsi";
  * This matches the definition from node-gsi
  */
 // eslint-disable-next-line no-shadow
-export enum EventType {
+export const enum EventType {
     AegisPickedUp = "aegis_picked_up",
     BountyRunePickup = "bounty_rune_pickup",
     RoshanKilled = "roshan_killed",
@@ -28,6 +28,9 @@ export default class Event {
     }
 
     static create(event: gsi.IEvent) {
-        return new Event(event.eventType, event.gameTime);
+        return new Event(
+            event.eventType as unknown as EventType,
+            event.gameTime
+        );
     }
 }

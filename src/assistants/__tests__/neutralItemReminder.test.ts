@@ -17,8 +17,8 @@ const HAS_NEUTRAL_ITEM = new PlayerItems(
     [],
     [],
     [],
-    new Item("id", "name"),
-    null
+    null,
+    new Item("id", "name")
 ) as DeepReadonly<PlayerItems>;
 
 describe("neutralItemReminder", () => {

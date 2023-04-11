@@ -1,4 +1,4 @@
-enum SlashCommandName {
+const enum SlashCommandName {
     config = "config",
     coachme = "coachme",
     stop = "stop",

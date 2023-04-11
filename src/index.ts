@@ -11,6 +11,7 @@ import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
+import GsiData from "./gsi/GsiData";
 
 dotenv.config();
 
@@ -56,13 +57,16 @@ registerAssistantConfig();
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
-    engine.setGsi(data.auth, {
-        events: data.state.events,
-        hero: data.state.hero,
-        items: data.state.items,
-        map: data.state.map,
-        player: data.state.player,
-    });
+    engine.setGsi(
+        data.auth,
+        new GsiData({
+            events: data.state.events,
+            hero: data.state.hero,
+            items: data.state.items,
+            map: data.state.map,
+            player: data.state.player,
+        })
+    );
 });
 
 // If we are looking at a replay or as an observer,
@@ -72,13 +76,16 @@ const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
-        engine.setGsi(data.auth, {
-            events: data.state.events,
-            hero: data.state.hero?.at(playerId) || null,
-            items: data.state.items?.at(playerId) || null,
-            map: data.state.map,
-            player: data.state.player?.at(playerId) || null,
-        });
+        engine.setGsi(
+            data.auth,
+            new GsiData({
+                events: data.state.events,
+                hero: data.state.hero?.at(playerId) || null,
+                items: data.state.items?.at(playerId) || null,
+                map: data.state.map,
+                player: data.state.player?.at(playerId) || null,
+            })
+        );
     }
 );
 

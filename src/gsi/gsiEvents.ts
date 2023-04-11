@@ -1,7 +1,6 @@
 import deepEqual from "deep-equal";
 import Event from "../gsi-data-classes/Event";
 import Fact from "../engine/Fact";
-import PersistentTopic from "../engine/PersistentTopic";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";

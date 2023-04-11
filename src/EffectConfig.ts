@@ -4,7 +4,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-enum EffectConfig {
+const enum EffectConfig {
     PUBLIC = "PUBLIC",
     PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
     PRIVATE = "PRIVATE",
