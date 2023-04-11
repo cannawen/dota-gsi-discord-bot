@@ -63,10 +63,7 @@ function applyRules(
     rules: Rule[],
     changedTopics: Set<Topic<unknown>>
 ) {
-    const newFacts: {
-        db: FactStore;
-        fact: Fact<unknown> | Promise<Fact<unknown> | void>;
-    }[] = [];
+    const newFacts: Array<Fact<unknown> | Promise<Fact<unknown> | void>> = [];
 
     rules.forEach((rule) => {
         // If a topic that a rule is interested in has changed
@@ -85,10 +82,10 @@ function applyRules(
                 return;
             }
 
-            // Enqueue any database changes as a result of this rule being applied
+            // Calculate any database changes as a result of this rule being applied
             const arrOut = Array.isArray(out) ? out : [out];
             arrOut.forEach((fact) => {
-                newFacts.push({ db: db, fact: fact });
+                newFacts.push(fact);
             });
         }
     });
@@ -98,10 +95,6 @@ function applyRules(
 
 class Engine {
     private rules: Rule[] = [];
-    private factQueue: {
-        db: FactStore;
-        fact: Fact<unknown> | Promise<Fact<unknown> | void>;
-    }[] = [];
 
     public register = (rule: Rule) => {
         log.verbose("rules", "Registering new rule %s", rule.label.yellow);
@@ -119,13 +112,7 @@ class Engine {
         db.set(newFact);
 
         const newFacts = applyRules(db, this.rules, changedTopics);
-        this.factQueue = [...this.factQueue, ...newFacts];
-
-        // eslint-disable-next-line no-loops/no-loops
-        while (this.factQueue.length > 0) {
-            const queueElement = this.factQueue.splice(0, 1)[0];
-            const factOrFactPromise = queueElement.fact;
-
+        newFacts.forEach((factOrFactPromise) => {
             if (factOrFactPromise instanceof Promise) {
                 // Is a promise of a fact (or undefined), set fact when promise is returned
                 factOrFactPromise.then((fact) => {
@@ -137,7 +124,7 @@ class Engine {
                 // Is a fact, set fact now
                 this.set(db, factOrFactPromise);
             }
-        }
+        });
     };
 }
 
