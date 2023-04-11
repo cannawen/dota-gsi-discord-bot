@@ -10,21 +10,19 @@ export const configTopic = topicManager.createConfigTopic(
 );
 export const defaultConfig = EffectConfig.PUBLIC;
 
-const NEW_NEUTRAL_ITEM_TIMES = [
-    7 * 60,
-    17 * 60,
-    27 * 60,
-    36 * 60 + 40,
-    60 * 60,
-];
+const NEUTRAL_ITEM_SPAWN_MINUTES = [7, 17, 27, 37, 60];
 
 export default new RuleConfigurable(
     rules.assistant.neutralItemDigReminder,
     configTopic,
     [topics.time],
     (get, effect) => {
-        const time = get(topics.time)!;
-        if (NEW_NEUTRAL_ITEM_TIMES.find((t) => t === time)) {
+        const currentTime = get(topics.time)!;
+        if (
+            NEUTRAL_ITEM_SPAWN_MINUTES.find(
+                (spawnMinute) => spawnMinute * 60 === currentTime
+            )
+        ) {
             return new Fact(effect, "resources/audio/new-neutrals.mp3");
         }
     }
