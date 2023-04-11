@@ -59,9 +59,9 @@ class DiscordClient {
     }
 
     private ready() {
-        return new Promise<void>((res, rej) => {
+        return new Promise<void>((resolve) => {
             this.client.once(Events.ClientReady, (client) => {
-                res();
+                resolve();
                 log.info(
                     "discord",
                     "Discord ready with bot: %s",

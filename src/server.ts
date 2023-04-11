@@ -3,7 +3,6 @@ import express from "express";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
-import topicManager from "./engine/topicManager";
 
 const app = express();
 
@@ -59,10 +58,11 @@ router.get("/coach/:studentId/config", (req, res) => {
 });
 
 router.post("/coach/:studentId/config/:rule/:effect", (req, res) => {
-    const studentId = req.params.studentId;
-    const rule = req.params.rule;
-    const effect = req.params.effect;
-    engine.changeConfig(studentId, rule, effect);
+    engine.changeConfig(
+        req.params.studentId,
+        req.params.rule,
+        req.params.effect
+    );
     res.status(200).send();
 });
 

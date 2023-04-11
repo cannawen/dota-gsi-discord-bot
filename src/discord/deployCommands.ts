@@ -6,13 +6,23 @@ dotenv.config();
 // This file should be run every time the definitions of the slash commands change
 // `npm run discord`
 
+const deployDev = false;
+const deployProd = false;
+
+let BOT_TOKEN: string;
+let APPLICATION_ID: string;
+
+if (deployDev) {
+    BOT_TOKEN = process.env.DISCORD_BOT_TOKEN!;
+    APPLICATION_ID = "761897641591701524";
+}
+if (deployProd) {
+    BOT_TOKEN = process.env.DISCORD_BOT_TOKEN_PROD!;
+    APPLICATION_ID = "1089945324757454950";
+}
+
 // Construct and prepare an instance of the REST module
-const rest = new REST({ version: "10" }).setToken(
-    // Development bot token
-    process.env.DISCORD_BOT_TOKEN!
-    // Production bot token
-    // process.env.DISCORD_BOT_TOKEN_PROD!
-);
+const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
 
 const allCommands = [
     new SlashCommandBuilder()
@@ -38,10 +48,7 @@ const allCommands = [
 
         // The put method is used to fully refresh all commands in the guild with the current set
         const data = await rest.put(
-            // Development application id
-            Routes.applicationCommands("761897641591701524"),
-            // Production application id
-            // Routes.applicationCommands("1089945324757454950"),
+            Routes.applicationCommands(APPLICATION_ID!),
             {
                 body: allCommands.map((cmd) => cmd.toJSON()),
             }
@@ -50,7 +57,6 @@ const allCommands = [
         console.log(`Successfully reloaded application (/) commands.`);
         console.log(data);
     } catch (error) {
-        // And of course, make sure you catch and log any errors!
         console.error(error);
     }
 })();

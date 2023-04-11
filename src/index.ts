@@ -4,6 +4,7 @@ import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";
 import gsi = require("node-gsi");
+import GsiData from "./gsi/GsiData";
 import gsiParser from "./gsiParser";
 import http from "http";
 import log from "./log";
@@ -11,7 +12,6 @@ import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
-import GsiData from "./gsi/GsiData";
 
 dotenv.config();
 

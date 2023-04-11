@@ -31,7 +31,7 @@ function createTtsFile(ttsString: string) {
         })
             .then(
                 (response) =>
-                    new Promise<Fact<string>>((resolve, reject) => {
+                    new Promise<Fact<string>>((resolve) => {
                         response.data
                             .pipe(fs.createWriteStream(ttsPath(ttsString)))
                             .on("close", () => {

@@ -9,6 +9,7 @@ import Voice = require("@discordjs/voice");
 function hashStudentId(userId: string) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
     if (key) {
+        // eslint-disable-next-line new-cap
         return CryptoJS.HmacSHA256(userId, key).toString();
     } else {
         log.error(
@@ -124,8 +125,8 @@ function help(interaction: ChatInputCommandInteraction<CacheType>) {
  * These functions are used in `discord/client.ts`
  */
 export default {
-    config,
     coachMe,
-    stop,
+    config,
     help,
+    stop,
 };

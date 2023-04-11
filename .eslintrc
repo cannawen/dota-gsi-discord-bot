@@ -38,6 +38,11 @@
         "no-loops/no-loops": "warn",
         //t ypescript
         "@typescript-eslint/no-empty-function": "warn",
+        "@typescript-eslint/no-shadow": "warn",
+        "@typescript-eslint/no-unused-vars": [
+            "warn",
+            { "argsIgnorePattern": "^_" }
+        ],
         // eslint
         // I would really like this, but it will interfere with prettier
         // "keyword-spacing": ["warn", { "before": true, "after": true }]
@@ -152,10 +157,6 @@
         "no-delete-var": "warn",
         "no-label-var": "warn",
         "no-restricted-globals": "warn",
-        "no-shadow": [
-            "warn",
-            { "builtinGlobals": false, "hoist": "functions" }
-        ],
         "no-shadow-restricted-names": "warn",
         "no-undef": ["warn", { "typeof": false }],
         "no-undef-init": "warn",
@@ -210,7 +211,6 @@
         "no-negated-condition": "warn",
         "no-nested-ternary": "warn",
         "no-new-object": "warn",
-        "no-plusplus": ["warn", { "allowForLoopAfterthoughts": false }],
         "no-underscore-dangle": [
             "warn",
             {
