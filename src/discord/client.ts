@@ -5,7 +5,7 @@ import SlashCommandName from "./SlashCommandName";
 
 const botSecretKey = process.env.DISCORD_BOT_TOKEN;
 
-class DiscordClient {
+export class DiscordClient {
     private client = new Discord.Client({
         // eslint-disable-next-line no-magic-numbers
         intents: [131071],
