@@ -73,7 +73,10 @@ const discord = {
 };
 
 const allTopics = {
-    studentId: new Topic<string>("studentId"),
+    studentId: new PersistentTopic<string>("studentId", {
+        persistAcrossGames: true,
+        persistAcrossRestarts: true,
+    }),
     configUpdated: new Topic<boolean>("configUpdated"),
     ...effect,
     ...gsi,
