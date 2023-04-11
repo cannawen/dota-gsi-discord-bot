@@ -7,3 +7,4 @@ resources/audio/tts-cache
 bot.code-workspace
 dump.rdb
 data/
+coverage

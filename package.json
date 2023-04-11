@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "build": "rimraf ./build ./resources/audio/tts-cache ./data && tsc",
+        "coverage": "npm test -- --coverage --collectCoverageFrom=\"./src/**\"",
         "discord": "npm run build && node build/discord/deployCommands.js",
         "lint": "eslint . --ext .ts",
         "format": "npx prettier --write .",
