@@ -9,6 +9,9 @@
                         return new Promise((resolve) => {
                             if (res.nextAudio) {
                                 const f = new Audio("/" + res.nextAudio);
+                                f.volume = parseFloat(
+                                    document.getElementById("volume").value
+                                );
                                 f.addEventListener("ended", resolve);
                                 f.play();
                             } else if (res.configUpdated) {
@@ -143,6 +146,16 @@
         >
             Coaching...
         </div>
+        <br />
+        Volume:
+        <input
+            id="volume"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.75"
+        />
         <br />
         <br />
         <div id="config"></div>
