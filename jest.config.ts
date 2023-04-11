@@ -1,5 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
+    clearMocks: true,
     modulePathIgnorePatterns: ["helpers.ts"],
     preset: "ts-jest",
     setupFiles: ["<rootDir>/.jest/setEnvVars.js"],

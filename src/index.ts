@@ -47,12 +47,16 @@ function registerAssistantConfig() {
         .forEach((topic) => registerEffectConfigRule(topic.label, topic));
 }
 
-registerRulesInDirectory("assistants");
-registerRulesInDirectory("discord/rules");
-registerRulesInDirectory("effects");
-registerRulesInDirectory("gsi");
+export function registerEverything() {
+    registerRulesInDirectory("assistants");
+    registerRulesInDirectory("discord/rules");
+    registerRulesInDirectory("effects");
+    registerRulesInDirectory("gsi");
 
-registerAssistantConfig();
+    registerAssistantConfig();
+}
+
+registerEverything();
 
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
