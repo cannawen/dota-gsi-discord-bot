@@ -1,39 +1,6 @@
 jest.mock("../../log");
 jest.mock("../handleSlashCommands");
-
-const mockLogin = jest.fn().mockImplementation(() => ({
-    catch: jest.fn(),
-}));
-const mockOn = jest.fn();
-const mockOnce = jest.fn();
-
-jest.mock("discord.js", () => ({
-    Client: jest.fn().mockImplementation(() => ({
-        guilds: {
-            cache: [
-                {
-                    id: "guildId",
-                    name: "Guild Name",
-                    channels: {
-                        cache: [
-                            { id: "channelId", name: "Channel Name" },
-                            { id: "1" },
-                        ],
-                    },
-                },
-                { id: "2" },
-            ],
-        },
-        login: mockLogin,
-        on: mockOn,
-        once: mockOnce,
-    })),
-    Events: {
-        ClientReady: "ClientReady",
-        Error: "Error",
-        InteractionCreate: "InteractionCreate",
-    },
-}));
+jest.mock("discord.js");
 
 import Discord from "discord.js";
 import { DiscordClient } from "../discordClient";
@@ -43,7 +10,10 @@ describe("client", () => {
     const OLD_ENV = process.env;
 
     let sut: DiscordClient;
+    let spyClient: any;
+
     beforeEach(() => {
+        spyClient = jest.spyOn(Discord, "Client");
         sut = new DiscordClient();
     });
 
@@ -60,21 +30,27 @@ describe("client", () => {
     });
 
     test("Logs in with bot token", () => {
+        const spyLogin = jest.spyOn(
+            spyClient.mock.results[0].value as any,
+            "login"
+        );
         sut.start();
-        expect(mockLogin).toHaveBeenCalledTimes(1);
-        expect(mockLogin.mock.lastCall[0]).toBe("test");
+        expect(spyLogin).toHaveBeenCalledTimes(1);
+        expect(spyLogin.mock.lastCall![0]).toBe("test");
     });
 
     describe("interactions", () => {
         let handleInteraction: (interaction: any) => void;
 
+        let spyOn: any;
         beforeEach(() => {
+            spyOn = jest.spyOn(spyClient.mock.results[0].value as any, "on");
             sut.start();
-            handleInteraction = mockOn.mock.calls[0][1];
+            handleInteraction = spyOn.mock.calls[0][1];
         });
         test("Sets up interactions", () => {
             sut.start();
-            expect(mockOn.mock.calls[0][0]).toEqual("InteractionCreate");
+            expect(spyOn.mock.calls[0][0]).toEqual("InteractionCreate");
         });
         test("config command is handled", () => {
             const spy = jest.spyOn(handleSlashCommands, "config");
