@@ -2,6 +2,7 @@ import PersistentFactStore, {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import { DeepReadonly } from "ts-essentials";
 import EffectConfig from "./EffectConfig";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
@@ -83,15 +84,8 @@ class CustomEngine extends Engine {
         }
     }
 
-    public alreadyConnectedToVoiceChannel(guildId: string, channelId: string) {
-        return Array.from(this.sessions.values()).reduce((memo, db) => {
-            const existingGuildId = db.get(topics.discordGuildId);
-            const existingChannelId = db.get(topics.discordGuildChannelId);
-            return (
-                memo ||
-                (existingGuildId === guildId && existingChannelId === channelId)
-            );
-        }, false);
+    public getSessions() {
+        return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
     }
 
     public isDiscordEnabled(studentId: string): boolean {

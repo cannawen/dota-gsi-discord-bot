@@ -10,10 +10,16 @@ export default new Rule(
         const guildId = get(topics.discordGuildId)!;
         const channelId = get(topics.discordGuildChannelId)!;
 
-        const alreadyConnected = engine.alreadyConnectedToVoiceChannel(
-            guildId,
-            channelId
-        );
+        const alreadyConnected = Array.from(
+            engine.getSessions().values()
+        ).reduce((memo, db) => {
+            const existingGuildId = db.get(topics.discordGuildId);
+            const existingChannelId = db.get(topics.discordGuildChannelId);
+            return (
+                memo ||
+                (existingGuildId === guildId && existingChannelId === channelId)
+            );
+        }, false);
 
         return new Fact(topics.discordAudioEnabled, !alreadyConnected);
     }

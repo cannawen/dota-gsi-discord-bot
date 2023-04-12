@@ -1,5 +1,5 @@
 const engine = {
-    alreadyConnectedToVoiceChannel: jest.fn(),
+    getSessions: jest.fn(),
     cleanupSession: jest.fn(),
     handleStartup: jest.fn(),
     readyToPlayAudio: jest.fn(),
