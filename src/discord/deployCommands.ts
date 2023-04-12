@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { REST, Routes, SlashCommandBuilder } from "discord.js";
 import dotenv = require("dotenv");
 import SlashCommandName from "./SlashCommandName";
