@@ -70,4 +70,31 @@ expect.extend({
                 : () => `${message}`,
         };
     },
+
+    toContainTopic(actual, label) {
+        if (actual === undefined) {
+            throw new Error("Did not recieve any Facts. Recieved undefined");
+        }
+        const actualArr = Array.isArray(actual) ? actual : [actual];
+        const factArray = actualArr.filter((fact) => fact instanceof Fact);
+        if (factArray.length === 0) {
+            throw new Error(
+                `Received ${actual}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
+            );
+        }
+
+        const fact = (actualArr as Fact<unknown>[]).find(
+            (f) => f.topic.label === label
+        );
+
+        const pass = fact !== undefined;
+
+        return {
+            pass,
+            message: pass
+                ? () =>
+                      `Topic ${label} exists. Expected to contain no such topic.`
+                : () => `Topic ${label} does not exist`,
+        };
+    },
 });
