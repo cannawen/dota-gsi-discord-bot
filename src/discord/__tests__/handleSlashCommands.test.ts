@@ -1,21 +1,12 @@
 jest.mock("../../log");
-
-const mockStartCoachingSession = jest.fn();
-jest.mock("../../customEngine", () => ({
-    startCoachingSession: mockStartCoachingSession,
-}));
-
-const mockDestroyConnection = jest.fn();
-const mockJoinVoiceChannel = jest
-    .fn()
-    .mockReturnValue({ destroy: mockDestroyConnection });
-jest.mock("@discordjs/voice", () => ({
-    joinVoiceChannel: mockJoinVoiceChannel,
-}));
+jest.mock("../../customEngine");
+jest.mock("@discordjs/voice");
 
 import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
+import engine from "../../customEngine";
 import handle from "../handleSlashCommands";
+import Voice from "@discordjs/voice";
 
 describe("handleSlashCommands", () => {
     const OLD_ENV = process.env;
@@ -58,17 +49,16 @@ describe("handleSlashCommands", () => {
         });
 
         test("calls engine.startCoachingSession with the proper params", () => {
+            const spy = jest.spyOn(engine, "startCoachingSession");
             const hashedStudentId = CryptoJS.HmacSHA256(
                 "userId",
                 "test"
             ).toString();
 
-            expect(mockStartCoachingSession).toHaveBeenCalledTimes(1);
-            expect(mockStartCoachingSession.mock.lastCall[0]).toBe(
-                hashedStudentId
-            );
-            expect(mockStartCoachingSession.mock.lastCall[1]).toBe("guildId");
-            expect(mockStartCoachingSession.mock.lastCall[2]).toBe("channelId");
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toBe(hashedStudentId);
+            expect(spy.mock.lastCall![1]).toBe("guildId");
+            expect(spy.mock.lastCall![2]).toBe("channelId");
         });
     });
 
@@ -81,15 +71,21 @@ describe("handleSlashCommands", () => {
             expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
         });
         test("joins the voice channel", () => {
-            expect(mockJoinVoiceChannel).toHaveBeenCalledTimes(1);
-            expect(mockJoinVoiceChannel.mock.lastCall[0]).toEqual({
+            const spy = jest.spyOn(Voice, "joinVoiceChannel");
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toEqual({
                 adapterCreator: "voiceAdapterCreator",
                 channelId: "channelId",
                 guildId: "guildId",
             });
         });
         test("destroys the voice channel", () => {
-            expect(mockDestroyConnection).toHaveBeenCalledTimes(1);
+            const spyVoice = jest.spyOn(Voice, "joinVoiceChannel");
+            const spyDestroy = jest.spyOn(
+                spyVoice.mock.results[0].value as any,
+                "destroy"
+            );
+            expect(spyDestroy).toHaveBeenCalledTimes(1);
         });
     });
 
