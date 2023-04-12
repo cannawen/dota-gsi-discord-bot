@@ -21,7 +21,7 @@ export default new Rule(
         const audioQueue = [...get(topics.publicAudioQueue)!];
 
         if (ready && audioQueue.length > 0) {
-            const filePath = audioQueue.pop()!;
+            const filePath = audioQueue.splice(0, 1)[0];
             log.info("discord", "Playing %s", emColor(filePath));
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);

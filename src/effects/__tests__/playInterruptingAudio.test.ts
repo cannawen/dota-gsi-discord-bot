@@ -1,12 +1,13 @@
+jest.mock("../../log");
+const mockPlay = jest.fn();
+const mockCreateAudioResource = jest.fn().mockReturnValue("AudioResource");
+jest.mock("@discordjs/voice", () => ({
+    createAudioResource: mockCreateAudioResource,
+}));
+
 import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
 import rule from "../playInterruptingAudio";
-
-jest.mock("../../log");
-const mockPlay = jest.fn();
-jest.mock("@discordjs/voice", () => ({
-    createAudioResource: jest.fn().mockReturnValue("AudioResource"),
-}));
 
 describe("playInterruptingAudio", () => {
     describe("discord audio enabled", () => {
@@ -27,6 +28,10 @@ describe("playInterruptingAudio", () => {
                 "playInterruptingAudioFile",
                 undefined
             );
+        });
+        test("create audio resource", () => {
+            expect(mockCreateAudioResource).toHaveBeenCalledTimes(1);
+            expect(mockCreateAudioResource.mock.lastCall[0]).toBe("foo.mp3");
         });
         test("play audio resource", () => {
             expect(mockPlay).toHaveBeenCalledTimes(1);
