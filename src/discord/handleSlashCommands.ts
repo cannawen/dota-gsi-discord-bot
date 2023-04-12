@@ -6,18 +6,18 @@ import log from "../log";
 import path from "path";
 import Voice = require("@discordjs/voice");
 
-function hashStudentId(userId: string) {
+function hash(message: string) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
     if (key) {
         // eslint-disable-next-line new-cap
-        return CryptoJS.HmacSHA256(userId, key).toString();
+        return CryptoJS.HmacSHA256(message, key).toString();
     } else {
         log.error(
             "discord",
             "Unable to find %s environment variable, so continuing without hashing. Check your .env file",
             "STUDENT_ID_HASH_PRIVATE_KEY"
         );
-        return userId;
+        return message;
     }
 }
 
@@ -42,30 +42,15 @@ function generateConfigFile(userId: string) {
 }
 
 function config(interaction: ChatInputCommandInteraction<CacheType>) {
-    interaction
-        .reply({
-            content: generateConfigFile(hashStudentId(interaction.user.id)),
-            ephemeral: true,
-        })
-        .catch((e) => {
-            log.error("discord", "Interaction error %s", e);
-            if (interaction.replied || interaction.deferred) {
-                interaction.followUp({
-                    content: "There was an error while executing this command!",
-                    ephemeral: true,
-                });
-            } else {
-                interaction.reply({
-                    content: "There was an error while executing this command!",
-                    ephemeral: true,
-                });
-            }
-        });
+    interaction.reply({
+        content: generateConfigFile(hash(interaction.user.id)),
+        ephemeral: true,
+    });
 }
 
 function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     if (interaction.channel?.isVoiceBased() && interaction.guildId) {
-        const studentId = hashStudentId(interaction.user.id);
+        const studentId = hash(interaction.user.id);
         engine.startCoachingSession(
             studentId,
             interaction.guildId,
@@ -90,7 +75,6 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
         content: "Ending...",
         ephemeral: true,
     });
-    const studentId = hashStudentId(interaction.user.id);
     const guild = interaction.guild;
     if (guild) {
         const connection = Voice.joinVoiceChannel({
@@ -108,8 +92,8 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
     } else {
         log.error(
             "discord",
-            "Unable to destroy voice connection for %s; no guild from interaction",
-            studentId
+            "Unable to destroy voice connection for discord user %s; no guild from interaction",
+            interaction.user.id
         );
     }
 }
