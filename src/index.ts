@@ -1,5 +1,5 @@
 import EffectConfig, { registerEffectConfigRule } from "./EffectConfig";
-import discordClient from "./discord/client";
+import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
 import fs from "fs";

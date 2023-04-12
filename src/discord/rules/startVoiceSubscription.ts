@@ -1,6 +1,6 @@
 /* eslint-disable max-lines-per-function */
 /* eslint-disable max-statements */
-import client from "../client";
+import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
