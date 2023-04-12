@@ -1,8 +1,6 @@
 jest.mock("../../log");
+jest.mock("@discordjs/voice");
 const mockPlay = jest.fn();
-jest.mock("@discordjs/voice", () => ({
-    createAudioResource: jest.fn().mockReturnValue("AudioResource"),
-}));
 
 import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
