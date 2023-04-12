@@ -1,4 +1,5 @@
 const engine = {
+    getSession: jest.fn(),
     getSessions: jest.fn(),
     cleanupSession: jest.fn(),
     handleStartup: jest.fn(),

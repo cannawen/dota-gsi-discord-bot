@@ -3,6 +3,7 @@ import express from "express";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
+import topics from "./topics";
 
 const app = express();
 
@@ -50,7 +51,9 @@ router.get("/coach/:studentId/", (req, res) => {
 });
 
 router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
-    res.status(200).json(engine.isDiscordEnabled(req.params.studentId));
+    res.status(200).json(
+        engine.getSession(req.params.studentId).get(topics.discordAudioEnabled)
+    );
 });
 
 router.get("/coach/:studentId/config", (req, res) => {

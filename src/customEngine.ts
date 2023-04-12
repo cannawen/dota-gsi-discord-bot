@@ -15,6 +15,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+import FactStore from "./engine/FactStore";
 
 function defaultConfigs(): Fact<EffectConfig>[] {
     const dirPath = path.join(__dirname, "assistants");
@@ -85,14 +86,11 @@ class CustomEngine extends Engine {
     }
 
     public getSessions() {
-        return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
+        return this.sessions as DeepReadonly<Map<string, FactStore>>;
     }
 
-    public isDiscordEnabled(studentId: string): boolean {
-        return this.withDb(
-            studentId,
-            (db) => db.get(topics.discordAudioEnabled)!
-        ) as boolean;
+    public getSession(studentId: string) {
+        return this.sessions.get(studentId) as DeepReadonly<FactStore>;
     }
 
     public changeConfig(studentId: string, topicLabel: string, effect: string) {

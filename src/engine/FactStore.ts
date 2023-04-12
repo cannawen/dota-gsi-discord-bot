@@ -17,6 +17,7 @@ export default class FactStore {
 
     /**
      * WARNING: Directly setting on a fact store will bypass the engine logic
+     * Use with extreme caution
      * @param fact
      */
     public set = (fact: Fact<unknown>) => {
