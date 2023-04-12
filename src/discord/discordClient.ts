@@ -3,8 +3,6 @@ import handle from "./handleSlashCommands";
 import log from "../log";
 import SlashCommandName from "./SlashCommandName";
 
-const botSecretKey = process.env.DISCORD_BOT_TOKEN;
-
 export class DiscordClient {
     private client = new Discord.Client({
         // eslint-disable-next-line no-magic-numbers
@@ -48,7 +46,7 @@ export class DiscordClient {
 
     private setup() {
         return this.client
-            .login(botSecretKey)
+            .login(process.env.DISCORD_BOT_TOKEN)
             .catch((e: Discord.DiscordjsError) => {
                 log.error(
                     "discord",

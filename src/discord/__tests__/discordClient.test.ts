@@ -1,4 +1,3 @@
-import Discord from "discord.js";
 jest.mock("../../log");
 
 const mockConfig = jest.fn();
@@ -47,12 +46,23 @@ jest.mock("discord.js", () => ({
     },
 }));
 
+import Discord from "discord.js";
 import { DiscordClient } from "../discordClient";
 
 describe("client", () => {
+    const OLD_ENV = process.env;
+
     let sut: DiscordClient;
     beforeEach(() => {
         sut = new DiscordClient();
+    });
+
+    beforeAll(() => {
+        process.env = { ...OLD_ENV, DISCORD_BOT_TOKEN: "test" };
+    });
+
+    afterAll(() => {
+        process.env = OLD_ENV;
     });
 
     test("Create new discord client", () => {
@@ -62,9 +72,7 @@ describe("client", () => {
     test("Logs in with bot token", () => {
         sut.start();
         expect(mockLogin).toHaveBeenCalledTimes(1);
-        expect(mockLogin.mock.lastCall[0]).toEqual(
-            process.env.DISCORD_BOT_TOKEN
-        );
+        expect(mockLogin.mock.lastCall[0]).toBe("test");
     });
 
     describe("interactions", () => {

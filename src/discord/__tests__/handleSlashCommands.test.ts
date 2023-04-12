@@ -1,5 +1,4 @@
-import { CacheType, ChatInputCommandInteraction } from "discord.js";
-import CryptoJS from "crypto-js";
+jest.mock("../../log");
 
 const mockStartCoachingSession = jest.fn();
 jest.mock("../../customEngine", () => ({
@@ -14,14 +13,13 @@ jest.mock("@discordjs/voice", () => ({
     joinVoiceChannel: mockJoinVoiceChannel,
 }));
 
+import { CacheType, ChatInputCommandInteraction } from "discord.js";
+import CryptoJS from "crypto-js";
 import handle from "../handleSlashCommands";
 
-const hashedStudentId = CryptoJS.HmacSHA256(
-    "userId",
-    process.env.STUDENT_ID_HASH_PRIVATE_KEY!
-).toString();
-
 describe("handleSlashCommands", () => {
+    const OLD_ENV = process.env;
+
     let interaction: ChatInputCommandInteraction<CacheType>;
     let mockReply: jest.Mock<any, any, any>;
 
@@ -42,6 +40,14 @@ describe("handleSlashCommands", () => {
         } as unknown as ChatInputCommandInteraction<CacheType>;
     });
 
+    beforeAll(() => {
+        process.env = { ...OLD_ENV, STUDENT_ID_HASH_PRIVATE_KEY: "test" };
+    });
+
+    afterAll(() => {
+        process.env = OLD_ENV;
+    });
+
     describe("coachMe", () => {
         beforeEach(() => {
             handle.coachMe(interaction);
@@ -52,6 +58,11 @@ describe("handleSlashCommands", () => {
         });
 
         test("calls engine.startCoachingSession with the proper params", () => {
+            const hashedStudentId = CryptoJS.HmacSHA256(
+                "userId",
+                "test"
+            ).toString();
+
             expect(mockStartCoachingSession).toHaveBeenCalledTimes(1);
             expect(mockStartCoachingSession.mock.lastCall[0]).toBe(
                 hashedStudentId
