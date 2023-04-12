@@ -7,7 +7,13 @@ const discordjs = {
                     name: "Guild Name",
                     channels: {
                         cache: [
-                            { id: "channelId", name: "Channel Name" },
+                            {
+                                id: "channelId",
+                                name: "Channel Name",
+                                guild: {
+                                    voiceAdapterCreator: "voiceAdapterCreator",
+                                },
+                            },
                             { id: "1" },
                         ],
                     },

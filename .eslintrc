@@ -224,7 +224,7 @@
         "sort-keys": [
             "warn",
             "asc",
-            { "caseSensitive": true, "natural": false }
+            { "caseSensitive": false, "natural": false }
         ],
         "sort-vars": ["warn", { "ignoreCase": false }],
         "arrow-body-style": ["warn", "as-needed"],
