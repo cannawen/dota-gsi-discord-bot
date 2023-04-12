@@ -15,7 +15,7 @@
     ],
     "overrides": [
         {
-            "files": ["*.test.ts"],
+            "files": ["*.test.ts", "**/__tests__/*", "**/__mocks__/*"],
             "rules": {
                 "@typescript-eslint/no-var-requires": ["off"],
                 "max-lines-per-function": ["off"],

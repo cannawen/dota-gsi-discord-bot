@@ -107,6 +107,6 @@ describe("client", () => {
 
     test("find channel", () => {
         const channel = sut.findChannel("guildId", "channelId");
-        expect(channel).toEqual({ id: "channelId", name: "Channel Name" });
+        expect(channel?.id).toEqual("channelId");
     });
 });

@@ -6,6 +6,9 @@ const voice = {
         on: jest.fn(),
         subscribe: jest.fn(),
     }),
+    AudioPlayerStatus: {
+        Idle: "Idle",
+    },
     VoiceConnectionStatus: {
         Destroyed: "Destroyed",
         Ready: "Ready",

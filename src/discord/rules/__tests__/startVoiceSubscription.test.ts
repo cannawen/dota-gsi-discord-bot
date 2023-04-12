@@ -1,5 +1,6 @@
 jest.mock("@discordjs/voice");
 jest.mock("../../../customEngine");
+jest.mock("../../../log");
 
 import engine from "../../../customEngine";
 import Fact from "../../../engine/Fact";
@@ -9,59 +10,123 @@ import Voice from "@discordjs/voice";
 
 describe("startVoiceSubscription", () => {
     let result: Fact<unknown>;
+
     let spyJoinVoiceChannel: any;
+    let spyCreateAudioPlayer: any;
+
+    let voiceConnection: Voice.VoiceConnection;
+    let audioPlayer: Voice.AudioPlayer;
+
     beforeEach(() => {
         spyJoinVoiceChannel = jest.spyOn(Voice, "joinVoiceChannel");
+        spyCreateAudioPlayer = jest.spyOn(Voice, "createAudioPlayer");
 
         result = getResults(rule, {
             discordGuildChannelId: "channelId",
             discordGuildId: "guildId",
             studentId: "studentId",
         }) as Fact<unknown>;
+
+        voiceConnection = spyJoinVoiceChannel.mock.results[0].value;
+        audioPlayer = spyCreateAudioPlayer.mock.results[0].value;
     });
 
-    test("voice connection established", () => {
-        expect(spyJoinVoiceChannel).toHaveBeenCalledTimes(1);
-        expect(spyJoinVoiceChannel.mock.lastCall![0]).toEqual({
-            adapterCreator: "voiceAdapterCreator",
-            channelId: "channelId",
-            guildId: "guildId",
+    describe("createVoiceConnection", () => {
+        test("voice connection established", () => {
+            expect(spyJoinVoiceChannel).toHaveBeenCalledTimes(1);
+            expect(spyJoinVoiceChannel.mock.lastCall![0]).toEqual({
+                adapterCreator: "voiceAdapterCreator",
+                channelId: "channelId",
+                guildId: "guildId",
+            });
+            expect(voiceConnection).not.toBeUndefined();
+        });
+
+        describe("VoiceConnection.on", () => {
+            let spyOn: any;
+            let onCallback: { Ready: any; Destroyed: any };
+
+            beforeEach(() => {
+                spyOn = jest.spyOn(voiceConnection, "on");
+                onCallback = spyOn.mock.calls.reduce((memo: any, args: any) => {
+                    memo[args[0]] = args[1];
+                    return memo;
+                }, {});
+            });
+
+            test("on(Ready), notify engine", () => {
+                const spyReadyToPlayAudio = jest.spyOn(
+                    engine,
+                    "readyToPlayAudio"
+                );
+
+                onCallback.Ready();
+
+                expect(spyReadyToPlayAudio).toHaveBeenCalledTimes(1);
+                expect(spyReadyToPlayAudio.mock.lastCall![0]).toBe("studentId");
+                expect(spyReadyToPlayAudio.mock.lastCall![1]).toBe(true);
+            });
+
+            test("on(Destroyed), notify engine", () => {
+                const spyCleanupSession = jest.spyOn(engine, "cleanupSession");
+
+                onCallback.Destroyed();
+
+                expect(spyCleanupSession).toHaveBeenCalledTimes(1);
+                expect(spyCleanupSession.mock.lastCall![0]).toBe("studentId");
+            });
         });
     });
 
-    describe("VoiceConnection.on", () => {
-        let spyOn: any;
-        let onCallback: { Ready: any; Destroyed: any };
+    describe("createAudioPlayer", () => {
+        test("create player", () => {
+            expect(spyCreateAudioPlayer).toHaveBeenCalledTimes(1);
+            expect(audioPlayer).not.toBeUndefined();
+        });
 
+        describe("AudioPlayer.on(stateChange)", () => {
+            let spyOn: any;
+            let stateChangeFn: any;
+
+            beforeEach(() => {
+                spyOn = jest.spyOn(audioPlayer, "on");
+                stateChangeFn = spyOn.mock.lastCall![1];
+            });
+            test("registers for stateChange events", () => {
+                expect(spyOn.mock.lastCall![0]).toBe("stateChange");
+            });
+            test("notify engine ready to play audio when state changes to Idle", () => {
+                const spy = jest.spyOn(engine, "readyToPlayAudio");
+                stateChangeFn({ status: "Playing" }, { status: "Idle" });
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy.mock.lastCall![0]).toBe("studentId");
+                expect(spy.mock.lastCall![1]).toBe(true);
+            });
+            test("notify engine not ready to play audio when state changes to Buffering", () => {
+                const spy = jest.spyOn(engine, "readyToPlayAudio");
+                stateChangeFn({ status: "Idle" }, { status: "Buffering" });
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy.mock.lastCall![0]).toBe("studentId");
+                expect(spy.mock.lastCall![1]).toBe(false);
+            });
+        });
+    });
+
+    describe("Voice.PlayerSubscription", () => {
+        let spySubscribe: any;
         beforeEach(() => {
-            spyOn = jest.spyOn(spyJoinVoiceChannel.mock.results[0].value, "on");
-            onCallback = spyOn.mock.calls.reduce((memo: any, args: any) => {
-                memo[args[0]] = args[1];
-                return memo;
-            }, {});
+            spySubscribe = jest.spyOn(voiceConnection, "subscribe");
+        });
+        test("creates subscription", () => {
+            expect(spySubscribe).toHaveBeenCalledTimes(1);
+            expect(spySubscribe.mock.lastCall![0]).toBe(audioPlayer);
         });
 
-        test("on ready, notify engine", () => {
-            const spyReadyToPlayAudio = jest.spyOn(engine, "readyToPlayAudio");
-
-            onCallback.Ready();
-
-            expect(spyReadyToPlayAudio).toHaveBeenCalledTimes(1);
-            expect(spyReadyToPlayAudio.mock.lastCall![0]).toBe("studentId");
-            expect(spyReadyToPlayAudio.mock.lastCall![1]).toBe(true);
+        test("returns discord subscription fact", () => {
+            expect(result).toContainFact(
+                "discordSubscriptionTopic",
+                spySubscribe.mock.results[0].value
+            );
         });
-
-        test("on destroy, notify engine", () => {
-            const spyCleanupSession = jest.spyOn(engine, "cleanupSession");
-
-            onCallback.Destroyed();
-
-            expect(spyCleanupSession).toHaveBeenCalledTimes(1);
-            expect(spyCleanupSession.mock.lastCall![0]).toBe("studentId");
-        });
-    });
-
-    test("returns discord subscription fact", () => {
-        expect(result).toContainTopic("discordSubscriptionTopic");
     });
 });
