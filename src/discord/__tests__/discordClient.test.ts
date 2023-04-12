@@ -1,16 +1,5 @@
 jest.mock("../../log");
-
-const mockConfig = jest.fn();
-const mockCoachMe = jest.fn();
-const mockStop = jest.fn();
-const mockHelp = jest.fn();
-
-jest.mock("../handleSlashCommands", () => ({
-    config: mockConfig,
-    coachMe: mockCoachMe,
-    stop: mockStop,
-    help: mockHelp,
-}));
+jest.mock("../handleSlashCommands");
 
 const mockLogin = jest.fn().mockImplementation(() => ({
     catch: jest.fn(),
@@ -48,6 +37,7 @@ jest.mock("discord.js", () => ({
 
 import Discord from "discord.js";
 import { DiscordClient } from "../discordClient";
+import handleSlashCommands from "../handleSlashCommands";
 
 describe("client", () => {
     const OLD_ENV = process.env;
@@ -87,40 +77,44 @@ describe("client", () => {
             expect(mockOn.mock.calls[0][0]).toEqual("InteractionCreate");
         });
         test("config command is handled", () => {
+            const spy = jest.spyOn(handleSlashCommands, "config");
             const interaction = {
                 isChatInputCommand: () => true,
                 commandName: "config",
             };
             handleInteraction(interaction);
-            expect(mockConfig).toHaveBeenCalledTimes(1);
-            expect(mockConfig.mock.lastCall[0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toBe(interaction);
         });
         test("coachme command is handled", () => {
+            const spy = jest.spyOn(handleSlashCommands, "coachMe");
             const interaction = {
                 isChatInputCommand: () => true,
                 commandName: "coachme",
             };
             handleInteraction(interaction);
-            expect(mockCoachMe).toHaveBeenCalledTimes(1);
-            expect(mockCoachMe.mock.lastCall[0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toBe(interaction);
         });
         test("stop command is handled", () => {
+            const spy = jest.spyOn(handleSlashCommands, "stop");
             const interaction = {
                 isChatInputCommand: () => true,
                 commandName: "stop",
             };
             handleInteraction(interaction);
-            expect(mockStop).toHaveBeenCalledTimes(1);
-            expect(mockStop.mock.lastCall[0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toBe(interaction);
         });
         test("help command is handled", () => {
+            const spy = jest.spyOn(handleSlashCommands, "help");
             const interaction = {
                 isChatInputCommand: () => true,
                 commandName: "help",
             };
             handleInteraction(interaction);
-            expect(mockHelp).toHaveBeenCalledTimes(1);
-            expect(mockHelp.mock.lastCall[0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledTimes(1);
+            expect(spy.mock.lastCall![0]).toBe(interaction);
         });
         test("unknown command sends ephemeral reply back to user", () => {
             const mockReply = jest.fn();
