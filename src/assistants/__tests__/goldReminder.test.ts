@@ -216,10 +216,7 @@ describe("gold reminder", () => {
                     },
                     state
                 );
-                expect(results).not.toContainFact(
-                    "playPrivateAudioFile",
-                    "resources/audio/money.mp3"
-                );
+                expect(results).not.toContainTopic("playPrivateAudioFile");
             });
         });
 

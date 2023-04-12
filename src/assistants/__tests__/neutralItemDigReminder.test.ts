@@ -129,10 +129,7 @@ describe("neutral item dig reminder", () => {
                         "lastNeutralItemDigReminderTimeTopic",
                         50
                     );
-                    expect(result).not.toContainFact(
-                        "playPrivateAudioFile",
-                        "resources/audio/dig.mp3"
-                    );
+                    expect(result).not.toContainTopic("playPrivateAudioFile");
                 });
             });
         });
@@ -151,10 +148,7 @@ describe("neutral item dig reminder", () => {
                         "lastNeutralItemDigReminderTimeTopic",
                         50
                     );
-                    expect(result).not.toContainFact(
-                        "playPrivateAudioFile",
-                        "resources/audio/dig.mp3"
-                    );
+                    expect(result).not.toContainTopic("playPrivateAudioFile");
                 });
             });
             describe("reminded 1 second ago", () => {
