@@ -5,9 +5,9 @@ import topics from "../../topics";
 
 export default new Rule(
     "discord/enabled",
-    [topics.discordGuildChannelId, topics.discordGuildChannelId],
+    [topics.discordGuildId, topics.discordGuildChannelId],
     (get) => {
-        const guildId = get(topics.discordGuildChannelId)!;
+        const guildId = get(topics.discordGuildId)!;
         const channelId = get(topics.discordGuildChannelId)!;
 
         const alreadyConnected = engine.alreadyConnectedToVoiceChannel(
