@@ -1,8 +1,11 @@
+import EffectConfig, { effectFromString } from "./EffectConfig";
 import engine from "./customEngine";
 import express from "express";
+import Fact from "./engine/Fact";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
+import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
 const app = express();
@@ -60,11 +63,13 @@ router.get("/coach/:studentId/config", (req, res) => {
     res.status(200).json(engine.getEffectConfigs(req.params.studentId));
 });
 
-router.post("/coach/:studentId/config/:rule/:effect", (req, res) => {
-    engine.changeConfig(
+router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
+    engine.updateFact(
         req.params.studentId,
-        req.params.rule,
-        req.params.effect
+        new Fact<EffectConfig>(
+            topicManager.findTopic(req.params.topic),
+            effectFromString(req.params.effect)
+        )
     );
     res.status(200).send();
 });

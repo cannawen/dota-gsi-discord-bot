@@ -1,5 +1,6 @@
 import engine from "./customEngine";
 import Fact from "./engine/Fact";
+import log from "./log";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
@@ -29,6 +30,26 @@ export function registerEffectConfigRule(
             (_) => new Fact(topics.configUpdated, true)
         )
     );
+}
+
+export function effectFromString(effect: string) {
+    switch (effect) {
+        case EffectConfig.PUBLIC:
+            return EffectConfig.PUBLIC;
+        case EffectConfig.PUBLIC_INTERRUPTING:
+            return EffectConfig.PUBLIC_INTERRUPTING;
+        case EffectConfig.PRIVATE:
+            return EffectConfig.PRIVATE;
+        case EffectConfig.NONE:
+            return EffectConfig.NONE;
+        default:
+            log.error(
+                "app",
+                "Cannot find effect %s. Defaulting to NONE",
+                effect
+            );
+            return EffectConfig.NONE;
+    }
 }
 
 export default EffectConfig;

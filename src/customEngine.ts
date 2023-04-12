@@ -6,6 +6,7 @@ import { DeepReadonly } from "ts-essentials";
 import EffectConfig from "./EffectConfig";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
+import FactStore from "./engine/FactStore";
 import fs from "fs";
 import GsiData from "./gsi/GsiData";
 import log from "./log";
@@ -15,7 +16,6 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
-import FactStore from "./engine/FactStore";
 
 function defaultConfigs(): Fact<EffectConfig>[] {
     const dirPath = path.join(__dirname, "assistants");
@@ -93,38 +93,8 @@ class CustomEngine extends Engine {
         return this.sessions.get(studentId) as DeepReadonly<FactStore>;
     }
 
-    public changeConfig(studentId: string, topicLabel: string, effect: string) {
-        const topic = topicManager.findTopic<EffectConfig>(topicLabel);
-
-        let safeEffect: EffectConfig;
-        if (effect === EffectConfig.PUBLIC) {
-            safeEffect = EffectConfig.PUBLIC;
-        } else if (effect === EffectConfig.PRIVATE) {
-            safeEffect = EffectConfig.PRIVATE;
-        } else if (effect === EffectConfig.NONE) {
-            safeEffect = EffectConfig.NONE;
-        } else {
-            log.error(
-                "app",
-                "Cannot configure rule %s to effect %s for student %s. Defaulting to NONE",
-                topicLabel,
-                effect,
-                studentId
-            );
-            safeEffect = EffectConfig.NONE;
-        }
-
-        log.verbose(
-            "rules",
-            "Setting topic %s for config %s, studentId %s",
-            topic.label.yellow,
-            safeEffect.yellow,
-            studentId
-        );
-
-        this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topic, safeEffect))
-        );
+    public updateFact(studentId: string, fact: Fact<unknown>) {
+        this.withDb(studentId, (db) => this.set(db, fact));
     }
 
     public getEffectConfigs(studentId: string) {
