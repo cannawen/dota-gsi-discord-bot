@@ -26,38 +26,56 @@ describe("customEngine", () => {
             );
         });
 
-        describe("no saved configs", () => {
-            test("should use default configs", () => {
-                const topicOne = new Topic<EffectConfig>("configTopicOne");
-                const topicTwo = new Topic<EffectConfig>("configTopicTwo");
-                jest.spyOn(persistence, "readStudentData").mockReturnValue(
-                    undefined
-                );
-                jest.spyOn(config, "defaultConfigs").mockReturnValue([
-                    new Fact(topicOne, config.EffectConfig.PRIVATE),
-                    new Fact(topicTwo, config.EffectConfig.PUBLIC),
-                ]);
-                sut.startCoachingSession("studentId", "guildId", "channelId");
-                expect(sut.getFactValue("studentId", topicOne)).toBe("PRIVATE");
-                expect(sut.getFactValue("studentId", topicTwo)).toBe("PUBLIC");
-            });
-        });
-
-        describe("has saved configs", () => {
-            test("should use saved config", () => {
-                const topicOne = new Topic<EffectConfig>("configTopicOne");
-                const topicTwo = new Topic<EffectConfig>("configTopicTwo");
-                const facts = [
+        describe("sets up configurations", () => {
+            let configFacts: Fact<EffectConfig>[];
+            let topicOne: Topic<EffectConfig>;
+            let topicTwo: Topic<EffectConfig>;
+            beforeEach(() => {
+                topicOne = new Topic<EffectConfig>("configTopicOne");
+                topicTwo = new Topic<EffectConfig>("configTopicTwo");
+                configFacts = [
                     new Fact(topicOne, config.EffectConfig.PRIVATE),
                     new Fact(topicTwo, config.EffectConfig.PUBLIC),
                 ];
-                jest.spyOn(persistence, "readStudentData").mockReturnValue(
-                    JSON.stringify(factsToPlainObject(facts))
-                );
-                sut.startCoachingSession("studentId", "guildId", "channelId");
+            });
 
-                expect(sut.getFactValue("studentId", topicOne)).toBe("PRIVATE");
-                expect(sut.getFactValue("studentId", topicTwo)).toBe("PUBLIC");
+            describe("no saved configs", () => {
+                test("should use default configs", () => {
+                    jest.spyOn(config, "defaultConfigs").mockReturnValue(
+                        configFacts
+                    );
+                    sut.startCoachingSession(
+                        "studentId",
+                        "guildId",
+                        "channelId"
+                    );
+                    expect(sut.getFactValue("studentId", topicOne)).toBe(
+                        "PRIVATE"
+                    );
+                    expect(sut.getFactValue("studentId", topicTwo)).toBe(
+                        "PUBLIC"
+                    );
+                });
+            });
+
+            describe("has saved configs", () => {
+                test("should use saved config", () => {
+                    jest.spyOn(persistence, "readStudentData").mockReturnValue(
+                        JSON.stringify(factsToPlainObject(configFacts))
+                    );
+                    sut.startCoachingSession(
+                        "studentId",
+                        "guildId",
+                        "channelId"
+                    );
+
+                    expect(sut.getFactValue("studentId", topicOne)).toBe(
+                        "PRIVATE"
+                    );
+                    expect(sut.getFactValue("studentId", topicTwo)).toBe(
+                        "PUBLIC"
+                    );
+                });
             });
         });
     });
