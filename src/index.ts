@@ -1,4 +1,4 @@
-import EffectConfig, { registerEffectConfigRule } from "./EffectConfig";
+import { EffectConfig, registerEffectConfigRule } from "./effectConfigManager";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
@@ -12,6 +12,8 @@ import path = require("path");
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
+import Fact from "./engine/Fact";
+import topics from "./topics";
 
 dotenv.config();
 
@@ -61,15 +63,18 @@ registerEverything();
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
-    engine.setGsi(
+    engine.updateFact(
         data.auth,
-        new GsiData({
-            events: data.state.events,
-            hero: data.state.hero,
-            items: data.state.items,
-            map: data.state.map,
-            player: data.state.player,
-        })
+        new Fact(
+            topics.allData,
+            new GsiData({
+                events: data.state.events,
+                hero: data.state.hero,
+                items: data.state.items,
+                map: data.state.map,
+                player: data.state.player,
+            })
+        )
     );
 });
 
@@ -80,15 +85,18 @@ const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
-        engine.setGsi(
+        engine.updateFact(
             data.auth,
-            new GsiData({
-                events: data.state.events,
-                hero: data.state.hero?.at(playerId) || null,
-                items: data.state.items?.at(playerId) || null,
-                map: data.state.map,
-                player: data.state.player?.at(playerId) || null,
-            })
+            new Fact(
+                topics.allData,
+                new GsiData({
+                    events: data.state.events,
+                    hero: data.state.hero?.at(playerId) || null,
+                    items: data.state.items?.at(playerId) || null,
+                    map: data.state.map,
+                    player: data.state.player?.at(playerId) || null,
+                })
+            )
         );
     }
 );

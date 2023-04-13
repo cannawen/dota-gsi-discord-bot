@@ -3,37 +3,14 @@ import PersistentFactStore, {
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
 import { DeepReadonly } from "ts-essentials";
-import EffectConfig from "./EffectConfig";
+import { defaultConfigs } from "./effectConfigManager";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import FactStore from "./engine/FactStore";
-import fs from "fs";
-import GsiData from "./gsi/GsiData";
 import log from "./log";
-import path from "path";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
-import Topic from "./engine/Topic";
 import topics from "./topics";
-
-function defaultConfigs(): Fact<EffectConfig>[] {
-    const dirPath = path.join(__dirname, "assistants");
-
-    return (
-        fs
-            .readdirSync(dirPath)
-            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-            .map((file) => path.join(dirPath, file))
-            // eslint-disable-next-line global-require
-            .map((filePath) => require(filePath))
-            .reduce((memo, module) => {
-                const topic = module.configTopic as Topic<EffectConfig>;
-                const config = module.defaultConfig as EffectConfig;
-                memo.push(new Fact(topic, config));
-                return memo;
-            }, [])
-    );
-}
 
 class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
@@ -92,14 +69,13 @@ class CustomEngine extends Engine {
         return this.sessions.get(studentId) as DeepReadonly<FactStore>;
     }
 
-    public updateFact(studentId: string, fact: Fact<unknown>) {
-        this.withDb(studentId, (db) => this.set(db, fact));
-    }
-
-    public resetConfig(studentId: string) {
-        this.withDb(studentId, (db) => {
-            defaultConfigs().map((fact) => this.set(db, fact));
-        });
+    public updateFact(studentId: string | null, fact: Fact<unknown>) {
+        if (studentId) {
+            const db = this.sessions.get(studentId);
+            if (db) {
+                this.set(db, fact);
+            }
+        }
     }
 
     public pollConfigUpdateAndReset(studentId: string) {
@@ -111,18 +87,6 @@ class CustomEngine extends Engine {
                 return false;
             }
         });
-    }
-
-    public setGsi(studentId: string | null, data: GsiData) {
-        this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topics.allData, data))
-        );
-    }
-
-    public readyToPlayAudio(studentId: string, ready: boolean) {
-        this.withDb(studentId, (db) =>
-            this.set(db, new Fact(topics.discordReadyToPlayAudio, ready))
-        );
     }
 
     public startCoachingSession(

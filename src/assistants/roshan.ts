@@ -1,6 +1,6 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
-import EffectConfig from "../EffectConfig";
+import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";

@@ -45,7 +45,10 @@ export default new Rule(
                 studentId
             );
             // Need this here to start the ready to play audio state as true
-            engine.readyToPlayAudio(studentId, true);
+            engine.updateFact(
+                studentId,
+                new Fact(topics.discordReadyToPlayAudio, true)
+            );
         });
 
         connection.on(Voice.VoiceConnectionStatus.Destroyed, () => {
@@ -67,11 +70,11 @@ export default new Rule(
                     emColor(newState.status)
                 );
             }
-            if (newState.status === Voice.AudioPlayerStatus.Idle) {
-                engine.readyToPlayAudio(studentId, true);
-            } else {
-                engine.readyToPlayAudio(studentId, false);
-            }
+            const ready = newState.status === Voice.AudioPlayerStatus.Idle;
+            engine.updateFact(
+                studentId,
+                new Fact(topics.discordReadyToPlayAudio, ready)
+            );
         });
 
         const subscription = connection.subscribe(player);

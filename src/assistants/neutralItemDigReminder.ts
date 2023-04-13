@@ -1,4 +1,4 @@
-import EffectConfig from "../EffectConfig";
+import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import RuleConfigurable from "../engine/RuleConfigurable";

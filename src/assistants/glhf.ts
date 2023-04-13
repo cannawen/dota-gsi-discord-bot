@@ -1,4 +1,4 @@
-import EffectConfig from "../EffectConfig";
+import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";

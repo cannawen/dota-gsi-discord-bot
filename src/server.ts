@@ -1,4 +1,8 @@
-import EffectConfig, { effectFromString } from "./EffectConfig";
+import {
+    defaultConfigs,
+    EffectConfig,
+    effectFromString,
+} from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
@@ -98,7 +102,9 @@ router.post("/coach/:studentId/stop-audio", (req, res) => {
 });
 
 router.post("/coach/:studentId/reset-config", (req, res) => {
-    engine.resetConfig(req.params.studentId);
+    defaultConfigs().map((fact) =>
+        engine.updateFact(req.params.studentId, fact)
+    );
     res.status(200).send();
 });
 

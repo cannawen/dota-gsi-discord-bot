@@ -55,16 +55,16 @@ describe("startVoiceSubscription", () => {
             });
 
             test("on(Ready), notify engine", () => {
-                const spyReadyToPlayAudio = jest.spyOn(
-                    engine,
-                    "readyToPlayAudio"
-                );
+                const spyUpdateFact = jest.spyOn(engine, "updateFact");
 
                 onCallback.Ready();
 
-                expect(spyReadyToPlayAudio).toHaveBeenCalledTimes(1);
-                expect(spyReadyToPlayAudio.mock.lastCall![0]).toBe("studentId");
-                expect(spyReadyToPlayAudio.mock.lastCall![1]).toBe(true);
+                expect(spyUpdateFact).toHaveBeenCalledTimes(1);
+                expect(spyUpdateFact.mock.lastCall![0]).toBe("studentId");
+                expect(spyUpdateFact.mock.lastCall![1]).toContainFact(
+                    "discordReadyToPlayAudio",
+                    true
+                );
             });
 
             test("on(Destroyed), notify engine", () => {
@@ -96,18 +96,24 @@ describe("startVoiceSubscription", () => {
                 expect(spyOn.mock.lastCall![0]).toBe("stateChange");
             });
             test("notify engine ready to play audio when state changes to Idle", () => {
-                const spy = jest.spyOn(engine, "readyToPlayAudio");
+                const spy = jest.spyOn(engine, "updateFact");
                 stateChangeFn({ status: "Playing" }, { status: "Idle" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");
-                expect(spy.mock.lastCall![1]).toBe(true);
+                expect(spy.mock.lastCall![1]).toContainFact(
+                    "discordReadyToPlayAudio",
+                    true
+                );
             });
             test("notify engine not ready to play audio when state changes to Buffering", () => {
-                const spy = jest.spyOn(engine, "readyToPlayAudio");
+                const spy = jest.spyOn(engine, "updateFact");
                 stateChangeFn({ status: "Idle" }, { status: "Buffering" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");
-                expect(spy.mock.lastCall![1]).toBe(false);
+                expect(spy.mock.lastCall![1]).toContainFact(
+                    "discordReadyToPlayAudio",
+                    false
+                );
             });
         });
     });
