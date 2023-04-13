@@ -47,26 +47,14 @@ class CustomEngine extends Engine {
         return db;
     }
 
-    private withDb(
-        studentId: string | null,
-        effectFn: (db: PersistentFactStore) => unknown
-    ) {
-        if (studentId) {
-            const db = this.sessions.get(studentId);
-            if (db) {
-                return effectFn(db);
-            }
-        } else {
-            log.error("rules", "no db found for student %s", studentId);
-        }
-    }
-
     public getSessions() {
         return this.sessions as DeepReadonly<Map<string, FactStore>>;
     }
 
     public getSession(studentId: string) {
-        return this.sessions.get(studentId) as DeepReadonly<FactStore>;
+        return this.sessions.get(studentId) as
+            | DeepReadonly<PersistentFactStore>
+            | undefined;
     }
 
     public updateFact(studentId: string | null, fact: Fact<unknown>) {
@@ -79,14 +67,15 @@ class CustomEngine extends Engine {
     }
 
     public pollConfigUpdateAndReset(studentId: string) {
-        return this.withDb(studentId, (db) => {
+        const db = this.sessions.get(studentId);
+        if (db) {
             if (db.get(topics.configUpdated)) {
                 this.set(db, new Fact(topics.configUpdated, undefined));
                 return true;
             } else {
                 return false;
             }
-        });
+        }
     }
 
     public startCoachingSession(
@@ -104,8 +93,9 @@ class CustomEngine extends Engine {
         }
     }
 
-    public cleanupSession(studentId: string) {
-        this.withDb(studentId, (db) => {
+    public closeSession(studentId: string) {
+        const db = this.sessions.get(studentId);
+        if (db) {
             const facts = factsToPlainObject(db.getPersistentForeverFacts());
 
             log.debug(
@@ -116,13 +106,14 @@ class CustomEngine extends Engine {
             );
 
             persistence.saveStudentData(studentId, JSON.stringify(facts));
-        });
-        log.info("rules", "Deleting database for student %s", studentId);
-        this.sessions.delete(studentId);
+            log.info("rules", "Deleting database for student %s", studentId);
+            this.sessions.delete(studentId);
+        }
     }
 
     public handleNextPrivateAudio(studentId: string) {
-        return this.withDb(studentId, (db) => {
+        const db = this.sessions.get(studentId);
+        if (db) {
             const queue = db.get(topics.privateAudioQueue);
             if (queue && queue.length > 0) {
                 const newQueue = [...queue];
@@ -130,7 +121,7 @@ class CustomEngine extends Engine {
                 this.set(db, new Fact(topics.privateAudioQueue, newQueue));
                 return nextFile;
             }
-        }) as string | void;
+        }
     }
 
     public handleStartup() {
@@ -141,11 +132,12 @@ class CustomEngine extends Engine {
 
         Object.entries(data).forEach(([studentId, studentData]) => {
             this.startCoachingSession(studentId);
-            this.withDb(studentId, (db) => {
+            const db = this.sessions.get(studentId);
+            if (db) {
                 plainObjectToFacts(studentData).map((fact) =>
                     this.set(db, fact)
                 );
-            });
+            }
         });
     }
 
@@ -201,22 +193,8 @@ class CustomEngine extends Engine {
             );
         }).then(() => {
             Array.from(this.sessions.keys()).forEach((studentId) => {
-                this.cleanupSession(studentId);
+                this.closeSession(studentId);
             });
-        });
-    }
-
-    public stopAudio(studentId: string) {
-        this.withDb(studentId, (db) => {
-            this.set(db, new Fact(topics.stopAudio, true));
-            this.set(db, new Fact(topics.privateAudioQueue, undefined));
-            this.set(db, new Fact(topics.publicAudioQueue, undefined));
-        });
-    }
-
-    public noLongerInGame(studentId: string) {
-        this.withDb(studentId, (db) => {
-            db.updatePersistentFactsAcrossGames();
         });
     }
 }
@@ -232,7 +210,9 @@ engine.register(
             const studentId = get(topics.studentId)!;
 
             if (!inGame) {
-                engine.noLongerInGame(studentId);
+                engine
+                    .getSession(studentId)
+                    ?.updatePersistentFactsAcrossGames();
             }
         }
     )

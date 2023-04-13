@@ -59,7 +59,9 @@ router.get("/coach/:studentId/", (req, res) => {
 
 router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
     res.status(200).json(
-        engine.getSession(req.params.studentId).get(topics.discordAudioEnabled)
+        engine
+            .getSession(req.params.studentId)
+            ?.get(topics.discordAudioEnabled) || false
     );
 });
 
@@ -67,7 +69,7 @@ router.get("/coach/:studentId/config", (req, res) => {
     const db = engine.getSession(req.params.studentId);
     const configTopics = topicManager
         .getConfigTopics()
-        .map((topic) => [topic.label, db.get(topic)]);
+        .map((topic) => [topic.label, db?.get(topic)]);
     res.status(200).json(configTopics);
 });
 
@@ -97,7 +99,11 @@ router.get("/coach/:studentId/poll", (req, res) => {
 });
 
 router.post("/coach/:studentId/stop-audio", (req, res) => {
-    engine.stopAudio(req.params.studentId);
+    [
+        new Fact(topics.stopAudio, true),
+        new Fact(topics.privateAudioQueue, undefined),
+        new Fact(topics.publicAudioQueue, undefined),
+    ].map((fact) => engine.updateFact(req.params.studentId, fact));
     res.status(200).send();
 });
 

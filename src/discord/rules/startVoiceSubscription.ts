@@ -57,7 +57,7 @@ export default new Rule(
                 "VoiceConnection destroyed for student %s",
                 emColor(studentId)
             );
-            engine.cleanupSession(studentId);
+            engine.closeSession(studentId);
         });
 
         const player = Voice.createAudioPlayer();

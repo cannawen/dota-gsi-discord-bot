@@ -68,12 +68,12 @@ describe("startVoiceSubscription", () => {
             });
 
             test("on(Destroyed), notify engine", () => {
-                const spyCleanupSession = jest.spyOn(engine, "cleanupSession");
+                const spyCloseSession = jest.spyOn(engine, "closeSession");
 
                 onCallback.Destroyed();
 
-                expect(spyCleanupSession).toHaveBeenCalledTimes(1);
-                expect(spyCleanupSession.mock.lastCall![0]).toBe("studentId");
+                expect(spyCloseSession).toHaveBeenCalledTimes(1);
+                expect(spyCloseSession.mock.lastCall![0]).toBe("studentId");
             });
         });
     });
