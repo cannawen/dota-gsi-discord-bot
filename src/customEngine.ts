@@ -68,18 +68,6 @@ class CustomEngine extends Engine {
         }
     }
 
-    public pollConfigUpdateAndReset(studentId: string) {
-        const db = this.sessions.get(studentId);
-        if (db) {
-            if (db.get(topics.configUpdated)) {
-                this.set(db, new Fact(topics.configUpdated, undefined));
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
     public startCoachingSession(
         studentId: string,
         guildId?: string,
@@ -110,19 +98,6 @@ class CustomEngine extends Engine {
             persistence.saveStudentData(studentId, JSON.stringify(facts));
             log.info("rules", "Deleting database for student %s", studentId);
             this.sessions.delete(studentId);
-        }
-    }
-
-    public handleNextPrivateAudio(studentId: string) {
-        const db = this.sessions.get(studentId);
-        if (db) {
-            const queue = db.get(topics.privateAudioQueue);
-            if (queue && queue.length > 0) {
-                const newQueue = [...queue];
-                const nextFile = newQueue.pop()!;
-                this.set(db, new Fact(topics.privateAudioQueue, newQueue));
-                return nextFile;
-            }
         }
     }
 }

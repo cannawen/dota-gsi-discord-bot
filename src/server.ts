@@ -71,14 +71,31 @@ router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
     res.status(200).send();
 });
 
+function getNextAudio(studentId: string) {
+    const queue = engine.getFactValue(studentId, topics.privateAudioQueue);
+    if (queue && queue.length > 0) {
+        const newQueue = [...queue];
+        const nextFile = newQueue.splice(0, 1)[0];
+        engine.setFact(studentId, new Fact(topics.privateAudioQueue, newQueue));
+        return nextFile;
+    }
+}
+
+function configUpdated(studentId: string) {
+    const updated = engine.getFactValue(studentId, topics.configUpdated);
+    if (updated) {
+        engine.setFact(studentId, new Fact(topics.configUpdated, undefined));
+    }
+    return updated;
+}
+
 router.get("/coach/:studentId/poll", (req, res) => {
-    const id = req.params.studentId;
-    const nextAudio = engine.handleNextPrivateAudio(id);
-    const configUpdated = engine.pollConfigUpdateAndReset(id);
+    const studentId = req.params.studentId;
+    const nextAudio = getNextAudio(studentId);
     if (nextAudio) {
         log.info("effect", "Playing private audio %s", nextAudio.magenta);
         res.status(200).json({ nextAudio: nextAudio });
-    } else if (configUpdated) {
+    } else if (configUpdated(studentId)) {
         res.status(200).json({ configUpdated: true });
     } else {
         res.status(200).send([null]);
