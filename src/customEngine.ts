@@ -14,7 +14,6 @@ import path from "path";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
-import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
 function defaultConfigs(): Fact<EffectConfig>[] {
@@ -95,14 +94,6 @@ class CustomEngine extends Engine {
 
     public updateFact(studentId: string, fact: Fact<unknown>) {
         this.withDb(studentId, (db) => this.set(db, fact));
-    }
-
-    public getEffectConfigs(studentId: string) {
-        return this.withDb(studentId, (db) =>
-            topicManager
-                .getConfigTopics()
-                .map((topic) => [topic.label, db.get(topic)])
-        );
     }
 
     public resetConfig(studentId: string) {

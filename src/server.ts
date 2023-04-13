@@ -60,7 +60,11 @@ router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
 });
 
 router.get("/coach/:studentId/config", (req, res) => {
-    res.status(200).json(engine.getEffectConfigs(req.params.studentId));
+    const db = engine.getSession(req.params.studentId);
+    const configTopics = topicManager
+        .getConfigTopics()
+        .map((topic) => [topic.label, db.get(topic)]);
+    res.status(200).json(configTopics);
 });
 
 router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
