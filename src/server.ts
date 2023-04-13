@@ -26,21 +26,6 @@ router.use(
     express.static(path.join(__dirname, "../resources/audio"))
 );
 
-router.post("/saveState", (req, res) => {
-    engine.saveState();
-    res.status(200).send();
-});
-
-router.post("/readState", (req, res) => {
-    engine.readState();
-    res.status(200).send();
-});
-
-router.post("/kill", (req, res) => {
-    process.kill(process.pid, "SIGTERM");
-    res.status(200).send();
-});
-
 router.get("/", (req, res) => {
     res.status(200).send("hello :3");
 });

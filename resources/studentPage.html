@@ -106,18 +106,6 @@
             function resetConfig() {
                 fetch("./reset-config", { method: "POST" });
             }
-
-            function saveState() {
-                fetch("/saveState", { method: "POST" });
-            }
-
-            function readState() {
-                fetch("/readState", { method: "POST" });
-            }
-
-            function kill() {
-                fetch("/kill", { method: "POST" });
-            }
         </script>
     </head>
     <body onload="onLoad()">
@@ -163,10 +151,5 @@
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
         <br />
-        <div style="display: none">
-            <button onClick="saveState()">save state</button>
-            <button onClick="readState()">read state</button>
-            <button onClick="kill()">kill</button>
-        </div>
     </body>
 </html>

@@ -16,16 +16,6 @@ import topics from "./topics";
 class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
-    // THIS IS FOR DEBUGGING ONLY
-    public saveState() {
-        this.storePersistentFactsAcrossRestarts();
-    }
-    // THIS IS FOR DEBUGGING ONLY
-    public readState() {
-        this.handleStartup();
-    }
-    // END DEBUGGING CODE
-
     private createFactStoreForStudent(studentId: string) {
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
