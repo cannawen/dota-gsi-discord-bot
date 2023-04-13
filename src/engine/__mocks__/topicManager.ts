@@ -1,25 +1,32 @@
+import { EffectConfig } from "../../effectConfigManager";
 import PersistentTopic from "../PersistentTopic";
 import Topic from "../Topic";
 
-const manager = {
-    findTopic: jest
-        .fn()
-        .mockReturnValueOnce(new Topic<number>("regular"))
-        .mockReturnValueOnce(
-            new PersistentTopic<number>("persistAcrossGames", {
-                persistAcrossGames: true,
-            })
-        )
-        .mockReturnValueOnce(
-            new PersistentTopic<number>("persistAcrossRestarts", {
+const topicMap = new Map<string, Topic<unknown>>(
+    Object.entries({
+        configTopicOne: new Topic<EffectConfig>("configTopicOne"),
+        configTopicTwo: new Topic<EffectConfig>("configTopicTwo"),
+        regular: new Topic<number>("regular"),
+        persistAcrossGames: new PersistentTopic<number>("persistAcrossGames", {
+            persistAcrossGames: true,
+        }),
+        persistAcrossRestarts: new PersistentTopic<number>(
+            "persistAcrossRestarts",
+            {
                 persistAcrossRestarts: true,
-            })
-        )
-        .mockReturnValueOnce(
-            new PersistentTopic<number>("persistForever", {
-                persistForever: true,
-            })
+            }
         ),
+        persistForever: new PersistentTopic<number>("persistForever", {
+            persistForever: true,
+        }),
+    })
+);
+
+const manager = {
+    findTopic: (label: string) => topicMap.get(label),
+    registerTopic: (topic: Topic<unknown>) => {
+        topicMap.set(topic.label, topic);
+    },
 };
 
 export default manager;

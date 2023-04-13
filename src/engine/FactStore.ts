@@ -2,10 +2,10 @@ import Fact from "./Fact";
 import Topic from "./Topic";
 
 export default class FactStore {
-    protected facts = new Map<Topic<unknown>, Fact<unknown>>();
+    protected facts = new Map<string, Fact<unknown>>();
 
     public get = <T>(topic: Topic<T>): T | undefined => {
-        const fact = this.facts.get(topic);
+        const fact = this.facts.get(topic.label);
         if (fact) {
             // Casting to T is safe here because when it is set,
             // The fact's topic is used as a key
@@ -22,9 +22,9 @@ export default class FactStore {
      */
     public set = (fact: Fact<unknown>) => {
         if (fact.value === undefined) {
-            this.facts.delete(fact.topic);
+            this.facts.delete(fact.topic.label);
         } else {
-            this.facts.set(fact.topic, fact);
+            this.facts.set(fact.topic.label, fact);
         }
     };
 }

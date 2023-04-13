@@ -1,11 +1,10 @@
 import Fact from "./Fact";
 import FactStore from "./FactStore";
 import PersistentTopic from "./PersistentTopic";
-import Topic from "./Topic";
 import topicManager from "./topicManager";
 
 function filter(
-    facts: Map<Topic<unknown>, Fact<unknown>>,
+    facts: Map<string, Fact<unknown>>,
     persistenceParam:
         | "persistAcrossGames"
         | "persistAcrossRestarts"
@@ -38,8 +37,8 @@ export function plainObjectToFacts(object: { [key: string]: unknown }) {
 export default class PersistentFactStore extends FactStore {
     public updatePersistentFactsAcrossGames() {
         this.facts = filter(this.facts, "persistAcrossGames").reduce(
-            (memo: Map<Topic<unknown>, Fact<unknown>>, fact) => {
-                memo.set(fact.topic, fact);
+            (memo: Map<string, Fact<unknown>>, fact) => {
+                memo.set(fact.topic.label, fact);
                 return memo;
             },
             new Map()

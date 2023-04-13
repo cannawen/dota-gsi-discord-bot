@@ -1,12 +1,16 @@
 jest.mock("../persistence");
 jest.mock("../effectConfigManager");
+jest.mock("../engine/topicManager");
 
 import config, { EffectConfig } from "../effectConfigManager";
+import PersistentFactStore, {
+    factsToPlainObject,
+} from "../engine/PersistentFactStore";
 import { CustomEngine } from "../customEngine";
 import Fact from "../engine/Fact";
 import persistence from "../persistence";
-import PersistentFactStore from "../engine/PersistentFactStore";
 import Topic from "../engine/Topic";
+import topicManager from "../engine/topicManager";
 
 describe("customEngine", () => {
     let sut: CustomEngine;
@@ -34,6 +38,24 @@ describe("customEngine", () => {
                     new Fact(topicTwo, config.EffectConfig.PUBLIC),
                 ]);
                 sut.startCoachingSession("studentId", "guildId", "channelId");
+                expect(sut.getFactValue("studentId", topicOne)).toBe("PRIVATE");
+                expect(sut.getFactValue("studentId", topicTwo)).toBe("PUBLIC");
+            });
+        });
+
+        describe("has saved configs", () => {
+            test("should use saved config", () => {
+                const topicOne = new Topic<EffectConfig>("configTopicOne");
+                const topicTwo = new Topic<EffectConfig>("configTopicTwo");
+                const facts = [
+                    new Fact(topicOne, config.EffectConfig.PRIVATE),
+                    new Fact(topicTwo, config.EffectConfig.PUBLIC),
+                ];
+                jest.spyOn(persistence, "readStudentData").mockReturnValue(
+                    JSON.stringify(factsToPlainObject(facts))
+                );
+                sut.startCoachingSession("studentId", "guildId", "channelId");
+
                 expect(sut.getFactValue("studentId", topicOne)).toBe("PRIVATE");
                 expect(sut.getFactValue("studentId", topicTwo)).toBe("PUBLIC");
             });
