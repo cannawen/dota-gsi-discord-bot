@@ -68,7 +68,7 @@ describe("startVoiceSubscription", () => {
             });
 
             test("on(Destroyed), notify engine", () => {
-                const spy = jest.spyOn(engine, "closeSession");
+                const spy = jest.spyOn(engine, "deleteSession");
 
                 onCallback.Destroyed();
 

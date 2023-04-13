@@ -83,7 +83,7 @@ class CustomEngine extends Engine {
         }
     }
 
-    public closeSession(studentId: string) {
+    public deleteSession(studentId: string) {
         const db = this.sessions.get(studentId);
         if (db) {
             const facts = factsToPlainObject(db.getPersistentForeverFacts());

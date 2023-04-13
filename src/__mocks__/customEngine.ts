@@ -1,7 +1,7 @@
 const engine = {
     getSession: jest.fn(),
     getSessions: jest.fn(),
-    closeSession: jest.fn(),
+    deleteSession: jest.fn(),
     setFact: jest.fn(),
     getFactValue: jest.fn(),
     register: jest.fn(),

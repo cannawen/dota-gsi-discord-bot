@@ -215,7 +215,7 @@ function handleShutdown() {
         storePersistentFactsAcrossRestarts();
         notifyStudentsOfRestart().then(() => {
             Array.from(engine.getSessions().keys()).forEach((studentId) => {
-                engine.closeSession(studentId);
+                engine.deleteSession(studentId);
             });
             log.info("app", "End handling shutdown gracefully");
             process.exit(0);
