@@ -2,6 +2,7 @@ import { EffectConfig, registerEffectConfigRule } from "./effectConfigManager";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
+import Fact from "./engine/Fact";
 import fs from "fs";
 import gsi = require("node-gsi");
 import GsiData from "./gsi/GsiData";
@@ -9,11 +10,12 @@ import gsiParser from "./gsiParser";
 import http from "http";
 import log from "./log";
 import path = require("path");
+import persistence from "./persistence";
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
-import Fact from "./engine/Fact";
 import topics from "./topics";
+import { plainObjectToFacts } from "./engine/PersistentFactStore";
 
 dotenv.config();
 
@@ -63,7 +65,7 @@ registerEverything();
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
-    engine.setData(
+    engine.setFact(
         data.auth,
         new Fact(
             topics.allData,
@@ -85,7 +87,7 @@ const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
-        engine.setData(
+        engine.setFact(
             data.auth,
             new Fact(
                 topics.allData,
@@ -119,7 +121,17 @@ if (port && host) {
 }
 
 discordClient.start().then(() => {
-    engine.handleStartup();
+    const dataString = persistence.readRestartData() || "{}";
+    const data = JSON.parse(dataString) as {
+        [key: string]: { [key: string]: unknown };
+    };
+
+    Object.entries(data).forEach(([studentId, studentData]) => {
+        engine.startCoachingSession(studentId);
+        plainObjectToFacts(studentData).map((fact) =>
+            engine.setFact(studentId, fact)
+        );
+    });
 });
 
 let shuttingDown = false;

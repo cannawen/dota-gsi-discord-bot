@@ -48,7 +48,7 @@ class CustomEngine extends Engine {
             | undefined;
     }
 
-    public setData<T>(studentId: string | null, fact: Fact<T>) {
+    public setFact<T>(studentId: string | null, fact: Fact<T>) {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
@@ -57,7 +57,10 @@ class CustomEngine extends Engine {
         }
     }
 
-    public getData<T>(studentId: string | null, topic: Topic<T>): T | void {
+    public getFactValue<T>(
+        studentId: string | null,
+        topic: Topic<T>
+    ): T | void {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
@@ -122,23 +125,6 @@ class CustomEngine extends Engine {
                 return nextFile;
             }
         }
-    }
-
-    public handleStartup() {
-        const dataString = persistence.readRestartData() || "{}";
-        const data = JSON.parse(dataString) as {
-            [key: string]: { [key: string]: unknown };
-        };
-
-        Object.entries(data).forEach(([studentId, studentData]) => {
-            this.startCoachingSession(studentId);
-            const db = this.sessions.get(studentId);
-            if (db) {
-                plainObjectToFacts(studentData).map((fact) =>
-                    this.set(db, fact)
-                );
-            }
-        });
     }
 
     private storePersistentFactsAcrossRestarts() {

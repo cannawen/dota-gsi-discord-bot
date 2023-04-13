@@ -44,7 +44,7 @@ router.get("/coach/:studentId/", (req, res) => {
 
 router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
     res.status(200).json(
-        engine.getData(req.params.studentId, topics.discordAudioEnabled) ||
+        engine.getFactValue(req.params.studentId, topics.discordAudioEnabled) ||
             false
     );
 });
@@ -55,13 +55,13 @@ router.get("/coach/:studentId/config", (req, res) => {
             .getConfigTopics()
             .map((topic) => [
                 topic.label,
-                engine.getData(req.params.studentId, topic),
+                engine.getFactValue(req.params.studentId, topic),
             ])
     );
 });
 
 router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
-    engine.setData(
+    engine.setFact(
         req.params.studentId,
         new Fact<EffectConfig>(
             topicManager.findTopic(req.params.topic),
@@ -90,12 +90,12 @@ router.post("/coach/:studentId/stop-audio", (req, res) => {
         new Fact(topics.stopAudio, true),
         new Fact(topics.privateAudioQueue, undefined),
         new Fact(topics.publicAudioQueue, undefined),
-    ].map((fact) => engine.setData(req.params.studentId, fact));
+    ].map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();
 });
 
 router.post("/coach/:studentId/reset-config", (req, res) => {
-    defaultConfigs().map((fact) => engine.setData(req.params.studentId, fact));
+    defaultConfigs().map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();
 });
 

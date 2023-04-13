@@ -55,7 +55,7 @@ describe("startVoiceSubscription", () => {
             });
 
             test("on(Ready), notify engine", () => {
-                const spy = jest.spyOn(engine, "setData");
+                const spy = jest.spyOn(engine, "setFact");
 
                 onCallback.Ready();
 
@@ -96,7 +96,7 @@ describe("startVoiceSubscription", () => {
                 expect(spyOn.mock.lastCall![0]).toBe("stateChange");
             });
             test("notify engine ready to play audio when state changes to Idle", () => {
-                const spy = jest.spyOn(engine, "setData");
+                const spy = jest.spyOn(engine, "setFact");
                 stateChangeFn({ status: "Playing" }, { status: "Idle" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");
@@ -106,7 +106,7 @@ describe("startVoiceSubscription", () => {
                 );
             });
             test("notify engine not ready to play audio when state changes to Buffering", () => {
-                const spy = jest.spyOn(engine, "setData");
+                const spy = jest.spyOn(engine, "setFact");
                 stateChangeFn({ status: "Idle" }, { status: "Buffering" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");

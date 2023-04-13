@@ -45,7 +45,7 @@ export default new Rule(
                 studentId
             );
             // Need this here to start the ready to play audio state as true
-            engine.setData(
+            engine.setFact(
                 studentId,
                 new Fact(topics.discordReadyToPlayAudio, true)
             );
@@ -71,7 +71,7 @@ export default new Rule(
                 );
             }
             const ready = newState.status === Voice.AudioPlayerStatus.Idle;
-            engine.setData(
+            engine.setFact(
                 studentId,
                 new Fact(topics.discordReadyToPlayAudio, ready)
             );
