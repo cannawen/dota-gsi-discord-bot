@@ -2,8 +2,8 @@ import PersistentFactStore, {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import config from "./effectConfigManager";
 import { DeepReadonly } from "ts-essentials";
-import { defaultConfigs } from "./effectConfigManager";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import log from "./log";
@@ -12,30 +12,8 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-class CustomEngine extends Engine {
+export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
-
-    private createFactStoreForStudent(studentId: string) {
-        const db = new PersistentFactStore();
-        this.set(db, new Fact(topics.studentId, studentId));
-
-        const savedPersistenceString = persistence.readStudentData(studentId);
-
-        if (savedPersistenceString) {
-            // User has started this app before; use saved values
-            plainObjectToFacts(JSON.parse(savedPersistenceString)).forEach(
-                (fact) => this.set(db, fact)
-            );
-        } else {
-            // User has not used the app before; set default values
-            defaultConfigs().map((fact) => this.set(db, fact));
-        }
-
-        // Add to engine's active sessions
-        this.sessions.set(studentId, db);
-
-        return db;
-    }
 
     public getSessions() {
         return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
@@ -73,7 +51,23 @@ class CustomEngine extends Engine {
         guildId?: string,
         channelId?: string
     ) {
-        const db = this.createFactStoreForStudent(studentId);
+        const db = new PersistentFactStore();
+        this.set(db, new Fact(topics.studentId, studentId));
+
+        const savedPersistenceString = persistence.readStudentData(studentId);
+
+        if (savedPersistenceString) {
+            // User has started this app before; use saved values
+            plainObjectToFacts(JSON.parse(savedPersistenceString)).forEach(
+                (fact) => this.set(db, fact)
+            );
+        } else {
+            // User has not used the app before; set default values
+            config.defaultConfigs().map((fact) => this.set(db, fact));
+        }
+
+        // Add to engine's active sessions
+        this.sessions.set(studentId, db);
 
         if (guildId) {
             this.set(db, new Fact(topics.discordGuildId, guildId));

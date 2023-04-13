@@ -7,7 +7,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-export const enum EffectConfig {
+export enum EffectConfig {
     PUBLIC = "PUBLIC",
     PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
     PRIVATE = "PRIVATE",
@@ -72,3 +72,11 @@ export function defaultConfigs(): Fact<EffectConfig>[] {
             }, [])
     );
 }
+
+export default {
+    defaultConfigs,
+    effectFromString,
+    registerEffectConfigRule,
+    configToEffectTopic,
+    EffectConfig,
+};
