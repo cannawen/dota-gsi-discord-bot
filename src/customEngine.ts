@@ -6,7 +6,6 @@ import { DeepReadonly } from "ts-essentials";
 import { defaultConfigs } from "./effectConfigManager";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
-import FactStore from "./engine/FactStore";
 import log from "./log";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
@@ -39,7 +38,7 @@ class CustomEngine extends Engine {
     }
 
     public getSessions() {
-        return this.sessions as DeepReadonly<Map<string, FactStore>>;
+        return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
     }
 
     public getSession(studentId: string) {
@@ -125,63 +124,6 @@ class CustomEngine extends Engine {
                 return nextFile;
             }
         }
-    }
-
-    private storePersistentFactsAcrossRestarts() {
-        const allData: { [key: string]: { [key: string]: unknown } } = {};
-        this.sessions.forEach((db, studentId) => {
-            allData[studentId] = factsToPlainObject(
-                db.getPersistentFactsAcrossRestarts()
-            );
-        });
-        persistence.saveRestartData(JSON.stringify(allData));
-    }
-
-    public handleShutdown() {
-        this.storePersistentFactsAcrossRestarts();
-        return new Promise<void>((resolve) => {
-            let expectedReadyCount = 0;
-            this.sessions.forEach((db, studentId) => {
-                log.info("app", "Notify %s of shutdown", studentId);
-                if (db.get(topics.discordAudioEnabled)) {
-                    expectedReadyCount++;
-                    this.set(
-                        db,
-                        new Fact(
-                            topics.playInterruptingAudioFile,
-                            "resources/audio/restart.mp3"
-                        )
-                    );
-                }
-            });
-            if (expectedReadyCount === 0) {
-                resolve();
-            }
-            let readyCount = 0;
-            this.register(
-                new Rule(
-                    "wait for all audio to be done playing",
-                    [topics.discordReadyToPlayAudio],
-                    (get) => {
-                        if (get(topics.discordReadyToPlayAudio)!) {
-                            readyCount++;
-                            log.info(
-                                "app",
-                                "Finished notifying %s of shutdown",
-                                get(topics.studentId)
-                            );
-                        }
-                        if (readyCount === expectedReadyCount) {
-                            resolve();
-                        }
-                    }
-                )
-            );
-        }).then(() => {
-            Array.from(this.sessions.keys()).forEach((studentId) => {
-                this.closeSession(studentId);
-            });
-        });
     }
 }
 

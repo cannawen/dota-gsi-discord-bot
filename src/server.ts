@@ -86,11 +86,15 @@ router.get("/coach/:studentId/poll", (req, res) => {
 });
 
 router.post("/coach/:studentId/stop-audio", (req, res) => {
-    [
-        new Fact(topics.stopAudio, true),
-        new Fact(topics.privateAudioQueue, undefined),
-        new Fact(topics.publicAudioQueue, undefined),
-    ].map((fact) => engine.setFact(req.params.studentId, fact));
+    engine.setFact(req.params.studentId, new Fact(topics.stopAudio, true));
+    engine.setFact(
+        req.params.studentId,
+        new Fact(topics.privateAudioQueue, undefined)
+    );
+    engine.setFact(
+        req.params.studentId,
+        new Fact(topics.publicAudioQueue, undefined)
+    );
     res.status(200).send();
 });
 

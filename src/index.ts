@@ -1,4 +1,8 @@
 import { EffectConfig, registerEffectConfigRule } from "./effectConfigManager";
+import {
+    factsToPlainObject,
+    plainObjectToFacts,
+} from "./engine/PersistentFactStore";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
@@ -15,9 +19,10 @@ import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import { plainObjectToFacts } from "./engine/PersistentFactStore";
 
 dotenv.config();
+
+// RULE REGISTRATION CODE
 
 function registerRulesInDirectory(directory: string) {
     const dirPath = path.join(__dirname, directory);
@@ -62,6 +67,8 @@ export function registerEverything() {
 
 registerEverything();
 
+// GSI CODE
+
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
@@ -103,6 +110,8 @@ gsiParser.events.on(
     }
 );
 
+// SERVER CODE
+
 const port = process.env.PORT;
 const host = process.env.HOST;
 let httpServer: http.Server;
@@ -120,6 +129,8 @@ if (port && host) {
     );
 }
 
+// STARTUP CODE
+
 discordClient.start().then(() => {
     const dataString = persistence.readRestartData() || "{}";
     const data = JSON.parse(dataString) as {
@@ -134,6 +145,60 @@ discordClient.start().then(() => {
     });
 });
 
+// SHUTDOWN CODE
+
+function storePersistentFactsAcrossRestarts() {
+    const allData: { [key: string]: { [key: string]: unknown } } = {};
+    engine.getSessions().forEach((db, studentId) => {
+        allData[studentId] = factsToPlainObject(
+            db.getPersistentFactsAcrossRestarts()
+        );
+    });
+    persistence.saveRestartData(JSON.stringify(allData));
+}
+
+function notifyStudentsOfRestart() {
+    return new Promise<void>((resolve) => {
+        let expectedReadyCount = 0;
+        engine.getSessions().forEach((db, studentId) => {
+            log.info("app", "Notify %s of shutdown", studentId);
+            if (db.get(topics.discordAudioEnabled)) {
+                expectedReadyCount++;
+                engine.setFact(
+                    studentId,
+                    new Fact(
+                        topics.playInterruptingAudioFile,
+                        "resources/audio/restart.mp3"
+                    )
+                );
+            }
+        });
+        if (expectedReadyCount === 0) {
+            resolve();
+        }
+        let readyCount = 0;
+        engine.register(
+            new Rule(
+                "wait for all audio to be done playing",
+                [topics.discordReadyToPlayAudio],
+                (get) => {
+                    if (get(topics.discordReadyToPlayAudio)!) {
+                        readyCount++;
+                        log.info(
+                            "app",
+                            "Finished notifying %s of shutdown",
+                            get(topics.studentId)
+                        );
+                    }
+                    if (readyCount === expectedReadyCount) {
+                        resolve();
+                    }
+                }
+            )
+        );
+    });
+}
+
 let shuttingDown = false;
 
 function handleShutdown() {
@@ -146,10 +211,12 @@ function handleShutdown() {
     if (!shuttingDown) {
         log.info("app", "Start handling shutdown");
         shuttingDown = true;
-        httpServer?.close(() => {
-            log.info("app", "Http server closed");
-        });
-        engine.handleShutdown().then(() => {
+        httpServer?.close();
+        storePersistentFactsAcrossRestarts();
+        notifyStudentsOfRestart().then(() => {
+            Array.from(engine.getSessions().keys()).forEach((studentId) => {
+                engine.closeSession(studentId);
+            });
             log.info("app", "End handling shutdown gracefully");
             process.exit(0);
         });
@@ -157,4 +224,4 @@ function handleShutdown() {
 }
 
 process.on("SIGINT", handleShutdown);
-// process.on("SIGTERM", handleShutdown);
+process.on("SIGTERM", handleShutdown);
