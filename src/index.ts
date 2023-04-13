@@ -63,7 +63,7 @@ registerEverything();
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine
     // See if it matches topic.discordCoachMe and is not undefined
-    engine.updateFact(
+    engine.setData(
         data.auth,
         new Fact(
             topics.allData,
@@ -85,7 +85,7 @@ const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
-        engine.updateFact(
+        engine.setData(
             data.auth,
             new Fact(
                 topics.allData,

@@ -55,25 +55,25 @@ describe("startVoiceSubscription", () => {
             });
 
             test("on(Ready), notify engine", () => {
-                const spyUpdateFact = jest.spyOn(engine, "updateFact");
+                const spy = jest.spyOn(engine, "setData");
 
                 onCallback.Ready();
 
-                expect(spyUpdateFact).toHaveBeenCalledTimes(1);
-                expect(spyUpdateFact.mock.lastCall![0]).toBe("studentId");
-                expect(spyUpdateFact.mock.lastCall![1]).toContainFact(
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy.mock.lastCall![0]).toBe("studentId");
+                expect(spy.mock.lastCall![1]).toContainFact(
                     "discordReadyToPlayAudio",
                     true
                 );
             });
 
             test("on(Destroyed), notify engine", () => {
-                const spyCloseSession = jest.spyOn(engine, "closeSession");
+                const spy = jest.spyOn(engine, "closeSession");
 
                 onCallback.Destroyed();
 
-                expect(spyCloseSession).toHaveBeenCalledTimes(1);
-                expect(spyCloseSession.mock.lastCall![0]).toBe("studentId");
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy.mock.lastCall![0]).toBe("studentId");
             });
         });
     });
@@ -96,7 +96,7 @@ describe("startVoiceSubscription", () => {
                 expect(spyOn.mock.lastCall![0]).toBe("stateChange");
             });
             test("notify engine ready to play audio when state changes to Idle", () => {
-                const spy = jest.spyOn(engine, "updateFact");
+                const spy = jest.spyOn(engine, "setData");
                 stateChangeFn({ status: "Playing" }, { status: "Idle" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");
@@ -106,7 +106,7 @@ describe("startVoiceSubscription", () => {
                 );
             });
             test("notify engine not ready to play audio when state changes to Buffering", () => {
-                const spy = jest.spyOn(engine, "updateFact");
+                const spy = jest.spyOn(engine, "setData");
                 stateChangeFn({ status: "Idle" }, { status: "Buffering" });
                 expect(spy).toHaveBeenCalledTimes(1);
                 expect(spy.mock.lastCall![0]).toBe("studentId");

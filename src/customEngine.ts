@@ -10,6 +10,7 @@ import FactStore from "./engine/FactStore";
 import log from "./log";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
+import Topic from "./engine/Topic";
 import topics from "./topics";
 
 class CustomEngine extends Engine {
@@ -57,11 +58,20 @@ class CustomEngine extends Engine {
             | undefined;
     }
 
-    public updateFact(studentId: string | null, fact: Fact<unknown>) {
+    public setData<T>(studentId: string | null, fact: Fact<T>) {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
                 this.set(db, fact);
+            }
+        }
+    }
+
+    public getData<T>(studentId: string | null, topic: Topic<T>): T | void {
+        if (studentId) {
+            const db = this.sessions.get(studentId);
+            if (db) {
+                return db.get(topic);
             }
         }
     }
