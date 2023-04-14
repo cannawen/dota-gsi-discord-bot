@@ -7,6 +7,7 @@ const log = {
     verbose: jest.fn(),
     debug: jest.fn(),
     silly: jest.fn(),
+    padToWithColor: jest.fn(),
 };
 
 export default log;

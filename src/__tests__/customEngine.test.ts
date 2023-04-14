@@ -1,6 +1,7 @@
-jest.mock("../persistence");
 jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
+jest.mock("../log");
+jest.mock("../persistence");
 
 import config, { EffectConfig } from "../effectConfigManager";
 import PersistentFactStore, {

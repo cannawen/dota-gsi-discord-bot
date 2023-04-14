@@ -4,12 +4,12 @@ jest.mock("../customEngine");
 jest.mock("../engine/topicManager");
 import { EffectConfig } from "../effectConfigManager";
 import engine from "../customEngine";
+import Fact from "../engine/Fact";
 const request = require("supertest");
 import sut from "../server";
 import Topic from "../engine/Topic";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
-import Fact from "../engine/Fact";
 
 describe("server", () => {
     test("instructions", (done) => {
