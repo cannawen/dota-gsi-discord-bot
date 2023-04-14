@@ -5,21 +5,25 @@ import path = require("path");
 import log from "./log";
 dotenv.config();
 
-const dataPath = process.env.PERSISTENCE_DATA_PATH || "";
+function restartDataFilePath() {
+    return path.join(
+        process.env.PERSISTENCE_DATA_PATH || "",
+        "restartData.json"
+    );
+}
 
-const RESTART_DATA_FILE_PATH = path.join(dataPath, "restartData.json");
-const STUDENT_DATA_DIRECTORY_PATH = path.join(dataPath, "student");
+function studentDataDirectory() {
+    return path.join(process.env.PERSISTENCE_DATA_PATH || "", "student");
+}
 
-if (!fs.existsSync(STUDENT_DATA_DIRECTORY_PATH)) {
-    fs.mkdirSync(STUDENT_DATA_DIRECTORY_PATH, {
-        recursive: true,
-    });
+function studentDataFilePath(studentId: string) {
+    return path.join(studentDataDirectory(), `${studentId}.json`);
 }
 
 function saveRestartData(data: string) {
     try {
         log.info("app", "Saving data %s", data);
-        fs.writeFileSync(RESTART_DATA_FILE_PATH, data);
+        fs.writeFileSync(restartDataFilePath(), data);
     } catch (error) {
         log.error("app", "Unable to write restart data %e", error);
     }
@@ -27,9 +31,10 @@ function saveRestartData(data: string) {
 
 function readRestartData() {
     try {
-        if (fs.existsSync(RESTART_DATA_FILE_PATH)) {
-            const data = fs.readFileSync(RESTART_DATA_FILE_PATH, "utf8");
-            fs.unlinkSync(RESTART_DATA_FILE_PATH);
+        const filePath = restartDataFilePath();
+        if (fs.existsSync(filePath)) {
+            const data = fs.readFileSync(filePath, "utf8");
+            fs.unlinkSync(filePath);
             log.info("app", "Reading data %s", data);
             return data;
         }
@@ -39,12 +44,13 @@ function readRestartData() {
 }
 
 function saveStudentData(studentId: string, data: string) {
+    if (!fs.existsSync(studentDataDirectory())) {
+        fs.mkdirSync(studentDataDirectory(), {
+            recursive: true,
+        });
+    }
     try {
-        const studentFile = path.join(
-            STUDENT_DATA_DIRECTORY_PATH,
-            `${studentId}.json`
-        );
-        fs.writeFileSync(studentFile, data);
+        fs.writeFileSync(studentDataFilePath(studentId), data);
     } catch (error) {
         log.error("app", "Unable to write student data %e", error);
     }
@@ -52,10 +58,7 @@ function saveStudentData(studentId: string, data: string) {
 
 function readStudentData(studentId: string) {
     try {
-        const studentFile = path.join(
-            STUDENT_DATA_DIRECTORY_PATH,
-            `${studentId}.json`
-        );
+        const studentFile = studentDataFilePath(studentId);
         if (fs.existsSync(studentFile)) {
             return fs.readFileSync(studentFile, "utf8");
         }
