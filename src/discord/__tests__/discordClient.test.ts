@@ -7,22 +7,12 @@ import { DiscordClient } from "../discordClient";
 import handleSlashCommands from "../handleSlashCommands";
 
 describe("client", () => {
-    const OLD_ENV = process.env;
-
     let sut: DiscordClient;
     let spyClient: any;
 
     beforeEach(() => {
         spyClient = jest.spyOn(Discord, "Client");
         sut = new DiscordClient();
-    });
-
-    beforeAll(() => {
-        process.env = { ...OLD_ENV, DISCORD_BOT_TOKEN: "test" };
-    });
-
-    afterAll(() => {
-        process.env = OLD_ENV;
     });
 
     test("Create new discord client", () => {
@@ -35,7 +25,7 @@ describe("client", () => {
             "login"
         );
         sut.start();
-        expect(spyLogin).toHaveBeenCalledWith("test");
+        expect(spyLogin).toHaveBeenCalledWith("test_DISCORD_BOT_TOKEN");
     });
 
     describe("interactions", () => {

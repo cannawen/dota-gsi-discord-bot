@@ -9,8 +9,6 @@ import handle from "../handleSlashCommands";
 import Voice from "@discordjs/voice";
 
 describe("handleSlashCommands", () => {
-    const OLD_ENV = process.env;
-
     let interaction: ChatInputCommandInteraction<CacheType>;
     let mockReply: jest.Mock<any, any, any>;
 
@@ -31,14 +29,6 @@ describe("handleSlashCommands", () => {
         } as unknown as ChatInputCommandInteraction<CacheType>;
     });
 
-    beforeAll(() => {
-        process.env = { ...OLD_ENV, STUDENT_ID_HASH_PRIVATE_KEY: "test" };
-    });
-
-    afterAll(() => {
-        process.env = OLD_ENV;
-    });
-
     describe("coachMe", () => {
         beforeEach(() => {
             handle.coachMe(interaction);
@@ -53,7 +43,7 @@ describe("handleSlashCommands", () => {
         test("calls engine.startCoachingSession with the proper params", () => {
             const hashedStudentId = CryptoJS.HmacSHA256(
                 "userId",
-                "test"
+                "test_STUDENT_ID_HASH_PRIVATE_KEY"
             ).toString();
 
             expect(engine.startCoachingSession).toHaveBeenCalledWith(
