@@ -66,8 +66,8 @@ function defaultConfigs(): Fact<EffectConfig>[] {
             .map((filePath) => require(filePath))
             .reduce((memo, module) => {
                 const topic = module.configTopic as Topic<EffectConfig>;
-                const config = module.defaultConfig as EffectConfig;
-                memo.push(new Fact(topic, config));
+                const effectConfig = module.defaultConfig as EffectConfig;
+                memo.push(new Fact(topic, effectConfig));
                 return memo;
             }, [])
     );

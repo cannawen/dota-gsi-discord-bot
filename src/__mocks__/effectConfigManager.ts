@@ -4,8 +4,8 @@ export enum EffectConfig {
     PRIVATE = "PRIVATE",
     NONE = "NONE",
 }
-const config = {
+const effectConfig = {
     defaultConfigs: jest.fn().mockReturnValue([]),
     effectFromString: (input: string): EffectConfig => input as EffectConfig,
 };
-export default config;
+export default effectConfig;

@@ -2,8 +2,8 @@ import PersistentFactStore, {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
-import config from "./effectConfigManager";
 import { DeepReadonly } from "ts-essentials";
+import effectConfig from "./effectConfigManager";
 import Engine from "./engine/Engine";
 import Fact from "./engine/Fact";
 import log from "./log";
@@ -63,7 +63,7 @@ export class CustomEngine extends Engine {
             );
         } else {
             // User has not used the app before; set default values
-            config.defaultConfigs().map((fact) => this.set(db, fact));
+            effectConfig.defaultConfigs().map((fact) => this.set(db, fact));
         }
 
         // Add to engine's active sessions

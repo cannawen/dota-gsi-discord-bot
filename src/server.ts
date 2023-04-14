@@ -1,4 +1,4 @@
-import config, { EffectConfig } from "./effectConfigManager";
+import effectConfig, { EffectConfig } from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
@@ -57,14 +57,14 @@ router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
         req.params.studentId,
         new Fact<EffectConfig>(
             topicManager.findTopic(req.params.topic),
-            config.effectFromString(req.params.effect)
+            effectConfig.effectFromString(req.params.effect)
         )
     );
     res.status(200).send();
 });
 
 router.post("/coach/:studentId/reset-config", (req, res) => {
-    config
+    effectConfig
         .defaultConfigs()
         .map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();

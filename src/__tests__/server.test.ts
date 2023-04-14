@@ -5,7 +5,7 @@ jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
 jest.mock("../log");
 jest.mock("../gsiParser");
-import config, { EffectConfig } from "../effectConfigManager";
+import effectConfig, { EffectConfig } from "../effectConfigManager";
 import engine from "../customEngine";
 import Fact from "../engine/Fact";
 import gsiParser from "../gsiParser";
@@ -122,7 +122,7 @@ describe("server", () => {
                     new Topic<EffectConfig>("configTopicTwo"),
                     EffectConfig.PUBLIC
                 );
-                (config.defaultConfigs as jest.Mock).mockReturnValue([
+                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
                     factOne,
                     factTwo,
                 ]);

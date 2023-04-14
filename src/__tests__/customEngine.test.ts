@@ -3,7 +3,7 @@ jest.mock("../engine/topicManager");
 jest.mock("../log");
 jest.mock("../persistence");
 
-import config, { EffectConfig } from "../effectConfigManager";
+import effectConfig, { EffectConfig } from "../effectConfigManager";
 import PersistentFactStore, {
     factsToPlainObject,
 } from "../engine/PersistentFactStore";
@@ -42,7 +42,7 @@ describe("customEngine", () => {
 
             describe("no saved configs", () => {
                 test("should use default configs", () => {
-                    (config.defaultConfigs as jest.Mock).mockReturnValue(
+                    (effectConfig.defaultConfigs as jest.Mock).mockReturnValue(
                         configFacts
                     );
                     sut.startCoachingSession(
