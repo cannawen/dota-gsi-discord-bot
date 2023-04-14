@@ -1,11 +1,11 @@
+export enum EffectConfig {
+    PUBLIC = "PUBLIC",
+    PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
+    PRIVATE = "PRIVATE",
+    NONE = "NONE",
+}
 const config = {
     defaultConfigs: jest.fn().mockReturnValue([]),
-    EffectConfig: {
-        PUBLIC: "PUBLIC",
-        PUBLIC_INTERRUPTING: "PUBLIC_INTERRUPTING",
-        PRIVATE: "PRIVATE",
-        NONE: "NONE",
-    },
-    effectFromString: (input: string) => input,
+    effectFromString: (input: string): EffectConfig => input as EffectConfig,
 };
 export default config;

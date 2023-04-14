@@ -105,7 +105,7 @@ describe("server", () => {
                             "studentId",
                             new Fact(
                                 new Topic<EffectConfig>("configTopicOne"),
-                                config.EffectConfig.PUBLIC
+                                EffectConfig.PUBLIC
                             )
                         );
                         return done();
@@ -114,11 +114,11 @@ describe("server", () => {
             test("reset", (done) => {
                 const factOne = new Fact(
                     new Topic<EffectConfig>("configTopicOne"),
-                    config.EffectConfig.PRIVATE
+                    EffectConfig.PRIVATE
                 );
                 const factTwo = new Fact(
                     new Topic<EffectConfig>("configTopicTwo"),
-                    config.EffectConfig.PUBLIC
+                    EffectConfig.PUBLIC
                 );
                 (config.defaultConfigs as jest.Mock).mockReturnValue([
                     factOne,

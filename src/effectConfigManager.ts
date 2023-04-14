@@ -78,5 +78,4 @@ export default {
     effectFromString,
     registerEffectConfigRule,
     configToEffectTopic,
-    EffectConfig,
 };

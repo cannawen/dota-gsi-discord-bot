@@ -35,8 +35,8 @@ describe("customEngine", () => {
                 topicOne = new Topic<EffectConfig>("configTopicOne");
                 topicTwo = new Topic<EffectConfig>("configTopicTwo");
                 configFacts = [
-                    new Fact(topicOne, config.EffectConfig.PRIVATE),
-                    new Fact(topicTwo, config.EffectConfig.PUBLIC),
+                    new Fact(topicOne, EffectConfig.PRIVATE),
+                    new Fact(topicTwo, EffectConfig.PUBLIC),
                 ];
             });
 
