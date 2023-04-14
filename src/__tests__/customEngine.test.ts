@@ -9,8 +9,8 @@ import PersistentFactStore, {
 import { CustomEngine } from "../customEngine";
 import Fact from "../engine/Fact";
 import persistence from "../persistence";
+import PersistentTopic from "../engine/PersistentTopic";
 import Topic from "../engine/Topic";
-import topicManager from "../engine/topicManager";
 
 describe("customEngine", () => {
     let sut: CustomEngine;
@@ -92,6 +92,31 @@ describe("customEngine", () => {
                     "studentId",
                     "studentId2",
                 ]);
+            });
+        });
+
+        describe("deleteSession", () => {
+            test("deletes correct session", () => {
+                sut.deleteSession("studentId");
+                expect(sut.getSession("studentId")).toBeUndefined();
+                expect(sut.getSession("studentId2")).not.toBeUndefined();
+            });
+            test("saves forever facts to persistence", () => {
+                const topic = new PersistentTopic<string>("persistentTopic", {
+                    persistForever: true,
+                });
+                sut.setFact("studentId", new Fact(topic, "hello"));
+                sut.setFact(
+                    "studentId",
+                    new Fact(new Topic<string>("topic"), "world")
+                );
+                const spy = jest.spyOn(persistence, "saveStudentData");
+                sut.deleteSession("studentId");
+                expect(spy).toHaveBeenCalledTimes(1);
+                expect(spy.mock.lastCall![0]).toBe("studentId");
+                expect(spy.mock.lastCall![1]).toBe(
+                    '{"persistentTopic":"hello"}'
+                );
             });
         });
     });
