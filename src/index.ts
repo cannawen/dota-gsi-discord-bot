@@ -1,4 +1,4 @@
-import { EffectConfig, registerEffectConfigRule } from "./effectConfigManager";
+import effectConfig, { EffectConfig } from "./effectConfigManager";
 import {
     factsToPlainObject,
     plainObjectToFacts,
@@ -53,7 +53,9 @@ function registerAssistantConfig() {
         // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
         .map((module) => module.configTopic as Topic<EffectConfig>)
-        .forEach((topic) => registerEffectConfigRule(topic.label, topic));
+        .forEach((topic) =>
+            effectConfig.registerEffectConfigRule(topic.label, topic)
+        );
 }
 
 export function registerEverything() {

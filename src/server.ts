@@ -1,8 +1,4 @@
-import {
-    defaultConfigs,
-    EffectConfig,
-    effectFromString,
-} from "./effectConfigManager";
+import config, { EffectConfig } from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
@@ -65,9 +61,16 @@ router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
         req.params.studentId,
         new Fact<EffectConfig>(
             topicManager.findTopic(req.params.topic),
-            effectFromString(req.params.effect)
+            config.effectFromString(req.params.effect)
         )
     );
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/reset-config", (req, res) => {
+    config
+        .defaultConfigs()
+        .map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();
 });
 
@@ -98,7 +101,7 @@ router.get("/coach/:studentId/poll", (req, res) => {
     } else if (configUpdated(studentId)) {
         res.status(200).json({ configUpdated: true });
     } else {
-        res.status(200).send([null]);
+        res.status(200).json(null);
     }
 });
 
@@ -112,11 +115,6 @@ router.post("/coach/:studentId/stop-audio", (req, res) => {
         req.params.studentId,
         new Fact(topics.publicAudioQueue, undefined)
     );
-    res.status(200).send();
-});
-
-router.post("/coach/:studentId/reset-config", (req, res) => {
-    defaultConfigs().map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();
 });
 

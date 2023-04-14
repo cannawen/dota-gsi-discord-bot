@@ -1,8 +1,10 @@
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
 jest.mock("../customEngine");
+jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
-import { EffectConfig } from "../effectConfigManager";
+jest.mock("../log");
+import config, { EffectConfig } from "../effectConfigManager";
 import engine from "../customEngine";
 import Fact from "../engine/Fact";
 const request = require("supertest");
@@ -54,52 +56,173 @@ describe("server", () => {
                 req.expect("false", done);
             });
         });
+        describe("configuration management", () => {
+            test("get all", (done) => {
+                const configTopicOne = new Topic<EffectConfig>(
+                    "configTopicOne"
+                );
+                const configTopicTwo = new Topic<EffectConfig>(
+                    "configTopicTwo"
+                );
+                (topicManager.getConfigTopics as jest.Mock).mockReturnValue([
+                    configTopicOne,
+                    configTopicTwo,
+                ]);
+                (engine.getFactValue as jest.Mock)
+                    .mockReturnValueOnce("PRIVATE")
+                    .mockReturnValueOnce("PUBLIC");
 
-        test("get-config", (done) => {
-            const configTopicOne = new Topic<EffectConfig>("configTopicOne");
-            const configTopicTwo = new Topic<EffectConfig>("configTopicTwo");
-            (topicManager.getConfigTopics as jest.Mock).mockReturnValue([
-                configTopicOne,
-                configTopicTwo,
-            ]);
-            (engine.getFactValue as jest.Mock)
-                .mockReturnValueOnce("PRIVATE")
-                .mockReturnValueOnce("PUBLIC");
-
-            request(sut)
-                .get("/coach/studentId/get-config")
-                .expect("Content-Type", /json/)
-                .expect(200)
-                .expect(
-                    JSON.stringify([
-                        ["configTopicOne", "PRIVATE"],
-                        ["configTopicTwo", "PUBLIC"],
-                    ])
-                )
-                .end((error: any) => {
-                    if (error) return done(error);
-                    expect(engine.getFactValue).toHaveBeenCalledWith(
-                        "studentId",
-                        configTopicOne
-                    );
-                    expect(engine.getFactValue).toHaveBeenCalledWith(
-                        "studentId",
-                        configTopicTwo
-                    );
-                    return done();
-                });
+                request(sut)
+                    .get("/coach/studentId/get-config")
+                    .expect("Content-Type", /json/)
+                    .expect(200)
+                    .expect(
+                        JSON.stringify([
+                            ["configTopicOne", "PRIVATE"],
+                            ["configTopicTwo", "PUBLIC"],
+                        ])
+                    )
+                    .end((error: any) => {
+                        if (error) return done(error);
+                        expect(engine.getFactValue).toHaveBeenCalledWith(
+                            "studentId",
+                            configTopicOne
+                        );
+                        expect(engine.getFactValue).toHaveBeenCalledWith(
+                            "studentId",
+                            configTopicTwo
+                        );
+                        return done();
+                    });
+            });
+            test("update", (done) => {
+                request(sut)
+                    .post("/coach/studentId/config/configTopicOne/PUBLIC")
+                    .expect(200)
+                    .end((error: any) => {
+                        if (error) return done(error);
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            new Fact(
+                                new Topic<EffectConfig>("configTopicOne"),
+                                config.EffectConfig.PUBLIC
+                            )
+                        );
+                        return done();
+                    });
+            });
+            test("reset", (done) => {
+                const factOne = new Fact(
+                    new Topic<EffectConfig>("configTopicOne"),
+                    config.EffectConfig.PRIVATE
+                );
+                const factTwo = new Fact(
+                    new Topic<EffectConfig>("configTopicTwo"),
+                    config.EffectConfig.PUBLIC
+                );
+                (config.defaultConfigs as jest.Mock).mockReturnValue([
+                    factOne,
+                    factTwo,
+                ]);
+                request(sut)
+                    .post("/coach/studentId/reset-config")
+                    .expect(200, (error: any) => {
+                        if (error) return done(error);
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            factOne
+                        );
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            factTwo
+                        );
+                        return done();
+                    });
+            });
         });
-        test("update-config", (done) => {
+        describe("polling", () => {
+            let req: any;
+            beforeEach(() => {
+                req = request(sut)
+                    .get("/coach/studentId/poll")
+                    .expect("Content-Type", /json/)
+                    .expect(200);
+            });
+            describe("playing private audio", () => {
+                test("has audio", (done) => {
+                    (engine.getFactValue as jest.Mock).mockImplementation(
+                        (studentId: string, topic: Topic<unknown>) => {
+                            if (topic.label === "privateAudioQueue") {
+                                return ["foo.mp3", "bar.mp3"];
+                            }
+                        }
+                    );
+                    req.expect(JSON.stringify({ nextAudio: "foo.mp3" })).end(
+                        (error: any) => {
+                            if (error) return done(error);
+                            expect(engine.setFact).toHaveBeenCalledWith(
+                                "studentId",
+                                new Fact(
+                                    new Topic<string[]>("privateAudioQueue"),
+                                    ["bar.mp3"]
+                                )
+                            );
+                            return done();
+                        }
+                    );
+                });
+                test("has no audio", (done) => {
+                    (engine.getFactValue as jest.Mock).mockReturnValue(
+                        undefined
+                    );
+                    req.expect(null, done);
+                });
+            });
+
+            describe("config updated", () => {
+                test("true", (done) => {
+                    (engine.getFactValue as jest.Mock).mockImplementation(
+                        (studentId: string, topic: Topic<unknown>) => {
+                            if (topic.label === "configUpdated") {
+                                return true;
+                            }
+                        }
+                    );
+                    req.expect(JSON.stringify({ configUpdated: true }), done);
+                });
+                test("false", (done) => {
+                    (engine.getFactValue as jest.Mock).mockImplementation(
+                        (studentId: string, topic: Topic<unknown>) => {
+                            if (topic.label === "configUpdated") {
+                                return false;
+                            }
+                        }
+                    );
+                    req.expect(null, done);
+                });
+            });
+        });
+        test("stop audio", (done) => {
             request(sut)
-                .post("/coach/studentId/config/configTopicOne/PUBLIC")
-                .expect(200)
-                .end((error: any) => {
+                .post("/coach/studentId/stop-audio")
+                .expect(200, (error: any) => {
                     if (error) return done(error);
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
+                        new Fact(new Topic<boolean>("stopAudio"), true)
+                    );
+                    expect(engine.setFact).toHaveBeenCalledWith(
+                        "studentId",
                         new Fact(
-                            new Topic<EffectConfig>("configTopicOne"),
-                            EffectConfig.PUBLIC
+                            new Topic<string[]>("privateAudioQueue"),
+                            undefined
+                        )
+                    );
+                    expect(engine.setFact).toHaveBeenCalledWith(
+                        "studentId",
+                        new Fact(
+                            new Topic<string[]>("publicAudioQueue"),
+                            undefined
                         )
                     );
                     return done();

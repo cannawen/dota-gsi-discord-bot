@@ -1,4 +1,4 @@
-import { configToEffectTopic, EffectConfig } from "../effectConfigManager";
+import effectConfig, { EffectConfig } from "../effectConfigManager";
 import Fact from "./Fact";
 import Rule from "./Rule";
 import Topic from "./Topic";
@@ -19,7 +19,7 @@ class RuleConfigurable extends Rule {
     ) {
         super(label, [...given, configTopic], (get) => {
             const config = get(configTopic)!;
-            const effect = configToEffectTopic[config];
+            const effect = effectConfig.configToEffectTopic[config];
             if (effect) {
                 return then(get, effect);
             }

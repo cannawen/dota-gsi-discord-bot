@@ -6,5 +6,6 @@ const config = {
         PRIVATE: "PRIVATE",
         NONE: "NONE",
     },
+    effectFromString: (input: string) => input,
 };
 export default config;

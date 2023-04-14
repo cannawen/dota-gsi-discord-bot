@@ -14,14 +14,14 @@ export enum EffectConfig {
     NONE = "NONE",
 }
 
-export const configToEffectTopic = {
+const configToEffectTopic = {
     [EffectConfig.PUBLIC]: topics.playPublicAudioFile,
     [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
     [EffectConfig.PRIVATE]: topics.playPrivateAudioFile,
     [EffectConfig.NONE]: undefined,
 };
 
-export function registerEffectConfigRule(
+function registerEffectConfigRule(
     ruleName: string,
     topic: Topic<EffectConfig>
 ) {
@@ -34,7 +34,7 @@ export function registerEffectConfigRule(
     );
 }
 
-export function effectFromString(effect: string) {
+function effectFromString(effect: string) {
     switch (effect) {
         case EffectConfig.PUBLIC:
             return EffectConfig.PUBLIC;
@@ -54,7 +54,7 @@ export function effectFromString(effect: string) {
     }
 }
 
-export function defaultConfigs(): Fact<EffectConfig>[] {
+function defaultConfigs(): Fact<EffectConfig>[] {
     const dirPath = path.join(__dirname, "assistants");
 
     return (
