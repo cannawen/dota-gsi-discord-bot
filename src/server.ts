@@ -22,10 +22,6 @@ router.use(
     express.static(path.join(__dirname, "../resources/audio"))
 );
 
-router.get("/", (req, res) => {
-    res.status(200).send("hello :3");
-});
-
 router.get("/instructions", (req, res) => {
     res.status(200).sendFile(
         path.join(__dirname, "../resources/instructions.html")

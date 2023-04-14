@@ -4,9 +4,11 @@ jest.mock("../customEngine");
 jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
 jest.mock("../log");
+jest.mock("../gsiParser");
 import config, { EffectConfig } from "../effectConfigManager";
 import engine from "../customEngine";
 import Fact from "../engine/Fact";
+import gsiParser from "../gsiParser";
 import request from "supertest";
 import sut from "../server";
 import Topic from "../engine/Topic";
@@ -225,6 +227,21 @@ describe("server", () => {
                             undefined
                         )
                     );
+                    return done();
+                });
+        });
+    });
+
+    describe("gsi", () => {
+        test("head", (done) => {
+            request(sut).head("/gsi").expect(200, done);
+        });
+        test("data", (done) => {
+            request(sut)
+                .post("/gsi")
+                .expect(200, (error: any) => {
+                    if (error) return done(error);
+                    expect(gsiParser.feedState).toHaveBeenCalledWith({});
                     return done();
                 });
         });
