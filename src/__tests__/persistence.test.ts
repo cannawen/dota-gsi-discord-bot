@@ -65,4 +65,78 @@ describe("persistence", () => {
             });
         });
     });
+
+    describe("save student data", () => {
+        describe("student directory does not exist", () => {
+            test("makes directory", () => {
+                (fs.existsSync as jest.Mock).mockReturnValue(false);
+                sut.saveStudentData("studentId", "data");
+                const mockMkdir = fs.mkdirSync as jest.Mock;
+                expect(mockMkdir).toHaveBeenCalledTimes(1);
+                expect(mockMkdir).toHaveBeenCalledWith("test/student", {
+                    recursive: true,
+                });
+            });
+        });
+        describe("student directory does exist", () => {
+            test("does not makes directory", () => {
+                (fs.existsSync as jest.Mock).mockReturnValue(true);
+                sut.saveStudentData("studentId", "data");
+                const mockMkdir = fs.mkdirSync as jest.Mock;
+                expect(mockMkdir).not.toHaveBeenCalled();
+            });
+        });
+        test("writes to student file", () => {
+            sut.saveStudentData("studentId", "data");
+            expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
+            expect(fs.writeFileSync).toHaveBeenCalledWith(
+                "test/student/studentId.json",
+                "data"
+            );
+        });
+    });
+
+    describe("readStudentData", () => {
+        let mockExist: jest.Mock;
+        let mockReadFile: jest.Mock;
+        let result: string | undefined;
+        beforeEach(() => {
+            mockExist = fs.existsSync as jest.Mock;
+            mockReadFile = fs.readFileSync as jest.Mock;
+            mockReadFile.mockReturnValue("data");
+        });
+        test("check to see if file exists", () => {
+            sut.readStudentData("studentId");
+            expect(mockExist).toHaveBeenCalledTimes(1);
+            expect(mockExist).toHaveBeenCalledWith(
+                "test/student/studentId.json"
+            );
+        });
+
+        describe("file exists", () => {
+            beforeEach(() => {
+                mockExist.mockReturnValue(true);
+                result = sut.readStudentData("studentId");
+            });
+            test("read student file", () => {
+                expect(mockReadFile).toHaveBeenCalledTimes(1);
+                expect(mockReadFile).toHaveBeenCalledWith(
+                    "test/student/studentId.json",
+                    "utf8"
+                );
+                expect(result).toBe("data");
+            });
+        });
+
+        describe("file does not exist", () => {
+            beforeEach(() => {
+                mockExist.mockReturnValue(false);
+                result = sut.readStudentData("studentId");
+            });
+            test("does not read data and returns undefined", () => {
+                expect(mockReadFile).not.toHaveBeenCalled();
+                expect(result).toBeUndefined();
+            });
+        });
+    });
 });

@@ -44,12 +44,12 @@ function readRestartData() {
 }
 
 function saveStudentData(studentId: string, data: string) {
-    if (!fs.existsSync(studentDataDirectory())) {
-        fs.mkdirSync(studentDataDirectory(), {
-            recursive: true,
-        });
-    }
     try {
+        if (!fs.existsSync(studentDataDirectory())) {
+            fs.mkdirSync(studentDataDirectory(), {
+                recursive: true,
+            });
+        }
         fs.writeFileSync(studentDataFilePath(studentId), data);
     } catch (error) {
         log.error("app", "Unable to write student data %e", error);
