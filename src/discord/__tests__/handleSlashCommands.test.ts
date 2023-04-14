@@ -44,7 +44,10 @@ describe("handleSlashCommands", () => {
             handle.coachMe(interaction);
         });
         test("replies ephemerally", () => {
-            expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
+            expect(mockReply).toHaveBeenCalledWith({
+                content: expect.anything(),
+                ephemeral: true,
+            });
         });
 
         test("calls engine.startCoachingSession with the proper params", () => {
@@ -66,7 +69,10 @@ describe("handleSlashCommands", () => {
             handle.stop(interaction);
         });
         test("replies ephemerally", () => {
-            expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
+            expect(mockReply).toHaveBeenCalledWith({
+                content: expect.anything(),
+                ephemeral: true,
+            });
         });
         test("joins the voice channel", () => {
             expect(Voice.joinVoiceChannel).toHaveBeenCalledWith({
@@ -88,12 +94,18 @@ describe("handleSlashCommands", () => {
     test("config replies ephemerally", () => {
         handle.config(interaction);
 
-        expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
+        expect(mockReply).toHaveBeenCalledWith({
+            content: expect.anything(),
+            ephemeral: true,
+        });
     });
 
     test("help replies ephemerally", () => {
         handle.help(interaction);
 
-        expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
+        expect(mockReply).toHaveBeenCalledWith({
+            content: expect.anything(),
+            ephemeral: true,
+        });
     });
 });
