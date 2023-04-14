@@ -42,14 +42,14 @@ router.get("/coach/:studentId/", (req, res) => {
     );
 });
 
-router.get("/coach/:studentId/discordAudioEnabled", (req, res) => {
+router.get("/coach/:studentId/discord-audio-enabled", (req, res) => {
     res.status(200).json(
         engine.getFactValue(req.params.studentId, topics.discordAudioEnabled) ||
             false
     );
 });
 
-router.get("/coach/:studentId/config", (req, res) => {
+router.get("/coach/:studentId/get-config", (req, res) => {
     res.status(200).json(
         topicManager
             .getConfigTopics()

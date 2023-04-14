@@ -59,7 +59,7 @@
             }
 
             function getDiscordEnabled() {
-                fetch("./discordAudioEnabled")
+                fetch("./discord-audio-enabled")
                     .then((res) => res.json())
                     .then((res) => {
                         if (res === false) {
@@ -70,7 +70,7 @@
             }
 
             function getConfig() {
-                fetch("./config")
+                fetch("./get-config")
                     .then((res) => res.json())
                     .then((res) => {
                         const message = res.reduce((memo, configInput) => {

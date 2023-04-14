@@ -23,6 +23,7 @@ const topicMap = new Map<string, Topic<unknown>>(
 );
 
 const manager = {
+    getConfigTopics: jest.fn(),
     findTopic: (label: string) => topicMap.get(label),
     registerTopic: (topic: Topic<unknown>) => {
         topicMap.set(topic.label, topic);
