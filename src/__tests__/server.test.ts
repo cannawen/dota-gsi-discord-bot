@@ -7,7 +7,7 @@ jest.mock("../log");
 import config, { EffectConfig } from "../effectConfigManager";
 import engine from "../customEngine";
 import Fact from "../engine/Fact";
-const request = require("supertest");
+import request from "supertest";
 import sut from "../server";
 import Topic from "../engine/Topic";
 import topicManager from "../engine/topicManager";
