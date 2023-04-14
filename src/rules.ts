@@ -7,18 +7,19 @@ const assistant = {
         availability: "buyback/availability",
         warnNoBuyback: "buyback/warn_no_buyback",
     },
+    glhf: "glhf",
+    goldReminder: "gold_reminder",
+    midas: "midas",
     neutralItemDigReminder: "neutral_item_dig_reminder",
     neutralItemReminder: "neutral_item_reminder",
     newNeutralItems: "new_neutral_items",
+    pause: "pause",
     roshan: {
         killedEvent: "roshan/killed_event/set_future_audio_state",
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
         aliveTime: "roshan/alive_time/play_audio",
     },
     runes: "runes",
-    pause: "pause",
-    goldReminder: "gold_reminder",
-    glhf: "glhf",
 };
 
 const discord = {
