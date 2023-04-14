@@ -14,6 +14,6 @@
         "forceConsistentCasingInFileNames": true,
         "sourceMap": true
     },
-    "include": ["./src/**/*.ts", ".jest/jest.d.ts", "./data/*"],
+    "include": ["./src/**/*.ts", ".jest/*.ts", "./data/*"],
     "exclude": ["**/__tests__/*", "**/__mocks__/*"]
 }
