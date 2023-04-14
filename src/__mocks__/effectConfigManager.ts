@@ -1,5 +1,5 @@
-const engine = {
-    defaultConfigs: () => [],
+const config = {
+    defaultConfigs: jest.fn().mockReturnValue([]),
     EffectConfig: {
         PUBLIC: "PUBLIC",
         PUBLIC_INTERRUPTING: "PUBLIC_INTERRUPTING",
@@ -7,4 +7,4 @@ const engine = {
         NONE: "NONE",
     },
 };
-export default engine;
+export default config;

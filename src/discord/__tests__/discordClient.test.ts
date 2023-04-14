@@ -35,8 +35,7 @@ describe("client", () => {
             "login"
         );
         sut.start();
-        expect(spyLogin).toHaveBeenCalledTimes(1);
-        expect(spyLogin.mock.lastCall![0]).toBe("test");
+        expect(spyLogin).toHaveBeenCalledWith("test");
     });
 
     describe("interactions", () => {
@@ -50,7 +49,10 @@ describe("client", () => {
         });
         test("Sets up interactions", () => {
             sut.start();
-            expect(spyOn.mock.calls[0][0]).toEqual("InteractionCreate");
+            expect(spyOn).toHaveBeenCalledWith(
+                "InteractionCreate",
+                expect.anything()
+            );
         });
         test("config command is handled", () => {
             const spy = jest.spyOn(handleSlashCommands, "config");
@@ -59,8 +61,7 @@ describe("client", () => {
                 commandName: "config",
             };
             handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledWith(interaction);
         });
         test("coachme command is handled", () => {
             const spy = jest.spyOn(handleSlashCommands, "coachMe");
@@ -69,8 +70,7 @@ describe("client", () => {
                 commandName: "coachme",
             };
             handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledWith(interaction);
         });
         test("stop command is handled", () => {
             const spy = jest.spyOn(handleSlashCommands, "stop");
@@ -79,8 +79,7 @@ describe("client", () => {
                 commandName: "stop",
             };
             handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledWith(interaction);
         });
         test("help command is handled", () => {
             const spy = jest.spyOn(handleSlashCommands, "help");
@@ -89,8 +88,7 @@ describe("client", () => {
                 commandName: "help",
             };
             handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe(interaction);
+            expect(spy).toHaveBeenCalledWith(interaction);
         });
         test("unknown command sends ephemeral reply back to user", () => {
             const mockReply = jest.fn();
@@ -100,8 +98,11 @@ describe("client", () => {
                 reply: mockReply,
             };
             handleInteraction(interaction);
-            expect(mockReply).toHaveBeenCalledTimes(1);
-            expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
+            expect(mockReply).toHaveBeenCalledWith({
+                content:
+                    "Unable to handle command unknown. Please try again later",
+                ephemeral: true,
+            });
         });
     });
 

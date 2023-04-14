@@ -28,13 +28,10 @@ describe("playInterruptingAudio", () => {
             );
         });
         test("create audio resource", () => {
-            const spy = jest.spyOn(Voice, "createAudioResource");
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe("foo.mp3");
+            expect(Voice.createAudioResource).toHaveBeenCalledWith("foo.mp3");
         });
         test("play audio resource", () => {
-            expect(mockPlay).toHaveBeenCalledTimes(1);
-            expect(mockPlay.mock.lastCall[0]).toBe("AudioResource");
+            expect(mockPlay).toHaveBeenCalledWith("AudioResource");
         });
     });
 

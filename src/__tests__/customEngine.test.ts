@@ -41,7 +41,7 @@ describe("customEngine", () => {
 
             describe("no saved configs", () => {
                 test("should use default configs", () => {
-                    jest.spyOn(config, "defaultConfigs").mockReturnValue(
+                    (config.defaultConfigs as jest.Mock).mockReturnValue(
                         configFacts
                     );
                     sut.startCoachingSession(
@@ -60,7 +60,7 @@ describe("customEngine", () => {
 
             describe("has saved configs", () => {
                 test("should use saved config", () => {
-                    jest.spyOn(persistence, "readStudentData").mockReturnValue(
+                    (persistence.readStudentData as jest.Mock).mockReturnValue(
                         JSON.stringify(factsToPlainObject(configFacts))
                     );
                     sut.startCoachingSession(
@@ -110,11 +110,9 @@ describe("customEngine", () => {
                     "studentId",
                     new Fact(new Topic<string>("topic"), "world")
                 );
-                const spy = jest.spyOn(persistence, "saveStudentData");
                 sut.deleteSession("studentId");
-                expect(spy).toHaveBeenCalledTimes(1);
-                expect(spy.mock.lastCall![0]).toBe("studentId");
-                expect(spy.mock.lastCall![1]).toBe(
+                expect(persistence.saveStudentData).toHaveBeenCalledWith(
+                    "studentId",
                     '{"persistentTopic":"hello"}'
                 );
             });

@@ -42,7 +42,7 @@ describe("stopAudio", () => {
             expect(results).toContainFact("stopAudio", undefined);
         });
         test("play audio resource", () => {
-            expect(mockStop).toHaveBeenCalledTimes(0);
+            expect(mockStop).not.toHaveBeenCalled();
         });
     });
 });

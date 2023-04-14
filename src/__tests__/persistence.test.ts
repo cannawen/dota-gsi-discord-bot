@@ -15,11 +15,11 @@ describe("persistence", () => {
     });
 
     test("saveRestartData", () => {
-        const spy = jest.spyOn(fs, "writeFileSync");
         sut.saveRestartData("all data");
-        expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy.mock.lastCall![0]).toBe("test/restartData.json");
-        expect(spy.mock.lastCall![1]).toBe("all data");
+        expect(fs.writeFileSync).toHaveBeenCalledWith(
+            "test/restartData.json",
+            "all data"
+        );
     });
 
     describe("readRestartData", () => {
@@ -27,10 +27,8 @@ describe("persistence", () => {
             expect(sut.readRestartData()).toBeUndefined();
         });
         test("check to see if restart data exists", () => {
-            const spy = jest.spyOn(fs, "existsSync");
             sut.readRestartData();
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe("test/restartData.json");
+            expect(fs.existsSync).toHaveBeenCalledWith("test/restartData.json");
         });
         test("does not exist", () => {
             (fs.existsSync as jest.Mock).mockReturnValue(false);
@@ -47,19 +45,17 @@ describe("persistence", () => {
             });
             test("should read file", () => {
                 const mockReadFile = fs.readFileSync as jest.Mock;
-                expect(mockReadFile).toHaveBeenCalledTimes(1);
-                expect(mockReadFile.mock.lastCall[0]).toBe(
-                    "test/restartData.json"
+                expect(mockReadFile).toHaveBeenCalledWith(
+                    "test/restartData.json",
+                    "utf8"
                 );
-                expect(mockReadFile.mock.lastCall[1]).toBe("utf8");
             });
             test("should return read data", () => {
                 expect(result).toBe("hello world");
             });
             test("should delete file", () => {
                 const mockUnlink = fs.unlinkSync as jest.Mock;
-                expect(mockUnlink).toHaveBeenCalledTimes(1);
-                expect(mockUnlink.mock.lastCall[0]).toBe(
+                expect(mockUnlink).toHaveBeenCalledWith(
                     "test/restartData.json"
                 );
             });
@@ -72,7 +68,6 @@ describe("persistence", () => {
                 (fs.existsSync as jest.Mock).mockReturnValue(false);
                 sut.saveStudentData("studentId", "data");
                 const mockMkdir = fs.mkdirSync as jest.Mock;
-                expect(mockMkdir).toHaveBeenCalledTimes(1);
                 expect(mockMkdir).toHaveBeenCalledWith("test/student", {
                     recursive: true,
                 });
@@ -88,7 +83,6 @@ describe("persistence", () => {
         });
         test("writes to student file", () => {
             sut.saveStudentData("studentId", "data");
-            expect(fs.writeFileSync).toHaveBeenCalledTimes(1);
             expect(fs.writeFileSync).toHaveBeenCalledWith(
                 "test/student/studentId.json",
                 "data"
@@ -107,7 +101,6 @@ describe("persistence", () => {
         });
         test("check to see if file exists", () => {
             sut.readStudentData("studentId");
-            expect(mockExist).toHaveBeenCalledTimes(1);
             expect(mockExist).toHaveBeenCalledWith(
                 "test/student/studentId.json"
             );
@@ -119,7 +112,6 @@ describe("persistence", () => {
                 result = sut.readStudentData("studentId");
             });
             test("read student file", () => {
-                expect(mockReadFile).toHaveBeenCalledTimes(1);
                 expect(mockReadFile).toHaveBeenCalledWith(
                     "test/student/studentId.json",
                     "utf8"

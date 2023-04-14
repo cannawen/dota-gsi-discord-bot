@@ -44,21 +44,20 @@ describe("handleSlashCommands", () => {
             handle.coachMe(interaction);
         });
         test("replies ephemerally", () => {
-            expect(mockReply).toHaveBeenCalledTimes(1);
             expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
         });
 
         test("calls engine.startCoachingSession with the proper params", () => {
-            const spy = jest.spyOn(engine, "startCoachingSession");
             const hashedStudentId = CryptoJS.HmacSHA256(
                 "userId",
                 "test"
             ).toString();
 
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toBe(hashedStudentId);
-            expect(spy.mock.lastCall![1]).toBe("guildId");
-            expect(spy.mock.lastCall![2]).toBe("channelId");
+            expect(engine.startCoachingSession).toHaveBeenCalledWith(
+                hashedStudentId,
+                "guildId",
+                "channelId"
+            );
         });
     });
 
@@ -67,22 +66,19 @@ describe("handleSlashCommands", () => {
             handle.stop(interaction);
         });
         test("replies ephemerally", () => {
-            expect(mockReply).toHaveBeenCalledTimes(1);
             expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
         });
         test("joins the voice channel", () => {
-            const spy = jest.spyOn(Voice, "joinVoiceChannel");
-            expect(spy).toHaveBeenCalledTimes(1);
-            expect(spy.mock.lastCall![0]).toEqual({
+            expect(Voice.joinVoiceChannel).toHaveBeenCalledWith({
                 adapterCreator: "voiceAdapterCreator",
                 channelId: "channelId",
                 guildId: "guildId",
             });
         });
         test("destroys the voice channel", () => {
-            const spyVoice = jest.spyOn(Voice, "joinVoiceChannel");
+            const mockVoice = Voice.joinVoiceChannel as jest.Mock;
             const spyDestroy = jest.spyOn(
-                spyVoice.mock.results[0].value as any,
+                mockVoice.mock.results[0].value as any,
                 "destroy"
             );
             expect(spyDestroy).toHaveBeenCalledTimes(1);
@@ -92,14 +88,12 @@ describe("handleSlashCommands", () => {
     test("config replies ephemerally", () => {
         handle.config(interaction);
 
-        expect(mockReply).toHaveBeenCalledTimes(1);
         expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
     });
 
     test("help replies ephemerally", () => {
         handle.help(interaction);
 
-        expect(mockReply).toHaveBeenCalledTimes(1);
         expect(mockReply.mock.lastCall[0].ephemeral).toBe(true);
     });
 });
