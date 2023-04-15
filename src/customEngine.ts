@@ -51,6 +51,12 @@ export class CustomEngine extends Engine {
         guildId?: string,
         channelId?: string
     ) {
+        const existingSession = this.getSession(studentId);
+        if (existingSession) {
+            existingSession
+                .get(topics.discordSubscriptionTopic)
+                ?.connection.destroy();
+        }
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
 

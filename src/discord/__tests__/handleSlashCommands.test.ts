@@ -35,7 +35,7 @@ describe("handleSlashCommands", () => {
         });
         test("replies ephemerally", () => {
             expect(mockReply).toHaveBeenCalledWith({
-                content: expect.anything(),
+                content: expect.stringContaining("Starting..."),
                 ephemeral: true,
             });
         });
