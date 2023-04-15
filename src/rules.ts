@@ -19,7 +19,9 @@ const assistant = {
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
         aliveTime: "roshan/alive_time/play_audio",
     },
-    runes: "runes",
+    runeBounty: "runeBounty",
+    runePower: "runePower",
+    runeWater: "runeWater",
 };
 
 const discord = {

@@ -5,19 +5,16 @@ import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-const RIVER_RUNE_SPAWN_INTERVAL = 2 * 60;
-const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
+const WATER_RUNE_2_MIN = 2 * 60;
+const WATER_TUNE_4_MIN = 4 * 60;
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.runes
+    rules.assistant.runeWater
 );
-export const defaultConfig = EffectConfig.PRIVATE;
+export const defaultConfig = EffectConfig.NONE;
 
-// If we have a time greater than 0 and are in a game
-// And the time is a multiple of 2 or 3 minutes
-// Play rune sound
 export default new RuleConfigurable(
-    rules.assistant.runes,
+    rules.assistant.runeWater,
     configTopic,
     [topics.inGame, topics.time],
     (get, effect) => {
@@ -25,11 +22,9 @@ export default new RuleConfigurable(
         const time = get(topics.time)!;
         if (
             inGame &&
-            time > 0 &&
-            (time % RIVER_RUNE_SPAWN_INTERVAL === 0 ||
-                time % BOUNTY_RUNE_SPAWN_INTERVAL === 0)
+            (time === WATER_RUNE_2_MIN || time === WATER_TUNE_4_MIN)
         ) {
-            return new Fact(effect, "resources/audio/rune-sound.mp3");
+            return new Fact(effect, "resources/audio/rune-water.mp3");
         }
     }
 );
