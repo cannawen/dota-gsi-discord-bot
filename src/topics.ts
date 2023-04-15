@@ -26,6 +26,11 @@ const gsi = {
     paused: new Topic<boolean>("paused"),
     // player
     gold: new Topic<number>("gold"),
+    // provider
+    timestamp: new PersistentTopic<number>("timestamp", {
+        persistAcrossGames: true,
+        persistAcrossRestarts: true,
+    }),
 };
 
 const effect = {

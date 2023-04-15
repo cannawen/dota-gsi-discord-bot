@@ -84,6 +84,7 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
                 items: data.state.items,
                 map: data.state.map,
                 player: data.state.player,
+                provider: data.state.provider,
             })
         )
     );
@@ -106,6 +107,7 @@ gsiParser.events.on(
                     items: data.state.items?.at(playerId) || null,
                     map: data.state.map,
                     player: data.state.player?.at(playerId) || null,
+                    provider: data.state.provider,
                 })
             )
         );

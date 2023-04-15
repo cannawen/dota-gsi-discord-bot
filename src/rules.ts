@@ -47,6 +47,7 @@ const gsi = {
     playerItems: "gsi/items->PlayerItems",
     map: "gsi/map",
     player: "gsi/player",
+    provider: "gsi/provider",
 };
 
 export default {
