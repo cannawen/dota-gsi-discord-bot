@@ -9,5 +9,6 @@ export default new Rule(rules.gsi.hero, [topics.allData], (get) => {
         new Fact(topics.alive, hero?.alive || false),
         new Fact(topics.buybackCost, hero?.buybackCost),
         new Fact(topics.buybackCooldown, hero?.buybackCooldown),
+        new Fact(topics.respawnSeconds, hero?.respawnSeconds),
     ];
 });

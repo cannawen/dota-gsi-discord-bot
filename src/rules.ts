@@ -14,6 +14,7 @@ const assistant = {
     neutralItemReminder: "neutral_item_reminder",
     newNeutralItems: "new_neutral_items",
     pause: "pause",
+    philosophersStone: "philosophersStone",
     roshan: {
         killedEvent: "roshan/killed_event/set_future_audio_state",
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
