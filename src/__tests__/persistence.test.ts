@@ -4,6 +4,13 @@ import fs from "fs";
 import sut from "../persistence";
 
 describe("persistence", () => {
+    test("deleteRestartData", () => {
+        sut.deleteRestartData();
+        expect(fs.unlinkSync).toHaveBeenCalledWith(
+            "test_PERSISTENCE_DATA_PATH/restartData.json"
+        );
+    });
+
     test("saveRestartData", () => {
         sut.saveRestartData("all data");
         expect(fs.writeFileSync).toHaveBeenCalledWith(
@@ -36,8 +43,7 @@ describe("persistence", () => {
                 result = sut.readRestartData();
             });
             test("should read file", () => {
-                const mockReadFile = fs.readFileSync as jest.Mock;
-                expect(mockReadFile).toHaveBeenCalledWith(
+                expect(fs.readFileSync).toHaveBeenCalledWith(
                     "test_PERSISTENCE_DATA_PATH/restartData.json",
                     "utf8"
                 );
@@ -46,12 +52,18 @@ describe("persistence", () => {
                 expect(result).toBe("hello world");
             });
             test("should delete file", () => {
-                const mockUnlink = fs.unlinkSync as jest.Mock;
-                expect(mockUnlink).toHaveBeenCalledWith(
+                expect(fs.unlinkSync).toHaveBeenCalledWith(
                     "test_PERSISTENCE_DATA_PATH/restartData.json"
                 );
             });
         });
+    });
+
+    test("deleteStudentData", () => {
+        sut.deleteStudentData("studentId");
+        expect(fs.unlinkSync).toHaveBeenCalledWith(
+            "test_PERSISTENCE_DATA_PATH/student/studentId.json"
+        );
     });
 
     describe("save student data", () => {
@@ -59,8 +71,7 @@ describe("persistence", () => {
             test("makes directory", () => {
                 (fs.existsSync as jest.Mock).mockReturnValue(false);
                 sut.saveStudentData("studentId", "data");
-                const mockMkdir = fs.mkdirSync as jest.Mock;
-                expect(mockMkdir).toHaveBeenCalledWith(
+                expect(fs.mkdirSync).toHaveBeenCalledWith(
                     "test_PERSISTENCE_DATA_PATH/student",
                     {
                         recursive: true,
@@ -72,8 +83,7 @@ describe("persistence", () => {
             test("does not makes directory", () => {
                 (fs.existsSync as jest.Mock).mockReturnValue(true);
                 sut.saveStudentData("studentId", "data");
-                const mockMkdir = fs.mkdirSync as jest.Mock;
-                expect(mockMkdir).not.toHaveBeenCalled();
+                expect(fs.mkdirSync).not.toHaveBeenCalled();
             });
         });
         test("writes to student file", () => {

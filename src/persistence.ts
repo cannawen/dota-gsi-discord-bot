@@ -20,11 +20,16 @@ function studentDataFilePath(studentId: string) {
     return path.join(studentDataDirectory(), `${studentId}.json`);
 }
 
+function deleteRestartData() {
+    fs.unlinkSync(restartDataFilePath());
+}
+
 function saveRestartData(data: string) {
     try {
         log.info("app", "Saving data %s", data);
         fs.writeFileSync(restartDataFilePath(), data);
     } catch (error) {
+        deleteRestartData();
         log.error("app", "Unable to write restart data %e", error);
     }
 }
@@ -39,8 +44,13 @@ function readRestartData() {
             return data;
         }
     } catch (error) {
+        deleteRestartData();
         log.error("app", "Unable to read restart data %e", error);
     }
+}
+
+function deleteStudentData(studentId: string) {
+    fs.unlinkSync(studentDataFilePath(studentId));
 }
 
 function saveStudentData(studentId: string, data: string) {
@@ -52,6 +62,7 @@ function saveStudentData(studentId: string, data: string) {
         }
         fs.writeFileSync(studentDataFilePath(studentId), data);
     } catch (error) {
+        deleteStudentData(studentId);
         log.error("app", "Unable to write student data %e", error);
     }
 }
@@ -63,14 +74,17 @@ function readStudentData(studentId: string) {
             return fs.readFileSync(studentFile, "utf8");
         }
     } catch (error) {
+        deleteStudentData(studentId);
         log.error("app", "Unable to read student data %e", error);
     }
 }
 
 export default {
+    deleteRestartData,
     saveRestartData,
     readRestartData,
 
+    deleteStudentData,
     saveStudentData,
     readStudentData,
 };
