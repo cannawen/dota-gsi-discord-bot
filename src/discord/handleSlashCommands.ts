@@ -2,22 +2,24 @@ import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
+import helper from "./discordHelpers";
 import log from "../log";
 import path from "path";
 import Voice = require("@discordjs/voice");
+import topics from "../topics";
 
-function hash(message: string) {
+function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
     if (key) {
         // eslint-disable-next-line new-cap
-        return CryptoJS.HmacSHA256(message, key).toString();
+        return CryptoJS.HmacSHA256(interaction.user.id, key).toString();
     } else {
         log.error(
             "discord",
             "Unable to find %s environment variable, so continuing without hashing. Check your .env file",
             "STUDENT_ID_HASH_PRIVATE_KEY"
         );
-        return message;
+        return interaction.user.id;
     }
 }
 
@@ -43,16 +45,15 @@ function generateConfigFile(userId: string) {
 
 function config(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: generateConfigFile(hash(interaction.user.id)),
+        content: generateConfigFile(studentId(interaction)),
         ephemeral: true,
     });
 }
 
 function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     if (interaction.channel?.isVoiceBased() && interaction.guildId) {
-        const studentId = hash(interaction.user.id);
         engine.startCoachingSession(
-            studentId,
+            studentId(interaction),
             interaction.guildId,
             interaction.channelId
         );
@@ -71,30 +72,42 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function stop(interaction: ChatInputCommandInteraction<CacheType>) {
-    interaction.reply({
-        content: "Ending...",
-        ephemeral: true,
-    });
     const guild = interaction.guild;
     if (guild) {
-        const connection = Voice.joinVoiceChannel({
-            adapterCreator: guild.voiceAdapterCreator,
-            channelId: interaction.channelId,
-            guildId: guild.id,
-        });
-        log.info(
-            "discord",
-            "Destroying voice connection in guild %s channel id %s",
-            guild.name,
+        const numberOFConnections = helper.numberOfPeopleConnected(
+            guild.id,
             interaction.channelId
         );
-        connection.destroy();
+        if (numberOFConnections === 0) {
+            const subscription = engine.getFactValue(
+                studentId(interaction),
+                topics.discordSubscriptionTopic
+            );
+            if (subscription) {
+                subscription.connection.destroy();
+            } else {
+                engine.deleteSession(studentId(interaction));
+            }
+            interaction.reply({
+                content: `Ending your coaching session...`,
+                ephemeral: true,
+            });
+        } else {
+            Voice.joinVoiceChannel({
+                adapterCreator: guild.voiceAdapterCreator,
+                channelId: interaction.channelId,
+                guildId: guild.id,
+            }).destroy();
+            interaction.reply({
+                content: `Ending coaching session in ${guild.name}...`,
+                ephemeral: true,
+            });
+        }
     } else {
-        log.error(
-            "discord",
-            "Unable to destroy voice connection for discord user %s; no guild from interaction",
-            interaction.user.id
-        );
+        interaction.reply({
+            content: `There was a problem ending coaching session; no guild found`,
+            ephemeral: true,
+        });
     }
 }
 

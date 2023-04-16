@@ -1,3 +1,4 @@
+/* eslint-disable sort-keys */
 const voice = {
     createAudioPlayer: jest.fn().mockReturnValue({ on: jest.fn() }),
     createAudioResource: jest.fn().mockReturnValue("AudioResource"),
