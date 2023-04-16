@@ -67,6 +67,8 @@ export class CustomEngine extends Engine {
             existingSession
                 .get(topics.discordSubscriptionTopic)
                 ?.connection.destroy();
+            // TODO I think there is a bug here where we destroy voice connection async
+            // So we will delete the session we just made async and the student will have no session
         }
 
         // Create new db for student
