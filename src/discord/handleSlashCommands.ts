@@ -85,8 +85,14 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
             );
             if (subscription) {
                 subscription.connection.destroy();
-            } else {
+            } else if (engine.getSession(studentId(interaction))) {
                 engine.deleteSession(studentId(interaction));
+            } else {
+                interaction.reply({
+                    content: `You are not currently in a coaching session.`,
+                    ephemeral: true,
+                });
+                return;
             }
             interaction.reply({
                 content: `Ending your coaching session...`,
