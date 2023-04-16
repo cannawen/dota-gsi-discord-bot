@@ -181,21 +181,21 @@ describe("server", () => {
                 });
             });
 
-            describe("config updated", () => {
+            describe("config updated and should update front end", () => {
                 test("true", (done) => {
                     (engine.getFactValue as jest.Mock).mockImplementation(
                         (studentId: string, topic: Topic<unknown>) => {
-                            if (topic.label === "configUpdated") {
+                            if (topic.label === "updateFrontend") {
                                 return true;
                             }
                         }
                     );
-                    req.expect(JSON.stringify({ configUpdated: true }), done);
+                    req.expect(JSON.stringify({ updateFrontend: true }), done);
                 });
                 test("false", (done) => {
                     (engine.getFactValue as jest.Mock).mockImplementation(
                         (studentId: string, topic: Topic<unknown>) => {
-                            if (topic.label === "configUpdated") {
+                            if (topic.label === "updateFrontend") {
                                 return false;
                             }
                         }

@@ -38,6 +38,6 @@ describe("discordEnabled", () => {
             discordGuildChannelId: "channelId",
             discordGuildId: "guildId",
         });
-        expect(result).toContainFact("configUpdated", true);
+        expect(result).toContainFact("updateFrontend", true);
     });
 });

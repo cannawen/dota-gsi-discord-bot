@@ -83,7 +83,7 @@ const allTopics = {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
-    configUpdated: new Topic<boolean>("configUpdated"),
+    updateFrontend: new Topic<boolean>("updateFrontend"),
     ...effect,
     ...gsi,
     ...discord,

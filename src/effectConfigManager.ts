@@ -29,7 +29,7 @@ function registerEffectConfigRule(
         new Rule(
             `${ruleName}_effect_config`,
             [topic],
-            (_) => new Fact(topics.configUpdated, true)
+            (_) => new Fact(topics.updateFrontend, true)
         )
     );
 }

@@ -80,10 +80,10 @@ function getNextAudio(studentId: string) {
     }
 }
 
-function configUpdated(studentId: string) {
-    const updated = engine.getFactValue(studentId, topics.configUpdated);
+function updateFrontend(studentId: string) {
+    const updated = engine.getFactValue(studentId, topics.updateFrontend);
     if (updated) {
-        engine.setFact(studentId, new Fact(topics.configUpdated, undefined));
+        engine.setFact(studentId, new Fact(topics.updateFrontend, undefined));
     }
     return updated;
 }
@@ -94,8 +94,8 @@ router.get("/coach/:studentId/poll", (req, res) => {
     if (nextAudio) {
         log.info("effect", "Playing private audio %s", nextAudio.magenta);
         res.status(200).json({ nextAudio: nextAudio });
-    } else if (configUpdated(studentId)) {
-        res.status(200).json({ configUpdated: true });
+    } else if (updateFrontend(studentId)) {
+        res.status(200).json({ updateFrontend: true });
     } else {
         res.status(200).json(null);
     }

@@ -14,7 +14,7 @@
                                 );
                                 f.addEventListener("ended", resolve);
                                 f.play();
-                            } else if (res.configUpdated) {
+                            } else if (res.updateFrontend) {
                                 getConfig();
                                 resolve();
                             } else {

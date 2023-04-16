@@ -17,7 +17,7 @@ export default new Rule(
                 topics.discordAudioEnabled,
                 helper.numberOfPeopleConnected(guildId, channelId) === 1
             ),
-            new Fact(topics.configUpdated, true),
+            new Fact(topics.updateFrontend, true),
         ];
     }
 );
