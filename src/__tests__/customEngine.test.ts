@@ -12,6 +12,7 @@ import Fact from "../engine/Fact";
 import persistence from "../persistence";
 import PersistentTopic from "../engine/PersistentTopic";
 import Topic from "../engine/Topic";
+import topicManager from "../engine/topicManager";
 
 describe("customEngine", () => {
     let sut: CustomEngine;
@@ -60,10 +61,12 @@ describe("customEngine", () => {
             });
 
             describe("has saved configs", () => {
-                test("should use saved config", () => {
+                beforeEach(() => {
                     (persistence.readStudentData as jest.Mock).mockReturnValue(
                         JSON.stringify(factsToPlainObject(configFacts))
                     );
+                });
+                test("should use saved config", () => {
                     sut.startCoachingSession(
                         "studentId",
                         "guildId",
@@ -76,6 +79,26 @@ describe("customEngine", () => {
                     expect(sut.getFactValue("studentId", topicTwo)).toBe(
                         "PUBLIC"
                     );
+                });
+                describe("saved configs throws error", () => {
+                    test("should delete saved configs and use defualt config", () => {
+                        (
+                            topicManager.findTopic as jest.Mock
+                        ).mockImplementation(() => {
+                            throw new Error();
+                        });
+                        sut.startCoachingSession(
+                            "studentId",
+                            "guildId",
+                            "channelId"
+                        );
+                        expect(
+                            persistence.deleteStudentData
+                        ).toHaveBeenCalledWith("studentId");
+                        expect(
+                            effectConfig.defaultConfigs
+                        ).toHaveBeenCalledTimes(1);
+                    });
                 });
             });
         });

@@ -12,6 +12,17 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
+function savedData(studentId: string) {
+    const savedPersistenceString = persistence.readStudentData(studentId);
+    if (savedPersistenceString) {
+        try {
+            return plainObjectToFacts(JSON.parse(savedPersistenceString));
+        } catch (error) {
+            persistence.deleteStudentData(studentId);
+        }
+    }
+}
+
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
@@ -57,24 +68,25 @@ export class CustomEngine extends Engine {
                 .get(topics.discordSubscriptionTopic)
                 ?.connection.destroy();
         }
+
+        // Create new db for student
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
 
-        const savedPersistenceString = persistence.readStudentData(studentId);
+        // Check to see if we have saved data
+        const data = savedData(studentId);
 
-        if (savedPersistenceString) {
-            // User has started this app before; use saved values
-            plainObjectToFacts(JSON.parse(savedPersistenceString)).forEach(
-                (fact) => this.set(db, fact)
-            );
+        // Set configuration from saved data or use default configs
+        if (data) {
+            data.map((fact) => this.set(db, fact));
         } else {
-            // User has not used the app before; set default values
             effectConfig.defaultConfigs().map((fact) => this.set(db, fact));
         }
 
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
 
+        // Set guild or channel id if provided
         if (guildId) {
             this.set(db, new Fact(topics.discordGuildId, guildId));
         }

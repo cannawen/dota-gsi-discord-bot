@@ -140,13 +140,16 @@ discordClient.start().then(() => {
     const data = JSON.parse(dataString) as {
         [key: string]: { [key: string]: unknown };
     };
-
-    Object.entries(data).forEach(([studentId, studentData]) => {
-        engine.startCoachingSession(studentId);
-        plainObjectToFacts(studentData).map((fact) =>
-            engine.setFact(studentId, fact)
-        );
-    });
+    try {
+        Object.entries(data).forEach(([studentId, studentData]) => {
+            engine.startCoachingSession(studentId);
+            plainObjectToFacts(studentData).map((fact) =>
+                engine.setFact(studentId, fact)
+            );
+        });
+    } catch (error) {
+        persistence.deleteRestartData();
+    }
 });
 
 // SHUTDOWN CODE

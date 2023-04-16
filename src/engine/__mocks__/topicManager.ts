@@ -24,10 +24,12 @@ const topicMap = new Map<string, Topic<unknown>>(
 
 const manager = {
     getConfigTopics: jest.fn(),
-    findTopic: (label: string) => topicMap.get(label),
-    registerTopic: (topic: Topic<unknown>) => {
+    findTopic: jest
+        .fn()
+        .mockImplementation((label: string) => topicMap.get(label)),
+    registerTopic: jest.fn().mockImplementation((topic: Topic<unknown>) => {
         topicMap.set(topic.label, topic);
-    },
+    }),
 };
 
 export default manager;
