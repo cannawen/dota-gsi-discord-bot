@@ -1,3 +1,4 @@
+/* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
 import client from "../discordClient";
 import colors from "@colors/colors";
@@ -18,6 +19,22 @@ export default new Rule(
         const guildId = get(topics.discordGuildId)!;
         const channelId = get(topics.discordGuildChannelId)!;
         const studentId = get(topics.studentId)!;
+
+        if (guildId === null || channelId === null) {
+            log.info("discord", "No guild or channel id provided");
+            const currentSubscription = engine.getFactValue(
+                studentId,
+                topics.discordSubscriptionTopic
+            );
+            if (currentSubscription) {
+                log.info("discord", "Destroying existing subscription");
+                currentSubscription.connection.destroy();
+                engine.setFact(
+                    studentId,
+                    new Fact(topics.discordSubscriptionTopic, undefined)
+                );
+            }
+        }
 
         const channel = client.findChannel(guildId, channelId);
         if (!channel) {
@@ -56,6 +73,7 @@ export default new Rule(
                     );
                     break;
                 case Voice.VoiceConnectionStatus.Disconnected:
+                    // This is a bit weird we are only rteurning the promise here for our tests
                     return Promise.race([
                         Voice.entersState(
                             connection,
@@ -84,14 +102,6 @@ export default new Rule(
                                 studentId,
                                 new Fact(topics.discordGuildChannelId, null)
                             );
-                            engine.setFact(
-                                studentId,
-                                new Fact(
-                                    topics.discordSubscriptionTopic,
-                                    undefined
-                                )
-                            );
-                            connection.destroy();
                         });
                 default:
                     break;
