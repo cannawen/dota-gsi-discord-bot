@@ -48,11 +48,11 @@ const effect = {
 };
 
 const discord = {
-    discordGuildId: new PersistentTopic<string>("discordGuildId", {
+    discordGuildId: new PersistentTopic<string | null>("discordGuildId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
-    discordGuildChannelId: new PersistentTopic<string>(
+    discordGuildChannelId: new PersistentTopic<string | null>(
         "discordGuildChannelId",
         {
             persistAcrossGames: true,

@@ -62,11 +62,9 @@ export class CustomEngine extends Engine {
         guildId?: string,
         channelId?: string
     ) {
-        const existingSession = this.getSession(studentId);
-        if (existingSession) {
-            existingSession
-                .get(topics.discordSubscriptionTopic)
-                ?.connection.destroy();
+        // TODO there may be something better than straight up deleting and re-creating the entire session
+        if (this.sessions.get(studentId)) {
+            this.deleteSession(studentId);
         }
 
         // Create new db for student
@@ -86,13 +84,11 @@ export class CustomEngine extends Engine {
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
 
-        // Set guild or channel id if provided
-        if (guildId) {
-            this.set(db, new Fact(topics.discordGuildId, guildId));
-        }
-        if (channelId) {
-            this.set(db, new Fact(topics.discordGuildChannelId, channelId));
-        }
+        // Set guild or channel id
+        // or null if not provided so we explicitly propogate the null information downstream
+        // to set the discordEnabled state
+        this.set(db, new Fact(topics.discordGuildId, guildId || null));
+        this.set(db, new Fact(topics.discordGuildChannelId, channelId || null));
     }
 
     public deleteSession(studentId: string) {

@@ -28,7 +28,31 @@ describe("customEngine", () => {
                 PersistentFactStore
             );
         });
+    });
 
+    describe("startCoachingSession", () => {
+        describe("has discord guild and channel id", () => {
+            test("saves guild and channel facts to db", () => {
+                sut.startCoachingSession("studentId", "guildId", "channelId");
+                expect(
+                    sut.getFactValue("studentId", topics.discordGuildId)
+                ).toBe("guildId");
+                expect(
+                    sut.getFactValue("studentId", topics.discordGuildChannelId)
+                ).toBe("channelId");
+            });
+        });
+        describe("missing discord guild or channel id", () => {
+            test("saves fact that discord ids are null", () => {
+                sut.startCoachingSession("studentId");
+                expect(
+                    sut.getFactValue("studentId", topics.discordGuildId)
+                ).toBe(null);
+                expect(
+                    sut.getFactValue("studentId", topics.discordGuildChannelId)
+                ).toBe(null);
+            });
+        });
         describe("sets up configurations", () => {
             let configFacts: Fact<EffectConfig>[];
             let topicOne: Topic<EffectConfig>;
@@ -41,7 +65,6 @@ describe("customEngine", () => {
                     new Fact(topicTwo, EffectConfig.PUBLIC),
                 ];
             });
-
             describe("no saved configs", () => {
                 test("should use default configs", () => {
                     (effectConfig.defaultConfigs as jest.Mock).mockReturnValue(
@@ -60,7 +83,6 @@ describe("customEngine", () => {
                     );
                 });
             });
-
             describe("has saved configs", () => {
                 beforeEach(() => {
                     (persistence.readStudentData as jest.Mock).mockReturnValue(
@@ -73,7 +95,6 @@ describe("customEngine", () => {
                         "guildId",
                         "channelId"
                     );
-
                     expect(sut.getFactValue("studentId", topicOne)).toBe(
                         "PRIVATE"
                     );

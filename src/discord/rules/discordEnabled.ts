@@ -7,16 +7,20 @@ export default new Rule(
     "discord/enabled",
     [topics.discordGuildId, topics.discordGuildChannelId],
     (get) => {
-        const guildId = get(topics.discordGuildId)!;
-        const channelId = get(topics.discordGuildChannelId)!;
+        const guildId = get(topics.discordGuildId);
+        const channelId = get(topics.discordGuildChannelId);
 
-        // If we are the only person connected to guild and channel, enable discord.
-        // Update the front end when we change discord enabledness
+        let enabled: boolean;
+
+        if (guildId && channelId) {
+            // If we are the only person connected to guild and channel, enable discord.
+            enabled = helper.numberOfPeopleConnected(guildId, channelId) === 1;
+        } else {
+            enabled = false;
+        }
+
         return [
-            new Fact(
-                topics.discordAudioEnabled,
-                helper.numberOfPeopleConnected(guildId, channelId) === 1
-            ),
+            new Fact(topics.discordAudioEnabled, enabled),
             new Fact(topics.updateFrontend, true),
         ];
     }

@@ -2,10 +2,8 @@ import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
-import helper from "./discordHelpers";
 import log from "../log";
 import path from "path";
-import Voice = require("@discordjs/voice");
 
 function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
@@ -70,7 +68,7 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         );
     } else {
         engine.startCoachingSession(studentId(interaction));
-        message = `${message}\n\nWARNING: You will not be receiving public discord announcements because you did not start the coaching session in a voice based guild channel. Please type /stop and /coachme in the proper channel if you wish to recieve public discord announcements`;
+        message = `${message}\n\nWARNING: You will not be receiving public discord announcements because you did not start the coaching session in a voice based guild channel. Please type /coachme in a voice channel chat if you wish to recieve public discord announcements`;
     }
     interaction.reply({
         content: message,
@@ -95,7 +93,7 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
 
 function help(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: `Version ${process.env.GIT_REVISION}. See ${process.env.SERVER_URL}/instructions for setup instructions`,
+        content: `Currently running version ${process.env.GIT_REVISION}. See ${process.env.SERVER_URL}/instructions for setup instructions`,
         ephemeral: true,
     });
 }

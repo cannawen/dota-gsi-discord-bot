@@ -6,6 +6,22 @@ import helpers from "../../discordHelpers";
 import rule from "../discordEnabled";
 
 describe("discordEnabled", () => {
+    test("we do not have a guildId, disable audio", () => {
+        (helpers.numberOfPeopleConnected as jest.Mock).mockReturnValue(1);
+        const result = getResults(rule, {
+            guildId: null,
+            channelId: "channelId",
+        });
+        expect(result).toContainFact("discordAudioEnabled", false);
+    });
+    test("we do not have a channelId, disable audio", () => {
+        (helpers.numberOfPeopleConnected as jest.Mock).mockReturnValue(1);
+        const result = getResults(rule, {
+            guildId: "channelId",
+            channelId: null,
+        });
+        expect(result).toContainFact("discordAudioEnabled", false);
+    });
     test("we are the only ones connected to guild+channel", () => {
         (helpers.numberOfPeopleConnected as jest.Mock).mockReturnValue(1);
         const result = getResults(rule, {
