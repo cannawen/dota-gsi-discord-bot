@@ -22,37 +22,74 @@ describe("handleSlashCommands", () => {
     beforeEach(() => {
         mockReply = jest.fn();
         interaction = {
-            channel: {
-                isVoiceBased: () => true,
-            },
             channelId: "channelId",
             guild: {
                 id: "guildId",
                 voiceAdapterCreator: "voiceAdapterCreator",
             },
-            guildId: "guildId",
             user: { id: "userId" },
             reply: mockReply,
         };
     });
 
     describe("coachMe", () => {
-        beforeEach(() => {
-            handle.coachMe(interaction);
-        });
-        test("replies ephemerally", () => {
-            expect(mockReply).toHaveBeenCalledWith({
-                content: expect.stringContaining("Starting..."),
-                ephemeral: true,
+        describe("does not currently have a coaching session", () => {
+            beforeEach(() => {
+                (engine.getSession as jest.Mock).mockReturnValue(undefined);
+            });
+            describe("bot is started in a voice based channel with a guildId", () => {
+                beforeEach(() => {
+                    handle.coachMe({
+                        ...interaction,
+                        channel: {
+                            isVoiceBased: () => true,
+                        },
+                        guildId: "guildId",
+                    });
+                });
+                test("replies affirmation ephemerally", () => {
+                    expect(mockReply).toHaveBeenCalledWith({
+                        content: expect.stringContaining("Starting..."),
+                        ephemeral: true,
+                    });
+                });
+                test("calls engine.startCoachingSession with the proper params", () => {
+                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
+                        STUDENT_ID,
+                        "guildId",
+                        "channelId"
+                    );
+                });
+            });
+            describe("bot is started in a non voice-based channel or without a guild id", () => {
+                beforeEach(() => {
+                    handle.coachMe(interaction);
+                });
+                test("replies affirmation ephemerally", () => {
+                    expect(mockReply).toHaveBeenCalledWith({
+                        content: expect.stringContaining("WARNING"),
+                        ephemeral: true,
+                    });
+                });
+                test("calls engine.startCoachingSession with the proper params", () => {
+                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
+                        STUDENT_ID
+                    );
+                });
             });
         });
-
-        test("calls engine.startCoachingSession with the proper params", () => {
-            expect(engine.startCoachingSession).toHaveBeenCalledWith(
-                STUDENT_ID,
-                "guildId",
-                "channelId"
-            );
+        describe("has a coaching session", () => {
+            beforeEach(() => {
+                (engine.getSession as jest.Mock).mockReturnValue(jest.fn());
+                handle.coachMe(interaction);
+            });
+            test("replies with error ephemerally", () => {
+                expect(mockReply).toHaveBeenCalledWith({
+                    content:
+                        "You already have a coaching session. Use /stop to end your current session before starting a new one",
+                    ephemeral: true,
+                });
+            });
         });
     });
 

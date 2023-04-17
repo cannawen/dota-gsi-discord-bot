@@ -51,24 +51,32 @@ function config(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
+    if (engine.getSession(studentId(interaction))) {
+        interaction.reply({
+            content:
+                "You already have a coaching session. Use /stop to end your current session before starting a new one",
+            ephemeral: true,
+        });
+        return;
+    }
+    const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
+        interaction
+    )}/`;
+    let message = `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`;
     if (interaction.channel?.isVoiceBased() && interaction.guildId) {
         engine.startCoachingSession(
             studentId(interaction),
             interaction.guildId,
             interaction.channelId
         );
-        const privateUrl = `${process.env.SERVER_URL}/coach/${studentId}/`;
-        interaction.reply({
-            content: `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`,
-            ephemeral: true,
-        });
     } else {
-        interaction.reply({
-            content:
-                "Bot must be started in voice-based channel. Click 'Open Chat' beside a voice channel and try /coachme again",
-            ephemeral: true,
-        });
+        engine.startCoachingSession(studentId(interaction));
+        message = `${message}\n\nWARNING: You will not be receiving public discord announcements because you did not start the coaching session in a voice based guild channel. Please type /stop and /coachme in the proper channel if you wish to recieve public discord announcements`;
     }
+    interaction.reply({
+        content: message,
+        ephemeral: true,
+    });
 }
 
 function stop(interaction: ChatInputCommandInteraction<CacheType>) {
