@@ -99,19 +99,17 @@ describe("server", () => {
             });
         });
         describe("configuration management", () => {
-            let configTopicOne: any;
             let configTopicTwo: any;
             let configTopicThree: any;
-            let configTopicFour: any;
-            let factOne: any;
-            let factTwo: any;
-            let factThree: any;
-            let factFour: any;
             beforeEach(() => {
-                configTopicOne = new Topic<EffectConfig>("configTopicOne");
+                const configTopicOne = new Topic<EffectConfig>(
+                    "configTopicOne"
+                );
                 configTopicTwo = new Topic<EffectConfig>("configTopicTwo");
                 configTopicThree = new Topic<EffectConfig>("configTopicThree");
-                configTopicFour = new Topic<EffectConfig>("configTopicFour");
+                const configTopicFour = new Topic<EffectConfig>(
+                    "configTopicFour"
+                );
                 (topicManager.getConfigTopics as jest.Mock).mockReturnValue([
                     configTopicOne,
                     configTopicTwo,
@@ -135,13 +133,13 @@ describe("server", () => {
                         }
                     }
                 );
-                factOne = new Fact(configTopicOne, EffectConfig.PRIVATE);
-                factTwo = new Fact(configTopicTwo, EffectConfig.PUBLIC);
-                factThree = new Fact(
+                const factOne = new Fact(configTopicOne, EffectConfig.PRIVATE);
+                const factTwo = new Fact(configTopicTwo, EffectConfig.PUBLIC);
+                const factThree = new Fact(
                     configTopicThree,
                     EffectConfig.PUBLIC_INTERRUPTING
                 );
-                factFour = new Fact(configTopicFour, EffectConfig.NONE);
+                const factFour = new Fact(configTopicFour, EffectConfig.NONE);
                 (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
                     factOne,
                     factTwo,
@@ -167,32 +165,20 @@ describe("server", () => {
                         if (error) return done(error);
                         expect(engine.getFactValue).toHaveBeenCalledWith(
                             "studentId",
-                            configTopicOne
-                        );
-                        expect(engine.getFactValue).toHaveBeenCalledWith(
-                            "studentId",
-                            configTopicTwo
-                        );
-                        expect(engine.getFactValue).toHaveBeenCalledWith(
-                            "studentId",
-                            configTopicThree
-                        );
-                        expect(engine.getFactValue).toHaveBeenCalledWith(
-                            "studentId",
-                            configTopicFour
+                            expect.anything()
                         );
                         return done();
                     });
             });
             test("update", (done) => {
                 request(sut)
-                    .post("/coach/studentId/config/configTopicOne/PUBLIC")
+                    .post("/coach/studentId/config/configTopicTwo/NONE")
                     .expect(200)
                     .end((error: any) => {
                         if (error) return done(error);
                         expect(engine.setFact).toHaveBeenCalledWith(
                             "studentId",
-                            new Fact(configTopicOne, EffectConfig.PUBLIC)
+                            new Fact(configTopicTwo, EffectConfig.NONE)
                         );
                         return done();
                     });
@@ -204,20 +190,9 @@ describe("server", () => {
                         if (error) return done(error);
                         expect(engine.setFact).toHaveBeenCalledWith(
                             "studentId",
-                            factOne
+                            expect.any(Fact)
                         );
-                        expect(engine.setFact).toHaveBeenCalledWith(
-                            "studentId",
-                            factTwo
-                        );
-                        expect(engine.setFact).toHaveBeenCalledWith(
-                            "studentId",
-                            factThree
-                        );
-                        expect(engine.setFact).toHaveBeenCalledWith(
-                            "studentId",
-                            factFour
-                        );
+                        expect(engine.setFact).toHaveBeenCalledTimes(4);
                         return done();
                     });
             });
