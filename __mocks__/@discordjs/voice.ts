@@ -2,6 +2,7 @@
 const voice = {
     createAudioPlayer: jest.fn().mockReturnValue({ on: jest.fn() }),
     createAudioResource: jest.fn().mockReturnValue("AudioResource"),
+    entersState: jest.fn(),
     joinVoiceChannel: jest.fn().mockReturnValue({
         destroy: jest.fn(),
         on: jest.fn(),

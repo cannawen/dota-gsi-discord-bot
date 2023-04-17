@@ -64,8 +64,9 @@ describe("startVoiceSubscription", () => {
                 );
             });
 
-            test("on disconnected, mark guild and channel id as null and destroy connection", () => {
-                stateChangeFn(
+            test("on disconnected, mark guild and channel id as null and destroy connection", async () => {
+                (Voice.entersState as jest.Mock).mockRejectedValue("error");
+                await stateChangeFn(
                     { status: Voice.VoiceConnectionStatus.Ready },
                     { status: Voice.VoiceConnectionStatus.Disconnected }
                 );
@@ -76,6 +77,10 @@ describe("startVoiceSubscription", () => {
                 expect(engine.setFact).toHaveBeenCalledWith(
                     "studentId",
                     new Fact(topics.discordGuildChannelId, null)
+                );
+                expect(engine.setFact).toHaveBeenCalledWith(
+                    "studentId",
+                    new Fact(topics.discordSubscriptionTopic, undefined)
                 );
                 expect(voiceConnection.destroy).toHaveBeenCalledWith();
             });

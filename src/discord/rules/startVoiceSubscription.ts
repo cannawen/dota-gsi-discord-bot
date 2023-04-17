@@ -48,20 +48,54 @@ export default new Rule(
                 studentId
             );
 
-            const facts: Fact<unknown>[] = [];
             switch (newState.status) {
                 case Voice.VoiceConnectionStatus.Ready:
-                    facts.push(new Fact(topics.discordReadyToPlayAudio, true));
+                    engine.setFact(
+                        studentId,
+                        new Fact(topics.discordReadyToPlayAudio, true)
+                    );
                     break;
                 case Voice.VoiceConnectionStatus.Disconnected:
-                    facts.push(new Fact(topics.discordGuildId, null));
-                    facts.push(new Fact(topics.discordGuildChannelId, null));
-                    connection.destroy();
-                    break;
+                    return Promise.race([
+                        Voice.entersState(
+                            connection,
+                            Voice.VoiceConnectionStatus.Signalling,
+                            5000
+                        ),
+                        Voice.entersState(
+                            connection,
+                            Voice.VoiceConnectionStatus.Connecting,
+                            5000
+                        ),
+                    ])
+                        .then(() => {
+                            // Seems to be reconnecting to a new channel
+                            // Need to figure out how to find the guild and channel id from here
+                            // So we can update our db with new channel id
+                            // The voice subscription is automagically updated.
+                        })
+                        .catch((reason) => {
+                            // Seems to be a real disconnect which SHOULDN'T be recovered from
+                            engine.setFact(
+                                studentId,
+                                new Fact(topics.discordGuildId, null)
+                            );
+                            engine.setFact(
+                                studentId,
+                                new Fact(topics.discordGuildChannelId, null)
+                            );
+                            engine.setFact(
+                                studentId,
+                                new Fact(
+                                    topics.discordSubscriptionTopic,
+                                    undefined
+                                )
+                            );
+                            connection.destroy();
+                        });
                 default:
                     break;
             }
-            facts.forEach((fact) => engine.setFact(studentId, fact));
         });
 
         const player = Voice.createAudioPlayer();
