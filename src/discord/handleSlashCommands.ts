@@ -79,41 +79,15 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function stop(interaction: ChatInputCommandInteraction<CacheType>) {
-    const guild = interaction.guild;
-    if (guild) {
-        const numberOFConnections = helper.numberOfPeopleConnected(
-            guild.id,
-            interaction.channelId
-        );
-        if (numberOFConnections === 0) {
-            if (engine.getSession(studentId(interaction))) {
-                engine.deleteSession(studentId(interaction));
-                interaction.reply({
-                    content: `Ending your coaching session...`,
-                    ephemeral: true,
-                });
-            } else {
-                interaction.reply({
-                    content: `You are not currently in a coaching session.`,
-                    ephemeral: true,
-                });
-            }
-        } else {
-            Voice.joinVoiceChannel({
-                adapterCreator: guild.voiceAdapterCreator,
-                channelId: interaction.channelId,
-                guildId: guild.id,
-            }).destroy();
-            // TODO Find all people with guild and channel and destroy
-            interaction.reply({
-                content: `Ending coaching session in ${guild.name}...`,
-                ephemeral: true,
-            });
-        }
-    } else {
+    if (engine.getSession(studentId(interaction))) {
         engine.deleteSession(studentId(interaction));
         interaction.reply({
             content: `Ending your coaching session...`,
+            ephemeral: true,
+        });
+    } else {
+        interaction.reply({
+            content: `You are not currently in a coaching session.`,
             ephemeral: true,
         });
     }
