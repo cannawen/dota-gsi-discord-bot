@@ -11,7 +11,7 @@
         "format": "npx prettier --write .",
         "start": "node build/index.js",
         "start:dev": "npx nodemon",
-        "test": "jest",
+        "test": "jest --detectOpenHandles",
         "test:dev": "jest --watchAll",
         "dig-canna": "mitmdump -nC mitmproxy-flows/die-respawn-dig_canna",
         "dig-canna-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/die-respawn-dig_canna",

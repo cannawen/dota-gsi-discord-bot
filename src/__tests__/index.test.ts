@@ -2,6 +2,7 @@ jest.mock("node-gsi");
 jest.mock("../customEngine");
 jest.mock("../discord/discordClient");
 jest.mock("../server");
+jest.mock("../log");
 import engine from "../customEngine";
 
 import { registerEverything } from "../index";

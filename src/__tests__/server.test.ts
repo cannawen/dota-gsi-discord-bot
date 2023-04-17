@@ -35,8 +35,8 @@ describe("server", () => {
             beforeEach(() => {
                 req = request(sut).post("/coach/studentId/start");
             });
-            test("should return 200", () => {
-                req.expect(200);
+            test("should return 200", (done) => {
+                req.expect(200, done);
             });
             test("has existing session", (done) => {
                 (engine.getSession as jest.Mock).mockReturnValue(jest.fn());
