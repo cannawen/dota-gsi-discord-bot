@@ -42,7 +42,7 @@ export default new RuleConfigurable(
         }
         if (time >= lastReminderTime + REMINDER_INTERVAL) {
             return [
-                new Fact(effect, "resources/audio/midas.mp3"),
+                new Fact(effect, "resources/audio/midas.mpeg"),
                 new Fact(lastReminderTimeTopic, time),
             ];
         }

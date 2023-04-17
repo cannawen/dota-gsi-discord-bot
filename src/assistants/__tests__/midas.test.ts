@@ -66,7 +66,7 @@ describe("midas assistant", () => {
                     ) as any;
                     expect(fifteenSecondsAfterState).toContainFact(
                         "playPrivateAudioFile",
-                        "resources/audio/midas.mp3"
+                        "resources/audio/midas.mpeg"
                     );
                     const thirtySecondsAfterState = getResults(
                         rule,
@@ -80,7 +80,7 @@ describe("midas assistant", () => {
                     ) as any;
                     expect(thirtySecondsAfterState).toContainFact(
                         "playPrivateAudioFile",
-                        "resources/audio/midas.mp3"
+                        "resources/audio/midas.mpeg"
                     );
                     const thirtyOneSeconsAfterState = getResults(
                         rule,
