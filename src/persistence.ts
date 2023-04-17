@@ -21,7 +21,9 @@ function studentDataFilePath(studentId: string) {
 }
 
 function deleteRestartData() {
-    fs.unlinkSync(restartDataFilePath());
+    try {
+        fs.unlinkSync(restartDataFilePath());
+    } catch (_) {}
 }
 
 function saveRestartData(data: string) {
@@ -50,7 +52,9 @@ function readRestartData() {
 }
 
 function deleteStudentData(studentId: string) {
-    fs.unlinkSync(studentDataFilePath(studentId));
+    try {
+        fs.unlinkSync(studentDataFilePath(studentId));
+    } catch (_) {}
 }
 
 function saveStudentData(studentId: string, data: string) {
