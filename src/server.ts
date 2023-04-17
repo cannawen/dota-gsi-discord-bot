@@ -34,6 +34,18 @@ router.get("/coach/:studentId/", (req, res) => {
     );
 });
 
+router.post("/coach/:studentId/start", (req, res) => {
+    if (engine.getSession(req.params.studentId) === undefined) {
+        engine.startCoachingSession(req.params.studentId);
+    }
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/stop", (req, res) => {
+    engine.deleteSession(req.params.studentId);
+    res.status(200).send();
+});
+
 router.get("/coach/:studentId/discord-audio-enabled", (req, res) => {
     res.status(200).json(
         engine.getFactValue(req.params.studentId, topics.discordAudioEnabled) ||

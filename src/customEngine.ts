@@ -62,6 +62,7 @@ export class CustomEngine extends Engine {
         guildId?: string,
         channelId?: string
     ) {
+        log.info("app", "Start coaching student %s", studentId);
         // TODO there may be something better than straight up deleting and re-creating the entire session
         if (this.sessions.get(studentId)) {
             this.deleteSession(studentId);
@@ -94,6 +95,7 @@ export class CustomEngine extends Engine {
     public deleteSession(studentId: string) {
         const db = this.sessions.get(studentId);
         if (db) {
+            log.info("app", "Deleting session for student %s", studentId);
             db.get(topics.discordSubscriptionTopic)?.connection.destroy();
             const facts = factsToPlainObject(db.getPersistentForeverFacts());
 
@@ -105,7 +107,6 @@ export class CustomEngine extends Engine {
             );
 
             persistence.saveStudentData(studentId, JSON.stringify(facts));
-            log.info("rules", "Deleting database for student %s", studentId);
             this.sessions.delete(studentId);
         }
     }

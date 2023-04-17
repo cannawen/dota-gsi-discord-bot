@@ -31,7 +31,6 @@
             function loop() {
                 try {
                     fetchAndPlay().then(() => {
-                        console.log("x");
                         timeoutId = setTimeout(loop, 500);
                     });
                 } catch (error) {
@@ -40,13 +39,14 @@
             }
 
             function startCoaching() {
+                fetch(`./start`, { method: "POST" });
                 document.getElementById("startCoaching").style.display = "none";
                 document.getElementById("coaching").style.display = "block";
                 loop();
             }
 
             function stopCoaching() {
-                console.log("Stop coaching");
+                fetch(`./stop`, { method: "POST" });
                 document.getElementById("startCoaching").style.display =
                     "block";
                 document.getElementById("coaching").style.display = "none";
@@ -103,7 +103,7 @@
                         const explanation = [
                             "PRIVATE means playing only on this site",
                             "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
-                            "NONE means this rule is disabled</div>",
+                            "null or NONE means this rule is disabled</div>",
                             "<br/>",
                             "If you are not seeing any preferences, perhaps you have not started /coachme",
                         ].reduce((memo, text) => {

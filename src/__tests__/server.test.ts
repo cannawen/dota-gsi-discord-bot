@@ -30,7 +30,47 @@ describe("server", () => {
                 .expect("Content-Type", /html/)
                 .expect(200, done);
         });
+        describe("start coaching", () => {
+            let req: any;
+            beforeEach(() => {
+                req = request(sut).post("/coach/studentId/start");
+            });
+            test("should return 200", () => {
+                req.expect(200);
+            });
+            test("has existing session", (done) => {
+                (engine.getSession as jest.Mock).mockReturnValue(jest.fn());
 
+                req.end((error: any) => {
+                    if (error) return done(error);
+                    expect(engine.getSession).toHaveBeenCalledWith("studentId");
+                    expect(engine.startCoachingSession).not.toHaveBeenCalled();
+                    return done();
+                });
+            });
+            test("does not have existing session", (done) => {
+                (engine.getSession as jest.Mock).mockReturnValue(undefined);
+                req.end((error: any) => {
+                    if (error) return done(error);
+                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
+                        "studentId"
+                    );
+                    return done();
+                });
+            });
+        });
+        test("stop coaching notifies engine to delete student's session", (done) => {
+            request(sut)
+                .post("/coach/studentId/stop")
+                .expect(200)
+                .end((error: any) => {
+                    if (error) return done(error);
+                    expect(engine.deleteSession).toHaveBeenCalledWith(
+                        "studentId"
+                    );
+                    return done();
+                });
+        });
         describe("discordAudioEnabled", () => {
             let req: any;
             beforeEach(() => {
