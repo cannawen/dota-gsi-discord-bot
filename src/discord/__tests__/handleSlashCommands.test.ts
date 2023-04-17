@@ -125,28 +125,20 @@ describe("handleSlashCommands", () => {
         });
 
         describe("no coaching session in channel", () => {
-            describe("student has a voice subscription", () => {
-                let mockDestroyVoiceConnection: jest.Mock;
+            beforeEach(() => {
+                (helper.numberOfPeopleConnected as jest.Mock).mockReturnValue(
+                    0
+                );
+            });
+            describe("user has a coaching session", () => {
                 beforeEach(() => {
-                    mockDestroyVoiceConnection = jest.fn();
-                    (engine.getFactValue as jest.Mock).mockReturnValue({
-                        connection: {
-                            destroy: mockDestroyVoiceConnection,
-                        },
-                    });
-                    (
-                        helper.numberOfPeopleConnected as jest.Mock
-                    ).mockReturnValue(0);
+                    (engine.getSession as jest.Mock).mockReturnValue(jest.fn());
                     handle.stop(interaction);
                 });
-                test("gets proper fact from engine", () => {
-                    expect(engine.getFactValue).toHaveBeenCalledWith(
-                        STUDENT_ID,
-                        topics.discordSubscriptionTopic
+                test("should tell engine to delete session", () => {
+                    expect(engine.deleteSession).toHaveBeenCalledWith(
+                        STUDENT_ID
                     );
-                });
-                test("destroys the voice channel", () => {
-                    expect(mockDestroyVoiceConnection).toHaveBeenCalledTimes(1);
                 });
                 test("notifies user coaching session is ending", () => {
                     expect(mockReply).toHaveBeenCalledWith({
@@ -155,64 +147,29 @@ describe("handleSlashCommands", () => {
                     });
                 });
             });
-            describe("user does not have a voice subscription", () => {
+            describe("user does not have a coaching session", () => {
                 beforeEach(() => {
-                    (engine.getFactValue as jest.Mock).mockReturnValue(
-                        undefined
-                    );
-                    (
-                        helper.numberOfPeopleConnected as jest.Mock
-                    ).mockReturnValue(0);
+                    (engine.getSession as jest.Mock).mockReturnValue(undefined);
+                    handle.stop(interaction);
                 });
-                describe("user has a coaching session", () => {
-                    beforeEach(() => {
-                        (engine.getSession as jest.Mock).mockReturnValue(
-                            jest.fn()
-                        );
-                        handle.stop(interaction);
-                    });
-                    test("should directly tell engine to delete session", () => {
-                        expect(engine.deleteSession).toHaveBeenCalledWith(
-                            STUDENT_ID
-                        );
-                    });
-                    test("notifies user coaching session is ending", () => {
-                        expect(mockReply).toHaveBeenCalledWith({
-                            content: "Ending your coaching session...",
-                            ephemeral: true,
-                        });
-                    });
+                test("tries to find current user's coaching session", () => {
+                    expect(engine.getSession).toHaveBeenCalledWith(STUDENT_ID);
                 });
-                describe("user does not have a coaching session", () => {
-                    beforeEach(() => {
-                        (engine.getSession as jest.Mock).mockReturnValue(
-                            undefined
-                        );
-                        handle.stop(interaction);
-                    });
-                    test("tries to find current user's coaching session", () => {
-                        expect(engine.getSession).toHaveBeenCalledWith(
-                            STUDENT_ID
-                        );
-                    });
-                    test("notifies user they have no coaching session", () => {
-                        expect(mockReply).toHaveBeenCalledWith({
-                            content:
-                                "You are not currently in a coaching session.",
-                            ephemeral: true,
-                        });
+                test("notifies user they have no coaching session", () => {
+                    expect(mockReply).toHaveBeenCalledWith({
+                        content: "You are not currently in a coaching session.",
+                        ephemeral: true,
                     });
                 });
             });
         });
-        test("no guild id in interaction", () => {
+        test("no guild id in interaction, delete the user's current session", () => {
             handle.stop({ ...interaction, ...{ guild: undefined } });
             expect(mockReply).toHaveBeenCalledWith({
-                content: expect.stringContaining(
-                    "problem ending coaching session"
-                ),
+                content: "Ending your coaching session...",
                 ephemeral: true,
             });
+            expect(engine.deleteSession).toHaveBeenCalledWith(STUDENT_ID);
         });
     });
 

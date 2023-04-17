@@ -11,28 +11,29 @@ describe("discordHelpers", () => {
         let sessions: Map<string, FactStore>;
         beforeEach(() => {
             sessions = new Map();
-            const factStore = new FactStore();
-            factStore.set(new Fact(topics.discordGuildId, "guildId"));
-            factStore.set(new Fact(topics.discordGuildChannelId, "channelId"));
-            sessions.set("studentId", factStore);
+            const db1 = new FactStore();
+            db1.set(new Fact(topics.discordGuildId, "guildId"));
+            db1.set(new Fact(topics.discordGuildChannelId, "channelId"));
+            sessions.set("studentId", db1);
+
+            const db2 = new FactStore();
+            db2.set(new Fact(topics.discordGuildId, "different-guildId"));
+            db2.set(
+                new Fact(topics.discordGuildChannelId, "different-channelId")
+            );
+            sessions.set("random-person", db2);
+
             (engine.getSessions as jest.Mock).mockReturnValue(sessions);
         });
 
         test("Only one person connected to guildId, channelId", () => {
-            const factStore = new FactStore();
-            factStore.set(new Fact(topics.discordGuildId, "different-guildId"));
-            factStore.set(
-                new Fact(topics.discordGuildChannelId, "different-channelId")
-            );
-            sessions.set("someone-else", factStore);
-
             expect(sut.numberOfPeopleConnected("guildId", "channelId")).toBe(1);
         });
         test("Two people connected to guildId, channelId", () => {
-            const factStore = new FactStore();
-            factStore.set(new Fact(topics.discordGuildId, "guildId"));
-            factStore.set(new Fact(topics.discordGuildChannelId, "channelId"));
-            sessions.set("someone-else", factStore);
+            const db = new FactStore();
+            db.set(new Fact(topics.discordGuildId, "guildId"));
+            db.set(new Fact(topics.discordGuildChannelId, "channelId"));
+            sessions.set("someone-else", db);
 
             expect(sut.numberOfPeopleConnected("guildId", "channelId")).toBe(2);
         });

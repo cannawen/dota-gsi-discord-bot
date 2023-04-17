@@ -13,6 +13,7 @@ import persistence from "../persistence";
 import PersistentTopic from "../engine/PersistentTopic";
 import Topic from "../engine/Topic";
 import topicManager from "../engine/topicManager";
+import topics from "../topics";
 
 describe("customEngine", () => {
     let sut: CustomEngine;
@@ -124,6 +125,23 @@ describe("customEngine", () => {
                 sut.deleteSession("studentId");
                 expect(sut.getSession("studentId")).toBeUndefined();
                 expect(sut.getSession("studentId2")).not.toBeUndefined();
+            });
+            test("disconnects from voice connection", () => {
+                const spyGet = jest.spyOn(sut.getSession("studentId")!, "get");
+                const mockSubscription: any = {
+                    connection: { destroy: jest.fn() },
+                };
+                sut.setFact(
+                    "studentId",
+                    new Fact(topics.discordSubscriptionTopic, mockSubscription)
+                );
+                sut.deleteSession("studentId");
+                expect(spyGet).toHaveBeenCalledWith(
+                    topics.discordSubscriptionTopic
+                );
+                expect(
+                    mockSubscription.connection.destroy
+                ).toHaveBeenCalledTimes(1);
             });
             test("saves forever facts to persistence", () => {
                 const topic = new PersistentTopic<string>("persistentTopic", {

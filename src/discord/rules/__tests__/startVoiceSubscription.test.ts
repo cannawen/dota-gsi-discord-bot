@@ -40,16 +40,12 @@ describe("startVoiceSubscription", () => {
 
         describe("VoiceConnection.on", () => {
             let readyFn: any;
-            let destroyFn: any;
 
             beforeEach(() => {
                 (voiceConnection.on as jest.Mock).mock.calls.forEach(
                     ([state, stateChangeFn]) => {
                         if (state === "Ready") {
                             readyFn = stateChangeFn;
-                        }
-                        if (state === "Destroyed") {
-                            destroyFn = stateChangeFn;
                         }
                     }
                 );
@@ -61,11 +57,6 @@ describe("startVoiceSubscription", () => {
                     "studentId",
                     new Fact(topics.discordReadyToPlayAudio, true)
                 );
-            });
-
-            test("on(Destroyed), notify engine", () => {
-                destroyFn();
-                expect(engine.deleteSession).toHaveBeenCalledWith("studentId");
             });
         });
     });

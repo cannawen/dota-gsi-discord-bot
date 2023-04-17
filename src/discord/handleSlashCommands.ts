@@ -6,7 +6,6 @@ import helper from "./discordHelpers";
 import log from "../log";
 import path from "path";
 import Voice = require("@discordjs/voice");
-import topics from "../topics";
 
 function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
@@ -87,39 +86,34 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
             interaction.channelId
         );
         if (numberOFConnections === 0) {
-            const subscription = engine.getFactValue(
-                studentId(interaction),
-                topics.discordSubscriptionTopic
-            );
-            if (subscription) {
-                subscription.connection.destroy();
-            } else if (engine.getSession(studentId(interaction))) {
+            if (engine.getSession(studentId(interaction))) {
                 engine.deleteSession(studentId(interaction));
+                interaction.reply({
+                    content: `Ending your coaching session...`,
+                    ephemeral: true,
+                });
             } else {
                 interaction.reply({
                     content: `You are not currently in a coaching session.`,
                     ephemeral: true,
                 });
-                return;
             }
-            interaction.reply({
-                content: `Ending your coaching session...`,
-                ephemeral: true,
-            });
         } else {
             Voice.joinVoiceChannel({
                 adapterCreator: guild.voiceAdapterCreator,
                 channelId: interaction.channelId,
                 guildId: guild.id,
             }).destroy();
+            // TODO Find all people with guild and channel and destroy
             interaction.reply({
                 content: `Ending coaching session in ${guild.name}...`,
                 ephemeral: true,
             });
         }
     } else {
+        engine.deleteSession(studentId(interaction));
         interaction.reply({
-            content: `There was a problem ending coaching session; no guild found`,
+            content: `Ending your coaching session...`,
             ephemeral: true,
         });
     }

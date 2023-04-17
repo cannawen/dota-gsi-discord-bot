@@ -106,6 +106,8 @@
             function resetConfig() {
                 fetch("./reset-config", { method: "POST" });
             }
+
+            function makeAllEnabledPrivate() {}
         </script>
     </head>
     <body onload="onLoad()">
@@ -119,6 +121,9 @@
                 another student in the same voice channel you are in? Only your
                 private coaching audio will work
             </div>
+            <button onClick="makeAllEnabledPrivate()">
+                Make all enabled assistants play private audio
+            </button>
             <br />
             <br />
         </div>
