@@ -5,6 +5,8 @@ import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rule from "../neutralItemReminder";
 import rules from "../../rules";
 
+const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10;
+
 const NO_ITEMS = new PlayerItems(
     [],
     [],
@@ -23,9 +25,9 @@ const HAS_NEUTRAL_ITEM = new PlayerItems(
 
 describe("neutralItemReminder", () => {
     describe("does not have neutral item", () => {
-        test("do not warn before 7 minutes", () => {
+        test("do not warn before 10 minutes", () => {
             const result = getResults(rule, {
-                time: 6 * 60,
+                time: (NEUTRAL_ITEM_REMINDER_START_MINUTE - 1) * 60,
                 items: NO_ITEMS,
             });
             expect(result).toBeUndefined();
@@ -34,19 +36,32 @@ describe("neutralItemReminder", () => {
         test("warn after 2 minutes grace", () => {
             const state = getResults(rule, {
                 [rules.assistant.neutralItemReminder]: "PRIVATE",
-                time: 7 * 60,
+                time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
                 items: NO_ITEMS,
             }) as any;
             const result = getResults(
                 rule,
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
-                    time: 9 * 60,
+                    time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 2) * 60,
                     items: NO_ITEMS,
                 },
                 state
-            );
+            ) as any;
             expect(result).toContainFact(
+                "playPrivateAudioFile",
+                "resources/audio/no-neutral.mp3"
+            );
+            const result2 = getResults(
+                rule,
+                {
+                    [rules.assistant.neutralItemReminder]: "PRIVATE",
+                    time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 4) * 60,
+                    items: NO_ITEMS,
+                },
+                result
+            );
+            expect(result2).toContainFact(
                 "playPrivateAudioFile",
                 "resources/audio/no-neutral.mp3"
             );
@@ -57,14 +72,14 @@ describe("neutralItemReminder", () => {
         test("should not warn", () => {
             const state1 = getResults(rule, {
                 [rules.assistant.neutralItemReminder]: "PRIVATE",
-                time: 7 * 60,
+                time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
                 items: NO_ITEMS,
             }) as any;
             const state2 = getResults(
                 rule,
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
-                    time: 8 * 60,
+                    time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 1) * 60,
                     items: HAS_NEUTRAL_ITEM,
                 },
                 state1

@@ -11,6 +11,7 @@ export const configTopic = topicManager.createConfigTopic(
 export const defaultConfig = EffectConfig.PRIVATE;
 
 const TIME_BETWEEN_REMINDERS = 120;
+const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10;
 
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
@@ -25,8 +26,8 @@ export default new RuleConfigurable(
         const time = get(topics.time)!;
         const lastReminderTime = get(lastReminderTimeTopic);
 
-        // Start assistant after 7 minutes
-        if (time < 7 * 60) {
+        // Start assistant after 10 minutes
+        if (time < NEUTRAL_ITEM_REMINDER_START_MINUTE * 60) {
             return;
         }
 
