@@ -39,24 +39,45 @@ describe("startVoiceSubscription", () => {
         });
 
         describe("VoiceConnection.on", () => {
-            let readyFn: any;
+            let stateChangeFn: any;
 
             beforeEach(() => {
-                (voiceConnection.on as jest.Mock).mock.calls.forEach(
-                    ([state, stateChangeFn]) => {
-                        if (state === "Ready") {
-                            readyFn = stateChangeFn;
-                        }
-                    }
+                stateChangeFn = (voiceConnection.on as jest.Mock).mock
+                    .lastCall[1];
+            });
+
+            test("registers for stateChange events", () => {
+                expect(voiceConnection.on).toHaveBeenCalledWith(
+                    "stateChange",
+                    stateChangeFn
                 );
             });
 
-            test("on(Ready), notify engine", () => {
-                readyFn();
+            test("on ready, notify engine", () => {
+                stateChangeFn(
+                    { status: Voice.VoiceConnectionStatus.Destroyed },
+                    { status: Voice.VoiceConnectionStatus.Ready }
+                );
                 expect(engine.setFact).toHaveBeenCalledWith(
                     "studentId",
                     new Fact(topics.discordReadyToPlayAudio, true)
                 );
+            });
+
+            test("on disconnected, mark guild and channel id as null and destroy connection", () => {
+                stateChangeFn(
+                    { status: Voice.VoiceConnectionStatus.Ready },
+                    { status: Voice.VoiceConnectionStatus.Disconnected }
+                );
+                expect(engine.setFact).toHaveBeenCalledWith(
+                    "studentId",
+                    new Fact(topics.discordGuildId, null)
+                );
+                expect(engine.setFact).toHaveBeenCalledWith(
+                    "studentId",
+                    new Fact(topics.discordGuildChannelId, null)
+                );
+                expect(voiceConnection.destroy).toHaveBeenCalledWith();
             });
         });
     });
@@ -80,14 +101,20 @@ describe("startVoiceSubscription", () => {
                 );
             });
             test("notify engine ready to play audio when state changes to Idle", () => {
-                stateChangeFn({ status: "Playing" }, { status: "Idle" });
+                stateChangeFn(
+                    { status: Voice.AudioPlayerStatus.Playing },
+                    { status: Voice.AudioPlayerStatus.Idle }
+                );
                 expect(engine.setFact).toHaveBeenCalledWith(
                     "studentId",
                     new Fact(topics.discordReadyToPlayAudio, true)
                 );
             });
             test("notify engine not ready to play audio when state changes to Buffering", () => {
-                stateChangeFn({ status: "Idle" }, { status: "Buffering" });
+                stateChangeFn(
+                    { status: Voice.AudioPlayerStatus.Idle },
+                    { status: Voice.AudioPlayerStatus.Buffering }
+                );
                 expect(engine.setFact).toHaveBeenCalledWith(
                     "studentId",
                     new Fact(topics.discordReadyToPlayAudio, false)

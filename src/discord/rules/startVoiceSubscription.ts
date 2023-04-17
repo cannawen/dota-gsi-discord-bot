@@ -1,5 +1,4 @@
 /* eslint-disable max-lines-per-function */
-/* eslint-disable max-statements */
 import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
@@ -38,37 +37,45 @@ export default new Rule(
             guildId: guildId,
         });
 
-        connection.on(Voice.VoiceConnectionStatus.Ready, () => {
+        connection.on("stateChange", (oldState, newState) => {
+            if (oldState.status === newState.status) return;
+
             log.info(
                 "discord",
-                "VoiceConnection ready to play audio for student %s!".green,
+                "connectionState changed from %s to %s for student %s",
+                oldState.status,
+                emColor(newState.status),
                 studentId
             );
-            // Need this here to start the ready to play audio state as true
-            engine.setFact(
-                studentId,
-                new Fact(topics.discordReadyToPlayAudio, true)
-            );
-        });
 
-        connection.on(Voice.VoiceConnectionStatus.Destroyed, () => {
-            log.info(
-                "discord",
-                "VoiceConnection destroyed for student %s",
-                emColor(studentId)
-            );
+            const facts: Fact<unknown>[] = [];
+            switch (newState.status) {
+                case Voice.VoiceConnectionStatus.Ready:
+                    facts.push(new Fact(topics.discordReadyToPlayAudio, true));
+                    break;
+                case Voice.VoiceConnectionStatus.Disconnected:
+                    facts.push(new Fact(topics.discordGuildId, null));
+                    facts.push(new Fact(topics.discordGuildChannelId, null));
+                    connection.destroy();
+                    break;
+                default:
+                    break;
+            }
+            facts.forEach((fact) => engine.setFact(studentId, fact));
         });
 
         const player = Voice.createAudioPlayer();
         player.on("stateChange", (oldState, newState) => {
-            if (oldState.status !== newState.status) {
-                log.debug(
-                    "discord",
-                    "AudioPlayerState - transitioned from %s to %s",
-                    oldState.status,
-                    emColor(newState.status)
-                );
-            }
+            if (oldState.status === newState.status) return;
+
+            log.debug(
+                "discord",
+                "AudioPlayerState - transitioned from %s to %s for student",
+                oldState.status,
+                emColor(newState.status),
+                studentId
+            );
+
             const ready = newState.status === Voice.AudioPlayerStatus.Idle;
             engine.setFact(
                 studentId,

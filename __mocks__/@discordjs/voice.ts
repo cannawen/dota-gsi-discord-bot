@@ -8,11 +8,18 @@ const voice = {
         subscribe: jest.fn(),
     }),
     AudioPlayerStatus: {
-        Idle: "Idle",
+        AutoPaused: "autopaused",
+        Buffering: "buffering",
+        Idle: "idle",
+        Paused: "paused",
+        Playing: "playing",
     },
     VoiceConnectionStatus: {
-        Destroyed: "Destroyed",
-        Ready: "Ready",
+        Connecting: "connecting",
+        Destroyed: "destroyed",
+        Disconnected: "disconnected",
+        Ready: "ready",
+        Signalling: "signalling",
     },
 };
 
