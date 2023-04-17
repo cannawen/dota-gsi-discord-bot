@@ -35,6 +35,10 @@ export function plainObjectToFacts(object: { [key: string]: unknown }) {
 }
 
 export default class PersistentFactStore extends FactStore {
+    // eslint-disable-next-line class-methods-use-this
+    public debug_getAllFacts() {
+        return Array.from(this.facts.values());
+    }
     public updatePersistentFactsAcrossGames() {
         this.facts = filter(this.facts, "persistAcrossGames").reduce(
             (memo: Map<string, Fact<unknown>>, fact) => {

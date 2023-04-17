@@ -2,9 +2,11 @@ import effectConfig, { EffectConfig } from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
+import { factsToPlainObject } from "./engine/PersistentFactStore";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
+import persistence from "./persistence";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
@@ -21,6 +23,19 @@ router.use(
     "/resources/audio",
     express.static(path.join(__dirname, "../resources/audio"))
 );
+
+router.post("/debug_save-state", (req, res) => {
+    const stateObj = Array.from(engine.getSessions().entries()).reduce(
+        (memo: { [key: string]: unknown }, [studentId, db]) => {
+            memo[studentId] = factsToPlainObject(db.debug_getAllFacts());
+            return memo;
+        },
+        {}
+    );
+    console.log(stateObj);
+    persistence.debug_saveAllState(JSON.stringify(stateObj));
+    res.status(200).send();
+});
 
 router.get("/instructions", (req, res) => {
     res.status(200).sendFile(

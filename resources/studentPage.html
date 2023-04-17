@@ -122,7 +122,13 @@
                 fetch("./reset-config", { method: "POST" });
             }
 
-            function makeAllEnabledPrivate() {}
+            function makeAllEnabledPrivate() {
+                // TODO
+            }
+
+            function debug_saveState() {
+                fetch("/debug_save-state", { method: "POST" });
+            }
         </script>
     </head>
     <body onload="onLoad()">
@@ -178,5 +184,10 @@
             STOP COACHING
         </button>
         <br />
+        <div style="display: none">
+            Debug
+            <br />
+            <button onClick="debug_saveState()">save all state</button>
+        </div>
     </body>
 </html>

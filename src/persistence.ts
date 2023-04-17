@@ -5,6 +5,22 @@ import path = require("path");
 import log from "./log";
 dotenv.config();
 
+if (!fs.existsSync(process.env.PERSISTENCE_DATA_PATH || "")) {
+    fs.mkdirSync(process.env.PERSISTENCE_DATA_PATH || "", { recursive: true });
+}
+
+// eslint-disable-next-line camelcase
+function debug_saveAllState(state: string) {
+    log.debug("rules", state);
+    fs.writeFileSync(
+        path.join(
+            process.env.PERSISTENCE_DATA_PATH || "",
+            "debug_saveAllState.json"
+        ),
+        state
+    );
+}
+
 function restartDataFilePath() {
     return path.join(
         process.env.PERSISTENCE_DATA_PATH || "",
@@ -32,7 +48,7 @@ function saveRestartData(data: string) {
         fs.writeFileSync(restartDataFilePath(), data);
     } catch (error) {
         deleteRestartData();
-        log.error("app", "Unable to write restart data %e", error);
+        log.error("app", "Unable to write restart data %s", error);
     }
 }
 
@@ -47,7 +63,7 @@ function readRestartData() {
         }
     } catch (error) {
         deleteRestartData();
-        log.error("app", "Unable to read restart data %e", error);
+        log.error("app", "Unable to read restart data %s", error);
     }
 }
 
@@ -67,7 +83,7 @@ function saveStudentData(studentId: string, data: string) {
         fs.writeFileSync(studentDataFilePath(studentId), data);
     } catch (error) {
         deleteStudentData(studentId);
-        log.error("app", "Unable to write student data %e", error);
+        log.error("app", "Unable to write student data %s", error);
     }
 }
 
@@ -79,7 +95,7 @@ function readStudentData(studentId: string) {
         }
     } catch (error) {
         deleteStudentData(studentId);
-        log.error("app", "Unable to read student data %e", error);
+        log.error("app", "Unable to read student data %s", error);
     }
 }
 
@@ -91,4 +107,6 @@ export default {
     deleteStudentData,
     saveStudentData,
     readStudentData,
+
+    debug_saveAllState,
 };
