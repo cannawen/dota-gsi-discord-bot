@@ -6,6 +6,8 @@ const topicMap = new Map<string, Topic<unknown>>(
     Object.entries({
         configTopicOne: new Topic<EffectConfig>("configTopicOne"),
         configTopicTwo: new Topic<EffectConfig>("configTopicTwo"),
+        configTopicThree: new Topic<EffectConfig>("configTopicThree"),
+        configTopicFour: new Topic<EffectConfig>("configTopicFour"),
         regular: new Topic<number>("regular"),
         persistAcrossGames: new PersistentTopic<number>("persistAcrossGames", {
             persistAcrossGames: true,

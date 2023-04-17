@@ -68,7 +68,7 @@ router.get("/coach/:studentId/discord-audio-enabled", (req, res) => {
     );
 });
 
-router.get("/coach/:studentId/get-config", (req, res) => {
+router.get("/coach/:studentId/config/get", (req, res) => {
     res.status(200).json(
         topicManager
             .getConfigTopics()
@@ -90,10 +90,26 @@ router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
     res.status(200).send();
 });
 
-router.post("/coach/:studentId/reset-config", (req, res) => {
+router.post("/coach/:studentId/config/reset", (req, res) => {
     effectConfig
         .defaultConfigs()
         .map((fact) => engine.setFact(req.params.studentId, fact));
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/config/PRIVATE", (req, res) => {
+    topicManager.getConfigTopics().forEach((topic) => {
+        const config = engine.getFactValue(req.params.studentId, topic);
+        if (
+            config === EffectConfig.PUBLIC ||
+            config === EffectConfig.PUBLIC_INTERRUPTING
+        ) {
+            engine.setFact(
+                req.params.studentId,
+                new Fact(topic, EffectConfig.PRIVATE)
+            );
+        }
+    });
     res.status(200).send();
 });
 

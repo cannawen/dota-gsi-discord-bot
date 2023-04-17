@@ -85,7 +85,7 @@
             }
 
             function getConfig() {
-                fetch("./get-config")
+                fetch("./config/get")
                     .then((res) => res.json())
                     .then((res) => {
                         const message = res.reduce((memo, configInput) => {
@@ -119,11 +119,11 @@
             }
 
             function resetConfig() {
-                fetch("./reset-config", { method: "POST" });
+                fetch("./config/reset", { method: "POST" });
             }
 
             function makeAllEnabledPrivate() {
-                // TODO
+                fetch("./config/PRIVATE", { method: "POST" });
             }
 
             function debug_saveState() {

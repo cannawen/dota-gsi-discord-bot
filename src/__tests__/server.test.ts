@@ -99,29 +99,68 @@ describe("server", () => {
             });
         });
         describe("configuration management", () => {
-            test("get all", (done) => {
-                const configTopicOne = new Topic<EffectConfig>(
-                    "configTopicOne"
-                );
-                const configTopicTwo = new Topic<EffectConfig>(
-                    "configTopicTwo"
-                );
+            let configTopicOne: any;
+            let configTopicTwo: any;
+            let configTopicThree: any;
+            let configTopicFour: any;
+            let factOne: any;
+            let factTwo: any;
+            let factThree: any;
+            let factFour: any;
+            beforeEach(() => {
+                configTopicOne = new Topic<EffectConfig>("configTopicOne");
+                configTopicTwo = new Topic<EffectConfig>("configTopicTwo");
+                configTopicThree = new Topic<EffectConfig>("configTopicThree");
+                configTopicFour = new Topic<EffectConfig>("configTopicFour");
                 (topicManager.getConfigTopics as jest.Mock).mockReturnValue([
                     configTopicOne,
                     configTopicTwo,
+                    configTopicThree,
+                    configTopicFour,
                 ]);
-                (engine.getFactValue as jest.Mock)
-                    .mockReturnValueOnce("PRIVATE")
-                    .mockReturnValueOnce("PUBLIC");
 
+                (engine.getFactValue as jest.Mock).mockImplementation(
+                    (studentId, topic) => {
+                        if (topic.label === "configTopicOne") {
+                            return EffectConfig.PRIVATE;
+                        }
+                        if (topic.label === "configTopicTwo") {
+                            return EffectConfig.PUBLIC;
+                        }
+                        if (topic.label === "configTopicThree") {
+                            return EffectConfig.PUBLIC_INTERRUPTING;
+                        }
+                        if (topic.label === "configTopicFour") {
+                            return EffectConfig.NONE;
+                        }
+                    }
+                );
+                factOne = new Fact(configTopicOne, EffectConfig.PRIVATE);
+                factTwo = new Fact(configTopicTwo, EffectConfig.PUBLIC);
+                factThree = new Fact(
+                    configTopicThree,
+                    EffectConfig.PUBLIC_INTERRUPTING
+                );
+                factFour = new Fact(configTopicFour, EffectConfig.NONE);
+                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
+                    factOne,
+                    factTwo,
+                    factThree,
+                    factFour,
+                ]);
+            });
+
+            test("get all", (done) => {
                 request(sut)
-                    .get("/coach/studentId/get-config")
+                    .get("/coach/studentId/config/get")
                     .expect("Content-Type", /json/)
                     .expect(200)
                     .expect(
                         JSON.stringify([
                             ["configTopicOne", "PRIVATE"],
                             ["configTopicTwo", "PUBLIC"],
+                            ["configTopicThree", "PUBLIC_INTERRUPTING"],
+                            ["configTopicFour", "NONE"],
                         ])
                     )
                     .end((error: any) => {
@@ -134,6 +173,14 @@ describe("server", () => {
                             "studentId",
                             configTopicTwo
                         );
+                        expect(engine.getFactValue).toHaveBeenCalledWith(
+                            "studentId",
+                            configTopicThree
+                        );
+                        expect(engine.getFactValue).toHaveBeenCalledWith(
+                            "studentId",
+                            configTopicFour
+                        );
                         return done();
                     });
             });
@@ -145,29 +192,14 @@ describe("server", () => {
                         if (error) return done(error);
                         expect(engine.setFact).toHaveBeenCalledWith(
                             "studentId",
-                            new Fact(
-                                new Topic<EffectConfig>("configTopicOne"),
-                                EffectConfig.PUBLIC
-                            )
+                            new Fact(configTopicOne, EffectConfig.PUBLIC)
                         );
                         return done();
                     });
             });
             test("reset", (done) => {
-                const factOne = new Fact(
-                    new Topic<EffectConfig>("configTopicOne"),
-                    EffectConfig.PRIVATE
-                );
-                const factTwo = new Fact(
-                    new Topic<EffectConfig>("configTopicTwo"),
-                    EffectConfig.PUBLIC
-                );
-                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
-                    factOne,
-                    factTwo,
-                ]);
                 request(sut)
-                    .post("/coach/studentId/reset-config")
+                    .post("/coach/studentId/config/reset")
                     .expect(200, (error: any) => {
                         if (error) return done(error);
                         expect(engine.setFact).toHaveBeenCalledWith(
@@ -177,6 +209,31 @@ describe("server", () => {
                         expect(engine.setFact).toHaveBeenCalledWith(
                             "studentId",
                             factTwo
+                        );
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            factThree
+                        );
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            factFour
+                        );
+                        return done();
+                    });
+            });
+            test("make all enabled private", (done) => {
+                request(sut)
+                    .post("/coach/studentId/config/PRIVATE")
+                    .expect(200, (error: any) => {
+                        if (error) return done(error);
+                        expect(engine.setFact).toHaveBeenCalledTimes(2);
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            new Fact(configTopicTwo, EffectConfig.PRIVATE)
+                        );
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            new Fact(configTopicThree, EffectConfig.PRIVATE)
                         );
                         return done();
                     });
