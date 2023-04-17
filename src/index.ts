@@ -164,48 +164,6 @@ function storePersistentFactsAcrossRestarts() {
     persistence.saveRestartData(JSON.stringify(allData));
 }
 
-function notifyStudentsOfRestart() {
-    return new Promise<void>((resolve) => {
-        let expectedReadyCount = 0;
-        engine.getSessions().forEach((db, studentId) => {
-            log.info("app", "Notify %s of shutdown", studentId);
-            if (db.get(topics.discordAudioEnabled)) {
-                expectedReadyCount++;
-                engine.setFact(
-                    studentId,
-                    new Fact(
-                        topics.playInterruptingAudioFile,
-                        "resources/audio/restart.mp3"
-                    )
-                );
-            }
-        });
-        if (expectedReadyCount === 0) {
-            resolve();
-        }
-        let readyCount = 0;
-        engine.register(
-            new Rule(
-                "wait for all audio to be done playing",
-                [topics.discordReadyToPlayAudio],
-                (get) => {
-                    if (get(topics.discordReadyToPlayAudio)!) {
-                        readyCount++;
-                        log.info(
-                            "app",
-                            "Finished notifying %s of shutdown",
-                            get(topics.studentId)
-                        );
-                    }
-                    if (readyCount === expectedReadyCount) {
-                        resolve();
-                    }
-                }
-            )
-        );
-    });
-}
-
 let shuttingDown = false;
 
 function handleShutdown() {
@@ -218,15 +176,27 @@ function handleShutdown() {
     if (!shuttingDown) {
         log.info("app", "Start handling shutdown");
         shuttingDown = true;
-        httpServer?.close();
         storePersistentFactsAcrossRestarts();
-        notifyStudentsOfRestart().then(() => {
-            Array.from(engine.getSessions().keys()).forEach((studentId) => {
-                engine.deleteSession(studentId);
+        Array.from(engine.getSessions().keys()).forEach((studentId) => {
+            engine.deleteSession(studentId);
+        });
+        if (httpServer) {
+            httpServer.close((error) => {
+                if (error) {
+                    log.error(
+                        "app",
+                        "End handling shutdown UNGRACEFULLY %s",
+                        error
+                    );
+                } else {
+                    log.info("app", "End handling shutdown gracefully");
+                }
+                process.exit(0);
             });
+        } else {
             log.info("app", "End handling shutdown gracefully");
             process.exit(0);
-        });
+        }
     }
 }
 
