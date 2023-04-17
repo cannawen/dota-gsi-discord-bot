@@ -3,6 +3,7 @@ import {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import cron from "node-cron";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
 import engine from "./customEngine";
@@ -132,6 +133,12 @@ if (port && host) {
         host
     );
 }
+
+// SESSION CLEANUP CODE
+cron.schedule("*/30 * * * *", () => {
+    log.info("app", "Cleaning up sessions with no recent activity");
+    engine.deleteOldSessions();
+});
 
 // STARTUP CODE
 

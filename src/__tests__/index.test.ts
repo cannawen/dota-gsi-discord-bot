@@ -1,3 +1,4 @@
+jest.mock("node-cron");
 jest.mock("node-gsi");
 jest.mock("../customEngine");
 jest.mock("../discord/discordClient");

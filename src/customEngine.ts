@@ -71,6 +71,7 @@ export class CustomEngine extends Engine {
         // Create new db for student
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
+        this.set(db, new Fact(topics.timestamp, Math.floor(Date.now() / 1000))); // TODO test
 
         // Check to see if we have saved data
         const data = savedData(studentId);
@@ -109,6 +110,19 @@ export class CustomEngine extends Engine {
             persistence.saveStudentData(studentId, JSON.stringify(facts));
             this.sessions.delete(studentId);
         }
+    }
+
+    // TODO test
+    public deleteOldSessions() {
+        Array.from(this.sessions.entries())
+            .filter(([_, db]) => {
+                const currentTime = Date.now() / 1000;
+                const lastInteractionTime = db.get(topics.timestamp)!;
+                const oneHour = 60 * 60;
+
+                return currentTime - lastInteractionTime > oneHour;
+            })
+            .forEach(([studentId, _]) => this.deleteSession(studentId));
     }
 }
 

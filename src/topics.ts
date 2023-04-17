@@ -27,6 +27,7 @@ const gsi = {
     // player
     gold: new Topic<number>("gold"),
     // provider
+    // Also set when we create a new coaching session
     timestamp: new PersistentTopic<number>("timestamp", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
