@@ -129,6 +129,14 @@
             function debug_saveState() {
                 fetch("/debug_save-state", { method: "POST" });
             }
+
+            function debug_playPublicAudio() {
+                fetch("./debug_playPublicAudio", { method: "POST" });
+            }
+
+            function debug_playPrivateAudio() {
+                fetch("./debug_playPrivateAudio", { method: "POST" });
+            }
         </script>
     </head>
     <body onload="onLoad()">
@@ -188,6 +196,10 @@
             Debug
             <br />
             <button onClick="debug_saveState()">save all state</button>
+            <button onClick="debug_playPublicAudio()">play public audio</button>
+            <button onClick="debug_playPrivateAudio()">
+                play private audio
+            </button>
         </div>
     </body>
 </html>

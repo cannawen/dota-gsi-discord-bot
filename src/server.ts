@@ -37,6 +37,22 @@ router.post("/debug_save-state", (req, res) => {
     res.status(200).send();
 });
 
+router.post("/coach/:studentId/debug_playPublicAudio", (req, res) => {
+    engine.setFact(
+        req.params.studentId,
+        new Fact(topics.playPublicAudioFile, "resources/audio/jeopardy.mp3")
+    );
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/debug_playPrivateAudio", (req, res) => {
+    engine.setFact(
+        req.params.studentId,
+        new Fact(topics.playPrivateAudioFile, "resources/audio/jeopardy.mp3")
+    );
+    res.status(200).send();
+});
+
 router.get("/instructions", (req, res) => {
     res.status(200).sendFile(
         path.join(__dirname, "../resources/instructions.html")
