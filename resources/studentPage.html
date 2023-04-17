@@ -2,12 +2,16 @@
     <head>
         <title>Private Coaching</title>
         <script>
+            let timeoutId;
+
             function fetchAndPlay() {
                 return fetch("./poll")
                     .then((res) => res.json())
                     .then((res) => {
                         return new Promise((resolve) => {
-                            if (res.nextAudio) {
+                            if (res === null) {
+                                resolve();
+                            } else if (res.nextAudio) {
                                 const f = new Audio("/" + res.nextAudio);
                                 f.volume = parseFloat(
                                     document.getElementById("volume").value
@@ -26,16 +30,27 @@
 
             function loop() {
                 try {
-                    fetchAndPlay().then(() => setTimeout(loop, 500));
+                    fetchAndPlay().then(() => {
+                        console.log("x");
+                        timeoutId = setTimeout(loop, 500);
+                    });
                 } catch (error) {
                     loop();
                 }
             }
 
-            function startCoaching(e) {
-                e.target.remove();
+            function startCoaching() {
+                document.getElementById("startCoaching").style.display = "none";
                 document.getElementById("coaching").style.display = "block";
                 loop();
+            }
+
+            function stopCoaching() {
+                console.log("Stop coaching");
+                document.getElementById("startCoaching").style.display =
+                    "block";
+                document.getElementById("coaching").style.display = "none";
+                clearTimeout(timeoutId);
             }
 
             function makePublic(e) {
@@ -118,8 +133,8 @@
             <div>The bot was unable to make a connection with discord.</div>
             <div>
                 Did you start /coachme from a non-voice channel, or is there
-                another student in the same voice channel you are in? Only your
-                private coaching audio will work
+                another student in the same voice channel you are in? Currently,
+                only your private coaching audio will work
             </div>
             <button onClick="makeAllEnabledPrivate()">
                 Make all enabled assistants play private audio
@@ -128,16 +143,16 @@
             <br />
         </div>
         <button
-            onClick="startCoaching(event)"
+            id="startCoaching"
+            onClick="startCoaching()"
             style="font-size: 5em; cursor: pointer"
         >
             START COACHING
         </button>
-        <div
-            style="background-color: green; display: none; font-size: 5em"
-            id="coaching"
-        >
-            Coaching...
+        <div id="coaching" style="display: none">
+            <div style="background-color: green; font-size: 5em">
+                Playing private audio...
+            </div>
         </div>
         <br />
         Volume:
@@ -155,6 +170,13 @@
         <br />
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
+        <br />
+        <button
+            onClick="stopCoaching()"
+            style="font-size: 5em; cursor: pointer"
+        >
+            STOP COACHING
+        </button>
         <br />
     </body>
 </html>
