@@ -23,6 +23,7 @@ const assistant = {
     runeBounty: "runeBounty",
     runePower: "runePower",
     runeWater: "runeWater",
+    tome: "tome",
 };
 
 const discord = {
