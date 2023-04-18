@@ -93,12 +93,7 @@ function onPlayerStateChange(
 
 export default new Rule(
     rules.discord.startVoiceSubscription,
-    [
-        topics.discordGuildId,
-        topics.discordGuildChannelId,
-        topics.studentId,
-        topics.discordAudioEnabled,
-    ],
+    [topics.discordGuildId, topics.discordGuildChannelId, topics.studentId],
     (get) => {
         const guildId = get(topics.discordGuildId)!;
         const channelId = get(topics.discordGuildChannelId)!;
