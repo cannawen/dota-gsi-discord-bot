@@ -17,7 +17,7 @@ export default new RuleConfigurable(
     (get, effect) => {
         const inGame = get(topics.inGame)!;
         const time = get(topics.time)!;
-        if (inGame && time === 14 * 60) {
+        if (inGame && time === 15 * 60) {
             return new Fact(effect, "resources/audio/shard.mp3");
         }
     }
