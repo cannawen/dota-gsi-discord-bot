@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import log from "../log";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -23,6 +24,12 @@ export default new RuleConfigurable(
                 (spawnMinute) => spawnMinute * 60 === currentTime
             )
         ) {
+            // TODO remove
+            log.info(
+                "rules",
+                "New neutral item announcement at time",
+                currentTime
+            );
             return new Fact(effect, "resources/audio/new-neutrals.mp3");
         }
     }

@@ -1,9 +1,11 @@
 /* eslint-disable max-statements */
+import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import log from "../log";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
-import Topic from "../engine/Topic";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
@@ -20,19 +22,11 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
     "remindedAlreadyThisDeathCycleTopic"
 );
 
-function seenPhilospherStoneForTheFirstTime(
-    get: <T>(topic: Topic<T>) => T | undefined
-): boolean {
-    if (get(seenPhilosophersStoneTopic) === undefined) {
-        const items = get(topics.items)!;
-        const stone = [...items.backpack, ...items.stash, items.neutral]
-            .filter((item) => item !== null)
-            .find((item) => item!.id === "item_philosophers_stone");
-        if (stone) {
-            return true;
-        }
-    }
-    return false;
+function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
+    const stone = [...items.backpack, ...items.stash, items.neutral]
+        .filter((item) => item !== null)
+        .find((item) => item!.id === "item_philosophers_stone");
+    return stone !== undefined;
 }
 
 export default new RuleConfigurable(
@@ -42,13 +36,15 @@ export default new RuleConfigurable(
     (get, effect) => {
         const inGame = get(topics.inGame)!;
         if (!inGame) return;
+        const items = get(topics.items)!;
 
-        if (seenPhilospherStoneForTheFirstTime(get)) {
+        const seenBefore = get(seenPhilosophersStoneTopic);
+        if (seenBefore === undefined && hasPhilosophersStone(items)) {
+            // TODO remove
+            log.info("rules", "Found philosopher's stone");
             return new Fact(seenPhilosophersStoneTopic, true);
         }
-
-        const seen = get(seenPhilosophersStoneTopic);
-        if (seen === undefined) {
+        if (!seenBefore) {
             return;
         }
 
@@ -59,7 +55,6 @@ export default new RuleConfigurable(
         } else {
             const respawnSeconds = get(topics.respawnSeconds)!;
             const alreadyReminded = get(remindedAlreadyThisDeathCycleTopic);
-            const items = get(topics.items)!;
 
             if (
                 alreadyReminded === undefined &&
