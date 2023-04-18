@@ -105,7 +105,9 @@ export class CustomEngine extends Engine {
                 "Deleting session for student %s",
                 studentId.substring(0, 10)
             );
-            db.get(topics.discordSubscriptionTopic)?.connection.destroy();
+            try {
+                db.get(topics.discordSubscriptionTopic)?.connection.destroy();
+            } catch (error) {}
             const facts = factsToPlainObject(db.getPersistentForeverFacts());
 
             log.debug(
