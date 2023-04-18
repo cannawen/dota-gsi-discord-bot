@@ -13,16 +13,15 @@ export default class Item {
     public readonly name: string;
     public readonly cooldown?: number;
 
-    public constructor(id: string, name: string, cooldown?: number) {
+    public constructor(id: string, name?: string, cooldown?: number) {
         this.id = id;
-        this.name = name;
+        this.name = name || id;
         this.cooldown = cooldown;
     }
 
     static create(item: DeepReadonly<gsi.IItem> | null) {
         if (item) {
-            const name = itemNames.get(item.name);
-            return new Item(item.name, name ? name : item.name, item.cooldown);
+            return new Item(item.name, itemNames.get(item.name), item.cooldown);
         }
         return null;
     }

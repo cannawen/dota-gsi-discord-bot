@@ -24,6 +24,16 @@ export default class PlayerItems {
         this.neutral = neutral;
     }
 
+    public allItems(): Array<Item | null> {
+        return [
+            ...this.inventory,
+            ...this.backpack,
+            ...this.stash,
+            this.teleport,
+            this.neutral,
+        ];
+    }
+
     static create(items: DeepReadonly<gsi.IItemContainer>) {
         const inventoryAndBackpack = items.slot.map(Item.create);
         return new PlayerItems(

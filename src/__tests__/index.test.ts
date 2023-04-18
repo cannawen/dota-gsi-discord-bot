@@ -12,7 +12,7 @@ describe("during app startup", () => {
     test("should register all rules with engine", () => {
         registerEverything();
 
-        const assistantCount = 14;
+        const assistantCount = 15;
         const assistantExcessRuleCount = 3;
         const discordRuleCount = 3;
         const effectRuleCount = 5;
