@@ -32,11 +32,11 @@ function handle(
 
     let fileName: string;
     if (gold <= 1000) {
-        fileName = "money";
+        fileName = "gold";
     } else if (gold <= 2000) {
-        fileName = "lot-of-money";
+        fileName = "gold-lots";
     } else {
-        fileName = "really-lot-of-money";
+        fileName = "gold-lots-really";
     }
 
     if (newMultiplier > oldMultiplier) {
