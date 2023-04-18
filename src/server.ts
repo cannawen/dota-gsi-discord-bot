@@ -27,7 +27,14 @@ router.use(
 router.post("/debug_save-state", (req, res) => {
     const stateObj = Array.from(engine.getSessions().entries()).reduce(
         (memo: { [key: string]: unknown }, [studentId, db]) => {
-            memo[studentId] = factsToPlainObject(db.debug_getAllFacts());
+            memo[studentId] = factsToPlainObject(
+                db
+                    .debug_getAllFacts()
+                    .filter(
+                        (fact) =>
+                            fact.topic.label !== "discordSubscriptionTopic"
+                    )
+            );
             return memo;
         },
         {}

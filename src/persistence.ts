@@ -11,7 +11,7 @@ if (!fs.existsSync(process.env.PERSISTENCE_DATA_PATH || "")) {
 
 // eslint-disable-next-line camelcase
 function debug_saveAllState(state: string) {
-    log.debug("rules", state);
+    try {
         fs.writeFileSync(
             path.join(
                 process.env.PERSISTENCE_DATA_PATH || "",
@@ -19,6 +19,7 @@ function debug_saveAllState(state: string) {
             ),
             state
         );
+    } catch (_) {}
 }
 
 function restartDataFilePath() {
