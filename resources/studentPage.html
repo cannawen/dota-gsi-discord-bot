@@ -89,26 +89,27 @@
                     .then((res) => res.json())
                     .then((res) => {
                         const message = res.reduce((memo, configInput) => {
-                            const configString = JSON.stringify(configInput);
                             return (
                                 memo +
-                                `<div>
-                                    <button id="${configInput[0]}" onClick="makePublic(event)">Make public</button>
-                                    <button id="${configInput[0]}" onClick="makePrivate(event)">Make private</button>
-                                    <button id="${configInput[0]}" onClick="disable(event)">Disable</button>
-                                    ${configString}
-                                </div>`
+                                `<tr>
+                                    <td>${configInput[0]}</td>
+                                    <td>${configInput[1]}</td>
+
+                                    <td><button id="${configInput[0]}" onClick="makePublic(event)">Make public</button></td>
+                                    <td><button id="${configInput[0]}" onClick="makePrivate(event)">Make private</button></td>
+                                    <td><button id="${configInput[0]}" onClick="disable(event)">Disable</button></td>
+                                </tr>`
                             );
-                        }, "<div>Your coaching preferences:</div><br/>");
+                        }, "<div>Your preferences:</div><table><tr><th>Assistant</th><th>Configuration</th></tr>");
                         const explanation = [
                             "PRIVATE means playing only on this site",
                             "PUBLIC or PUBLIC_INTERRUPTING means playing on discord",
-                            "null or NONE means this rule is disabled</div>",
+                            "NONE means this rule is disabled</div>",
                             "<br/>",
-                            "If you are not seeing any preferences, perhaps you have not started /coachme",
+                            "If you are seeing null preferences, perhaps you have not started /coachme",
                         ].reduce((memo, text) => {
                             return memo + `<div>${text}</div>`;
-                        }, "");
+                        }, "</table><br/>");
                         document.getElementById("config").innerHTML =
                             message + "<br/>" + explanation;
                     });
