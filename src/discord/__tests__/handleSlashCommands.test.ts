@@ -107,8 +107,9 @@ describe("handleSlashCommands", () => {
             });
             test("replies with error ephemerally", () => {
                 expect(mockReply).toHaveBeenCalledWith({
-                    content:
-                        "You already have a coaching session. Use /stop to end your current session before starting a new one",
+                    content: expect.stringContaining(
+                        "You already have a coaching session"
+                    ),
                     ephemeral: true,
                 });
             });

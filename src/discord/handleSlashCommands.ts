@@ -49,17 +49,16 @@ function config(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
+    const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
+        interaction
+    )}/`;
     if (engine.getSession(studentId(interaction))) {
         interaction.reply({
-            content:
-                "You already have a coaching session. Use /stop to end your current session before starting a new one",
+            content: `You already have a coaching session at ${privateUrl}. Use /stop to end your current session before starting a new one`,
             ephemeral: true,
         });
         return;
     }
-    const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
-        interaction
-    )}/`;
     let message = `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`;
     if (
         interaction.channel?.isVoiceBased() &&
