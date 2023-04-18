@@ -76,6 +76,7 @@ const discord = {
     discordAudioEnabled: new PersistentTopic<boolean>("discordAudioEnabled", {
         persistAcrossGames: true,
     }),
+    lastDiscordMessage: new Topic<string>("lastDiscordMessage"),
 };
 
 const allTopics = {

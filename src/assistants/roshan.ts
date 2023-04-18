@@ -34,6 +34,17 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
     );
 }
 
+function roshStatusMessage(message: string) {
+    return message.match(/what is.*status/i) !== null;
+}
+
+function secondsToTimeString(seconds: number) {
+    const totalMs = seconds * 1000;
+    const result = new Date(totalMs).toISOString().slice(14, 19);
+
+    return result;
+}
+
 export default [
     // When an event notifies us that roshan is killed
     // Set roshan maybe time to 8 minutes from now
@@ -86,6 +97,42 @@ export default [
                     new Fact(effect, "resources/audio/rosh-alive.mp3"),
                     new Fact(roshanAliveTimeTopic, undefined),
                 ];
+            }
+        }
+    ),
+
+    new RuleConfigurable(
+        rules.assistant.roshan.voice,
+        configTopic,
+        [topics.lastDiscordMessage],
+        // TODO use effect instead of tts
+        (get, effect) => {
+            const message = get(topics.lastDiscordMessage)!;
+            if (!roshStatusMessage(message)) {
+                return;
+            }
+            const maybeAlive = get(roshanMaybeTimeTopic);
+            if (maybeAlive) {
+                return new Fact(
+                    topics.playTts,
+                    `Roshan is dead. May respawn at ${secondsToTimeString(
+                        maybeAlive
+                    )}`
+                );
+            }
+            const alive = get(roshanAliveTimeTopic);
+            if (alive) {
+                return new Fact(
+                    topics.playTts,
+                    `Roshan may be alive. Guaranteed respawn at ${secondsToTimeString(
+                        alive
+                    )}`
+                );
+            }
+            if (get(topics.inGame)) {
+                return new Fact(topics.playTts, "Roshan is alive");
+            } else {
+                return new Fact(topics.playTts, "You are not in a game");
             }
         }
     ),

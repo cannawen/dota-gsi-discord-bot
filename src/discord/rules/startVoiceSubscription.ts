@@ -144,9 +144,14 @@ export default new Rule(
                         transcript: { text: string };
                     }) => {
                         if (!data.transcript.text) return;
-                        let text = data.transcript.text;
-                        let userId = data.userId;
-                        console.log(userId, text);
+                        const text = data.transcript.text;
+                        // hash(userId) may be different than studentId because it may be someone else speaking
+                        const userId = data.userId;
+
+                        engine.setFact(
+                            studentId,
+                            new Fact(topics.lastDiscordMessage, text)
+                        );
                     }
                 );
         });

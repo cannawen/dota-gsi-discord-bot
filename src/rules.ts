@@ -19,6 +19,7 @@ const assistant = {
         killedEvent: "roshan/killed_event/set_future_audio_state",
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
         aliveTime: "roshan/alive_time/play_audio",
+        voice: "roshan/voice",
     },
     runeBounty: "rune_bounty",
     runePower: "rune_power",
