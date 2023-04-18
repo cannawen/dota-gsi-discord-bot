@@ -4,15 +4,15 @@ import rule from "../discordEnabled";
 describe("discordEnabled", () => {
     test("we do not have a guildId, disable audio", () => {
         const result = getResults(rule, {
-            guildId: null,
-            channelId: "channelId",
+            discordGuildId: null,
+            discordGuildChannelId: "channelId",
         });
         expect(result).toContainFact("discordAudioEnabled", false);
     });
     test("we do not have a channelId, disable audio", () => {
         const result = getResults(rule, {
-            guildId: "channelId",
-            channelId: null,
+            discordGuildId: "channelId",
+            discordGuildChannelId: null,
         });
         expect(result).toContainFact("discordAudioEnabled", false);
     });
