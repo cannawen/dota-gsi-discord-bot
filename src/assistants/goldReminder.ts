@@ -31,9 +31,9 @@ function handle(
     const oldMultiplier = Math.floor(lastRemindedGold / reminderIncrement);
 
     let fileName: string;
-    if (gold <= 1000) {
+    if (gold <= 1500) {
         fileName = "gold";
-    } else if (gold <= 2000) {
+    } else if (gold <= 2500) {
         fileName = "gold-lots";
     } else {
         fileName = "gold-lots-really";

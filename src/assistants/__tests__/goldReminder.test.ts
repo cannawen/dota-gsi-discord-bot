@@ -208,13 +208,13 @@ describe("gold reminder", () => {
         });
 
         describe("reminder intensity", () => {
-            describe("1000 gold over", () => {
+            describe("1500 gold over", () => {
                 test("mild intensity", () => {
                     const results = getResults(rule, {
                         [rules.assistant.goldReminder]: "PRIVATE",
                         time: 9 * 60,
                         inGame: true,
-                        gold: 1000,
+                        gold: 1500,
                     });
                     expect(results).toContainFact(
                         "playPrivateAudioFile",
@@ -222,13 +222,13 @@ describe("gold reminder", () => {
                     );
                 });
             });
-            describe("2000 gold over", () => {
+            describe("2500 gold over", () => {
                 test("medium intensity", () => {
                     const results = getResults(rule, {
                         [rules.assistant.goldReminder]: "PRIVATE",
                         time: 9 * 60,
                         inGame: true,
-                        gold: 2000,
+                        gold: 2500,
                     });
                     expect(results).toContainFact(
                         "playPrivateAudioFile",
@@ -236,13 +236,13 @@ describe("gold reminder", () => {
                     );
                 });
             });
-            describe("3000 gold over", () => {
+            describe("2500+ gold over", () => {
                 test("high intensity", () => {
                     const results = getResults(rule, {
                         [rules.assistant.goldReminder]: "PRIVATE",
                         time: 9 * 60,
                         inGame: true,
-                        gold: 3000,
+                        gold: 2501,
                     });
                     expect(results).toContainFact(
                         "playPrivateAudioFile",
