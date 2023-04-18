@@ -78,6 +78,7 @@ describe("startVoiceSubscription", () => {
                         "studentId",
                         new Fact(topics.discordGuildChannelId, null)
                     );
+                    expect(voiceConnection.destroy).toHaveBeenCalledTimes(1);
                 });
             });
         });
@@ -138,42 +139,6 @@ describe("startVoiceSubscription", () => {
                         .value
                 );
             });
-        });
-    });
-
-    describe("missing guildId or channelId", () => {
-        let destroyFn = jest.fn();
-        beforeEach(() => {
-            (engine.getFactValue as jest.Mock).mockReturnValue({
-                connection: { destroy: destroyFn },
-            });
-        });
-        test("no guild Id", () => {
-            getResults(rule, {
-                discordGuildChannelId: "channelId",
-                discordGuildId: null,
-                studentId: "studentId",
-            }) as Fact<unknown>;
-
-            expect(engine.setFact).toHaveBeenCalledWith(
-                "studentId",
-                new Fact(topics.discordSubscriptionTopic, undefined)
-            );
-            expect(destroyFn).toHaveBeenCalled();
-        });
-
-        test("no channel Id", () => {
-            getResults(rule, {
-                discordGuildChannelId: null,
-                discordGuildId: "guildId",
-                studentId: "studentId",
-            }) as Fact<unknown>;
-
-            expect(engine.setFact).toHaveBeenCalledWith(
-                "studentId",
-                new Fact(topics.discordSubscriptionTopic, undefined)
-            );
-            expect(destroyFn).toHaveBeenCalled();
         });
     });
 });

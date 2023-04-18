@@ -6,6 +6,7 @@ jest.mock("../discordHelpers");
 import CryptoJS from "crypto-js";
 import engine from "../../customEngine";
 import handle from "../handleSlashCommands";
+import helpers from "../discordHelpers";
 
 const STUDENT_ID = CryptoJS.HmacSHA256(
     "userId",
@@ -24,6 +25,10 @@ describe("handleSlashCommands", () => {
                 id: "guildId",
                 voiceAdapterCreator: "voiceAdapterCreator",
             },
+            channel: {
+                isVoiceBased: () => true,
+            },
+            guildId: "guildId",
             user: { id: "userId" },
             reply: mockReply,
         };
@@ -35,32 +40,52 @@ describe("handleSlashCommands", () => {
                 (engine.getSession as jest.Mock).mockReturnValue(undefined);
             });
             describe("bot is started in a voice based channel with a guildId", () => {
+                describe("no one else connected to channel", () => {
+                    beforeEach(() => {
+                        (
+                            helpers.numberOfPeopleConnected as jest.Mock
+                        ).mockReturnValue(0);
+                        handle.coachMe(interaction);
+                    });
+                    test("replies affirmation ephemerally", () => {
+                        expect(mockReply).toHaveBeenCalledWith({
+                            content: expect.stringContaining("Starting..."),
+                            ephemeral: true,
+                        });
+                    });
+                    test("calls engine.startCoachingSession with the proper params", () => {
+                        expect(
+                            engine.startCoachingSession
+                        ).toHaveBeenCalledWith(
+                            STUDENT_ID,
+                            "guildId",
+                            "channelId"
+                        );
+                    });
+                });
+                describe("someone else connected to channel", () => {
+                    beforeEach(() => {
+                        (
+                            helpers.numberOfPeopleConnected as jest.Mock
+                        ).mockReturnValue(1);
+                        handle.coachMe(interaction);
+                    });
+                    test("calls engine.startCoachingSession with the proper params", () => {
+                        expect(
+                            engine.startCoachingSession
+                        ).toHaveBeenCalledWith(STUDENT_ID);
+                    });
+                });
+            });
+            describe("bot is started in a non voice-based channe or without guildId", () => {
                 beforeEach(() => {
                     handle.coachMe({
                         ...interaction,
                         channel: {
-                            isVoiceBased: () => true,
+                            isVoiceBased: () => false,
                         },
-                        guildId: "guildId",
+                        guildId: undefined,
                     });
-                });
-                test("replies affirmation ephemerally", () => {
-                    expect(mockReply).toHaveBeenCalledWith({
-                        content: expect.stringContaining("Starting..."),
-                        ephemeral: true,
-                    });
-                });
-                test("calls engine.startCoachingSession with the proper params", () => {
-                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
-                        STUDENT_ID,
-                        "guildId",
-                        "channelId"
-                    );
-                });
-            });
-            describe("bot is started in a non voice-based channel or without a guild id", () => {
-                beforeEach(() => {
-                    handle.coachMe(interaction);
                 });
                 test("replies affirmation ephemerally", () => {
                     expect(mockReply).toHaveBeenCalledWith({

@@ -2,6 +2,7 @@ import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
+import helpers from "./discordHelpers";
 import log from "../log";
 import path from "path";
 
@@ -60,7 +61,14 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         interaction
     )}/`;
     let message = `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`;
-    if (interaction.channel?.isVoiceBased() && interaction.guildId) {
+    if (
+        interaction.channel?.isVoiceBased() &&
+        interaction.guildId &&
+        helpers.numberOfPeopleConnected(
+            interaction.guildId,
+            interaction.channelId
+        ) === 0
+    ) {
         engine.startCoachingSession(
             studentId(interaction),
             interaction.guildId,
