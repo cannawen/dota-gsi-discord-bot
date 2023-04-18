@@ -7,6 +7,7 @@ const voice = {
         destroy: jest.fn(),
         on: jest.fn(),
         subscribe: jest.fn(),
+        receiver: { speaking: { on: jest.fn() } },
     }),
     AudioPlayerStatus: {
         AutoPaused: "autopaused",
