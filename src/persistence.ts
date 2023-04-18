@@ -12,13 +12,13 @@ if (!fs.existsSync(process.env.PERSISTENCE_DATA_PATH || "")) {
 // eslint-disable-next-line camelcase
 function debug_saveAllState(state: string) {
     log.debug("rules", state);
-    fs.writeFileSync(
-        path.join(
-            process.env.PERSISTENCE_DATA_PATH || "",
-            "debug_saveAllState.json"
-        ),
-        state
-    );
+        fs.writeFileSync(
+            path.join(
+                process.env.PERSISTENCE_DATA_PATH || "",
+                "debug_saveAllState.json"
+            ),
+            state
+        );
 }
 
 function restartDataFilePath() {
@@ -95,7 +95,12 @@ function readStudentData(studentId: string) {
         }
     } catch (error) {
         deleteStudentData(studentId);
-        log.error("app", "Unable to read student data %s", error);
+        log.error(
+            "app",
+            "Unable to read student %s data %s",
+            studentId.substring(0, 10),
+            error
+        );
     }
 }
 

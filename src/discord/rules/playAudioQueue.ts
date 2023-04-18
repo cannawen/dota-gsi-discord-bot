@@ -22,7 +22,12 @@ export default new Rule(
 
         if (ready && audioQueue.length > 0) {
             const filePath = audioQueue.splice(0, 1)[0];
-            log.info("discord", "Playing %s", emColor(filePath));
+            log.info(
+                "discord",
+                "Playing %s for student %s",
+                emColor(filePath),
+                get(topics.studentId)?.substring(0, 10)
+            );
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return new Fact(topics.publicAudioQueue, audioQueue);

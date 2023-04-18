@@ -151,7 +151,12 @@ router.get("/coach/:studentId/poll", (req, res) => {
     const studentId = req.params.studentId;
     const nextAudio = getNextAudio(studentId);
     if (nextAudio) {
-        log.info("effect", "Playing private audio %s", nextAudio.magenta);
+        log.info(
+            "effect",
+            "Playing private audio %s for %s",
+            nextAudio.magenta,
+            studentId.substring(0, 10)
+        );
         res.status(200).json({ nextAudio: nextAudio });
     } else if (updateFrontend(studentId)) {
         res.status(200).json({ updateFrontend: true });

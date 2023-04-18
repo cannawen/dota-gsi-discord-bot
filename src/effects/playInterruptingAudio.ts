@@ -16,7 +16,12 @@ export default new Rule(
         if (get(topics.discordAudioEnabled)!) {
             const file = get(topics.playInterruptingAudioFile)!;
             const subscription = get(topics.discordSubscriptionTopic)!;
-            log.info("discord", "Playing interrupting audio %s", file.magenta);
+            log.info(
+                "discord",
+                "Playing interrupting audio %s for student %s",
+                file.magenta,
+                get(topics.studentId)?.substring(0, 10)
+            );
 
             subscription.player.play(Voice.createAudioResource(file));
         }

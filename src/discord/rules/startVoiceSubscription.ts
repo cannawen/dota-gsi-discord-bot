@@ -41,7 +41,7 @@ export default new Rule(
             log.error(
                 "discord",
                 "Not attempting to start Voice.PlayerSubscription for %s; channel %s not found in guild %s",
-                studentId,
+                studentId.substring(0, 10),
                 channelId,
                 guildId
             );
@@ -62,7 +62,7 @@ export default new Rule(
                 "connectionState changed from %s to %s for student %s",
                 oldState.status,
                 emColor(newState.status),
-                studentId
+                studentId.substring(0, 10)
             );
 
             switch (newState.status) {
@@ -117,7 +117,7 @@ export default new Rule(
                 "AudioPlayerState - transitioned from %s to %s for student",
                 oldState.status,
                 emColor(newState.status),
-                studentId
+                studentId.substring(0, 10)
             );
 
             const ready = newState.status === Voice.AudioPlayerStatus.Idle;
