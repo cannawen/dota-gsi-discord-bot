@@ -11,7 +11,7 @@ import topics from "../../topics";
 import Voice = require("@discordjs/voice");
 
 import Transcriber from "discord-speech-to-text";
-const transcriber = new Transcriber("NORJA5Y77XGK6FPS3PMU4WRUOY6PIJDQ");
+const transcriber = new Transcriber(process.env.WIT_TOKEN);
 
 const emColor = colors.cyan;
 
