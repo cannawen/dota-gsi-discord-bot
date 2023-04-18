@@ -10,6 +10,9 @@ import rules from "../../rules";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
 
+import Transcriber from "discord-speech-to-text";
+const transcriber = new Transcriber("NORJA5Y77XGK6FPS3PMU4WRUOY6PIJDQ");
+
 const emColor = colors.cyan;
 
 // https://discordjs.guide/voice/voice-connections.html#handling-disconnects
@@ -119,6 +122,8 @@ export default new Rule(
             adapterCreator: channel.guild.voiceAdapterCreator,
             channelId: channelId,
             guildId: guildId,
+            selfDeaf: false,
+            selfMute: false,
         });
         connection.on("stateChange", (oldState, newState) => {
             if (oldState.status === newState.status) return;
@@ -129,6 +134,21 @@ export default new Rule(
                 studentId,
                 connection
             );
+        });
+        connection.receiver.speaking.on("start", (userId) => {
+            transcriber
+                .listen(connection.receiver, userId)
+                .then(
+                    (data: {
+                        userId: string;
+                        transcript: { text: string };
+                    }) => {
+                        if (!data.transcript.text) return;
+                        let text = data.transcript.text;
+                        let userId = data.userId;
+                        console.log(userId, text);
+                    }
+                );
         });
 
         const player = Voice.createAudioPlayer();
