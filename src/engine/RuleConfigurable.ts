@@ -3,6 +3,9 @@ import Fact from "./Fact";
 import Rule from "./Rule";
 import Topic from "./Topic";
 
+/**
+ * Note: When the effect changes, the `then` will be run once
+ */
 class RuleConfigurable extends Rule {
     constructor(
         label: string,

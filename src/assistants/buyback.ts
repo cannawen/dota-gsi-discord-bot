@@ -28,10 +28,10 @@ export default [
             const time = get(topics.time)!;
             if (!inGame || time < 30 * 60) return;
 
-            const buybackCooldownAvailable = get(topics.buybackCooldown)! === 0;
+            const buybackAvailable = get(topics.buybackCooldown)! === 0;
             const gold = get(topics.gold)!;
             const buybackCost = get(topics.buybackCost)!;
-            if (buybackCooldownAvailable) {
+            if (buybackAvailable) {
                 const hasBuyback = gold >= buybackCost;
                 return new Fact(hasBuybackTopic, hasBuyback);
             } else {
