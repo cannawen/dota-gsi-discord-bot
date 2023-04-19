@@ -7,6 +7,9 @@ import rules from "../rules";
 import topics from "../topics";
 import tts from "./tts";
 
+/**
+ * The actual playing happens in server /coach/:studentId/poll
+ */
 export default new Rule(
     rules.effect.playPrivateAudio,
     [topics.playPrivateAudio],

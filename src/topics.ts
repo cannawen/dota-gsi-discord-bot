@@ -34,6 +34,11 @@ const gsi = {
     }),
 };
 
+/**
+ * playDiscordAudio and playPrivateAudio take in either
+ * 1) A hardcoded file in ./resources/audio/ directory
+ * 2) A message that will be TTS-ed and saved to ./resources/audio/tts-cache/
+ */
 const effect = {
     playDiscordAudio: new Topic<string>("playDiscordAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
