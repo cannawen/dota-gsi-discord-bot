@@ -23,7 +23,6 @@ describe("roshan", () => {
                 Roshan: "PUBLIC",
                 inGame: false,
                 lastDiscordMessage: "What is rosh status",
-                time: 0,
             });
             expect(results).toContainFact(
                 "playDiscordAudio",

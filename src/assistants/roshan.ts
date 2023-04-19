@@ -97,7 +97,7 @@ roshRulesArray.push(
     new RuleConfigurable(
         rules.assistant.roshan.voice,
         configTopic,
-        [topics.lastDiscordMessage, topics.time],
+        [topics.lastDiscordMessage],
         (get, effect) => {
             if (!get(topics.inGame)) {
                 return new Fact(effect, "You are not in a game");
@@ -107,9 +107,8 @@ roshRulesArray.push(
                 return;
             }
             const killedTime = get(lastRoshanKilledTime);
-            if (killedTime) {
-                const time = get(topics.time)!;
-
+            const time = get(topics.time);
+            if (killedTime && time) {
                 if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
                     return new Fact(
                         effect,
