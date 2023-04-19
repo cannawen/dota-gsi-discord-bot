@@ -1,5 +1,5 @@
 const fs = {
-    existsSync: jest.fn().mockReturnValue(true),
+    existsSync: jest.fn(),
     mkdirSync: jest.fn(),
     readFileSync: jest.fn(),
     readdirSync: jest.fn().mockReturnValue([]),
