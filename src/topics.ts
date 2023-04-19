@@ -35,8 +35,6 @@ const gsi = {
 };
 
 const effect = {
-    playTts: new Topic<string>("playTts"),
-
     playDiscordAudio: new Topic<string>("playDiscordAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
 

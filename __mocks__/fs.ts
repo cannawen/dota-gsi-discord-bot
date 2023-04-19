@@ -1,8 +1,9 @@
 const fs = {
-    existsSync: jest.fn(),
+    existsSync: jest.fn().mockReturnValue(true),
     mkdirSync: jest.fn(),
     readFileSync: jest.fn(),
     readdirSync: jest.fn(),
+    stat: jest.fn(),
     unlinkSync: jest.fn(),
     writeFileSync: jest.fn(),
 };

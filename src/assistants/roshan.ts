@@ -105,7 +105,6 @@ export default [
         rules.assistant.roshan.voice,
         configTopic,
         [topics.lastDiscordMessage],
-        // TODO use effect instead of tts
         (get, effect) => {
             const message = get(topics.lastDiscordMessage)!;
             if (!roshStatusMessage(message)) {
@@ -114,7 +113,7 @@ export default [
             const maybeAlive = get(roshanMaybeTimeTopic);
             if (maybeAlive) {
                 return new Fact(
-                    topics.playTts,
+                    effect,
                     `Roshan is dead. May respawn at ${secondsToTimeString(
                         maybeAlive
                     )}`
@@ -123,16 +122,16 @@ export default [
             const alive = get(roshanAliveTimeTopic);
             if (alive) {
                 return new Fact(
-                    topics.playTts,
+                    effect,
                     `Roshan may be alive. Guaranteed respawn at ${secondsToTimeString(
                         alive
                     )}`
                 );
             }
             if (get(topics.inGame)) {
-                return new Fact(topics.playTts, "Roshan is alive");
+                return new Fact(effect, "Roshan is alive");
             } else {
-                return new Fact(topics.playTts, "You are not in a game");
+                return new Fact(effect, "You are not in a game");
             }
         }
     ),

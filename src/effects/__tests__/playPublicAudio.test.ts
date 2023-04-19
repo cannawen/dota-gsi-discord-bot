@@ -1,6 +1,6 @@
 import Fact from "../../engine/Fact";
 import { getResults } from "../../__tests__/helpers";
-import rule from "../playAudio";
+import rule from "../playPublicAudio";
 
 describe("playAudio", () => {
     describe("discord audio enabled", () => {
@@ -38,7 +38,7 @@ describe("playAudio", () => {
                 discordAudioEnabled: false,
             }) as Fact<string[]>[];
 
-            expect(results).not.toContainTopic("publicAudioQueue");
+            expect(results).toContainFact("publicAudioQueue", []);
             expect(results).toContainFact("playDiscordAudio", undefined);
         });
     });
