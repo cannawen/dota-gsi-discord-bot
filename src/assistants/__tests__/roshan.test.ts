@@ -63,7 +63,24 @@ describe("roshan", () => {
                 }) as any;
             });
 
-            test("voice should say rosh is dead until 8:00 after killed event", () => {
+            test("voice should say rosh is dead & aegis reminder until 5:00 after killed event", () => {
+                const results = getResults(
+                    voiceRule,
+                    {
+                        Roshan: "PUBLIC",
+                        inGame: true,
+                        lastDiscordMessage: "what time",
+                        time: 100 + 4 * 60,
+                    },
+                    roshKilledState
+                );
+                expect(results).toContainFact(
+                    "playPublicAudio",
+                    expect.stringContaining("Roshan is dead. Aegis expires at")
+                );
+            });
+
+            test("voice should say rosh is dead & respawn reminder until 8:00 after killed event", () => {
                 const results = getResults(
                     voiceRule,
                     {
@@ -76,7 +93,7 @@ describe("roshan", () => {
                 );
                 expect(results).toContainFact(
                     "playPublicAudio",
-                    expect.stringContaining("Roshan is dead")
+                    expect.stringContaining("Roshan is dead. May respawn at")
                 );
             });
 
@@ -96,7 +113,7 @@ describe("roshan", () => {
                 );
             });
 
-            test("voice should say rosh may be alive until 11:00 after killed event", () => {
+            test("voice should say rosh may be alive & respawn reminder until 11:00 after killed event", () => {
                 const results = getResults(
                     voiceRule,
                     {
@@ -109,7 +126,9 @@ describe("roshan", () => {
                 );
                 expect(results).toContainFact(
                     "playPublicAudio",
-                    expect.stringContaining("Roshan may be alive")
+                    expect.stringContaining(
+                        "Roshan may be alive. Guaranteed respawn at"
+                    )
                 );
             });
 

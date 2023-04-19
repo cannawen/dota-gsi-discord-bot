@@ -14,6 +14,7 @@ export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
 
+const AEGIS_DURATION = 5 * 60;
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
@@ -110,6 +111,14 @@ roshRulesArray.push(
             const killedTime = get(lastRoshanKilledTime);
             const time = get(topics.time);
             if (killedTime && time) {
+                if (time < killedTime + AEGIS_DURATION) {
+                    return new Fact(
+                        effect,
+                        `Roshan is dead. Aegis expires at ${secondsToTimeString(
+                            killedTime + AEGIS_DURATION
+                        )}`
+                    );
+                }
                 if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
                     return new Fact(
                         effect,
@@ -118,7 +127,6 @@ roshRulesArray.push(
                         )}`
                     );
                 }
-
                 if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
                     return new Fact(
                         effect,
