@@ -40,8 +40,6 @@ export default new RuleConfigurable(
 
         const seenBefore = get(seenPhilosophersStoneTopic);
         if (seenBefore === undefined && hasPhilosophersStone(items)) {
-            // TODO remove
-            log.info("rules", "Found philosopher's stone");
             return new Fact(seenPhilosophersStoneTopic, true);
         }
         if (!seenBefore) {

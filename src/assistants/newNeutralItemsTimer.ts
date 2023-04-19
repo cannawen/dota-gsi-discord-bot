@@ -27,8 +27,8 @@ export default new RuleConfigurable(
             // TODO remove
             log.info(
                 "rules",
-                "New neutral item announcement at time",
-                currentTime
+                "New neutral item announcement at time %s",
+                currentTime / 60
             );
             return new Fact(effect, "resources/audio/new-neutrals.mp3");
         }

@@ -42,7 +42,7 @@ function secondsToTimeString(seconds: number) {
     const totalMs = seconds * 1000;
     const result = new Date(totalMs).toISOString().slice(14, 19);
 
-    return result;
+    return result.replace(":", " ");
 }
 
 export default [
