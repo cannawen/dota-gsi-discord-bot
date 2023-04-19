@@ -25,7 +25,7 @@ describe("roshan", () => {
                 lastDiscordMessage: "What is rosh status",
             });
             expect(results).toContainFact(
-                "playDiscordAudio",
+                "playPublicAudio",
                 "You are not in a game"
             );
         });
@@ -50,10 +50,7 @@ describe("roshan", () => {
                 time: 1,
                 lastDiscordMessage: "What is rosh status",
             });
-            expect(results).toContainFact(
-                "playDiscordAudio",
-                "Roshan is alive"
-            );
+            expect(results).toContainFact("playPublicAudio", "Roshan is alive");
         });
         describe("roshan killed", () => {
             let roshKilledState: any;
@@ -78,7 +75,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playDiscordAudio",
+                    "playPublicAudio",
                     expect.stringContaining("Roshan is dead")
                 );
             });
@@ -94,7 +91,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playDiscordAudio",
+                    "playPublicAudio",
                     "resources/audio/rosh-maybe.mp3"
                 );
             });
@@ -111,7 +108,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playDiscordAudio",
+                    "playPublicAudio",
                     expect.stringContaining("Roshan may be alive")
                 );
             });
@@ -127,7 +124,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playDiscordAudio",
+                    "playPublicAudio",
                     "resources/audio/rosh-alive.mp3"
                 );
             });
@@ -144,7 +141,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playDiscordAudio",
+                    "playPublicAudio",
                     "Roshan is alive"
                 );
             });

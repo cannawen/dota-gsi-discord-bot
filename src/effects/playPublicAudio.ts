@@ -12,9 +12,9 @@ import tts from "./tts";
  */
 export default new Rule(
     rules.effect.playAudio,
-    [topics.playDiscordAudio, topics.discordAudioEnabled],
+    [topics.playPublicAudio, topics.discordAudioEnabled],
     (get) => {
-        const audio = get(topics.playDiscordAudio)!;
+        const audio = get(topics.playPublicAudio)!;
         const queue = [...(get(topics.publicAudioQueue) || [])];
 
         if (get(topics.discordAudioEnabled)!) {
@@ -33,7 +33,7 @@ export default new Rule(
                 tts.create(audio).then(() => {
                     engine.setFact(
                         get(topics.studentId)!,
-                        new Fact(topics.playDiscordAudio, audio)
+                        new Fact(topics.playPublicAudio, audio)
                     );
                 });
             }
@@ -41,7 +41,7 @@ export default new Rule(
 
         return [
             new Fact(topics.publicAudioQueue, queue),
-            new Fact(topics.playDiscordAudio, undefined),
+            new Fact(topics.playPublicAudio, undefined),
         ];
     }
 );

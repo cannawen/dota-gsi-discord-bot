@@ -25,7 +25,7 @@ describe("RuleConfigurable", () => {
     });
     test("PUBLIC", () => {
         const results = getResults(rule, { configTopic: EffectConfig.PUBLIC });
-        expect(results).toContainFact("playDiscordAudio", "foo.mp3");
+        expect(results).toContainFact("playPublicAudio", "foo.mp3");
     });
     test("PUBLIC_INTERRUPTING", () => {
         const results = getResults(rule, {

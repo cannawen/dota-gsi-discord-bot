@@ -17,7 +17,7 @@ describe("playAudio", () => {
             });
             test("should create audio queue", () => {
                 const results = getResults(rule, {
-                    playDiscordAudio: "foo.mp3",
+                    playPublicAudio: "foo.mp3",
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
@@ -27,7 +27,7 @@ describe("playAudio", () => {
             test("should add to audio queue and reset state", () => {
                 const results = getResults(rule, {
                     publicAudioQueue: ["bar.mp3"],
-                    playDiscordAudio: "foo.mp3",
+                    playPublicAudio: "foo.mp3",
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
@@ -38,11 +38,11 @@ describe("playAudio", () => {
             });
             test("should reset state", () => {
                 const results = getResults(rule, {
-                    playDiscordAudio: "foo.mp3",
+                    playPublicAudio: "foo.mp3",
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
-                expect(results).toContainFact("playDiscordAudio", undefined);
+                expect(results).toContainFact("playPublicAudio", undefined);
             });
         });
         describe("cached file exists", () => {
@@ -53,7 +53,7 @@ describe("playAudio", () => {
             });
             test("should add to audio queue", () => {
                 const results = getResults(rule, {
-                    playDiscordAudio: "foo",
+                    playPublicAudio: "foo",
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
@@ -71,7 +71,7 @@ describe("playAudio", () => {
                 const results = getResults(rule, {
                     discordAudioEnabled: true,
                     studentId: "studentId",
-                    playDiscordAudio: "text to speech message",
+                    playPublicAudio: "text to speech message",
                 }) as Fact<string[]>[];
 
                 expect(results).toContainFact("publicAudioQueue", []);
@@ -84,7 +84,7 @@ describe("playAudio", () => {
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
-                            topics.playDiscordAudio,
+                            topics.playPublicAudio,
                             "text to speech message"
                         )
                     );
@@ -96,12 +96,12 @@ describe("playAudio", () => {
     describe("discord audio disabled", () => {
         test("should reset state", () => {
             const results = getResults(rule, {
-                playDiscordAudio: "foo.mp3",
+                playPublicAudio: "foo.mp3",
                 discordAudioEnabled: false,
             }) as Fact<string[]>[];
 
             expect(results).toContainFact("publicAudioQueue", []);
-            expect(results).toContainFact("playDiscordAudio", undefined);
+            expect(results).toContainFact("playPublicAudio", undefined);
         });
     });
 });
