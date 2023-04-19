@@ -16,14 +16,8 @@ export const assistantDescription =
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanMaybeTimeTopic = topicManager.createTopic<number>(
-    "roshanMaybeTimeTopic",
-    {
-        persistAcrossRestarts: true,
-    }
-);
-const roshanAliveTimeTopic = topicManager.createTopic<number>(
-    "roshanAliveTimeTopic",
+const lastRoshanKilledTime = topicManager.createTopic<number>(
+    "lastRoshanKilledTime",
     {
         persistAcrossRestarts: true,
     }
@@ -57,16 +51,7 @@ export default [
         (get) => {
             if (roshanWasKilled(get(topics.events)!)) {
                 const time = get(topics.time)!;
-                return [
-                    new Fact(
-                        roshanMaybeTimeTopic,
-                        time + ROSHAN_MINIMUM_SPAWN_TIME
-                    ),
-                    new Fact(
-                        roshanAliveTimeTopic,
-                        time + ROSHAN_MAXIMUM_SPAWN_TIME
-                    ),
-                ];
+                return new Fact(lastRoshanKilledTime, time);
             }
         }
     ),
@@ -76,13 +61,13 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.maybeAliveTime,
         configTopic,
-        [topics.time, roshanMaybeTimeTopic],
+        [topics.time, lastRoshanKilledTime],
         (get, effect) => {
-            if (get(topics.time)! >= get(roshanMaybeTimeTopic)!) {
-                return [
-                    new Fact(effect, "resources/audio/rosh-maybe.mp3"),
-                    new Fact(roshanMaybeTimeTopic, undefined),
-                ];
+            if (
+                get(topics.time)! >=
+                get(lastRoshanKilledTime)! + ROSHAN_MINIMUM_SPAWN_TIME
+            ) {
+                return new Fact(effect, "resources/audio/rosh-maybe.mp3");
             }
         }
     ),
@@ -92,12 +77,15 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.aliveTime,
         configTopic,
-        [topics.time, roshanAliveTimeTopic],
+        [topics.time, lastRoshanKilledTime],
         (get, effect) => {
-            if (get(topics.time)! >= get(roshanAliveTimeTopic)!) {
+            if (
+                get(topics.time)! >=
+                get(lastRoshanKilledTime)! + ROSHAN_MAXIMUM_SPAWN_TIME
+            ) {
                 return [
                     new Fact(effect, "resources/audio/rosh-alive.mp3"),
-                    new Fact(roshanAliveTimeTopic, undefined),
+                    new Fact(lastRoshanKilledTime, undefined),
                 ];
             }
         }
@@ -106,35 +94,38 @@ export default [
     new RuleConfigurable(
         rules.assistant.roshan.voice,
         configTopic,
-        [topics.lastDiscordMessage],
+        [topics.lastDiscordMessage, topics.time],
         (get, effect) => {
+            if (!get(topics.inGame)) {
+                return new Fact(effect, "You are not in a game");
+            }
             const message = get(topics.lastDiscordMessage)!;
             if (!roshStatusMessage(message)) {
                 return;
             }
-            const maybeAlive = get(roshanMaybeTimeTopic);
-            if (maybeAlive) {
-                return new Fact(
-                    effect,
-                    `Roshan is dead. May respawn at ${secondsToTimeString(
-                        maybeAlive
-                    )}`
-                );
+            const killedTime = get(lastRoshanKilledTime);
+            if (killedTime) {
+                const time = get(topics.time)!;
+
+                if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
+                    return new Fact(
+                        effect,
+                        `Roshan is dead. May respawn at ${secondsToTimeString(
+                            killedTime + ROSHAN_MINIMUM_SPAWN_TIME
+                        )}`
+                    );
+                }
+
+                if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
+                    return new Fact(
+                        effect,
+                        `Roshan may be alive. Guaranteed respawn at ${secondsToTimeString(
+                            killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
+                        )}`
+                    );
+                }
             }
-            const alive = get(roshanAliveTimeTopic);
-            if (alive) {
-                return new Fact(
-                    effect,
-                    `Roshan may be alive. Guaranteed respawn at ${secondsToTimeString(
-                        alive
-                    )}`
-                );
-            }
-            if (get(topics.inGame)) {
-                return new Fact(effect, "Roshan is alive");
-            } else {
-                return new Fact(effect, "You are not in a game");
-            }
+            return new Fact(effect, "Roshan is alive");
         }
     ),
 ];
