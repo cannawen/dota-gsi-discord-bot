@@ -77,7 +77,7 @@ describe("philosopher's stone assistant", () => {
                         },
                         seenPhilosophersStoneState
                     );
-                    expect(result).not.toContainTopic("playPrivateAudioFile");
+                    expect(result).not.toContainTopic("playPrivateAudio");
                 });
             });
             describe("when not alive and holding stone", () => {
@@ -116,7 +116,7 @@ describe("philosopher's stone assistant", () => {
                 });
                 test("reminds", () => {
                     expect(deadSeenStoneBeforeState).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/philosphers-stone-hold.mp3"
                     );
                 });
@@ -137,7 +137,7 @@ describe("philosopher's stone assistant", () => {
                             ]
                         );
                         expect(result).toContainFact(
-                            "playPrivateAudioFile",
+                            "playPrivateAudio",
                             "resources/audio/philosphers-stone-return.mp3"
                         );
                     });

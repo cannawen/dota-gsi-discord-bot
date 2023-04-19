@@ -52,7 +52,7 @@ describe("midas assistant", () => {
                         items: MIDAS_CAN_CAST,
                     }) as any;
                     expect(firstSeenMidasState).not.toContainTopic(
-                        "playPrivateAudioFile"
+                        "playPrivateAudio"
                     );
                     const fifteenSecondsAfterState = getResults(
                         rule,
@@ -65,7 +65,7 @@ describe("midas assistant", () => {
                         firstSeenMidasState
                     ) as any;
                     expect(fifteenSecondsAfterState).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/midas.mpeg"
                     );
                     const thirtySecondsAfterState = getResults(
@@ -79,7 +79,7 @@ describe("midas assistant", () => {
                         fifteenSecondsAfterState
                     ) as any;
                     expect(thirtySecondsAfterState).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/midas.mpeg"
                     );
                     const thirtyOneSeconsAfterState = getResults(
@@ -104,7 +104,7 @@ describe("midas assistant", () => {
                         items: MIDAS_ON_COOLDOWN,
                     }) as any;
                     expect(firstSeenMidasState).not.toContainTopic(
-                        "playPrivateAudioFile"
+                        "playPrivateAudio"
                     );
                     const fifteenSecondsAfterState = getResults(
                         rule,
@@ -117,7 +117,7 @@ describe("midas assistant", () => {
                         firstSeenMidasState
                     ) as any;
                     expect(fifteenSecondsAfterState).not.toContainTopic(
-                        "playPrivateAudioFile"
+                        "playPrivateAudio"
                     );
                     const thirtySecondsAfterState = getResults(
                         rule,
@@ -130,7 +130,7 @@ describe("midas assistant", () => {
                         fifteenSecondsAfterState
                     ) as any;
                     expect(thirtySecondsAfterState).not.toContainTopic(
-                        "playPrivateAudioFile"
+                        "playPrivateAudio"
                     );
                 });
             });
@@ -145,9 +145,7 @@ describe("midas assistant", () => {
                 alive: false,
                 items: MIDAS_CAN_CAST,
             }) as any;
-            expect(firstSeenMidasState).not.toContainTopic(
-                "playPrivateAudioFile"
-            );
+            expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
             const fifteenSecondsAfterState = getResults(
                 rule,
                 {
@@ -159,7 +157,7 @@ describe("midas assistant", () => {
                 firstSeenMidasState
             ) as any;
             expect(fifteenSecondsAfterState).not.toContainTopic(
-                "playPrivateAudioFile"
+                "playPrivateAudio"
             );
         });
     });
@@ -172,9 +170,7 @@ describe("midas assistant", () => {
                 alive: true,
                 items: NO_MIDAS,
             }) as any;
-            expect(firstSeenMidasState).not.toContainTopic(
-                "playPrivateAudioFile"
-            );
+            expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
             const fifteenSecondsAfterState = getResults(
                 rule,
                 {
@@ -186,7 +182,7 @@ describe("midas assistant", () => {
                 firstSeenMidasState
             ) as any;
             expect(fifteenSecondsAfterState).not.toContainTopic(
-                "playPrivateAudioFile"
+                "playPrivateAudio"
             );
         });
     });

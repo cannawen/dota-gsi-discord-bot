@@ -75,7 +75,7 @@ describe("buyback gold reminder", () => {
                         hasBuybackTopic: false,
                     });
                     expect(results).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/buyback-warning.mp3"
                     );
                 });

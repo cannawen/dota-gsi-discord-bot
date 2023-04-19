@@ -17,7 +17,7 @@ export enum EffectConfig {
 const configToEffectTopic = {
     [EffectConfig.PUBLIC]: topics.playDiscordAudio,
     [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
-    [EffectConfig.PRIVATE]: topics.playPrivateAudioFile,
+    [EffectConfig.PRIVATE]: topics.playPrivateAudio,
     [EffectConfig.NONE]: undefined,
 };
 

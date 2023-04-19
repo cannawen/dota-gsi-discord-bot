@@ -33,7 +33,7 @@ describe("water runes", () => {
                     time: 2 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-water.mp3"
                 );
             });
@@ -46,7 +46,7 @@ describe("water runes", () => {
                     time: 4 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-water.mp3"
                 );
             });

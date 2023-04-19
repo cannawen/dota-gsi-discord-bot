@@ -43,7 +43,7 @@ describe("power runes", () => {
                     time: 6 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-power.wav"
                 );
             });
@@ -56,7 +56,7 @@ describe("power runes", () => {
                     time: 60 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-power.wav"
                 );
             });

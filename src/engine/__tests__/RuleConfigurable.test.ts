@@ -21,7 +21,7 @@ describe("RuleConfigurable", () => {
     });
     test("PRIVATE", () => {
         const results = getResults(rule, { configTopic: EffectConfig.PRIVATE });
-        expect(results).toContainFact("playPrivateAudioFile", "foo.mp3");
+        expect(results).toContainFact("playPrivateAudio", "foo.mp3");
     });
     test("PUBLIC", () => {
         const results = getResults(rule, { configTopic: EffectConfig.PUBLIC });

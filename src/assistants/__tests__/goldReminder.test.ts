@@ -35,7 +35,7 @@ describe("gold reminder", () => {
                             inGame: true,
                             gold: 500,
                         });
-                        expect(results).toContainTopic("playPrivateAudioFile");
+                        expect(results).toContainTopic("playPrivateAudio");
                     });
                 });
                 describe("has reminded before at the same level", () => {
@@ -76,9 +76,7 @@ describe("gold reminder", () => {
                                 },
                                 state
                             );
-                            expect(results).toContainTopic(
-                                "playPrivateAudioFile"
-                            );
+                            expect(results).toContainTopic("playPrivateAudio");
                         });
                     });
                 });
@@ -124,7 +122,7 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 1000,
                     });
-                    expect(results).toContainTopic("playPrivateAudioFile");
+                    expect(results).toContainTopic("playPrivateAudio");
                 });
             });
         });
@@ -152,7 +150,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
-                        expect(results).toContainTopic("playPrivateAudioFile");
+                        expect(results).toContainTopic("playPrivateAudio");
                     });
                 });
             });
@@ -179,7 +177,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
-                        expect(results).toContainTopic("playPrivateAudioFile");
+                        expect(results).toContainTopic("playPrivateAudio");
                     });
                 });
             });
@@ -203,7 +201,7 @@ describe("gold reminder", () => {
                     },
                     state
                 );
-                expect(results).not.toContainTopic("playPrivateAudioFile");
+                expect(results).not.toContainTopic("playPrivateAudio");
             });
         });
 
@@ -217,7 +215,7 @@ describe("gold reminder", () => {
                         gold: 1500,
                     });
                     expect(results).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/gold.mp3"
                     );
                 });
@@ -231,7 +229,7 @@ describe("gold reminder", () => {
                         gold: 2500,
                     });
                     expect(results).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/gold-lots.mp3"
                     );
                 });
@@ -245,7 +243,7 @@ describe("gold reminder", () => {
                         gold: 2501,
                     });
                     expect(results).toContainFact(
-                        "playPrivateAudioFile",
+                        "playPrivateAudio",
                         "resources/audio/gold-lots-really.mp3"
                     );
                 });

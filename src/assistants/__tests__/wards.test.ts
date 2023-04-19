@@ -53,7 +53,7 @@ describe("wards", () => {
                     noWardState
                 );
                 expect(noWardStateLater).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/wards.mp3"
                 );
             });
@@ -76,7 +76,7 @@ describe("wards", () => {
                     },
                     twoWardState
                 );
-                expect(oneWardState).toContainTopic("playPrivateAudioFile");
+                expect(oneWardState).toContainTopic("playPrivateAudio");
             });
         });
         describe("increase in ward count", () => {
@@ -107,7 +107,7 @@ describe("wards", () => {
                     },
                     twoWardState
                 );
-                expect(noWardState).not.toContainTopic("playPrivateAudioFile");
+                expect(noWardState).not.toContainTopic("playPrivateAudio");
             });
         });
     });

@@ -33,7 +33,7 @@ describe("bounty runes", () => {
                     time: 3 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-bounty.wav"
                 );
             });
@@ -46,7 +46,7 @@ describe("bounty runes", () => {
                     time: 60 * 60,
                 });
                 expect(results).toContainFact(
-                    "playPrivateAudioFile",
+                    "playPrivateAudio",
                     "resources/audio/rune-bounty.wav"
                 );
             });

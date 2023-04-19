@@ -40,7 +40,7 @@ const effect = {
     playDiscordAudio: new Topic<string>("playDiscordAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
 
-    playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),
+    playPrivateAudio: new Topic<string>("playPrivateAudio"),
     privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
 
     playInterruptingAudioFile: new Topic<string>("playInterruptingAudioFile"),

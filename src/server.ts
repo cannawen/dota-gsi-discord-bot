@@ -55,7 +55,7 @@ router.post("/coach/:studentId/debug_playPublicAudio", (req, res) => {
 router.post("/coach/:studentId/debug_playPrivateAudio", (req, res) => {
     engine.setFact(
         req.params.studentId,
-        new Fact(topics.playPrivateAudioFile, "resources/audio/jeopardy.mp3")
+        new Fact(topics.playPrivateAudio, "resources/audio/jeopardy.mp3")
     );
     res.status(200).send();
 });

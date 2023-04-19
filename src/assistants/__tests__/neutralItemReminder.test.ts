@@ -49,7 +49,7 @@ describe("neutralItemReminder", () => {
                 state
             ) as any;
             expect(result).toContainFact(
-                "playPrivateAudioFile",
+                "playPrivateAudio",
                 "resources/audio/no-neutral.mp3"
             );
             const result2 = getResults(
@@ -62,7 +62,7 @@ describe("neutralItemReminder", () => {
                 result
             );
             expect(result2).toContainFact(
-                "playPrivateAudioFile",
+                "playPrivateAudio",
                 "resources/audio/no-neutral.mp3"
             );
         });
