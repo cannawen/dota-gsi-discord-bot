@@ -15,6 +15,8 @@
         "format": "npx prettier --write .",
         "start:dev": "npx nodemon",
         "test:dev": "jest --watchAll",
+        "rosh-canna": "mitmdump -nC mitmproxy-flows/kill-rosh-take-bounty-destroy-tower-live_canna",
+        "rosh-canna-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/kill-rosh-take-bounty-destroy-tower-live_canna",
         "dig-canna": "mitmdump -nC mitmproxy-flows/die-respawn-dig_canna",
         "dig-canna-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/die-respawn-dig_canna",
         "rune-canna": "mitmdump -nC mitmproxy-flows/water-rune_canna",

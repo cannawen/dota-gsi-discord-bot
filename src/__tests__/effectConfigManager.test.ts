@@ -6,7 +6,7 @@ describe("effectConfigManager", () => {
     test("defaultConfigs", () => {
         expect(sut.defaultConfigs()).toContainEqual(
             new Fact(
-                new PersistentTopic<EffectConfig>("buyback", {
+                new PersistentTopic<EffectConfig>("Buyback", {
                     persistForever: true,
                 }),
                 EffectConfig.PRIVATE

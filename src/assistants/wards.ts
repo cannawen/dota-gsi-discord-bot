@@ -10,7 +10,7 @@ export const configTopic = topicManager.createConfigTopic(
 );
 export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
-    "Reminds you to buy wards if you have not done so in a while";
+    "Reminds you to buy wards if you have not done so recently";
 
 const WARD_RESTOCK_SECONDS = 135;
 const MAX_WARDS_IN_STOCK = 4;

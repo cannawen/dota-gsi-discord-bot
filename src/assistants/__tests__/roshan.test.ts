@@ -29,7 +29,7 @@ describe("roshan", () => {
                 const results = getResults(
                     maybeAliveRule,
                     {
-                        roshan: "PUBLIC",
+                        Roshan: "PUBLIC",
                         time: 100 + 8 * 60,
                     },
                     roshKilledState
@@ -44,7 +44,7 @@ describe("roshan", () => {
                 const results = getResults(
                     aliveRule,
                     {
-                        roshan: "PUBLIC",
+                        Roshan: "PUBLIC",
                         time: 100 + 11 * 60,
                     },
                     roshKilledState
