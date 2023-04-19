@@ -8,6 +8,8 @@ import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic("buyback");
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "After 30 minutes, you will be warned when you do not have enough gold for buyback";
 
 const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
 

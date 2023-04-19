@@ -13,6 +13,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.philosophersStone
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Reminds you to use Philospher's Stone while you are dead";
 
 const seenPhilosophersStoneTopic = topicManager.createTopic<boolean>(
     "seenPhilosophersStoneTopic",

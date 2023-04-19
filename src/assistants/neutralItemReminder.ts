@@ -9,6 +9,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.neutralItemReminder
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Reminds you to pick up a neutral item (after 12:00)";
 
 const TIME_BETWEEN_REMINDERS = 120;
 const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10;

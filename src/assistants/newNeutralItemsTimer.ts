@@ -10,6 +10,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.newNeutralItems
 );
 export const defaultConfig = EffectConfig.PUBLIC;
+export const assistantDescription =
+    "Reminds you when new neutral items are spawning";
 
 const NEUTRAL_ITEM_SPAWN_MINUTES = [7, 17, 27, 37, 60];
 

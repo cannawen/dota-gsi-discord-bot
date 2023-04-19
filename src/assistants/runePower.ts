@@ -12,6 +12,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runePower
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Reminds you of power rune spawn every 2:00 after 6:00";
 
 export default new RuleConfigurable(
     rules.assistant.runePower,

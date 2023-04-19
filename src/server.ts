@@ -3,12 +3,31 @@ import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
+import fs from "fs";
 import gsiParser from "./gsiParser";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+
+const descriptions = assistantDescriptions();
+
+function assistantDescriptions() {
+    const dirPath = path.join(__dirname, "assistants");
+    return (
+        fs
+            .readdirSync(dirPath)
+            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+            .map((file) => path.join(dirPath, file))
+            // eslint-disable-next-line global-require
+            .map((filePath) => require(filePath))
+            .reduce((memo: { [key: string]: string }, module) => {
+                memo[module.configTopic.label] = module.assistantDescription;
+                return memo;
+            }, {})
+    );
+}
 
 const app = express();
 
@@ -98,6 +117,7 @@ router.get("/coach/:studentId/config/get", (req, res) => {
             .map((topic) => [
                 topic.label,
                 engine.getFactValue(req.params.studentId, topic),
+                descriptions[topic.label],
             ])
     );
 });

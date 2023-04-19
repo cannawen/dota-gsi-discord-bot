@@ -7,6 +7,7 @@ import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(rules.assistant.tome);
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription = "Reminds you of tome restock";
 
 export default new RuleConfigurable(
     rules.assistant.tome,

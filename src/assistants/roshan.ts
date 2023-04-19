@@ -10,6 +10,8 @@ import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic("roshan");
 export const defaultConfig = EffectConfig.PUBLIC;
+export const assistantDescription =
+    'Tracks roshan respawn time. Responds to discord voice command "What is (rosh/roshan) status"';
 
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;

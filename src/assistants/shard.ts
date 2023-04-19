@@ -9,6 +9,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.shard
 );
 export const defaultConfig = EffectConfig.PUBLIC;
+export const assistantDescription =
+    "Reminds you of shard availability at 15:00";
 
 export default new RuleConfigurable(
     rules.assistant.shard,

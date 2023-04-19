@@ -9,6 +9,7 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.pause
 );
 export const defaultConfig = EffectConfig.PUBLIC_INTERRUPTING;
+export const assistantDescription = "Plays Jeopardy music while paused";
 
 export default new RuleConfigurable(
     rules.assistant.pause,

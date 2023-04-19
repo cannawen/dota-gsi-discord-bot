@@ -12,6 +12,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeWater
 );
 export const defaultConfig = EffectConfig.NONE;
+export const assistantDescription =
+    "Reminds you of water rune spawn at 2:00 and 4:00";
 
 export default new RuleConfigurable(
     rules.assistant.runeWater,

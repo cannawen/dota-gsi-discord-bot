@@ -7,6 +7,8 @@ import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(rules.assistant.glhf);
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Wishes you good fortune at the start of the game";
 
 export default new RuleConfigurable(
     rules.assistant.glhf,

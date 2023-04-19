@@ -10,6 +10,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.neutralItemDigReminder
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Reminds you to use your Trust Shovel or Pirate Hat";
 
 const VALID_NEUTRAL_ARRAY = ["item_trusty_shovel", "item_pirate_hat"];
 const TIME_BETWEEN_REMINDERS = 15;

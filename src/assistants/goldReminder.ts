@@ -10,6 +10,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.goldReminder
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription =
+    "Reminds you to spend gold if you have too much (with progressively more severe reminders)";
 
 const SMALL_REMINDER_INCREMENT = 500;
 const LARGE_REMINDER_INCREMENT = 1000;

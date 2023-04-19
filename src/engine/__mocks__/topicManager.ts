@@ -25,6 +25,10 @@ const topicMap = new Map<string, Topic<unknown>>(
 );
 
 const manager = {
+    createConfigTopic: jest
+        .fn()
+        .mockReturnValue(new PersistentTopic<EffectConfig>("configTopic")),
+    createTopic: jest.fn(),
     getConfigTopics: jest.fn(),
     findTopic: jest
         .fn()

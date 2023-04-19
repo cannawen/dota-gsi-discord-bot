@@ -9,6 +9,7 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.midas
 );
 export const defaultConfig = EffectConfig.PRIVATE;
+export const assistantDescription = "Reminds you to use your midas";
 
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastMidasReminderTimeTopic"

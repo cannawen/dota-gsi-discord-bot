@@ -155,10 +155,10 @@ describe("server", () => {
                     .expect(200)
                     .expect(
                         JSON.stringify([
-                            ["configTopicOne", "PRIVATE"],
-                            ["configTopicTwo", "PUBLIC"],
-                            ["configTopicThree", "PUBLIC_INTERRUPTING"],
-                            ["configTopicFour", "NONE"],
+                            ["configTopicOne", "PRIVATE", null],
+                            ["configTopicTwo", "PUBLIC", null],
+                            ["configTopicThree", "PUBLIC_INTERRUPTING", null],
+                            ["configTopicFour", "NONE", null],
                         ])
                     )
                     .end((error: any) => {

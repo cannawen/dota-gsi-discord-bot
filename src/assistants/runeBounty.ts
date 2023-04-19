@@ -11,6 +11,8 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeBounty
 );
 export const defaultConfig = EffectConfig.NONE;
+export const assistantDescription =
+    "Reminds you of bounty rune spawn every 3:00";
 
 export default new RuleConfigurable(
     rules.assistant.runeBounty,
