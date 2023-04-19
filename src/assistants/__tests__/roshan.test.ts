@@ -31,6 +31,17 @@ describe("roshan", () => {
         });
     });
 
+    describe("not asking about rosh", () => {
+        test("voice should return nothing", () => {
+            const results = getResults(voiceRule, {
+                Roshan: "PUBLIC",
+                inGame: false,
+                lastDiscordMessage: "The sky is blue",
+            });
+            expect(results).toBeUndefined();
+        });
+    });
+
     describe("in game", () => {
         test("voice should return roshan is alive", () => {
             const results = getResults(voiceRule, {

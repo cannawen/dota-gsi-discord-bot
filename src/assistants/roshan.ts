@@ -99,12 +99,13 @@ roshRulesArray.push(
         configTopic,
         [topics.lastDiscordMessage],
         (get, effect) => {
-            if (!get(topics.inGame)) {
-                return new Fact(effect, "You are not in a game");
-            }
             const message = get(topics.lastDiscordMessage)!;
             if (!roshStatusMessage(message)) {
                 return;
+            }
+
+            if (!get(topics.inGame)) {
+                return new Fact(effect, "You are not in a game");
             }
             const killedTime = get(lastRoshanKilledTime);
             const time = get(topics.time);
