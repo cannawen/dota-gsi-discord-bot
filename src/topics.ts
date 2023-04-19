@@ -37,7 +37,7 @@ const gsi = {
 const effect = {
     playTts: new Topic<string>("playTts"),
 
-    playPublicAudioFile: new Topic<string>("playPublicAudioFile"),
+    playDiscordAudio: new Topic<string>("playDiscordAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
 
     playPrivateAudioFile: new Topic<string>("playPrivateAudioFile"),

@@ -35,7 +35,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playPublicAudioFile",
+                    "playDiscordAudio",
                     "resources/audio/rosh-maybe.mp3"
                 );
             });
@@ -50,7 +50,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainFact(
-                    "playPublicAudioFile",
+                    "playDiscordAudio",
                     "resources/audio/rosh-alive.mp3"
                 );
             });
