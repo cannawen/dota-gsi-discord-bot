@@ -70,7 +70,7 @@ describe("buyback gold reminder", () => {
             describe("buyback not on cooldown", () => {
                 test("play effect", () => {
                     const results = getResults(warnRule, {
-                        buyback: "PRIVATE",
+                        Buyback: "PRIVATE",
                         buybackCooldown: 0,
                         hasBuybackTopic: false,
                     });
@@ -83,7 +83,7 @@ describe("buyback gold reminder", () => {
             describe("buyback on cooldown", () => {
                 test("do nothing", () => {
                     const results = getResults(warnRule, {
-                        buyback: "PRIVATE",
+                        Buyback: "PRIVATE",
                         buybackCooldown: 1,
                         hasBuybackTopic: false,
                     });
@@ -94,7 +94,7 @@ describe("buyback gold reminder", () => {
         describe("hasBuybackTopic changed to true", () => {
             test("do nothing", () => {
                 const results = getResults(warnRule, {
-                    buyback: "PRIVATE",
+                    Buyback: "PRIVATE",
                     hasBuybackTopic: true,
                 });
                 expect(results).toBeUndefined();
