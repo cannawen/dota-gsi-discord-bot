@@ -48,7 +48,7 @@ describe("roshan", () => {
                 Roshan: "PUBLIC",
                 inGame: true,
                 time: 1,
-                lastDiscordMessage: "What is rosh status",
+                lastDiscordMessage: "What's roshan timer",
             });
             expect(results).toContainFact("playPublicAudio", "Roshan is alive");
         });
@@ -69,7 +69,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "What is rosh status",
+                        lastDiscordMessage: "what time",
                         time: 100 + 7 * 60,
                     },
                     roshKilledState
@@ -102,7 +102,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "What is rosh status",
+                        lastDiscordMessage: "what status",
                         time: 100 + 10 * 60,
                     },
                     roshKilledState
@@ -135,7 +135,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "What is rosh status",
+                        lastDiscordMessage: "Whats roshan time",
                         time: 100 + 12 * 60,
                     },
                     roshKilledState
