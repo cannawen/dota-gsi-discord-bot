@@ -150,6 +150,7 @@ describe("midas assistant", () => {
                 [rules.assistant.midas]: "PRIVATE",
                 time: 0,
                 alive: false,
+                inGame: true,
                 items: MIDAS_CAN_CAST,
             }) as any;
             expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
@@ -159,6 +160,7 @@ describe("midas assistant", () => {
                     [rules.assistant.midas]: "PRIVATE",
                     time: 15,
                     alive: false,
+                    inGame: true,
                     items: MIDAS_CAN_CAST,
                 },
                 firstSeenMidasState
@@ -175,6 +177,7 @@ describe("midas assistant", () => {
                 [rules.assistant.midas]: "PRIVATE",
                 time: 0,
                 alive: true,
+                inGame: true,
                 items: NO_MIDAS,
             }) as any;
             expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
@@ -184,6 +187,7 @@ describe("midas assistant", () => {
                     [rules.assistant.midas]: "PRIVATE",
                     time: 15,
                     alive: true,
+                    inGame: true,
                     items: NO_MIDAS,
                 },
                 firstSeenMidasState

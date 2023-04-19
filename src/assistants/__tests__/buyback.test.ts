@@ -73,6 +73,7 @@ describe("buyback gold reminder", () => {
                         Buyback: "PRIVATE",
                         buybackCooldown: 0,
                         hasBuybackTopic: false,
+                        inGame: true,
                     });
                     expect(results).toContainFact(
                         "playPrivateAudio",
@@ -86,6 +87,7 @@ describe("buyback gold reminder", () => {
                         Buyback: "PRIVATE",
                         buybackCooldown: 1,
                         hasBuybackTopic: false,
+                        inGame: true,
                     });
                     expect(results).toBeUndefined();
                 });
@@ -96,6 +98,7 @@ describe("buyback gold reminder", () => {
                 const results = getResults(warnRule, {
                     Buyback: "PRIVATE",
                     hasBuybackTopic: true,
+                    inGame: true,
                 });
                 expect(results).toBeUndefined();
             });

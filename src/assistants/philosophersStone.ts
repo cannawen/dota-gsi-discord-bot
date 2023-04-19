@@ -4,6 +4,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -30,52 +31,52 @@ function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
     return stone !== undefined;
 }
 
-export default new RuleConfigurable(
-    rules.assistant.philosophersStone,
-    configTopic,
-    [topics.items, topics.respawnSeconds, topics.alive],
-    (get, effect) => {
-        if (!get(topics.inGame)!) return;
+export default new RuleDecoratorInGame(
+    new RuleConfigurable(
+        rules.assistant.philosophersStone,
+        configTopic,
+        [topics.items, topics.respawnSeconds, topics.alive],
+        (get, effect) => {
+            const items = get(topics.items)!;
 
-        const items = get(topics.items)!;
+            const seenBefore = get(seenPhilosophersStoneTopic);
+            if (seenBefore === undefined && hasPhilosophersStone(items)) {
+                return new Fact(seenPhilosophersStoneTopic, true);
+            }
+            if (!seenBefore) {
+                return;
+            }
 
-        const seenBefore = get(seenPhilosophersStoneTopic);
-        if (seenBefore === undefined && hasPhilosophersStone(items)) {
-            return new Fact(seenPhilosophersStoneTopic, true);
-        }
-        if (!seenBefore) {
-            return;
-        }
+            const alive = get(topics.alive)!;
 
-        const alive = get(topics.alive)!;
+            if (alive) {
+                return new Fact(remindedAlreadyThisDeathCycleTopic, undefined);
+            } else {
+                const respawnSeconds = get(topics.respawnSeconds)!;
+                const alreadyReminded = get(remindedAlreadyThisDeathCycleTopic);
 
-        if (alive) {
-            return new Fact(remindedAlreadyThisDeathCycleTopic, undefined);
-        } else {
-            const respawnSeconds = get(topics.respawnSeconds)!;
-            const alreadyReminded = get(remindedAlreadyThisDeathCycleTopic);
-
-            if (
-                alreadyReminded === undefined &&
-                items.neutral?.id !== "item_philosophers_stone"
-            ) {
-                return [
-                    new Fact(
+                if (
+                    alreadyReminded === undefined &&
+                    items.neutral?.id !== "item_philosophers_stone"
+                ) {
+                    return [
+                        new Fact(
+                            effect,
+                            "resources/audio/philosphers-stone-hold.mp3"
+                        ),
+                        new Fact(remindedAlreadyThisDeathCycleTopic, true),
+                    ];
+                }
+                if (
+                    respawnSeconds === 5 &&
+                    items.neutral?.id === "item_philosophers_stone"
+                ) {
+                    return new Fact(
                         effect,
-                        "resources/audio/philosphers-stone-hold.mp3"
-                    ),
-                    new Fact(remindedAlreadyThisDeathCycleTopic, true),
-                ];
-            }
-            if (
-                respawnSeconds === 5 &&
-                items.neutral?.id === "item_philosophers_stone"
-            ) {
-                return new Fact(
-                    effect,
-                    "resources/audio/philosphers-stone-return.mp3"
-                );
+                        "resources/audio/philosphers-stone-return.mp3"
+                    );
+                }
             }
         }
-    }
+    )
 );

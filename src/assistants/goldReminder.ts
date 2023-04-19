@@ -1,6 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import Topic from "../engine/Topic";
 import topicManager from "../engine/topicManager";
@@ -51,50 +52,50 @@ function handle(
     }
 }
 
-export default new RuleConfigurable(
-    rules.assistant.goldReminder,
-    configTopic,
-    [topics.gold, topics.time],
-    (get, effect) => {
-        if (!get(topics.inGame)!) return;
+export default new RuleDecoratorInGame(
+    new RuleConfigurable(
+        rules.assistant.goldReminder,
+        configTopic,
+        [topics.gold, topics.time],
+        (get, effect) => {
+            const time = get(topics.time)!;
+            const gold = get(topics.gold)!;
+            const lastRemindedGold = get(lastRemindedGoldTopic) || 0;
 
-        const time = get(topics.time)!;
-        const gold = get(topics.gold)!;
-        const lastRemindedGold = get(lastRemindedGoldTopic) || 0;
-
-        if (time < 10 * 60) {
-            return handle(
-                gold,
-                lastRemindedGold,
-                SMALL_REMINDER_INCREMENT,
-                effect
-            );
-        } else if (time < 30 * 60) {
-            return handle(
-                gold,
-                lastRemindedGold,
-                LARGE_REMINDER_INCREMENT,
-                effect
-            );
-        } else {
-            const buybackCost = get(topics.buybackCost)!;
-            const buybackCooldown = get(topics.buybackCooldown)!;
-
-            if (buybackCooldown === 0) {
+            if (time < 10 * 60) {
                 return handle(
-                    gold - buybackCost,
+                    gold,
                     lastRemindedGold,
-                    LARGE_REMINDER_INCREMENT,
+                    SMALL_REMINDER_INCREMENT,
                     effect
                 );
-            } else {
+            } else if (time < 30 * 60) {
                 return handle(
                     gold,
                     lastRemindedGold,
                     LARGE_REMINDER_INCREMENT,
                     effect
                 );
+            } else {
+                const buybackCost = get(topics.buybackCost)!;
+                const buybackCooldown = get(topics.buybackCooldown)!;
+
+                if (buybackCooldown === 0) {
+                    return handle(
+                        gold - buybackCost,
+                        lastRemindedGold,
+                        LARGE_REMINDER_INCREMENT,
+                        effect
+                    );
+                } else {
+                    return handle(
+                        gold,
+                        lastRemindedGold,
+                        LARGE_REMINDER_INCREMENT,
+                        effect
+                    );
+                }
             }
         }
-    }
+    )
 );

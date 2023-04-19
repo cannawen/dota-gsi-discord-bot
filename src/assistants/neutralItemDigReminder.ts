@@ -2,6 +2,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -37,40 +38,40 @@ function canCast(item: Item | null): boolean {
     return item.cooldown === 0;
 }
 
-export default new RuleConfigurable(
-    rules.assistant.neutralItemDigReminder,
-    configTopic,
-    [topics.alive, topics.items, topics.time],
-    (get, effect) => {
-        if (!get(topics.inGame)!) return;
+export default new RuleDecoratorInGame(
+    new RuleConfigurable(
+        rules.assistant.neutralItemDigReminder,
+        configTopic,
+        [topics.alive, topics.items, topics.time],
+        (get, effect) => {
+            const alive = get(topics.alive)!;
+            const items = get(topics.items)!;
+            const lastReminderTime = get(lastReminderTimeTopic);
+            const time = get(topics.time)!;
 
-        const alive = get(topics.alive)!;
-        const items = get(topics.items)!;
-        const lastReminderTime = get(lastReminderTimeTopic);
-        const time = get(topics.time)!;
+            const validItems = [...items.backpack, items.neutral]
+                .filter(validNeutralItem)
+                .filter(canCast);
+            // If we are dead or cannot cast any valid neutral items
+            // reset last reminder time
+            if (!alive || validItems.length === 0) {
+                return new Fact(lastReminderTimeTopic, undefined);
+            }
 
-        const validItems = [...items.backpack, items.neutral]
-            .filter(validNeutralItem)
-            .filter(canCast);
-        // If we are dead or cannot cast any valid neutral items
-        // reset last reminder time
-        if (!alive || validItems.length === 0) {
-            return new Fact(lastReminderTimeTopic, undefined);
+            // If we have never reminded the user before,
+            // Give them 15 seconds before we start reminding
+            if (!lastReminderTime) {
+                return new Fact(lastReminderTimeTopic, time);
+            }
+            // If our last reminder time was more than 15 seconds ago
+            if (time >= lastReminderTime + TIME_BETWEEN_REMINDERS) {
+                // Remind the user
+                // And update the last reminder time
+                return [
+                    new Fact(effect, "resources/audio/dig.mp3"),
+                    new Fact(lastReminderTimeTopic, time),
+                ];
+            }
         }
-
-        // If we have never reminded the user before,
-        // Give them 15 seconds before we start reminding
-        if (!lastReminderTime) {
-            return new Fact(lastReminderTimeTopic, time);
-        }
-        // If our last reminder time was more than 15 seconds ago
-        if (time >= lastReminderTime + TIME_BETWEEN_REMINDERS) {
-            // Remind the user
-            // And update the last reminder time
-            return [
-                new Fact(effect, "resources/audio/dig.mp3"),
-                new Fact(lastReminderTimeTopic, time),
-            ];
-        }
-    }
+    )
 );

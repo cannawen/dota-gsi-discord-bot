@@ -21,6 +21,7 @@ describe("roshan", () => {
         test("voice should return we are not in a game", () => {
             const results = getResults(voiceRule, {
                 Roshan: "PUBLIC",
+                inGame: false,
                 lastDiscordMessage: "What is rosh status",
                 time: 0,
             });
@@ -77,6 +78,7 @@ describe("roshan", () => {
                     maybeAliveRule,
                     {
                         Roshan: "PUBLIC",
+                        inGame: true,
                         time: 100 + 8 * 60,
                     },
                     roshKilledState
@@ -109,6 +111,7 @@ describe("roshan", () => {
                     aliveRule,
                     {
                         Roshan: "PUBLIC",
+                        inGame: true,
                         time: 100 + 11 * 60,
                     },
                     roshKilledState

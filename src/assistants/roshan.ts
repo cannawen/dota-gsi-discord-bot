@@ -4,6 +4,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -41,7 +42,7 @@ function secondsToTimeString(seconds: number) {
     return result.replace(":", " ");
 }
 
-export default [
+const roshRulesArray = [
     // When an event notifies us that roshan is killed
     // Set roshan maybe time to 8 minutes from now
     // Set roshan alibe time to 11 minutes from now
@@ -49,7 +50,6 @@ export default [
         rules.assistant.roshan.killedEvent,
         [topics.time, topics.events],
         (get) => {
-            if (!get(topics.inGame)!) return;
             if (roshanWasKilled(get(topics.events)!)) {
                 const time = get(topics.time)!;
                 return new Fact(lastRoshanKilledTime, time);
@@ -91,7 +91,9 @@ export default [
             }
         }
     ),
+].map((rule) => new RuleDecoratorInGame(rule));
 
+roshRulesArray.push(
     new RuleConfigurable(
         rules.assistant.roshan.voice,
         configTopic,
@@ -128,5 +130,7 @@ export default [
             }
             return new Fact(effect, "Roshan is alive");
         }
-    ),
-];
+    )
+);
+
+export default roshRulesArray;
