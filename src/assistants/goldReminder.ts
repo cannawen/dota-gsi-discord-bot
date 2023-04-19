@@ -54,7 +54,7 @@ function handle(
 export default new RuleConfigurable(
     rules.assistant.goldReminder,
     configTopic,
-    [topics.gold, topics.inGame, topics.time],
+    [topics.gold, topics.time],
     (get, effect) => {
         if (!get(topics.inGame)!) return;
 

@@ -17,11 +17,11 @@ export const assistantDescription =
 export default new RuleConfigurable(
     rules.assistant.runeBounty,
     configTopic,
-    [topics.inGame, topics.time],
+    [topics.time],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
+        if (!get(topics.inGame)!) return;
         const time = get(topics.time)!;
-        if (inGame && time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
+        if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
             return new Fact(effect, "resources/audio/rune-bounty.wav");
         }
     }

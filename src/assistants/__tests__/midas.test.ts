@@ -49,6 +49,7 @@ describe("midas assistant", () => {
                         [rules.assistant.midas]: "PRIVATE",
                         time: 0,
                         alive: true,
+                        inGame: true,
                         items: MIDAS_CAN_CAST,
                     }) as any;
                     expect(firstSeenMidasState).not.toContainTopic(
@@ -60,6 +61,7 @@ describe("midas assistant", () => {
                             [rules.assistant.midas]: "PRIVATE",
                             time: 15,
                             alive: true,
+                            inGame: true,
                             items: MIDAS_CAN_CAST,
                         },
                         firstSeenMidasState
@@ -74,6 +76,7 @@ describe("midas assistant", () => {
                             [rules.assistant.midas]: "PRIVATE",
                             time: 30,
                             alive: true,
+                            inGame: true,
                             items: MIDAS_CAN_CAST_BACKPACK,
                         },
                         fifteenSecondsAfterState
@@ -88,6 +91,7 @@ describe("midas assistant", () => {
                             [rules.assistant.midas]: "PRIVATE",
                             time: 31,
                             alive: true,
+                            inGame: true,
                             items: MIDAS_CAN_CAST,
                         },
                         thirtySecondsAfterState
@@ -101,6 +105,7 @@ describe("midas assistant", () => {
                         [rules.assistant.midas]: "PRIVATE",
                         time: 0,
                         alive: true,
+                        inGame: true,
                         items: MIDAS_ON_COOLDOWN,
                     }) as any;
                     expect(firstSeenMidasState).not.toContainTopic(
@@ -112,6 +117,7 @@ describe("midas assistant", () => {
                             [rules.assistant.midas]: "PRIVATE",
                             time: 15,
                             alive: true,
+                            inGame: true,
                             items: MIDAS_ON_COOLDOWN,
                         },
                         firstSeenMidasState
@@ -125,6 +131,7 @@ describe("midas assistant", () => {
                             [rules.assistant.midas]: "PRIVATE",
                             time: 15,
                             alive: true,
+                            inGame: true,
                             items: MIDAS_ON_COOLDOWN_BACKPACK,
                         },
                         fifteenSecondsAfterState

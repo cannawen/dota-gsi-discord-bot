@@ -28,6 +28,7 @@ describe("neutralItemReminder", () => {
         test("do not warn before 10 minutes", () => {
             const result = getResults(rule, {
                 time: (NEUTRAL_ITEM_REMINDER_START_MINUTE - 1) * 60,
+                inGame: true,
                 items: NO_ITEMS,
             });
             expect(result).toBeUndefined();
@@ -37,6 +38,7 @@ describe("neutralItemReminder", () => {
             const state = getResults(rule, {
                 [rules.assistant.neutralItemReminder]: "PRIVATE",
                 time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
+                inGame: true,
                 items: NO_ITEMS,
             }) as any;
             const result = getResults(
@@ -44,6 +46,7 @@ describe("neutralItemReminder", () => {
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 2) * 60,
+                    inGame: true,
                     items: NO_ITEMS,
                 },
                 state
@@ -57,6 +60,7 @@ describe("neutralItemReminder", () => {
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 4) * 60,
+                    inGame: true,
                     items: NO_ITEMS,
                 },
                 result
@@ -73,6 +77,7 @@ describe("neutralItemReminder", () => {
             const state1 = getResults(rule, {
                 [rules.assistant.neutralItemReminder]: "PRIVATE",
                 time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
+                inGame: true,
                 items: NO_ITEMS,
             }) as any;
             const state2 = getResults(
@@ -80,6 +85,7 @@ describe("neutralItemReminder", () => {
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 1) * 60,
+                    inGame: true,
                     items: HAS_NEUTRAL_ITEM,
                 },
                 state1
@@ -89,6 +95,7 @@ describe("neutralItemReminder", () => {
                 {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: 9 * 60,
+                    inGame: true,
                     items: HAS_NEUTRAL_ITEM,
                 },
                 state2

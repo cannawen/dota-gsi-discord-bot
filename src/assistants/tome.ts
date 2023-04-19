@@ -12,11 +12,12 @@ export const assistantDescription = "Reminds you of tome restock";
 export default new RuleConfigurable(
     rules.assistant.tome,
     configTopic,
-    [topics.time, topics.inGame],
+    [topics.time],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
+        if (!get(topics.inGame)!) return;
+
         const time = get(topics.time)!;
-        if (inGame && time > 0 && time % (10 * 60) === 0) {
+        if (time > 0 && time % (10 * 60) === 0) {
             return new Fact(effect, "resources/audio/tome.mp3");
         }
     }

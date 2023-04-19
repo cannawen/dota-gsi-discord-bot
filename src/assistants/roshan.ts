@@ -49,6 +49,7 @@ export default [
         rules.assistant.roshan.killedEvent,
         [topics.time, topics.events],
         (get) => {
+            if (!get(topics.inGame)!) return;
             if (roshanWasKilled(get(topics.events)!)) {
                 const time = get(topics.time)!;
                 return new Fact(lastRoshanKilledTime, time);

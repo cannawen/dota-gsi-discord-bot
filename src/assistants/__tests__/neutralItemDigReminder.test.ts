@@ -5,6 +5,8 @@ import neutralItemRule from "../neutralItemDigReminder";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rules from "../../rules";
 
+// TODO do not expose lastNeutralItemDigReminderTimeTopic in tests
+
 const NO_ITEMS = new PlayerItems(
     [],
     [],
@@ -80,13 +82,13 @@ const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(
     null
 );
 
-// TODO do not expose lastNeutralItemDigReminderTimeTopic in tests
 describe("neutral item dig reminder", () => {
     describe("player is dead", () => {
         test("invalidate reminder time", () => {
             const result = getResults(neutralItemRule, {
                 [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                 alive: false,
+                inGame: true,
                 items: TRUSTY_SHOVEL,
                 lastNeutralItemDigReminderTimeTopic: 5,
                 time: 50,
@@ -104,6 +106,7 @@ describe("neutral item dig reminder", () => {
                 const result = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: NO_ITEMS,
                     lastNeutralItemDigReminderTimeTopic: 5,
                     time: 50,
@@ -121,6 +124,7 @@ describe("neutral item dig reminder", () => {
                     const result = getResults(neutralItemRule, {
                         [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
+                        inGame: true,
                         items: PIRATE_HAT,
                         lastNeutralItemDigReminderTimeTopic: undefined,
                         time: 50,
@@ -140,6 +144,7 @@ describe("neutral item dig reminder", () => {
                     const result = getResults(neutralItemRule, {
                         [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
+                        inGame: true,
                         items: TRUSTY_SHOVEL,
                         lastNeutralItemDigReminderTimeTopic: undefined,
                         time: 50,
@@ -156,6 +161,7 @@ describe("neutral item dig reminder", () => {
                     const result = getResults(neutralItemRule, {
                         [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
+                        inGame: true,
                         items: TRUSTY_SHOVEL,
                         lastNeutralItemDigReminderTimeTopic: 49,
                         time: 50,
@@ -169,6 +175,7 @@ describe("neutral item dig reminder", () => {
                     const result = getResults(neutralItemRule, {
                         [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                         alive: true,
+                        inGame: true,
                         items: TRUSTY_SHOVEL,
                         lastNeutralItemDigReminderTimeTopic: 35,
                         time: 50,
@@ -190,6 +197,7 @@ describe("neutral item dig reminder", () => {
                 const result = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: SHOVEL_ON_COOLDOWN,
                     lastNeutralItemDigReminderTimeTopic: undefined,
                     time: 50,
@@ -206,6 +214,7 @@ describe("neutral item dig reminder", () => {
                 const result = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: SHOVEL_ON_COOLDOWN_IN_BACKPACK,
                     lastNeutralItemDigReminderTimeTopic: undefined,
                     time: 50,
@@ -222,6 +231,7 @@ describe("neutral item dig reminder", () => {
                 const result = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: SHOVEL_READY_IN_BACKPACK,
                     lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
@@ -242,6 +252,7 @@ describe("neutral item dig reminder", () => {
                 const resultA = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_A,
                     lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
@@ -258,6 +269,7 @@ describe("neutral item dig reminder", () => {
                 const resultB = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_B,
                     lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,
@@ -274,6 +286,7 @@ describe("neutral item dig reminder", () => {
                 const resultC = getResults(neutralItemRule, {
                     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
                     alive: true,
+                    inGame: true,
                     items: TWO_NEUTRAL_ITEMS_ONE_READY_C,
                     lastNeutralItemDigReminderTimeTopic: 35,
                     time: 50,

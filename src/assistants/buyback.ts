@@ -16,17 +16,10 @@ const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
 export default [
     new Rule(
         rules.assistant.buyback.availability,
-        [
-            topics.inGame,
-            topics.time,
-            topics.gold,
-            topics.buybackCost,
-            topics.buybackCooldown,
-        ],
+        [topics.time, topics.gold, topics.buybackCost, topics.buybackCooldown],
         (get) => {
-            const inGame = get(topics.inGame)!;
             const time = get(topics.time)!;
-            if (!inGame || time < 30 * 60) return;
+            if (!get(topics.inGame) || time < 30 * 60) return;
 
             const buybackAvailable = get(topics.buybackCooldown)! === 0;
             const gold = get(topics.gold)!;

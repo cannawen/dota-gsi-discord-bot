@@ -42,6 +42,8 @@ export default new RuleConfigurable(
     configTopic,
     [topics.alive, topics.items, topics.time],
     (get, effect) => {
+        if (!get(topics.inGame)!) return;
+
         const alive = get(topics.alive)!;
         const items = get(topics.items)!;
         const lastReminderTime = get(lastReminderTimeTopic);

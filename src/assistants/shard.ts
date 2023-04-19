@@ -15,11 +15,12 @@ export const assistantDescription =
 export default new RuleConfigurable(
     rules.assistant.shard,
     configTopic,
-    [topics.time, topics.inGame],
+    [topics.time],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
+        if (!get(topics.inGame)!) return;
+
         const time = get(topics.time)!;
-        if (inGame && time === 15 * 60) {
+        if (time === 15 * 60) {
             return new Fact(effect, "resources/audio/shard.mp3");
         }
     }

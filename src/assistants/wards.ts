@@ -33,7 +33,7 @@ const lastWardCountTopic =
 export default new RuleConfigurable(
     rules.assistant.wards,
     configTopic,
-    [topics.time, topics.inGame, topics.items],
+    [topics.time, topics.items],
     (get, effect) => {
         if (!get(topics.inGame)!) return;
 

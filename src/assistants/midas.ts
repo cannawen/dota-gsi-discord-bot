@@ -22,7 +22,7 @@ export default new RuleConfigurable(
     configTopic,
     [topics.items, topics.alive, topics.time],
     (get, effect) => {
-        if (!get(topics.alive)!) {
+        if (!get(topics.inGame) || !get(topics.alive)!) {
             return new Fact(lastReminderTimeTopic, undefined);
         }
 

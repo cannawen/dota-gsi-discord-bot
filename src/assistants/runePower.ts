@@ -18,12 +18,12 @@ export const assistantDescription =
 export default new RuleConfigurable(
     rules.assistant.runePower,
     configTopic,
-    [topics.inGame, topics.time],
+    [topics.time],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
+        if (!get(topics.inGame)!) return;
+
         const time = get(topics.time)!;
         if (
-            inGame &&
             time >= POWER_RUNE_START_SPAWN_TIME &&
             time % POWER_RUNE_SPAWN_INTERVAL === 0
         ) {

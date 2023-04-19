@@ -50,6 +50,7 @@ describe("roshan", () => {
             beforeEach(() => {
                 roshKilledState = getResults(killedRule, {
                     time: 100,
+                    inGame: true,
                     events: [new Event(EventType.RoshanKilled, 200)],
                 }) as any;
             });

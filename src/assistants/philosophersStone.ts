@@ -2,7 +2,6 @@
 import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
-import log from "../log";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
@@ -34,10 +33,10 @@ function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
 export default new RuleConfigurable(
     rules.assistant.philosophersStone,
     configTopic,
-    [topics.items, topics.inGame, topics.respawnSeconds, topics.alive],
+    [topics.items, topics.respawnSeconds, topics.alive],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
-        if (!inGame) return;
+        if (!get(topics.inGame)!) return;
+
         const items = get(topics.items)!;
 
         const seenBefore = get(seenPhilosophersStoneTopic);

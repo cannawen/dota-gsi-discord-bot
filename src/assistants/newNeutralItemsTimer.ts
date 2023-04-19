@@ -20,6 +20,7 @@ export default new RuleConfigurable(
     configTopic,
     [topics.time],
     (get, effect) => {
+        if (!get(topics.inGame)!) return;
         const currentTime = get(topics.time)!;
         if (
             NEUTRAL_ITEM_SPAWN_MINUTES.find(

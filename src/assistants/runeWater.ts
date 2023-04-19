@@ -18,14 +18,12 @@ export const assistantDescription =
 export default new RuleConfigurable(
     rules.assistant.runeWater,
     configTopic,
-    [topics.inGame, topics.time],
+    [topics.time],
     (get, effect) => {
-        const inGame = get(topics.inGame)!;
+        if (!get(topics.inGame)!) return;
+
         const time = get(topics.time)!;
-        if (
-            inGame &&
-            (time === WATER_RUNE_2_MIN || time === WATER_TUNE_4_MIN)
-        ) {
+        if (time === WATER_RUNE_2_MIN || time === WATER_TUNE_4_MIN) {
             return new Fact(effect, "resources/audio/rune-water.mp3");
         }
     }
