@@ -65,7 +65,7 @@ const roshRulesArray = [
         [topics.time, lastRoshanKilledTime],
         (get, effect) => {
             if (
-                get(topics.time)! >=
+                get(topics.time)! ===
                 get(lastRoshanKilledTime)! + ROSHAN_MINIMUM_SPAWN_TIME
             ) {
                 return new Fact(effect, "resources/audio/rosh-maybe.mp3");
@@ -81,7 +81,7 @@ const roshRulesArray = [
         [topics.time, lastRoshanKilledTime],
         (get, effect) => {
             if (
-                get(topics.time)! >=
+                get(topics.time)! ===
                 get(lastRoshanKilledTime)! + ROSHAN_MAXIMUM_SPAWN_TIME
             ) {
                 return [
