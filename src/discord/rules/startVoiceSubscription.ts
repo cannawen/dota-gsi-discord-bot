@@ -10,9 +10,6 @@ import rules from "../../rules";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
 
-import Transcriber from "discord-speech-to-text";
-const transcriber = new Transcriber(process.env.WIT_TOKEN);
-
 const emColor = colors.cyan;
 
 // https://discordjs.guide/voice/voice-connections.html#handling-disconnects
@@ -134,26 +131,6 @@ export default new Rule(
                 studentId,
                 connection
             );
-        });
-        connection.receiver.speaking.on("start", (userId) => {
-            transcriber
-                .listen(connection.receiver, userId)
-                .then(
-                    (data: {
-                        userId: string;
-                        transcript: { text: string };
-                    }) => {
-                        if (!data.transcript.text) return;
-                        const text = data.transcript.text;
-                        // hash(userId) may be different than studentId because it may be someone else speaking
-                        const userId = data.userId;
-
-                        engine.setFact(
-                            studentId,
-                            new Fact(topics.lastDiscordMessage, text)
-                        );
-                    }
-                );
         });
 
         const player = Voice.createAudioPlayer();

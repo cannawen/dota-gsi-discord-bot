@@ -30,12 +30,6 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
 -   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
 
-### wit.ai
-
--   Go to wit.ai and create a wit app
--   Go to your app and click Management -> Settings to get the Server Access Token to put in your .env file
--   Used for speech to text for voice commands
-
 ## Logging
 
 -   Use winston loggers from `log.ts`. New "labels" are created for loggers on the fly
