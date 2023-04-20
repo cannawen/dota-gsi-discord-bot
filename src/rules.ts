@@ -15,6 +15,7 @@ const assistant = {
     newNeutralItems: "New neutral items",
     pause: "Pause",
     philosophersStone: "Philosopher's stone",
+    randomItem: "Random item suggestion",
     roshan: {
         killedEvent: "roshan/killed_event/set_future_audio_state",
         maybeAliveTime: "roshan/maybe_alive_time/play_audio",
