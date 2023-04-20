@@ -25,6 +25,7 @@ function savedData(studentId: string) {
 
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
+    private channelIdToStudentId: Map<string, string> = new Map();
 
     public getSessions() {
         return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
@@ -36,13 +37,21 @@ export class CustomEngine extends Engine {
             | undefined;
     }
 
-    public setFact<T>(studentId: string | null, fact: Fact<T>) {
+    public setFact<T>(studentId: string | null | undefined, fact: Fact<T>) {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
                 this.set(db, fact);
             }
         }
+    }
+
+    public updateChannelUtterance(channelId: string, utterance: string) {
+        const studentId = this.channelIdToStudentId.get(channelId);
+        this.setFact(
+            studentId,
+            new Fact(topics.lastDiscordUtterance, utterance)
+        );
     }
 
     public getFactValue<T>(
@@ -89,6 +98,9 @@ export class CustomEngine extends Engine {
 
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
+        if (channelId) {
+            this.channelIdToStudentId.set(channelId, studentId);
+        }
 
         // Set guild or channel id
         // or null if not provided so we explicitly propogate the null information downstream
@@ -105,6 +117,10 @@ export class CustomEngine extends Engine {
                 "Deleting session for student %s",
                 studentId.substring(0, 10)
             );
+            const channelId = db.get(topics.discordGuildChannelId);
+            if (channelId) {
+                this.channelIdToStudentId.delete(channelId);
+            }
             try {
                 db.get(topics.discordSubscriptionTopic)?.connection.destroy();
             } catch (error) {}

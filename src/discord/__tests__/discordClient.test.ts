@@ -1,6 +1,7 @@
 jest.mock("../../log");
 jest.mock("../handleSlashCommands");
 jest.mock("discord.js");
+jest.mock("discord-speech-recognition");
 
 import Discord from "discord.js";
 import { DiscordClient } from "../discordClient";

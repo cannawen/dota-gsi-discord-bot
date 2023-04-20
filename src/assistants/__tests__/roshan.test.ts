@@ -22,7 +22,7 @@ describe("roshan", () => {
             const results = getResults(voiceRule, {
                 Roshan: "PUBLIC",
                 inGame: false,
-                lastDiscordMessage: "What is rosh status",
+                lastDiscordUtterance: "What is rosh status",
             });
             expect(results).toContainFact(
                 "playPublicAudio",
@@ -36,7 +36,7 @@ describe("roshan", () => {
             const results = getResults(voiceRule, {
                 Roshan: "PUBLIC",
                 inGame: false,
-                lastDiscordMessage: "The sky is blue",
+                lastDiscordUtterance: "The sky is blue",
             });
             expect(results).toBeUndefined();
         });
@@ -48,7 +48,7 @@ describe("roshan", () => {
                 Roshan: "PUBLIC",
                 inGame: true,
                 time: 1,
-                lastDiscordMessage: "What's roshan timer",
+                lastDiscordUtterance: "What's roshan timer",
             });
             expect(results).toContainFact("playPublicAudio", "Roshan is alive");
         });
@@ -69,7 +69,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "what time",
+                        lastDiscordUtterance: "what time",
                         time: 100 + 4 * 60,
                     },
                     roshKilledState
@@ -86,7 +86,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "what time",
+                        lastDiscordUtterance: "what time",
                         time: 100 + 7 * 60,
                     },
                     roshKilledState
@@ -119,7 +119,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "what status",
+                        lastDiscordUtterance: "what status",
                         time: 100 + 10 * 60,
                     },
                     roshKilledState
@@ -154,7 +154,7 @@ describe("roshan", () => {
                     {
                         Roshan: "PUBLIC",
                         inGame: true,
-                        lastDiscordMessage: "Whats roshan time",
+                        lastDiscordUtterance: "Whats roshan time",
                         time: 100 + 12 * 60,
                     },
                     roshKilledState

@@ -98,9 +98,9 @@ roshRulesArray.push(
     new RuleConfigurable(
         rules.assistant.roshan.voice,
         configTopic,
-        [topics.lastDiscordMessage],
+        [topics.lastDiscordUtterance],
         (get, effect) => {
-            const message = get(topics.lastDiscordMessage)!;
+            const message = get(topics.lastDiscordUtterance)!;
             if (!roshStatusMessage(message)) {
                 return;
             }

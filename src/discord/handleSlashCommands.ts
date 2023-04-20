@@ -1,9 +1,25 @@
 import { CacheType, ChatInputCommandInteraction } from "discord.js";
+import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
 import helpers from "./discordHelpers";
 import log from "../log";
 import path from "path";
+
+function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
+    const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
+    if (key) {
+        // eslint-disable-next-line new-cap
+        return CryptoJS.HmacSHA256(interaction.user.id, key).toString();
+    } else {
+        log.error(
+            "discord",
+            "Unable to find %s environment variable, so continuing without hashing. Check your .env file",
+            "STUDENT_ID_HASH_PRIVATE_KEY"
+        );
+        return interaction.user.id;
+    }
+}
 
 function generateConfigFile(userId: string) {
     const serverUrl = process.env.SERVER_URL;
@@ -27,7 +43,7 @@ function generateConfigFile(userId: string) {
 
 function config(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: generateConfigFile(helpers.studentId(interaction)),
+        content: generateConfigFile(studentId(interaction)),
         ephemeral: true,
     });
 }
@@ -36,7 +52,7 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
         interaction
     )}/`;
-    if (engine.getSession(helpers.studentId(interaction))) {
+    if (engine.getSession(studentId(interaction))) {
         interaction.reply({
             content: `You already have a coaching session at ${privateUrl}. Use /stop to end your current session before starting a new one`,
             ephemeral: true,
@@ -53,12 +69,12 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         ) === 0
     ) {
         engine.startCoachingSession(
-            helpers.studentId(interaction),
+            studentId(interaction),
             interaction.guildId,
             interaction.channelId
         );
     } else {
-        engine.startCoachingSession(helpers.studentId(interaction));
+        engine.startCoachingSession(studentId(interaction));
         message = `${message}\n\nWARNING: You will not be receiving public discord announcements because you did not start the coaching session in a voice based guild channel. Please type /coachme in a voice channel chat if you wish to recieve public discord announcements`;
     }
     interaction.reply({
@@ -68,8 +84,8 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function stop(interaction: ChatInputCommandInteraction<CacheType>) {
-    if (engine.getSession(helpers.studentId(interaction))) {
-        engine.deleteSession(helpers.studentId(interaction));
+    if (engine.getSession(studentId(interaction))) {
+        engine.deleteSession(studentId(interaction));
         interaction.reply({
             content: `Ending your coaching session...`,
             ephemeral: true,
