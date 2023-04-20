@@ -1,7 +1,12 @@
 import Discord, { Events } from "discord.js";
+import { addSpeechEvent } from "discord-speech-recognition";
+import engine from "../customEngine";
+import Fact from "../engine/Fact";
 import handle from "./handleSlashCommands";
+import helpers from "./discordHelpers";
 import log from "../log";
 import SlashCommandName from "./SlashCommandName";
+import topics from "../topics";
 
 export class DiscordClient {
     private client = new Discord.Client({
@@ -10,9 +15,17 @@ export class DiscordClient {
     });
 
     public start() {
+        addSpeechEvent(this.client);
         this.setupInteractions();
         this.client.on(Events.Error, (error) => {
             log.error("discord", "%s", error);
+        });
+        this.client.on("speech", (msg) => {
+            if (!msg.content) return;
+            engine.setFact(
+                helpers.studentId(msg.author.id),
+                new Fact(topics.lastDiscordMessage, msg.content)
+            );
         });
         return Promise.all([this.setup(), this.ready()]);
     }
