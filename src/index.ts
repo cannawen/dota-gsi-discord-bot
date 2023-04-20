@@ -149,7 +149,11 @@ discordClient.start().then(() => {
     };
     try {
         Object.entries(data).forEach(([studentId, studentData]) => {
-            engine.startCoachingSession(studentId);
+            engine.startCoachingSession(
+                studentId,
+                studentData["discordGuildId"] as string,
+                studentData["discordGuildChannelId"] as string
+            );
             plainObjectToFacts(studentData).map((fact) =>
                 engine.setFact(studentId, fact)
             );
