@@ -12,7 +12,7 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-function savedData(studentId: string) {
+function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
     if (savedPersistenceString) {
         try {
@@ -87,13 +87,16 @@ export class CustomEngine extends Engine {
         this.set(db, new Fact(topics.timestamp, Math.floor(Date.now() / 1000))); // TODO test
 
         // Check to see if we have saved data
-        const data = savedData(studentId);
+        // If we cannot get saved data due to an error,
+        // Assume our preference topics have been updated
+        // And nuke entire save file
+        // TODO there is probably a more graceful way to handle this
+        const data = getSavedDataOrDeleteDataIfInvalid(studentId);
 
-        // Set configuration from saved data or use default configs
+        // Set default config and overwrite any with saved configs
+        effectConfig.defaultConfigs().map((fact) => this.set(db, fact));
         if (data) {
             data.map((fact) => this.set(db, fact));
-        } else {
-            effectConfig.defaultConfigs().map((fact) => this.set(db, fact));
         }
 
         // Add to engine's active sessions

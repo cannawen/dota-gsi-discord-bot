@@ -54,22 +54,19 @@ describe("customEngine", () => {
             });
         });
         describe("sets up configurations", () => {
-            let configFacts: Fact<EffectConfig>[];
             let topicOne: Topic<EffectConfig>;
             let topicTwo: Topic<EffectConfig>;
             beforeEach(() => {
                 topicOne = new Topic<EffectConfig>("configTopicOne");
                 topicTwo = new Topic<EffectConfig>("configTopicTwo");
-                configFacts = [
+
+                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
                     new Fact(topicOne, EffectConfig.PRIVATE),
                     new Fact(topicTwo, EffectConfig.PUBLIC),
-                ];
+                ]);
             });
             describe("no saved configs", () => {
                 test("should use default configs", () => {
-                    (effectConfig.defaultConfigs as jest.Mock).mockReturnValue(
-                        configFacts
-                    );
                     sut.startCoachingSession(
                         "studentId",
                         "guildId",
@@ -86,10 +83,14 @@ describe("customEngine", () => {
             describe("has saved configs", () => {
                 beforeEach(() => {
                     (persistence.readStudentData as jest.Mock).mockReturnValue(
-                        JSON.stringify(factsToPlainObject(configFacts))
+                        JSON.stringify(
+                            factsToPlainObject([
+                                new Fact(topicTwo, EffectConfig.PRIVATE),
+                            ])
+                        )
                     );
                 });
-                test("should use saved config", () => {
+                test("should use default configs augmented with saved config", () => {
                     sut.startCoachingSession(
                         "studentId",
                         "guildId",
@@ -99,7 +100,7 @@ describe("customEngine", () => {
                         "PRIVATE"
                     );
                     expect(sut.getFactValue("studentId", topicTwo)).toBe(
-                        "PUBLIC"
+                        "PRIVATE"
                     );
                 });
                 describe("saved configs throws error", () => {
