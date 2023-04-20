@@ -26,7 +26,7 @@ const itemCosts: Array<[string, number]> = Object.entries(
 
 function randomItemCost(message: string) {
     try {
-        const match = message.match(/what should I buy .*([0-9,]+)/i);
+        const match = message.match(/what should I buy .*?([0-9,]+)/i);
         if (match === null) return;
         return parseInt(match[1].replace(/,/g, ""));
     } catch (_) {}
