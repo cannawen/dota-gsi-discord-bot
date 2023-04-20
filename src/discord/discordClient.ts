@@ -21,6 +21,10 @@ export class DiscordClient {
         });
         this.client.on("speech", (message) => {
             if (!message.content) return;
+            // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
+            if (message.author.id === "169619011238232073") {
+                log.info("tts", message.content);
+            }
             engine.updateChannelUtterance(message.channel.id, message.content);
         });
         return Promise.all([this.setup(), this.ready()]);
