@@ -12,13 +12,16 @@ export class DiscordClient {
     });
 
     public start() {
-        addSpeechEvent(this.client);
+        addSpeechEvent(this.client, {
+            profanityFilter: false,
+        });
         this.setupInteractions();
         this.client.on(Events.Error, (error) => {
             log.error("discord", "%s", error);
         });
         this.client.on("speech", (message) => {
             if (!message.content) return;
+            console.log(message.content);
             engine.updateChannelUtterance(message.channel.id, message.content);
         });
         return Promise.all([this.setup(), this.ready()]);
