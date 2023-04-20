@@ -21,7 +21,6 @@ export class DiscordClient {
         });
         this.client.on("speech", (message) => {
             if (!message.content) return;
-            console.log(message.content);
             engine.updateChannelUtterance(message.channel.id, message.content);
         });
         return Promise.all([this.setup(), this.ready()]);
