@@ -32,12 +32,20 @@ function randomItemCost(message: string) {
     } catch (_) {}
 }
 
+function whatShouldIBuy(message: string) {
+    return message.match(/^what (do|should) I (buy|get)$/i) !== null;
+}
+
 export default new RuleConfigurable(
     rules.assistant.glhf,
     configTopic,
     [topics.lastDiscordUtterance],
     (get, effect) => {
         const message = get(topics.lastDiscordUtterance)!;
+        if (whatShouldIBuy(message)) {
+            const randomIndex = Math.floor(Math.random() * itemCosts.length);
+            return new Fact(effect, `Buy a ${itemCosts[randomIndex][0]}`);
+        }
         const cost = randomItemCost(message);
         if (cost === undefined) {
             return;
