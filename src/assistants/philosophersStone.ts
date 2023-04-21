@@ -14,7 +14,7 @@ export const configTopic = topicManager.createConfigTopic(
 );
 export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
-    "Reminds you to use Philospher's Stone while you are dead";
+    "Reminds you to use Philosopher's Stone while you are dead";
 
 const seenPhilosophersStoneTopic = topicManager.createTopic<boolean>(
     "seenPhilosophersStoneTopic",
@@ -62,7 +62,7 @@ export default new RuleDecoratorInGame(
                     return [
                         new Fact(
                             effect,
-                            "resources/audio/philosphers-stone-hold.mp3"
+                            "resources/audio/philosophers-stone-hold.mp3"
                         ),
                         new Fact(remindedAlreadyThisDeathCycleTopic, true),
                     ];
@@ -73,7 +73,7 @@ export default new RuleDecoratorInGame(
                 ) {
                     return new Fact(
                         effect,
-                        "resources/audio/philosphers-stone-return.mp3"
+                        "resources/audio/philosophers-stone-return.mp3"
                     );
                 }
             }
