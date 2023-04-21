@@ -9,10 +9,23 @@ import topics from "../topics";
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.tormenter
 );
-export const defaultConfig = EffectConfig.PRIVATE;
-export const assistantDescription = "Reminds you of tormenter";
+export const defaultConfig = EffectConfig.PUBLIC;
+export const assistantDescription =
+    'Reminds you of tormenter. Responds to "torment has fallen" and "torment status"';
 
-export default new RuleDecoratorInGame(
+const tormenterFallenTimeTopic = topicManager.createTopic<number>(
+    "tormenterFallenTimeTopic",
+    { persistAcrossRestarts: true }
+);
+
+function secondsToTimeString(seconds: number) {
+    const totalMs = seconds * 1000;
+    const result = new Date(totalMs).toISOString().slice(14, 19);
+
+    return result.replace(":", " ");
+}
+
+export default [
     new RuleConfigurable(
         rules.assistant.tormenter,
         configTopic,
@@ -20,8 +33,54 @@ export default new RuleDecoratorInGame(
         (get, effect) => {
             const time = get(topics.time)!;
             if (time === 20 * 60) {
-                return new Fact(effect, "tormenter");
+                return new Fact(effect, "tormenter has spawned");
             }
         }
-    )
-);
+    ),
+    new RuleConfigurable(
+        "tormenter reminder",
+        configTopic,
+        [topics.time, tormenterFallenTimeTopic],
+        (get, effect) => {
+            const time = get(topics.time);
+            const fallenTime = get(tormenterFallenTimeTopic);
+            if (time === fallenTime) {
+                return [
+                    new Fact(effect, "Tormenter has respawned"),
+                    new Fact(tormenterFallenTimeTopic, undefined),
+                ];
+            }
+        }
+    ),
+    new RuleConfigurable(
+        "tormenter voice",
+        configTopic,
+        [topics.lastDiscordUtterance],
+        (get, effect) => {
+            const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
+            if (lastDiscordUtterance.match(/torment has fallen/i)) {
+                return [
+                    new Fact(tormenterFallenTimeTopic, get(topics.time)),
+                    new Fact(effect, "OK"),
+                ];
+            }
+            if (lastDiscordUtterance.match(/torment status/i)) {
+                const fallenTime = get(tormenterFallenTimeTopic);
+                let message: string;
+                if (fallenTime) {
+                    message = `Tormenter is dead. Will respawn at ${secondsToTimeString(
+                        fallenTime + 10 * 60
+                    )}`;
+                } else if (get(topics.time)! >= 20 * 60) {
+                    return new Fact(effect, "Tormenter is alive");
+                } else {
+                    return new Fact(
+                        effect,
+                        "Tormenter will spawn at 20 minutes"
+                    );
+                }
+                return new Fact(effect, message);
+            }
+        }
+    ),
+].map((rule) => new RuleDecoratorInGame(rule));
