@@ -25,8 +25,8 @@ const assistant = {
     runeBounty: "Bounty rune",
     runePower: "Power rune",
     runeWater: "Water rune",
+    runeWisdom: "Wisdom rune",
     shard: "Shard",
-    tome: "Tome",
     wards: "Wards",
 };
 
