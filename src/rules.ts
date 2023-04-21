@@ -9,6 +9,7 @@ const assistant = {
     },
     glhf: "Good luck and have fun",
     goldReminder: "Gold",
+    lotus: "Lotus",
     midas: "Midas",
     neutralItemDigReminder: "Neutral item dig",
     neutralItemReminder: "Neutral item",
