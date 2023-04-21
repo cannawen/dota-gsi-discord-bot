@@ -28,6 +28,7 @@ const assistant = {
     runeWater: "Water rune",
     runeWisdom: "Wisdom rune",
     shard: "Shard",
+    tormenter: "Tormenter",
     wards: "Wards",
 };
 
