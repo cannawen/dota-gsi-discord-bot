@@ -6,7 +6,7 @@ import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-const LOTUS_RUNE_SPAWN_INTERVAL = 3 * 60;
+const LOTUS_SPAWN_INTERVAL = 3 * 60;
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.lotus
@@ -24,8 +24,8 @@ export default new RuleDecoratorInGame(
             const time = get(topics.time)!;
             if (
                 time > 0 &&
-                time <= 12 * 60 &&
-                time % LOTUS_RUNE_SPAWN_INTERVAL === 0
+                time <= 12 * 60 - 10 &&
+                time % LOTUS_SPAWN_INTERVAL === 0
             ) {
                 return new Fact(effect, "lotus");
             }
