@@ -33,6 +33,7 @@ describe("buyback gold reminder", () => {
                 test("should return has no buyback", () => {
                     const results = getResults(availabilityRule, {
                         inGame: true,
+                        time: 31 * 60,
                         gold: 0,
                         buybackCost: 0,
                         buybackCooldown: 1,
@@ -44,6 +45,7 @@ describe("buyback gold reminder", () => {
                 test("should return has no buyback", () => {
                     const results = getResults(availabilityRule, {
                         inGame: true,
+                        time: 31 * 60,
                         gold: 0,
                         buybackCost: 1,
                         buybackCooldown: 0,
@@ -55,6 +57,7 @@ describe("buyback gold reminder", () => {
                 test("should return has buyback", () => {
                     const results = getResults(availabilityRule, {
                         inGame: true,
+                        time: 31 * 60,
                         gold: 1,
                         buybackCost: 1,
                         buybackCooldown: 0,
