@@ -136,7 +136,7 @@ if (port && host) {
 
 // SESSION CLEANUP CODE
 cron.schedule("*/30 * * * *", () => {
-    log.info("app", "Cleaning up sessions with no recent activity");
+    log.debug("app", "Cleaning up sessions with no recent activity");
     engine.deleteOldSessions();
 });
 
