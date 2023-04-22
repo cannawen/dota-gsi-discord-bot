@@ -21,6 +21,7 @@ const gsi = {
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     // map
+    dayTime: new Topic<boolean>("dayTime"),
     inGame: new Topic<boolean>("inGame"),
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),

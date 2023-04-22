@@ -17,32 +17,18 @@ const voiceRule = roshanRules.find(
 )!;
 
 describe("roshan", () => {
-    describe("not in a game", () => {
-        test("voice should return we are not in a game", () => {
-            const results = getResults(voiceRule, {
-                Roshan: "PUBLIC",
-                inGame: false,
-                lastDiscordUtterance: "What is rosh status",
-            });
-            expect(results).toContainFact(
-                "playPublicAudio",
-                "You are not in a game"
-            );
-        });
-    });
-
     describe("not asking about rosh", () => {
         test("voice should return nothing", () => {
             const results = getResults(voiceRule, {
                 Roshan: "PUBLIC",
-                inGame: false,
+                inGame: true,
                 lastDiscordUtterance: "The sky is blue",
             });
             expect(results).toBeUndefined();
         });
     });
 
-    describe("in game", () => {
+    describe("asking about rosh", () => {
         test("voice should return roshan is alive", () => {
             const results = getResults(voiceRule, {
                 Roshan: "PUBLIC",
@@ -50,7 +36,10 @@ describe("roshan", () => {
                 time: 1,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainFact("playPublicAudio", "Roshan is alive");
+            expect(results).toContainFact(
+                "playPublicAudio",
+                expect.stringContaining("Roshan is alive")
+            );
         });
         describe("roshan killed", () => {
             let roshKilledState: any;
@@ -161,7 +150,7 @@ describe("roshan", () => {
                 );
                 expect(results).toContainFact(
                     "playPublicAudio",
-                    "Roshan is alive"
+                    expect.stringContaining("Roshan is alive")
                 );
             });
         });
