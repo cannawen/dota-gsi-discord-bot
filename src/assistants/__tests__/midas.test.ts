@@ -47,7 +47,7 @@ describe("midas assistant", () => {
                 test("should remind every 15 seconds", () => {
                     const firstSeenMidasState = getResults(rule, {
                         [rules.assistant.midas]: "PRIVATE",
-                        time: 0,
+                        time: 100,
                         alive: true,
                         inGame: true,
                         items: MIDAS_CAN_CAST,
@@ -59,7 +59,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             [rules.assistant.midas]: "PRIVATE",
-                            time: 15,
+                            time: 115,
                             alive: true,
                             inGame: true,
                             items: MIDAS_CAN_CAST,
@@ -74,7 +74,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             [rules.assistant.midas]: "PRIVATE",
-                            time: 30,
+                            time: 130,
                             alive: true,
                             inGame: true,
                             items: MIDAS_CAN_CAST_BACKPACK,
@@ -89,7 +89,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             [rules.assistant.midas]: "PRIVATE",
-                            time: 31,
+                            time: 131,
                             alive: true,
                             inGame: true,
                             items: MIDAS_CAN_CAST,
@@ -103,7 +103,7 @@ describe("midas assistant", () => {
                 test("should not remind about midas", () => {
                     const firstSeenMidasState = getResults(rule, {
                         [rules.assistant.midas]: "PRIVATE",
-                        time: 0,
+                        time: 100,
                         alive: true,
                         inGame: true,
                         items: MIDAS_ON_COOLDOWN,
@@ -115,7 +115,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             [rules.assistant.midas]: "PRIVATE",
-                            time: 15,
+                            time: 115,
                             alive: true,
                             inGame: true,
                             items: MIDAS_ON_COOLDOWN,
@@ -129,7 +129,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             [rules.assistant.midas]: "PRIVATE",
-                            time: 15,
+                            time: 130,
                             alive: true,
                             inGame: true,
                             items: MIDAS_ON_COOLDOWN_BACKPACK,
@@ -148,7 +148,7 @@ describe("midas assistant", () => {
         test("should not remind about midas", () => {
             const firstSeenMidasState = getResults(rule, {
                 [rules.assistant.midas]: "PRIVATE",
-                time: 0,
+                time: 100,
                 alive: false,
                 inGame: true,
                 items: MIDAS_CAN_CAST,
@@ -158,7 +158,7 @@ describe("midas assistant", () => {
                 rule,
                 {
                     [rules.assistant.midas]: "PRIVATE",
-                    time: 15,
+                    time: 115,
                     alive: false,
                     inGame: true,
                     items: MIDAS_CAN_CAST,
@@ -175,7 +175,7 @@ describe("midas assistant", () => {
         test("should not remind about midas", () => {
             const firstSeenMidasState = getResults(rule, {
                 [rules.assistant.midas]: "PRIVATE",
-                time: 0,
+                time: 100,
                 alive: true,
                 inGame: true,
                 items: NO_MIDAS,
@@ -185,7 +185,7 @@ describe("midas assistant", () => {
                 rule,
                 {
                     [rules.assistant.midas]: "PRIVATE",
-                    time: 15,
+                    time: 115,
                     alive: true,
                     inGame: true,
                     items: NO_MIDAS,
