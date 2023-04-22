@@ -13,6 +13,8 @@ export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you of wisdom rune every 7 minutes";
 
+const ADVANCED_WARNING = 20;
+
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
         rules.assistant.runeWisdom,
@@ -20,8 +22,8 @@ export default new RuleDecoratorInGame(
         [topics.time],
         (get, effect) => {
             const time = get(topics.time)!;
-            if (time > 0 && time % (7 * 60) === 0) {
-                return new Fact(effect, "wisdom rune");
+            if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
+                return new Fact(effect, "wisdom rune soon");
             }
         }
     )
