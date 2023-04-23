@@ -1,6 +1,5 @@
 import { EffectConfig } from "../../effectConfigManager";
 import Fact from "../Fact";
-import { getResults } from "../../__tests__/helpers";
 import RuleConfigurable from "../RuleConfigurable";
 import Topic from "../Topic";
 

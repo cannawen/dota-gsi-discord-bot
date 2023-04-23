@@ -1,7 +1,6 @@
 jest.mock("../../log");
 
 import Fact from "../../engine/Fact";
-import { getResults } from "../../__tests__/helpers";
 import rule from "../stopAudio";
 
 const mockStop = jest.fn();

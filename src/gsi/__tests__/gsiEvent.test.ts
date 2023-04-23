@@ -1,6 +1,5 @@
 import { EventType, IEvent } from "node-gsi";
 import Event from "../../gsi-data-classes/Event";
-import { getResults } from "../../__tests__/helpers";
 import GsiData from "../GsiData";
 import rule from "../gsiEvents";
 

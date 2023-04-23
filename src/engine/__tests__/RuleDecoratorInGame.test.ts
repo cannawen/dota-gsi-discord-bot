@@ -1,5 +1,4 @@
 import Fact from "../Fact";
-import { getResults } from "../../__tests__/helpers";
 import Rule from "../Rule";
 import RuleDecoratorInGame from "../RuleDecoratorInGame";
 import Topic from "../Topic";

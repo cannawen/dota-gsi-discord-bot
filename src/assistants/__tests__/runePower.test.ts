@@ -1,4 +1,3 @@
-import { getResults } from "../../__tests__/helpers";
 import rule from "../runePower";
 import rules from "../../rules";
 

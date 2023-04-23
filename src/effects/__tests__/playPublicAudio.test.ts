@@ -4,7 +4,6 @@ jest.mock("../tts");
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
 import fs from "fs";
-import { getResults } from "../../__tests__/helpers";
 import rule from "../playPublicAudio";
 import topics from "../../topics";
 import tts from "../tts";

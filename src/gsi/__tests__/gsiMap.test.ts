@@ -1,5 +1,4 @@
 import { Dota2GameState, IMap } from "node-gsi";
-import { getResults } from "../../__tests__/helpers";
 import GsiData from "../GsiData";
 import rule from "../gsiMap";
 

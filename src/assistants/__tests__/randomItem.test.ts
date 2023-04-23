@@ -1,4 +1,3 @@
-import { getResults } from "../../__tests__/helpers";
 import rule from "../randomItem";
 import rules from "../../rules";
 

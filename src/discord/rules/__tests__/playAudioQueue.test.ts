@@ -3,7 +3,6 @@ jest.mock("@discordjs/voice");
 jest.mock("../../../log");
 
 import Fact from "../../../engine/Fact";
-import { getResults } from "../../../__tests__/helpers";
 import rule from "../playAudioQueue";
 import Voice from "@discordjs/voice";
 

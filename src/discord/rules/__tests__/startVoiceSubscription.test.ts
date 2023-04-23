@@ -4,7 +4,6 @@ jest.mock("../../../log");
 
 import engine from "../../../customEngine";
 import Fact from "../../../engine/Fact";
-import { getResults } from "../../../__tests__/helpers";
 import rule from "../startVoiceSubscription";
 import topics from "../../../topics";
 import Voice from "@discordjs/voice";

@@ -3,7 +3,6 @@ jest.mock("@discordjs/voice");
 const mockPlay = jest.fn();
 
 import Fact from "../../engine/Fact";
-import { getResults } from "../../__tests__/helpers";
 import rule from "../playInterruptingAudio";
 import Voice from "@discordjs/voice";
 

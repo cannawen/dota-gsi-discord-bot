@@ -1,6 +1,14 @@
+import Fact from "../src/engine/Fact";
 import { MatcherFunction } from "expect";
+import Rule from "../src/engine/Rule";
 
 declare global {
+    function getResults(
+        rule: Rule,
+        db: { [keys: string]: unknown },
+        previousState?: Fact<unknown>[] | Fact<unknown>
+    ): Fact<unknown>[] | Fact<unknown>;
+
     namespace jest {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;

@@ -1,5 +1,7 @@
 /* eslint-disable max-statements */
 import Fact from "../src/engine/Fact";
+import Rule from "../src/engine/Rule";
+import Topic from "../src/engine/Topic";
 
 /* eslint-disable sort-keys */
 expect.extend({
@@ -97,3 +99,38 @@ expect.extend({
         };
     },
 });
+
+const makeGetFunction =
+    (input: { [keys: string]: unknown }) =>
+    <T>(t: Topic<T>): T =>
+        input[t.label] as T;
+
+// NOTE: Cannot re-use the existing code in topicManager
+// because the import will mess with jest.mock("topicManager")
+function factsToPlainObject(facts: Fact<unknown>[]) {
+    return facts.reduce((memo: { [key: string]: unknown }, fact) => {
+        memo[fact.topic.label] = fact.value;
+        return memo;
+    }, {});
+}
+
+// TODO refactor to be in function() format
+// TODO refactor to be able to take in a list of rules instead of just a single rule
+const getResults = (
+    rule: Rule,
+    db: { [keys: string]: unknown },
+    previousState?: Fact<unknown>[] | Fact<unknown>
+) => {
+    if (previousState) {
+        const arrPreviousState = Array.isArray(previousState)
+            ? previousState
+            : [previousState];
+        return rule.then(
+            makeGetFunction({ ...factsToPlainObject(arrPreviousState), ...db })
+        );
+    } else {
+        return rule.then(makeGetFunction(db));
+    }
+};
+
+global.getResults = getResults as any;

@@ -1,4 +1,3 @@
-import { getResults } from "../../__tests__/helpers";
 import GsiData from "../GsiData";
 import { IPlayer } from "node-gsi";
 import rule from "../gsiPlayer";

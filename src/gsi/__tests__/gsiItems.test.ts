@@ -1,5 +1,4 @@
 import { IItem, IItemContainer } from "node-gsi";
-import { getResults } from "../../__tests__/helpers";
 import GsiData from "../GsiData";
 import Item from "../../gsi-data-classes/Item";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";

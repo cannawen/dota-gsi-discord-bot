@@ -27,6 +27,9 @@
             }
         }
     ],
+    "globals": {
+        "getResults": "readonly"
+    },
     "rules": {
         // jest plugin rules
         "jest/no-disabled-tests": "warn",

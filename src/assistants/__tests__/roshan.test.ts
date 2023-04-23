@@ -1,5 +1,4 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
-import { getResults } from "../../__tests__/helpers";
 import roshanRules from "../roshan";
 import rules from "../../rules";
 

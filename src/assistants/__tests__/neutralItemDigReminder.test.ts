@@ -1,5 +1,4 @@
 import { DeepReadonly } from "ts-essentials";
-import { getResults } from "../../__tests__/helpers";
 import Item from "../../gsi-data-classes/Item";
 import neutralItemRule from "../neutralItemDigReminder";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
