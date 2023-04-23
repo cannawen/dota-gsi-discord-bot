@@ -32,32 +32,35 @@ function getGoogleRequestOptions(): AxiosRequestConfig {
         method: "POST",
         transformResponse: [
             (data) => {
-                const fixedData = data.replace('{"result":[]}', "");
-                try {
+                // Google randomly sends an extra `{"result":[]}\n`
+                // Before our actual results. Filter it out here
+                const fixedData = data.replace('{"result":[]}\n', "");
+                if (fixedData === "") {
+                    return undefined;
+                } else {
                     return JSON.parse(fixedData);
-                } catch (e) {
-                    return { error: e };
                 }
             },
         ],
     };
 }
 
-function transcribe(buffer: Buffer): Promise<string | void> {
+function transcribe(buffer: Buffer): Promise<string> {
     const requestOptions = getGoogleRequestOptions();
     requestOptions.data = buffer;
     return axios(requestOptions).then((response) => {
-        if (response.data.error) {
-            return;
+        if (response.data) {
+            return response.data.result[0].alternative[0].transcript;
+        } else {
+            return Promise.reject(new Error("Could not transcribe voice"));
         }
-        return response.data.result[0].alternative[0].transcript;
     });
 }
 
 export function listenSpeechToText(
     receiver: Voice.VoiceReceiver,
     userId: string
-): Promise<string | void> {
+): Promise<string> {
     return new Promise((res, rej) => {
         const stream = receiver.subscribe(userId, {
             end: {
@@ -82,8 +85,7 @@ export function listenSpeechToText(
             const totalBuffer = Buffer.concat(bufferPieces);
             const duration = totalBuffer.length / 48000 / 2;
             if (duration > 1.0 || duration < 19) {
-                const transcript = transcribe(convertAudio(totalBuffer));
-                res(transcript);
+                res(transcribe(convertAudio(totalBuffer)));
             }
         });
     });
