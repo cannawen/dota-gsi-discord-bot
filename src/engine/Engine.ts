@@ -101,12 +101,7 @@ class Engine {
         this.rules.push(rule);
     };
 
-    /**
-     * Currently only way to set on this database is to create a custom subclass
-     * @param db db to use
-     * @param newFact fact that has changed
-     */
-    protected set = (db: FactStore, newFact: Fact<unknown>) => {
+    public set = (db: FactStore, newFact: Fact<unknown>) => {
         const changedTopics = determineChangedTopics(db, newFact);
 
         db.set(newFact);
