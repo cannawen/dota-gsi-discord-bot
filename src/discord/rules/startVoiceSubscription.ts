@@ -137,13 +137,20 @@ export default new Rule(
         connection.receiver.speaking.on("start", (userId) => {
             listenSpeechToText(connection.receiver, userId)
                 .then((transcript) => {
+                    if (!transcript) return;
                     // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
                     if (userId === "169619011238232073") {
                         log.info("tts", transcript);
                     }
                     engine.updateChannelUtterance(channelId, transcript);
                 })
-                .catch((_) => {});
+                .catch((error) => {
+                    log.error(
+                        "tts",
+                        "Problem with transcription, %s",
+                        error.message
+                    );
+                });
         });
 
         const player = Voice.createAudioPlayer();

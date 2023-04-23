@@ -45,23 +45,35 @@ function getGoogleRequestOptions(): AxiosRequestConfig {
     };
 }
 
-function transcribe(buffer: Buffer): Promise<string> {
+function transcribe(buffer: Buffer): Promise<string | void> {
     const requestOptions = getGoogleRequestOptions();
     requestOptions.data = buffer;
     return axios(requestOptions).then((response) => {
         if (response.data) {
             return response.data.result[0].alternative[0].transcript;
         } else {
-            return Promise.reject(new Error("Could not transcribe voice"));
+            return undefined;
         }
     });
 }
 
+// TODO should we move to the async format? Is this easier to understand?
+// async function transcribe(buffer: Buffer) {
+//     const requestOptions = getGoogleRequestOptions();
+//     requestOptions.data = buffer;
+//     const response = await axios(requestOptions);
+//     if (response.data) {
+//         return response.data.result[0].alternative[0].transcript;
+//     } else {
+//         return undefined;
+//     }
+// }
+
 export function listenSpeechToText(
     receiver: Voice.VoiceReceiver,
     userId: string
-): Promise<string> {
-    return new Promise((res, rej) => {
+): Promise<string | void> {
+    return new Promise((resolve) => {
         const stream = receiver.subscribe(userId, {
             end: {
                 behavior: Voice.EndBehaviorType.AfterSilence,
@@ -85,7 +97,7 @@ export function listenSpeechToText(
             const totalBuffer = Buffer.concat(bufferPieces);
             const duration = totalBuffer.length / 48000 / 2;
             if (duration > 1.0 || duration < 19) {
-                res(transcribe(convertAudio(totalBuffer)));
+                resolve(transcribe(convertAudio(totalBuffer)));
             }
         });
     });
