@@ -39,7 +39,7 @@ describe("wards", () => {
                 const noWardState = getResults(rule, {
                     [rules.assistant.wards]: "PRIVATE",
                     inGame: true,
-                    time: 0,
+                    time: 1000,
                     items: NO_WARDS,
                 }) as any;
                 const noWardStateLater = getResults(
@@ -47,7 +47,7 @@ describe("wards", () => {
                     {
                         [rules.assistant.wards]: "PRIVATE",
                         inGame: true,
-                        time: 540,
+                        time: 1540,
                         items: NO_WARDS,
                     },
                     noWardState
@@ -63,7 +63,7 @@ describe("wards", () => {
                 const twoWardState = getResults(rule, {
                     [rules.assistant.wards]: "PRIVATE",
                     inGame: true,
-                    time: 0,
+                    time: 1000,
                     items: TWO_WARDS,
                 }) as any;
                 const oneWardState = getResults(
@@ -71,7 +71,7 @@ describe("wards", () => {
                     {
                         [rules.assistant.wards]: "PRIVATE",
                         inGame: true,
-                        time: 540,
+                        time: 1540,
                         items: ONE_WARD,
                     },
                     twoWardState
@@ -84,7 +84,7 @@ describe("wards", () => {
                 const oneWardState = getResults(rule, {
                     [rules.assistant.wards]: "PRIVATE",
                     inGame: true,
-                    time: 0,
+                    time: 1000,
                     items: ONE_WARD,
                 }) as any;
                 const twoWardState = getResults(
@@ -92,7 +92,7 @@ describe("wards", () => {
                     {
                         [rules.assistant.wards]: "PRIVATE",
                         inGame: true,
-                        time: 500,
+                        time: 1500,
                         items: TWO_WARDS,
                     },
                     oneWardState
@@ -102,7 +102,7 @@ describe("wards", () => {
                     {
                         [rules.assistant.wards]: "PRIVATE",
                         inGame: true,
-                        time: 540,
+                        time: 1540,
                         items: NO_WARDS,
                     },
                     twoWardState

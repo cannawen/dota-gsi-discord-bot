@@ -1,6 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -30,36 +31,36 @@ const lastWardCountTopic =
  * This means if you buy wards from fountain and it does not pass through your stash,
  * The app may not know your ward count has increased.
  */
-export default new RuleConfigurable(
-    rules.assistant.wards,
-    configTopic,
-    [topics.time, topics.items],
-    (get, effect) => {
-        if (!get(topics.inGame)!) return;
+export default new RuleDecoratorInGame(
+    new RuleConfigurable(
+        rules.assistant.wards,
+        configTopic,
+        [topics.time, topics.items],
+        (get, effect) => {
+            const facts: Fact<unknown>[] = [];
+            const time = get(topics.time)!;
+            const lastWardReminderTime = get(lastWardReminderTimeTopic) || 0;
+            const lastWardCount = get(lastWardCountTopic) || 0;
 
-        const facts: Fact<unknown>[] = [];
-        const time = get(topics.time)!;
-        const lastWardReminderTime = get(lastWardReminderTimeTopic) || 0;
-        const lastWardCount = get(lastWardCountTopic) || 0;
+            const currentWardCount = get(topics.items)!
+                .allItems()
+                .filter(
+                    (item) =>
+                        item?.id === "item_ward_observer" ||
+                        item?.id === "item_ward_sentry" ||
+                        item?.id === "item_ward_dispenser"
+                ).length;
+            if (lastWardCount !== currentWardCount) {
+                facts.push(new Fact(lastWardCountTopic, currentWardCount));
+            }
 
-        const currentWardCount = get(topics.items)!
-            .allItems()
-            .filter(
-                (item) =>
-                    item?.id === "item_ward_observer" ||
-                    item?.id === "item_ward_sentry" ||
-                    item?.id === "item_ward_dispenser"
-            ).length;
-        if (lastWardCount !== currentWardCount) {
-            facts.push(new Fact(lastWardCountTopic, currentWardCount));
+            if (currentWardCount > lastWardCount) {
+                facts.push(new Fact(lastWardReminderTimeTopic, time));
+            } else if (time - lastWardReminderTime >= WARD_REMINDER_INTERVAL) {
+                facts.push(new Fact(effect, "resources/audio/wards.mp3"));
+                facts.push(new Fact(lastWardReminderTimeTopic, time));
+            }
+            return facts;
         }
-
-        if (currentWardCount > lastWardCount) {
-            facts.push(new Fact(lastWardReminderTimeTopic, time));
-        } else if (time - lastWardReminderTime >= WARD_REMINDER_INTERVAL) {
-            facts.push(new Fact(effect, "resources/audio/wards.mp3"));
-            facts.push(new Fact(lastWardReminderTimeTopic, time));
-        }
-        return facts;
-    }
+    )
 );
