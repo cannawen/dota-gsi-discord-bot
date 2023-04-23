@@ -19,12 +19,13 @@ function convertAudio(input: Buffer) {
 }
 
 function getGoogleRequestOptions(): AxiosRequestConfig {
-    let key = "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw";
-    let lang = "en-US";
-    let profanityFilter = "0";
-
     return {
-        url: `https://www.google.com/speech-api/v2/recognize?output=json&lang=${lang}&key=${key}&pFilter=${profanityFilter}`,
+        url: `https://www.google.com/speech-api/v2/recognize?output=json`,
+        params: {
+            lang: "en-US",
+            key: "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
+            pFilter: "0",
+        },
         headers: {
             "Content-Type": "audio/l16; rate=48000;",
         },
