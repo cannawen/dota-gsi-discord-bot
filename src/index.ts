@@ -53,6 +53,7 @@ function registerAssistantConfig() {
         .map((file) => path.join(dirPath, file))
         // eslint-disable-next-line global-require
         .map((filePath) => require(filePath))
+        .filter((module) => module.configTopic)
         .map((module) => module.configTopic as Topic<EffectConfig>)
         .forEach((topic) =>
             effectConfig.registerEffectConfigRule(topic.label, topic)

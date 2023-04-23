@@ -64,6 +64,7 @@ function defaultConfigs(): Fact<EffectConfig>[] {
             .map((file) => path.join(dirPath, file))
             // eslint-disable-next-line global-require
             .map((filePath) => require(filePath))
+            .filter((module) => module.configTopic)
             .reduce((memo, module) => {
                 const topic = module.configTopic as Topic<EffectConfig>;
                 const effectConfig = module.defaultConfig as EffectConfig;

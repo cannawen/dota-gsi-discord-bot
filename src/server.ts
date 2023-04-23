@@ -22,6 +22,7 @@ function assistantDescriptions() {
             .map((file) => path.join(dirPath, file))
             // eslint-disable-next-line global-require
             .map((filePath) => require(filePath))
+            .filter((module) => module.configTopic)
             .reduce((memo: { [key: string]: string }, module) => {
                 memo[module.configTopic.label] = module.assistantDescription;
                 return memo;
