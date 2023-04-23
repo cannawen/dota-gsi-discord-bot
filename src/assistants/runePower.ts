@@ -2,7 +2,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
-import RuleDecoratorMinAndMaxMinute from "../engine/RuleDecoratorMixAndMaxMinute";
+import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -16,7 +16,7 @@ export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you of power rune spawn every 2:00 after 6:00";
 
-export default new RuleDecoratorMinAndMaxMinute(
+export default new RuleDecoratorStartAndEndMinute(
     6,
     undefined,
     new RuleDecoratorInGame(

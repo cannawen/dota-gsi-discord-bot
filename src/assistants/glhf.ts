@@ -13,7 +13,7 @@ export const assistantDescription =
 export default new RuleConfigurable(
     rules.assistant.glhf,
     configTopic,
-    [topics.time],
+    [topics.inGame, topics.time],
     (get, effect) => {
         if (get(topics.time)! === 0 && get(topics.inGame)! === true) {
             return new Fact(effect, "resources/audio/glhf.mp3");

@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import RuleConfigurable from "../engine/RuleConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
+import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -20,7 +20,9 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
-export default new RuleDecoratorInGame(
+export default new RuleDecoratorStartAndEndMinute(
+    NEUTRAL_ITEM_REMINDER_START_MINUTE,
+    undefined,
     new RuleConfigurable(
         rules.assistant.neutralItemDigReminder,
         configTopic,
@@ -29,11 +31,6 @@ export default new RuleDecoratorInGame(
             const items = get(topics.items)!;
             const time = get(topics.time)!;
             const lastReminderTime = get(lastReminderTimeTopic);
-
-            // Start assistant after 10 minutes
-            if (time < NEUTRAL_ITEM_REMINDER_START_MINUTE * 60) {
-                return;
-            }
 
             // If we have a neutral item
             if (items.neutral) {

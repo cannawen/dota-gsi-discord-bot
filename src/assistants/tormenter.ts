@@ -6,6 +6,7 @@ import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.tormenter
@@ -20,16 +21,14 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
 );
 
 export default [
-    new RuleConfigurable(
-        rules.assistant.tormenter,
-        configTopic,
-        [topics.time],
-        (get, effect) => {
-            const time = get(topics.time)!;
-            if (time === 20 * 60) {
-                return new Fact(effect, "tormenter has spawned");
-            }
-        }
+    new RuleDecoratorAtMinute(
+        20,
+        new RuleConfigurable(
+            rules.assistant.tormenter,
+            configTopic,
+            [],
+            (get, effect) => new Fact(effect, "tormenter has spawned")
+        )
     ),
     new RuleConfigurable(
         "tormenter reminder",

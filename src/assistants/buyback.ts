@@ -3,7 +3,7 @@ import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
-import RuleDecoratorMinAndMaxMinute from "../engine/RuleDecoratorMixAndMaxMinute";
+import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -16,7 +16,7 @@ export const assistantDescription =
 const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
 
 export default [
-    new RuleDecoratorMinAndMaxMinute(
+    new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
         new Rule(

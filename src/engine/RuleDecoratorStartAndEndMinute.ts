@@ -1,9 +1,11 @@
 import Rule from "./Rule";
+import RuleDecoratorInGame from "./RuleDecoratorInGame";
 import topics from "../topics";
 
-class RuleDecoratorMinAndMaxMinute extends Rule {
+class RuleDecoratorStartAndEndMinute extends Rule {
     constructor(min: number | undefined, max: number | undefined, rule: Rule) {
-        super(rule.label, rule.given, (get) => {
+        const inGameRule = new RuleDecoratorInGame(rule);
+        super(inGameRule.label, inGameRule.given, (get) => {
             const time = get(topics.time)!;
             if (min && time < min * 60) {
                 return;
@@ -12,9 +14,9 @@ class RuleDecoratorMinAndMaxMinute extends Rule {
                 return;
             }
 
-            return rule.then(get);
+            return inGameRule.then(get);
         });
     }
 }
 
-export default RuleDecoratorMinAndMaxMinute;
+export default RuleDecoratorStartAndEndMinute;

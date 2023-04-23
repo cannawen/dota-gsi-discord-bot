@@ -8,6 +8,8 @@ const makeGetFunction =
     <T>(t: Topic<T>): T =>
         input[t.label] as T;
 
+// TODO refactor to be in function() format
+// TODO refactor to be able to take in a list of rules instead of just a single rule
 export const getResults = (
     rule: Rule,
     db: { [keys: string]: unknown },
