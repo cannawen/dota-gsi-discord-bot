@@ -2,6 +2,10 @@ import axios, { AxiosRequestConfig } from "axios";
 import prism from "prism-media";
 import Voice = require("@discordjs/voice");
 
+// Mashup of:
+// https://github.com/ShadowLp174/discord-stt
+// https://github.com/Rei-x/discord-speech-recognition
+
 function convertAudio(input: Buffer) {
     try {
         // stereo to mono channel
@@ -19,11 +23,15 @@ function convertAudio(input: Buffer) {
 }
 
 function getGoogleRequestOptions(): AxiosRequestConfig {
+    // Docs:
+    // https://github.com/gillesdemey/google-speech-v2
+    // https://github.com/Uberi/speech_recognition/blob/c89856088ad81d81d38be314e3db50905481c5fe/speech_recognition/__init__.py#L850
     return {
         url: `https://www.google.com/speech-api/v2/recognize?output=json`,
         params: {
-            lang: "en-US",
+            // Uses generic Google API key for free speech to text
             key: "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
+            lang: "en-US",
             pFilter: "0",
         },
         headers: {
