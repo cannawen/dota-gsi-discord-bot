@@ -37,8 +37,8 @@ export default [
         [topics.time, tormenterFallenTimeTopic],
         (get, effect) => {
             const time = get(topics.time);
-            const fallenTime = get(tormenterFallenTimeTopic);
-            if (time === fallenTime) {
+            const fallenTime = get(tormenterFallenTimeTopic)!;
+            if (time === fallenTime + 60 * 10) {
                 return [
                     new Fact(effect, "Tormenter has respawned"),
                     new Fact(tormenterFallenTimeTopic, undefined),
@@ -52,13 +52,13 @@ export default [
         [topics.lastDiscordUtterance],
         (get, effect) => {
             const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
-            if (lastDiscordUtterance.match(/torment has fallen/i)) {
+            if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
                 return [
                     new Fact(tormenterFallenTimeTopic, get(topics.time)),
                     new Fact(effect, "OK"),
                 ];
             }
-            if (lastDiscordUtterance.match(/torment status/i)) {
+            if (lastDiscordUtterance.match(/^torment status$/i)) {
                 const fallenTime = get(tormenterFallenTimeTopic);
                 let message: string;
                 if (fallenTime) {
