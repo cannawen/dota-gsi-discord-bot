@@ -13,7 +13,7 @@ const assistant = {
     midas: "Midas",
     neutralItemDigReminder: "Neutral item dig",
     neutralItemReminder: "Neutral item",
-    newNeutralItems: "New neutral items",
+    newNeutralTokens: "New neutral tokens",
     pause: "Pause",
     philosophersStone: "Philosopher's stone",
     randomItem: "Random item suggestion",

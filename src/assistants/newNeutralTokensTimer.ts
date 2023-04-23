@@ -1,6 +1,5 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
-import log from "../log";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -8,13 +7,13 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.newNeutralItems
+    rules.assistant.newNeutralTokens
 );
 export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
-    "Reminds you when new neutral items are spawning";
+    "Reminds you when new neutral tokens are spawning";
 
-const NEUTRAL_ITEM_SPAWN_MINUTES = [7, 17, 27, 37, 60];
+const NEUTRAL_TOKEN_SPAWN_MINUTES = [7, 17, 27, 37, 60];
 
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
@@ -24,17 +23,11 @@ export default new RuleDecoratorInGame(
         (get, effect) => {
             const currentTime = get(topics.time)!;
             if (
-                NEUTRAL_ITEM_SPAWN_MINUTES.find(
+                NEUTRAL_TOKEN_SPAWN_MINUTES.find(
                     (spawnMinute) => spawnMinute * 60 === currentTime
                 )
             ) {
-                // TODO remove
-                log.info(
-                    "rules",
-                    "New neutral item announcement at time %s",
-                    currentTime / 60
-                );
-                return new Fact(effect, "resources/audio/new-neutrals.mp3");
+                return new Fact(effect, "New neutral tokens");
             }
         }
     )
