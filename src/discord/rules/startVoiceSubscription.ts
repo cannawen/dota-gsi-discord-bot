@@ -4,6 +4,7 @@ import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
+import { listenSpeechToText } from "../speechToText";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
@@ -130,6 +131,19 @@ export default new Rule(
                 newState,
                 studentId,
                 connection
+            );
+        });
+
+        connection.receiver.speaking.on("start", (userId) => {
+            listenSpeechToText(connection.receiver, userId).then(
+                (transcript) => {
+                    if (!transcript) return;
+                    // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
+                    if (userId === "169619011238232073") {
+                        log.info("tts", transcript);
+                    }
+                    engine.updateChannelUtterance(channelId, transcript);
+                }
             );
         });
 
