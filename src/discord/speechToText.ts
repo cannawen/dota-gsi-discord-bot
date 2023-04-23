@@ -1,25 +1,16 @@
+/* eslint-disable sort-keys */
 import axios, { AxiosRequestConfig } from "axios";
 import prism from "prism-media";
 import Voice = require("@discordjs/voice");
 
-// Mashup of:
+// This file is a mashup of:
 // https://github.com/ShadowLp174/discord-stt
 // https://github.com/Rei-x/discord-speech-recognition
 
-function convertAudio(input: Buffer) {
-    try {
-        // stereo to mono channel
-        const data = new Int16Array(input);
-        const ndata = new Int16Array(data.length / 2);
-        for (let i = 0, j = 0; i < data.length; i += 4) {
-            ndata[j++] = data[i];
-            ndata[j++] = data[i + 1];
-        }
-        return Buffer.from(ndata);
-    } catch (e) {
-        console.log("convertAudio error: ", e);
-        throw e;
-    }
+function convertAudioFromStereoToMono(input: Buffer) {
+    const stereoData = new Int16Array(input);
+    const monoData = stereoData.filter((_, idx) => idx % 2);
+    return Buffer.from(monoData);
 }
 
 function getGoogleRequestOptions(): AxiosRequestConfig {
@@ -28,6 +19,7 @@ function getGoogleRequestOptions(): AxiosRequestConfig {
     // https://github.com/Uberi/speech_recognition/blob/c89856088ad81d81d38be314e3db50905481c5fe/speech_recognition/__init__.py#L850
     return {
         url: `https://www.google.com/speech-api/v2/recognize?output=json`,
+        method: "POST",
         params: {
             // Uses generic Google API key for free speech to text
             key: "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
@@ -37,7 +29,6 @@ function getGoogleRequestOptions(): AxiosRequestConfig {
         headers: {
             "Content-Type": "audio/l16; rate=48000;",
         },
-        method: "POST",
         transformResponse: [
             (data) => {
                 // Google randomly sends an extra `{"result":[]}\n`
@@ -65,18 +56,6 @@ function transcribe(buffer: Buffer): Promise<string | void> {
     });
 }
 
-// TODO should we move to the async format? Is this easier to understand?
-// async function transcribe(buffer: Buffer) {
-//     const requestOptions = getGoogleRequestOptions();
-//     requestOptions.data = buffer;
-//     const response = await axios(requestOptions);
-//     if (response.data) {
-//         return response.data.result[0].alternative[0].transcript;
-//     } else {
-//         return undefined;
-//     }
-// }
-
 export function listenSpeechToText(
     receiver: Voice.VoiceReceiver,
     userId: string
@@ -96,17 +75,17 @@ export function listenSpeechToText(
         });
         stream.pipe(decoder);
 
-        const bufferPieces: Buffer[] = [];
+        const bufferArray: Buffer[] = [];
         decoder.on("data", (data) => {
-            bufferPieces.push(data);
+            bufferArray.push(data);
         });
 
         decoder.on("end", async () => {
-            const totalBuffer = Buffer.concat(bufferPieces);
-            const duration = totalBuffer.length / 48000 / 2;
-            if (duration > 1.0 || duration < 19) {
-                resolve(transcribe(convertAudio(totalBuffer)));
-            }
+            const buffer = Buffer.concat(bufferArray);
+            // const duration = buffer.length / 48000 / 2;
+            // if (duration > 1.0 || duration < 19) {
+            resolve(transcribe(convertAudioFromStereoToMono(buffer)));
+            // }
         });
     });
 }
