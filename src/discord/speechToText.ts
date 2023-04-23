@@ -13,27 +13,29 @@ function convertAudioFromStereoToMono(input: Buffer) {
     return Buffer.from(monoData);
 }
 
-function getGoogleRequestOptions(): AxiosRequestConfig {
+function googleTranscribeRequest(requestData: Buffer): AxiosRequestConfig {
     // Docs:
     // https://github.com/gillesdemey/google-speech-v2
     // https://github.com/Uberi/speech_recognition/blob/c89856088ad81d81d38be314e3db50905481c5fe/speech_recognition/__init__.py#L850
     return {
         url: `https://www.google.com/speech-api/v2/recognize?output=json`,
         method: "POST",
+        data: requestData,
         params: {
             // Uses generic Google API key for free speech to text
             key: "AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw",
             lang: "en-US",
+            // profanity filter is off
             pFilter: "0",
         },
         headers: {
             "Content-Type": "audio/l16; rate=48000;",
         },
         transformResponse: [
-            (data) => {
+            (responseData) => {
                 // Google randomly sends an extra `{"result":[]}\n`
                 // Before our actual results. Filter it out here
-                const fixedData = data.replace('{"result":[]}\n', "");
+                const fixedData = responseData.replace('{"result":[]}\n', "");
                 if (fixedData === "") {
                     return undefined;
                 } else {
@@ -45,9 +47,7 @@ function getGoogleRequestOptions(): AxiosRequestConfig {
 }
 
 function transcribe(buffer: Buffer): Promise<string | void> {
-    const requestOptions = getGoogleRequestOptions();
-    requestOptions.data = buffer;
-    return axios(requestOptions).then((response) => {
+    return axios(googleTranscribeRequest(buffer)).then((response) => {
         if (response.data) {
             return response.data.result[0].alternative[0].transcript;
         } else {
