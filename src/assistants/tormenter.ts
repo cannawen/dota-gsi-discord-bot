@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -17,13 +18,6 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
     "tormenterFallenTimeTopic",
     { persistAcrossRestarts: true }
 );
-
-function secondsToTimeString(seconds: number) {
-    const totalMs = seconds * 1000;
-    const result = new Date(totalMs).toISOString().slice(14, 19);
-
-    return result.replace(":", " ");
-}
 
 export default [
     new RuleConfigurable(
@@ -68,7 +62,7 @@ export default [
                 const fallenTime = get(tormenterFallenTimeTopic);
                 let message: string;
                 if (fallenTime) {
-                    message = `Tormenter is dead. Will respawn at ${secondsToTimeString(
+                    message = `Tormenter is dead. Will respawn at ${helper.secondsToTimeString(
                         fallenTime + 10 * 60
                     )}`;
                 } else if (get(topics.time)! >= 20 * 60) {

@@ -2,6 +2,7 @@ import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
@@ -48,14 +49,7 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
 }
 
 function roshStatusMessage(message: string) {
-    return message.match(/(what).{1,15}(status|timer?)/i) !== null;
-}
-
-function secondsToTimeString(seconds: number) {
-    const totalMs = seconds * 1000;
-    const result = new Date(totalMs).toISOString().slice(14, 19);
-
-    return result.replace(":", " ");
+    return message.match(/^(what).{1,15}(status|timer?)$/i) !== null;
 }
 
 const roshRulesArray = [
@@ -124,15 +118,15 @@ const roshRulesArray = [
 
             if (killedTime) {
                 if (time < killedTime + AEGIS_DURATION) {
-                    response = `Roshan is dead. Aegis expires at ${secondsToTimeString(
+                    response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
                         killedTime + AEGIS_DURATION
                     )}`;
                 } else if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
-                    response = `Roshan is dead. May respawn at ${secondsToTimeString(
+                    response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
                         killedTime + ROSHAN_MINIMUM_SPAWN_TIME
                     )}`;
                 } else if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
-                    response = `Roshan may be alive. Guaranteed respawn at ${secondsToTimeString(
+                    response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
                         killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
                     )}`;
                 }
