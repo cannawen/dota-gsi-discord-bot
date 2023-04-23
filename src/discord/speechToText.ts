@@ -7,10 +7,10 @@ import Voice = require("@discordjs/voice");
 // https://github.com/ShadowLp174/discord-stt
 // https://github.com/Rei-x/discord-speech-recognition
 
-function convertAudioFromStereoToMono(input: Buffer) {
-    const stereoData = new Int16Array(input);
-    const monoData = stereoData.filter((_, idx) => idx % 2);
-    return Buffer.from(monoData);
+function convertAudioFromStereoToMono(stereoAudioBuffer: Buffer) {
+    const stereoBuffer = new Int16Array(stereoAudioBuffer);
+    const monoBuffer = stereoBuffer.filter((_, idx) => idx % 2);
+    return Buffer.from(monoBuffer);
 }
 
 function googleTranscribeRequest(requestData: Buffer): AxiosRequestConfig {
@@ -46,8 +46,8 @@ function googleTranscribeRequest(requestData: Buffer): AxiosRequestConfig {
     };
 }
 
-function transcribe(buffer: Buffer): Promise<string | void> {
-    return axios(googleTranscribeRequest(buffer)).then((response) => {
+function transcribeNetworkCall(audioBuffer: Buffer): Promise<string | void> {
+    return axios(googleTranscribeRequest(audioBuffer)).then((response) => {
         if (response.data) {
             return response.data.result[0].alternative[0].transcript;
         } else {
@@ -56,7 +56,7 @@ function transcribe(buffer: Buffer): Promise<string | void> {
     });
 }
 
-export function listenSpeechToText(
+export function transcribe(
     receiver: Voice.VoiceReceiver,
     userId: string
 ): Promise<string | void> {
@@ -75,17 +75,16 @@ export function listenSpeechToText(
         });
         stream.pipe(decoder);
 
-        const bufferArray: Buffer[] = [];
+        const audioBufferArray: Buffer[] = [];
         decoder.on("data", (data) => {
-            bufferArray.push(data);
+            audioBufferArray.push(data);
         });
 
         decoder.on("end", async () => {
-            const buffer = Buffer.concat(bufferArray);
-            // const duration = buffer.length / 48000 / 2;
-            // if (duration > 1.0 || duration < 19) {
-            resolve(transcribe(convertAudioFromStereoToMono(buffer)));
-            // }
+            const audioBuffer = Buffer.concat(audioBufferArray);
+            resolve(
+                transcribeNetworkCall(convertAudioFromStereoToMono(audioBuffer))
+            );
         });
     });
 }

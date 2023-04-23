@@ -4,7 +4,7 @@ import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
-import { listenSpeechToText } from "../speechToText";
+import { transcribe } from "../speechToText";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
@@ -135,7 +135,7 @@ export default new Rule(
         });
 
         connection.receiver.speaking.on("start", (userId) => {
-            listenSpeechToText(connection.receiver, userId)
+            transcribe(connection.receiver, userId)
                 .then((transcript) => {
                     if (!transcript) return;
                     // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
