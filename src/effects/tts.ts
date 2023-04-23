@@ -14,11 +14,16 @@ function ttsPath(ttsString: string) {
 
 function create(ttsString: string): Promise<AxiosResponse<any, any>> {
     log.verbose("effect", "Processing TTS string '%s'", ttsString);
-    const encodedAudio = encodeURIComponent(ttsString);
     return axios({
-        method: "get",
+        url: "https://translate.google.com/translate_tts",
+        // eslint-disable-next-line sort-keys
+        params: {
+            client: "tw-ob",
+            ie: "UTF-8",
+            q: ttsString,
+            tl: "en",
+        },
         responseType: "stream",
-        url: `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodedAudio}&tl=en&client=tw-ob`,
     })
         .then((response) =>
             response.data
