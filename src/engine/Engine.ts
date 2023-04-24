@@ -46,35 +46,36 @@ function hasFactChanged(db: FactStore, newFact: Fact<unknown>): boolean {
     return false;
 }
 
+/**
+ * Notifies all rules of changedTopic and returns new facts from all rules
+ */
 function applyRules(
     db: FactStore,
     rules: Rule[],
     changedTopic: Topic<unknown>
-) {
-    return rules.reduce((memo, rule) => {
-        // If a topic that a rule is interested in has changed
-        // and there none of the givens are `undefined`
-        // Note: anyone can still `set` a fact to be undefined,
-        // But it will not be propogated downstream
-        if (
-            rule.given.find((topic) => topic.label === changedTopic.label) &&
-            // Note: this is why it is safe to do a !
-            // when we get any topics from the db if they are in the given array
-            topicsAllDefined(rule.given, db)
-        ) {
-            // Process the rule
-            const out = rule.then((topic) => db.get(topic));
-            if (out) {
-                // Calculate any database changes as a result of this rule being applied
-                if (Array.isArray(out)) {
-                    return memo.concat(out);
-                } else {
-                    memo.push(out);
+): Fact<unknown>[] {
+    return (
+        rules
+            // If the rule is interested in this changed topic
+            .filter((rule) =>
+                rule.given.find((topic) => topic.label === changedTopic.label)
+            )
+            // and there none of the givens are `undefined`
+            .filter((rule) => topicsAllDefined(rule.given, db))
+            .reduce((memo, rule) => {
+                // Process the rule
+                const out = rule.then((topic) => db.get(topic));
+                if (out) {
+                    // Collect any database changes as a result of this rule being applied
+                    if (Array.isArray(out)) {
+                        return memo.concat(out);
+                    } else {
+                        memo.push(out);
+                    }
                 }
-            }
-        }
-        return memo;
-    }, [] as Fact<unknown>[]);
+                return memo;
+            }, [] as Fact<unknown>[])
+    );
 }
 
 class Engine {
