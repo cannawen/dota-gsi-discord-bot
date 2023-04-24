@@ -4,20 +4,20 @@ import Topic from "./Topic";
 class Rule {
     // label is only used for logging purposes
     public readonly label: string;
-    public readonly given: Array<Topic<unknown>>;
+    public readonly given: Topic<unknown>[];
     public readonly then: (
-        get: <T>(topic: Topic<T>) => T | undefined
-    ) => Fact<unknown> | void | Array<Fact<unknown>>;
+        get: <T>(topic: Topic<T>) => T | void
+    ) => Fact<unknown>[] | Fact<unknown> | void;
 
     constructor(
         label: string,
-        given: Array<Topic<unknown>>,
+        given: Topic<unknown>[],
         then: (
-            get: <T>(topic: Topic<T>) => T | undefined
-        ) => Fact<unknown> | void | Array<Fact<unknown>>
+            get: <T>(topic: Topic<T>) => T | void
+        ) => Fact<unknown>[] | Fact<unknown> | void
     ) {
         this.label = label;
-        this.given = given;
+        this.given = [...new Set(given)];
         this.then = then;
     }
 }
