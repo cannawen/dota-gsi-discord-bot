@@ -20,5 +20,8 @@
         "./data/*",
         "./global.d.ts"
     ],
+    // Excluding mocks so our tests do not fail on CI
+    // If we exclude tests here, it will also help stop tests from failing on CI
+    // But then toContainFact does the angry red squiggle in VSCode
     "exclude": ["**/__mocks__/*"]
 }
