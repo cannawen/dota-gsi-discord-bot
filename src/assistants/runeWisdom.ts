@@ -11,8 +11,7 @@ export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeWisdom
 );
 export const defaultConfig = EffectConfig.PUBLIC;
-export const assistantDescription =
-    "Reminds you of wisdom rune every 7 minutes";
+export const assistantDescription = "Reminds you of wisdom rune every 7:00";
 
 const ADVANCED_WARNING = 20;
 

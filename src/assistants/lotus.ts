@@ -15,11 +15,11 @@ export const configTopic = topicManager.createConfigTopic(
 );
 export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
-    "Reminds you of lotus every 3:00 before 15:00";
+    "Reminds you of lotus every 3:00 before 12:00";
 
 export default new RuleDecoratorStartAndEndMinute(
     0,
-    15,
+    12,
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(rules.assistant.lotus, [topics.time], (get) => {
