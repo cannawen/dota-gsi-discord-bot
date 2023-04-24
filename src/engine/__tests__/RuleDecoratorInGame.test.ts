@@ -5,19 +5,19 @@ import Topic from "../Topic";
 
 describe("RuleDecoratorInGame", () => {
     let rule: RuleDecoratorInGame;
-    let topic: Topic<number>;
+    let topic: Topic<boolean>;
 
     beforeEach(() => {
-        topic = new Topic<number>("topic");
+        topic = new Topic<boolean>("hasTriggeredClosure");
         rule = new RuleDecoratorInGame(
-            new Rule("test", [topic], (get) => new Fact(topic, 5))
+            new Rule("test", [topic], (get) => new Fact(topic, true))
         );
     });
 
     describe("in game", () => {
         test("time not 0", () => {
             const results = getResults(rule, { inGame: true, time: 5 });
-            expect(results).toContainFact("topic", 5);
+            expect(results).toContainFact("hasTriggeredClosure", true);
         });
         test("time 0", () => {
             const results = getResults(rule, { inGame: true, time: 0 });
