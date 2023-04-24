@@ -45,7 +45,9 @@ expect.extend({
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
         if (factArray.length === 0) {
             throw new Error(
-                `Received ${actual}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
+                `Received ${JSON.stringify(
+                    actual
+                )}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
             );
         }
 
