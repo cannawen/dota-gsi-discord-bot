@@ -5,7 +5,7 @@ module.exports = {
     // Because the test.ts files are already being run
     modulePathIgnorePatterns: ["<rootDir>/build/.+test.js$"],
     preset: "ts-jest",
-    setupFiles: ["<rootDir>/.jest/setEnvVars.js"],
+    setupFiles: ["<rootDir>/.jest/setEnvVars.ts"],
     setupFilesAfterEnv: ["<rootDir>/.jest/jest.setup.ts"],
     testEnvironment: "node",
 };
