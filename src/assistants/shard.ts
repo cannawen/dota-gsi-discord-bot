@@ -21,7 +21,8 @@ export default new RuleDecoratorAtMinute(
         new Rule(
             rules.assistant.shard,
             [],
-            (get) => new Fact(topics.effect, "resources/audio/shard.mp3")
+            (get) =>
+                new Fact(topics.configurableEffect, "resources/audio/shard.mp3")
         )
     )
 );

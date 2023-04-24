@@ -45,7 +45,7 @@ export default [
                 const buybackCooldown = get(topics.buybackCooldown)!;
                 if (!hasBuyback && buybackCooldown === 0) {
                     return new Fact(
-                        topics.effect,
+                        topics.configurableEffect,
                         "resources/audio/buyback-warning.mp3"
                     );
                 }

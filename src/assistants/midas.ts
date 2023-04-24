@@ -47,7 +47,10 @@ export default new RuleDecoratorInGame(
                 }
                 if (time >= lastReminderTime + REMINDER_INTERVAL) {
                     return [
-                        new Fact(topics.effect, "resources/audio/midas.mpeg"),
+                        new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/midas.mpeg"
+                        ),
                         new Fact(lastReminderTimeTopic, time),
                     ];
                 }

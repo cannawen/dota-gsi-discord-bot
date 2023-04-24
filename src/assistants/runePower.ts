@@ -27,7 +27,7 @@ export default new RuleDecoratorStartAndEndMinute(
                 const time = get(topics.time)!;
                 if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
                     return new Fact(
-                        topics.effect,
+                        topics.configurableEffect,
                         "resources/audio/rune-power.wav"
                     );
                 }

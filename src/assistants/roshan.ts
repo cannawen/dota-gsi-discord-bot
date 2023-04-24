@@ -82,7 +82,7 @@ const roshRulesArray = [
                     get(roshanDeathTimes)!.at(-1)! + ROSHAN_MINIMUM_SPAWN_TIME
                 ) {
                     return new Fact(
-                        topics.effect,
+                        topics.configurableEffect,
                         "resources/audio/rosh-maybe.mp3"
                     );
                 }
@@ -104,7 +104,7 @@ const roshRulesArray = [
                 ) {
                     return [
                         new Fact(
-                            topics.effect,
+                            topics.configurableEffect,
                             "resources/audio/rosh-alive.mp3"
                         ),
                         new Fact(roshanDeathTimes, undefined),
@@ -142,7 +142,7 @@ const roshRulesArray = [
                         )}`;
                     }
                 }
-                return new Fact(topics.effect, response);
+                return new Fact(topics.configurableEffect, response);
             }
         )
     ),

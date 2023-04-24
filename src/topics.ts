@@ -42,7 +42,7 @@ const gsi = {
  */
 const effect = {
     // This is used as a temporary topic to be swap out by rule decorator configurable
-    effect: new Topic<string>("effect"),
+    configurableEffect: new Topic<string>("configurableEffect"),
 
     playPublicAudio: new Topic<string>("playPublicAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),

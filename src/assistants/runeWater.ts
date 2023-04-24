@@ -25,7 +25,7 @@ export default [2, 4].map(
                     [],
                     (get) =>
                         new Fact(
-                            topics.effect,
+                            topics.configurableEffect,
                             "resources/audio/rune-water.mp3"
                         )
                 )

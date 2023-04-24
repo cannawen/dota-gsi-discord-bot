@@ -70,7 +70,10 @@ export default new RuleDecoratorInGame(
                     // Remind the user
                     // And update the last reminder time
                     return [
-                        new Fact(topics.effect, "resources/audio/dig.mp3"),
+                        new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/dig.mp3"
+                        ),
                         new Fact(lastReminderTimeTopic, time),
                     ];
                 }

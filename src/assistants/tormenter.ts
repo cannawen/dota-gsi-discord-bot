@@ -29,7 +29,8 @@ export default [
             new Rule(
                 rules.assistant.tormenter,
                 [],
-                (get) => new Fact(topics.effect, "tormenter has spawned")
+                (get) =>
+                    new Fact(topics.configurableEffect, "tormenter has spawned")
             )
         )
     ),
@@ -43,7 +44,10 @@ export default [
                 const fallenTime = get(tormenterFallenTimeTopic)!;
                 if (time === fallenTime + 60 * 10) {
                     return [
-                        new Fact(topics.effect, "Tormenter has respawned"),
+                        new Fact(
+                            topics.configurableEffect,
+                            "Tormenter has respawned"
+                        ),
                         new Fact(tormenterFallenTimeTopic, undefined),
                     ];
                 }
@@ -57,7 +61,7 @@ export default [
             if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
                 return [
                     new Fact(tormenterFallenTimeTopic, get(topics.time)),
-                    new Fact(topics.effect, "OK"),
+                    new Fact(topics.configurableEffect, "OK"),
                 ];
             }
             if (lastDiscordUtterance.match(/^torment status$/i)) {
@@ -68,14 +72,17 @@ export default [
                         fallenTime + 10 * 60
                     )}`;
                 } else if (get(topics.time)! >= 20 * 60) {
-                    return new Fact(topics.effect, "Tormenter is alive");
+                    return new Fact(
+                        topics.configurableEffect,
+                        "Tormenter is alive"
+                    );
                 } else {
                     return new Fact(
-                        topics.effect,
+                        topics.configurableEffect,
                         "Tormenter will spawn at 20 minutes"
                     );
                 }
-                return new Fact(topics.effect, message);
+                return new Fact(topics.configurableEffect, message);
             }
         })
     ),

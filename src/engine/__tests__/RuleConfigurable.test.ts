@@ -18,7 +18,7 @@ describe("RuleDecoratorConfigurable", () => {
             new Rule(
                 "test",
                 [topic],
-                (get) => new Fact(topics.effect, "foo.mp3")
+                (get) => new Fact(topics.configurableEffect, "foo.mp3")
             )
         );
     });

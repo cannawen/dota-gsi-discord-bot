@@ -5,11 +5,9 @@ import Topic from "./Topic";
 import topics from "../topics";
 
 /**
+ * On output, replaces `topics.configurableEffect` fact with what is specified by `configTopic`
  * Note: When the effect changes, the `then` will be run once
  */
-// TODO we change this to a decorator by creating a "topics.effect"
-// And then this decorator swpas out the topics.effect to a get(configTopic)
-// version of the effect
 class RuleDecoratorConfigurable extends Rule {
     constructor(configTopic: Topic<EffectConfig>, rule: Rule) {
         super(rule.label, [...rule.given, configTopic], (get) => {
@@ -20,17 +18,17 @@ class RuleDecoratorConfigurable extends Rule {
                 if (result === undefined) {
                     return;
                 }
-                let arrResult = result;
-                if (!Array.isArray(result)) {
-                    arrResult = [result];
-                }
-                return (arrResult as Fact<unknown>[]).map((fact) => {
-                    if (fact.topic.label === topics.effect.label) {
-                        return new Fact(effect, fact.value);
-                    } else {
-                        return fact;
+                return (Array.isArray(result) ? result : [result]).map(
+                    (fact) => {
+                        if (
+                            fact.topic.label === topics.configurableEffect.label
+                        ) {
+                            return new Fact(effect, fact.value);
+                        } else {
+                            return fact;
+                        }
                     }
-                });
+                );
             }
         });
     }

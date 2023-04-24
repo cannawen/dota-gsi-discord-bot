@@ -23,7 +23,11 @@ export default [7, 17, 27, 37, 60].map(
                 new Rule(
                     rules.assistant.neutralItemDigReminder,
                     [],
-                    (get) => new Fact(topics.effect, "New neutral tokens")
+                    (get) =>
+                        new Fact(
+                            topics.configurableEffect,
+                            "New neutral tokens"
+                        )
                 )
             )
         )

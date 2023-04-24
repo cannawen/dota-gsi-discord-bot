@@ -15,7 +15,10 @@ export default new RuleDecoratorConfigurable(
     configTopic,
     new Rule(rules.assistant.glhf, [topics.inGame, topics.time], (get) => {
         if (get(topics.time)! === 0 && get(topics.inGame)! === true) {
-            return new Fact(topics.effect, "resources/audio/glhf.mp3");
+            return new Fact(
+                topics.configurableEffect,
+                "resources/audio/glhf.mp3"
+            );
         }
     })
 );

@@ -80,7 +80,7 @@ export default new RuleDecoratorInGame(
                     time < 10 * 60
                         ? SMALL_REMINDER_INCREMENT
                         : LARGE_REMINDER_INCREMENT,
-                    topics.effect
+                    topics.configurableEffect
                 );
             }
         )

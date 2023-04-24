@@ -44,7 +44,7 @@ export default new RuleDecoratorConfigurable(
         if (whatShouldIBuy(message)) {
             const randomIndex = Math.floor(Math.random() * itemCosts.length);
             return new Fact(
-                topics.effect,
+                topics.configurableEffect,
                 `Buy a ${itemCosts[randomIndex][0]}`
             );
         }
@@ -58,6 +58,9 @@ export default new RuleDecoratorConfigurable(
         );
         const closestItems = sortedItems.slice(0, 10);
         const randomIndex = Math.floor(Math.random() * closestItems.length);
-        return new Fact(topics.effect, `Buy a ${closestItems[randomIndex][0]}`);
+        return new Fact(
+            topics.configurableEffect,
+            `Buy a ${closestItems[randomIndex][0]}`
+        );
     })
 );

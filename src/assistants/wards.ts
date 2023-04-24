@@ -57,7 +57,10 @@ export default new RuleDecoratorInGame(
                 facts.push(new Fact(lastWardReminderTimeTopic, time));
             } else if (time - lastWardReminderTime >= WARD_REMINDER_INTERVAL) {
                 facts.push(
-                    new Fact(topics.effect, "resources/audio/wards.mp3")
+                    new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/wards.mp3"
+                    )
                 );
                 facts.push(new Fact(lastWardReminderTimeTopic, time));
             }

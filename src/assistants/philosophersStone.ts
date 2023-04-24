@@ -68,7 +68,7 @@ export default new RuleDecoratorInGame(
                     ) {
                         return [
                             new Fact(
-                                topics.effect,
+                                topics.configurableEffect,
                                 "resources/audio/philosophers-stone-hold.mp3"
                             ),
                             new Fact(remindedAlreadyThisDeathCycleTopic, true),
@@ -79,7 +79,7 @@ export default new RuleDecoratorInGame(
                         items.neutral?.id === "item_philosophers_stone"
                     ) {
                         return new Fact(
-                            topics.effect,
+                            topics.configurableEffect,
                             "resources/audio/philosophers-stone-return.mp3"
                         );
                     }

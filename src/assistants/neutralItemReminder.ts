@@ -54,7 +54,7 @@ export default new RuleDecoratorStartAndEndMinute(
                         // Remind them and update reminder time
                         return [
                             new Fact(
-                                topics.effect,
+                                topics.configurableEffect,
                                 "resources/audio/no-neutral.mp3"
                             ),
                             new Fact(lastReminderTimeTopic, time),

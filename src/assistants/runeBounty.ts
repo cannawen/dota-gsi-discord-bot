@@ -23,7 +23,7 @@ export default new RuleDecoratorInGame(
             const time = get(topics.time)!;
             if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
                 return new Fact(
-                    topics.effect,
+                    topics.configurableEffect,
                     "resources/audio/rune-bounty.wav"
                 );
             }
