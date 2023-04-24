@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "build": "npm run clean && tsc",
+        "build": "npm run clean && tsc -p tsconfig.build.json",
         "start": "node build/index.js",
         "go": "npm run build && npm run start",
         "clean": "rimraf ./build ./resources/audio/tts-cache ./data ./test_PERSISTENCE_DATA_PATH",
