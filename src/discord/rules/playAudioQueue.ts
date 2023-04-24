@@ -1,5 +1,6 @@
 import colors from "@colors/colors";
 import Fact from "../../engine/Fact";
+import helper from "../../assistants/assistantHelpers";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
@@ -24,7 +25,8 @@ export default new Rule(
             const filePath = audioQueue.splice(0, 1)[0];
             log.info(
                 "discord",
-                "Playing %s for student %s",
+                "%s - Playing %s for student %s",
+                helper.secondsToTimeString(get(topics.time) || 0),
                 emColor(filePath),
                 get(topics.studentId)?.substring(0, 10)
             );

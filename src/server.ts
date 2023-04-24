@@ -5,6 +5,7 @@ import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
 import fs from "fs";
 import gsiParser from "./gsiParser";
+import helper from "./assistants/assistantHelpers";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";
@@ -181,7 +182,10 @@ router.get("/coach/:studentId/poll", (req, res) => {
     if (nextAudio) {
         log.info(
             "effect",
-            "Playing private audio %s for %s",
+            "%s - Playing private audio %s for %s",
+            helper.secondsToTimeString(
+                engine.getFactValue(studentId, topics.time) || 0
+            ),
             nextAudio.magenta,
             studentId.substring(0, 10)
         );
