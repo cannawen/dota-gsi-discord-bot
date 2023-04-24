@@ -1,9 +1,11 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
+import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.shard
@@ -15,9 +17,11 @@ export const assistantDescription =
 export default new RuleDecoratorAtMinute(
     15,
     new RuleConfigurable(
-        rules.assistant.shard,
         configTopic,
-        [],
-        (get, effect) => new Fact(effect, "resources/audio/shard.mp3")
+        new Rule(
+            rules.assistant.shard,
+            [],
+            (get) => new Fact(topics.effect, "resources/audio/shard.mp3")
+        )
     )
 );

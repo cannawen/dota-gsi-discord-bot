@@ -1,12 +1,13 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
-import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.tormenter
@@ -24,37 +25,39 @@ export default [
     new RuleDecoratorAtMinute(
         20,
         new RuleConfigurable(
-            rules.assistant.tormenter,
             configTopic,
-            [],
-            (get, effect) => new Fact(effect, "tormenter has spawned")
+            new Rule(
+                rules.assistant.tormenter,
+                [],
+                (get) => new Fact(topics.effect, "tormenter has spawned")
+            )
         )
     ),
     new RuleConfigurable(
-        "tormenter reminder",
         configTopic,
-        [topics.time, tormenterFallenTimeTopic],
-        (get, effect) => {
-            const time = get(topics.time);
-            const fallenTime = get(tormenterFallenTimeTopic)!;
-            if (time === fallenTime + 60 * 10) {
-                return [
-                    new Fact(effect, "Tormenter has respawned"),
-                    new Fact(tormenterFallenTimeTopic, undefined),
-                ];
+        new Rule(
+            "tormenter reminder",
+            [topics.time, tormenterFallenTimeTopic],
+            (get) => {
+                const time = get(topics.time);
+                const fallenTime = get(tormenterFallenTimeTopic)!;
+                if (time === fallenTime + 60 * 10) {
+                    return [
+                        new Fact(topics.effect, "Tormenter has respawned"),
+                        new Fact(tormenterFallenTimeTopic, undefined),
+                    ];
+                }
             }
-        }
+        )
     ),
     new RuleConfigurable(
-        "tormenter voice",
         configTopic,
-        [topics.lastDiscordUtterance],
-        (get, effect) => {
+        new Rule("tormenter voice", [topics.lastDiscordUtterance], (get) => {
             const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
             if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
                 return [
                     new Fact(tormenterFallenTimeTopic, get(topics.time)),
-                    new Fact(effect, "OK"),
+                    new Fact(topics.effect, "OK"),
                 ];
             }
             if (lastDiscordUtterance.match(/^torment status$/i)) {
@@ -65,15 +68,15 @@ export default [
                         fallenTime + 10 * 60
                     )}`;
                 } else if (get(topics.time)! >= 20 * 60) {
-                    return new Fact(effect, "Tormenter is alive");
+                    return new Fact(topics.effect, "Tormenter is alive");
                 } else {
                     return new Fact(
-                        effect,
+                        topics.effect,
                         "Tormenter will spawn at 20 minutes"
                     );
                 }
-                return new Fact(effect, message);
+                return new Fact(topics.effect, message);
             }
-        }
+        })
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

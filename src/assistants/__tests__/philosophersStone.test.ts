@@ -131,7 +131,7 @@ describe("philosopher's stone assistant", () => {
                                 respawnSeconds: 5,
                             },
                             [
-                                seenPhilosophersStoneState,
+                                ...seenPhilosophersStoneState,
                                 ...deadSeenStoneBeforeState,
                             ]
                         );

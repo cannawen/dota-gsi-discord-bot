@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
@@ -24,38 +25,43 @@ export default new RuleDecoratorStartAndEndMinute(
     NEUTRAL_ITEM_REMINDER_START_MINUTE,
     undefined,
     new RuleConfigurable(
-        rules.assistant.neutralItemDigReminder,
         configTopic,
-        [topics.items, topics.time],
-        (get, effect) => {
-            const items = get(topics.items)!;
-            const time = get(topics.time)!;
-            const lastReminderTime = get(lastReminderTimeTopic);
+        new Rule(
+            rules.assistant.neutralItemDigReminder,
+            [topics.items, topics.time],
+            (get) => {
+                const items = get(topics.items)!;
+                const time = get(topics.time)!;
+                const lastReminderTime = get(lastReminderTimeTopic);
 
-            // If we have a neutral item
-            if (items.neutral) {
-                // If we have reminded them before
-                if (lastReminderTime) {
-                    // Clear reminder time
-                    return new Fact(lastReminderTimeTopic, undefined);
-                }
-            } else {
-                // If we do not have a nuetral item
-                // If we have never reminded them before
-                if (!lastReminderTime) {
-                    // Set reminder time without effect to give them some grace
-                    return new Fact(lastReminderTimeTopic, time);
-                }
-                // If we have been silent for the grace time
-                // But they still do not have a neutral item
-                if (time - lastReminderTime >= TIME_BETWEEN_REMINDERS) {
-                    // Remind them and update reminder time
-                    return [
-                        new Fact(effect, "resources/audio/no-neutral.mp3"),
-                        new Fact(lastReminderTimeTopic, time),
-                    ];
+                // If we have a neutral item
+                if (items.neutral) {
+                    // If we have reminded them before
+                    if (lastReminderTime) {
+                        // Clear reminder time
+                        return new Fact(lastReminderTimeTopic, undefined);
+                    }
+                } else {
+                    // If we do not have a nuetral item
+                    // If we have never reminded them before
+                    if (!lastReminderTime) {
+                        // Set reminder time without effect to give them some grace
+                        return new Fact(lastReminderTimeTopic, time);
+                    }
+                    // If we have been silent for the grace time
+                    // But they still do not have a neutral item
+                    if (time - lastReminderTime >= TIME_BETWEEN_REMINDERS) {
+                        // Remind them and update reminder time
+                        return [
+                            new Fact(
+                                topics.effect,
+                                "resources/audio/no-neutral.mp3"
+                            ),
+                            new Fact(lastReminderTimeTopic, time),
+                        ];
+                    }
                 }
             }
-        }
+        )
     )
 );

@@ -1,9 +1,11 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
+import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeWater
@@ -17,11 +19,16 @@ export default [2, 4].map(
         new RuleDecoratorAtMinute(
             time,
             new RuleConfigurable(
-                rules.assistant.runeWater,
                 configTopic,
-                [],
-                (get, effect) =>
-                    new Fact(effect, "resources/audio/rune-water.mp3")
+                new Rule(
+                    rules.assistant.runeWater,
+                    [],
+                    (get) =>
+                        new Fact(
+                            topics.effect,
+                            "resources/audio/rune-water.mp3"
+                        )
+                )
             )
         )
 );

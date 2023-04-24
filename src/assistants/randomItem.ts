@@ -2,6 +2,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import fs from "fs";
 import path from "path";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -37,14 +38,15 @@ function whatShouldIBuy(message: string) {
 }
 
 export default new RuleConfigurable(
-    rules.assistant.glhf,
     configTopic,
-    [topics.lastDiscordUtterance],
-    (get, effect) => {
+    new Rule(rules.assistant.glhf, [topics.lastDiscordUtterance], (get) => {
         const message = get(topics.lastDiscordUtterance)!;
         if (whatShouldIBuy(message)) {
             const randomIndex = Math.floor(Math.random() * itemCosts.length);
-            return new Fact(effect, `Buy a ${itemCosts[randomIndex][0]}`);
+            return new Fact(
+                topics.effect,
+                `Buy a ${itemCosts[randomIndex][0]}`
+            );
         }
         const cost = randomItemCost(message);
         if (cost === undefined) {
@@ -56,6 +58,6 @@ export default new RuleConfigurable(
         );
         const closestItems = sortedItems.slice(0, 10);
         const randomIndex = Math.floor(Math.random() * closestItems.length);
-        return new Fact(effect, `Buy a ${closestItems[randomIndex][0]}`);
-    }
+        return new Fact(topics.effect, `Buy a ${closestItems[randomIndex][0]}`);
+    })
 );

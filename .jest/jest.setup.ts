@@ -121,7 +121,7 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
 const getResults = (
     rule: Rule,
     db: { [keys: string]: unknown },
-    previousState?: Fact<unknown>[] | Fact<unknown>
+    previousState?: Fact<unknown>[] | Fact<unknown> | void
 ) => {
     if (previousState) {
         const arrPreviousState = Array.isArray(previousState)

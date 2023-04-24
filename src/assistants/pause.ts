@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -14,15 +15,13 @@ export const assistantDescription = "Plays Jeopardy music while paused";
 
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
-        rules.assistant.pause,
         configTopic,
-        [topics.paused],
-        (get, effect) => {
+        new Rule(rules.assistant.pause, [topics.paused], (get) => {
             if (get(topics.paused)!) {
-                return new Fact(effect, "resources/audio/jeopardy.mp3");
+                return new Fact(topics.effect, "resources/audio/jeopardy.mp3");
             } else {
                 return new Fact(topics.stopAudio, true);
             }
-        }
+        })
     )
 );

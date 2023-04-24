@@ -41,6 +41,9 @@ const gsi = {
  * 2) A message that will be TTS-ed and saved to ./resources/audio/tts-cache/
  */
 const effect = {
+    // This is used as a temporary topic to be swap out by rule decorator configurable
+    effect: new Topic<string>("effect"),
+
     playPublicAudio: new Topic<string>("playPublicAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
 

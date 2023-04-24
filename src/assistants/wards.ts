@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -33,10 +34,8 @@ const lastWardCountTopic =
  */
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
-        rules.assistant.wards,
         configTopic,
-        [topics.time, topics.items],
-        (get, effect) => {
+        new Rule(rules.assistant.wards, [topics.time, topics.items], (get) => {
             const facts: Fact<unknown>[] = [];
             const time = get(topics.time)!;
             const lastWardReminderTime = get(lastWardReminderTimeTopic) || 0;
@@ -57,10 +56,12 @@ export default new RuleDecoratorInGame(
             if (currentWardCount > lastWardCount) {
                 facts.push(new Fact(lastWardReminderTimeTopic, time));
             } else if (time - lastWardReminderTime >= WARD_REMINDER_INTERVAL) {
-                facts.push(new Fact(effect, "resources/audio/wards.mp3"));
+                facts.push(
+                    new Fact(topics.effect, "resources/audio/wards.mp3")
+                );
                 facts.push(new Fact(lastWardReminderTimeTopic, time));
             }
             return facts;
-        }
+        })
     )
 );

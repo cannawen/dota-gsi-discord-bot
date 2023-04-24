@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -17,14 +18,15 @@ export const assistantDescription =
 
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
-        rules.assistant.runeBounty,
         configTopic,
-        [topics.time],
-        (get, effect) => {
+        new Rule(rules.assistant.runeBounty, [topics.time], (get) => {
             const time = get(topics.time)!;
             if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
-                return new Fact(effect, "resources/audio/rune-bounty.wav");
+                return new Fact(
+                    topics.effect,
+                    "resources/audio/rune-bounty.wav"
+                );
             }
-        }
+        })
     )
 );

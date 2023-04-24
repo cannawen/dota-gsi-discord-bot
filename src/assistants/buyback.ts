@@ -36,15 +36,20 @@ export default [
         )
     ),
     new RuleConfigurable(
-        rules.assistant.buyback.warnNoBuyback,
         configTopic,
-        [hasBuybackTopic, topics.buybackCooldown],
-        (get, effect) => {
-            const hasBuyback = get(hasBuybackTopic)!;
-            const buybackCooldown = get(topics.buybackCooldown)!;
-            if (!hasBuyback && buybackCooldown === 0) {
-                return new Fact(effect, "resources/audio/buyback-warning.mp3");
+        new Rule(
+            rules.assistant.buyback.warnNoBuyback,
+            [hasBuybackTopic, topics.buybackCooldown],
+            (get) => {
+                const hasBuyback = get(hasBuybackTopic)!;
+                const buybackCooldown = get(topics.buybackCooldown)!;
+                if (!hasBuyback && buybackCooldown === 0) {
+                    return new Fact(
+                        topics.effect,
+                        "resources/audio/buyback-warning.mp3"
+                    );
+                }
             }
-        }
+        )
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

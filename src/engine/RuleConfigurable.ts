@@ -2,6 +2,7 @@ import effectConfig, { EffectConfig } from "../effectConfigManager";
 import Fact from "./Fact";
 import Rule from "./Rule";
 import Topic from "./Topic";
+import topics from "../topics";
 
 /**
  * Note: When the effect changes, the `then` will be run once
@@ -10,24 +11,26 @@ import Topic from "./Topic";
 // And then this decorator swpas out the topics.effect to a get(configTopic)
 // version of the effect
 class RuleConfigurable extends Rule {
-    constructor(
-        label: string,
-        configTopic: Topic<EffectConfig>,
-        given: Array<Topic<unknown>>,
-        then: (
-            get: <T>(topic: Topic<T>) => T | undefined,
-            effect: Topic<string>
-        ) =>
-            | Fact<unknown>
-            | Promise<Fact<unknown>>
-            | void
-            | Array<Fact<unknown> | Promise<Fact<unknown> | void>>
-    ) {
-        super(label, [...given, configTopic], (get) => {
+    constructor(configTopic: Topic<EffectConfig>, rule: Rule) {
+        super(rule.label, [...rule.given, configTopic], (get) => {
             const config = get(configTopic)!;
             const effect = effectConfig.configToEffectTopic[config];
             if (effect) {
-                return then(get, effect);
+                const result = rule.then(get);
+                if (result === undefined) {
+                    return;
+                }
+                let arrResult = result;
+                if (!Array.isArray(result)) {
+                    arrResult = [result];
+                }
+                return (arrResult as Fact<unknown>[]).map((fact) => {
+                    if (fact.topic.label === topics.effect.label) {
+                        return new Fact(effect, fact.value);
+                    } else {
+                        return fact;
+                    }
+                });
             }
         });
     }

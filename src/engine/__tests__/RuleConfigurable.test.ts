@@ -1,7 +1,9 @@
 import { EffectConfig } from "../../effectConfigManager";
 import Fact from "../Fact";
+import Rule from "../Rule";
 import RuleConfigurable from "../RuleConfigurable";
 import Topic from "../Topic";
+import topics from "../../topics";
 
 describe("RuleConfigurable", () => {
     let configTopic: Topic<EffectConfig>;
@@ -12,10 +14,12 @@ describe("RuleConfigurable", () => {
         configTopic = new Topic<EffectConfig>("configTopic");
         topic = new Topic<number>("topic");
         rule = new RuleConfigurable(
-            "test",
             configTopic,
-            [topic],
-            (get, effect) => new Fact(effect, "foo.mp3")
+            new Rule(
+                "test",
+                [topic],
+                (get) => new Fact(topics.effect, "foo.mp3")
+            )
         );
     });
     test("PRIVATE", () => {

@@ -72,67 +72,79 @@ const roshRulesArray = [
     // When time is when roshan might be alive
     // Play audio and reset roshan maybe alive time state
     new RuleConfigurable(
-        rules.assistant.roshan.maybeAliveTime,
         configTopic,
-        [topics.time, roshanDeathTimes],
-        (get, effect) => {
-            if (
-                get(topics.time)! ===
-                get(roshanDeathTimes)!.at(-1)! + ROSHAN_MINIMUM_SPAWN_TIME
-            ) {
-                return new Fact(effect, "resources/audio/rosh-maybe.mp3");
+        new Rule(
+            rules.assistant.roshan.maybeAliveTime,
+            [topics.time, roshanDeathTimes],
+            (get) => {
+                if (
+                    get(topics.time)! ===
+                    get(roshanDeathTimes)!.at(-1)! + ROSHAN_MINIMUM_SPAWN_TIME
+                ) {
+                    return new Fact(
+                        topics.effect,
+                        "resources/audio/rosh-maybe.mp3"
+                    );
+                }
             }
-        }
+        )
     ),
 
     // When time is when roshan should be alive
     // Play audio and reset roshan alive time state
     new RuleConfigurable(
-        rules.assistant.roshan.aliveTime,
         configTopic,
-        [topics.time, roshanDeathTimes],
-        (get, effect) => {
-            if (
-                get(topics.time)! ===
-                get(roshanDeathTimes)!.at(-1)! + ROSHAN_MAXIMUM_SPAWN_TIME
-            ) {
-                return [
-                    new Fact(effect, "resources/audio/rosh-alive.mp3"),
-                    new Fact(roshanDeathTimes, undefined),
-                ];
-            }
-        }
-    ),
-    new RuleConfigurable(
-        rules.assistant.roshan.voice,
-        configTopic,
-        [topics.lastDiscordUtterance],
-        (get, effect) => {
-            if (!roshStatusMessage(get(topics.lastDiscordUtterance)!)) {
-                return;
-            }
-            const killedTimes = get(roshanDeathTimes) || [];
-            const killedTime = killedTimes?.at(-1);
-            const time = get(topics.time)!;
-            let response = aliveMessage(killedTimes, get(topics.dayTime)!);
-
-            if (killedTime) {
-                if (time < killedTime + AEGIS_DURATION) {
-                    response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
-                        killedTime + AEGIS_DURATION
-                    )}`;
-                } else if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
-                    response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
-                        killedTime + ROSHAN_MINIMUM_SPAWN_TIME
-                    )}`;
-                } else if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
-                    response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
-                        killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
-                    )}`;
+        new Rule(
+            rules.assistant.roshan.aliveTime,
+            [topics.time, roshanDeathTimes],
+            (get) => {
+                if (
+                    get(topics.time)! ===
+                    get(roshanDeathTimes)!.at(-1)! + ROSHAN_MAXIMUM_SPAWN_TIME
+                ) {
+                    return [
+                        new Fact(
+                            topics.effect,
+                            "resources/audio/rosh-alive.mp3"
+                        ),
+                        new Fact(roshanDeathTimes, undefined),
+                    ];
                 }
             }
-            return new Fact(effect, response);
-        }
+        )
+    ),
+    new RuleConfigurable(
+        configTopic,
+        new Rule(
+            rules.assistant.roshan.voice,
+            [topics.lastDiscordUtterance],
+            (get) => {
+                if (!roshStatusMessage(get(topics.lastDiscordUtterance)!)) {
+                    return;
+                }
+                const killedTimes = get(roshanDeathTimes) || [];
+                const killedTime = killedTimes?.at(-1);
+                const time = get(topics.time)!;
+                let response = aliveMessage(killedTimes, get(topics.dayTime)!);
+
+                if (killedTime) {
+                    if (time < killedTime + AEGIS_DURATION) {
+                        response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
+                            killedTime + AEGIS_DURATION
+                        )}`;
+                    } else if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
+                        response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
+                            killedTime + ROSHAN_MINIMUM_SPAWN_TIME
+                        )}`;
+                    } else if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
+                        response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
+                            killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
+                        )}`;
+                    }
+                }
+                return new Fact(topics.effect, response);
+            }
+        )
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));
 

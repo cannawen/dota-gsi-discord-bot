@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -21,14 +21,12 @@ export default new RuleDecoratorStartAndEndMinute(
     0,
     15,
     new RuleConfigurable(
-        rules.assistant.lotus,
         configTopic,
-        [topics.time],
-        (get, effect) => {
+        new Rule(rules.assistant.lotus, [topics.time], (get) => {
             const time = get(topics.time)!;
             if ((time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0) {
-                return new Fact(effect, "lotus soon");
+                return new Fact(topics.effect, "lotus soon");
             }
-        }
+        })
     )
 );

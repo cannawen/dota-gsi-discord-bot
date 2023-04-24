@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
@@ -21,15 +22,16 @@ export default new RuleDecoratorStartAndEndMinute(
     undefined,
     new RuleDecoratorInGame(
         new RuleConfigurable(
-            rules.assistant.runePower,
             configTopic,
-            [topics.time],
-            (get, effect) => {
+            new Rule(rules.assistant.runePower, [topics.time], (get) => {
                 const time = get(topics.time)!;
                 if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
-                    return new Fact(effect, "resources/audio/rune-power.wav");
+                    return new Fact(
+                        topics.effect,
+                        "resources/audio/rune-power.wav"
+                    );
                 }
-            }
+            })
         )
     )
 );

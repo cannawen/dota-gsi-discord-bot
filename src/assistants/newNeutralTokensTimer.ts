@@ -1,9 +1,11 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
+import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.newNeutralTokens
@@ -17,10 +19,12 @@ export default [7, 17, 27, 37, 60].map(
         new RuleDecoratorAtMinute(
             time,
             new RuleConfigurable(
-                rules.assistant.neutralItemDigReminder,
                 configTopic,
-                [],
-                (get, effect) => new Fact(effect, "New neutral tokens")
+                new Rule(
+                    rules.assistant.neutralItemDigReminder,
+                    [],
+                    (get) => new Fact(topics.effect, "New neutral tokens")
+                )
             )
         )
 );

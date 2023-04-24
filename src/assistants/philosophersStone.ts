@@ -3,6 +3,7 @@ import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
+import Rule from "../engine/Rule";
 import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
@@ -33,50 +34,57 @@ function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
 
 export default new RuleDecoratorInGame(
     new RuleConfigurable(
-        rules.assistant.philosophersStone,
         configTopic,
-        [topics.items, topics.respawnSeconds, topics.alive],
-        (get, effect) => {
-            const items = get(topics.items)!;
+        new Rule(
+            rules.assistant.philosophersStone,
+            [topics.items, topics.respawnSeconds, topics.alive],
+            (get) => {
+                const items = get(topics.items)!;
 
-            const seenBefore = get(seenPhilosophersStoneTopic);
-            if (seenBefore === undefined && hasPhilosophersStone(items)) {
-                return new Fact(seenPhilosophersStoneTopic, true);
-            }
-            if (!seenBefore) {
-                return;
-            }
-
-            const alive = get(topics.alive)!;
-
-            if (alive) {
-                return new Fact(remindedAlreadyThisDeathCycleTopic, undefined);
-            } else {
-                const respawnSeconds = get(topics.respawnSeconds)!;
-                const alreadyReminded = get(remindedAlreadyThisDeathCycleTopic);
-
-                if (
-                    alreadyReminded === undefined &&
-                    items.neutral?.id !== "item_philosophers_stone"
-                ) {
-                    return [
-                        new Fact(
-                            effect,
-                            "resources/audio/philosophers-stone-hold.mp3"
-                        ),
-                        new Fact(remindedAlreadyThisDeathCycleTopic, true),
-                    ];
+                const seenBefore = get(seenPhilosophersStoneTopic);
+                if (seenBefore === undefined && hasPhilosophersStone(items)) {
+                    return new Fact(seenPhilosophersStoneTopic, true);
                 }
-                if (
-                    respawnSeconds === 5 &&
-                    items.neutral?.id === "item_philosophers_stone"
-                ) {
+                if (!seenBefore) {
+                    return;
+                }
+
+                const alive = get(topics.alive)!;
+
+                if (alive) {
                     return new Fact(
-                        effect,
-                        "resources/audio/philosophers-stone-return.mp3"
+                        remindedAlreadyThisDeathCycleTopic,
+                        undefined
                     );
+                } else {
+                    const respawnSeconds = get(topics.respawnSeconds)!;
+                    const alreadyReminded = get(
+                        remindedAlreadyThisDeathCycleTopic
+                    );
+
+                    if (
+                        alreadyReminded === undefined &&
+                        items.neutral?.id !== "item_philosophers_stone"
+                    ) {
+                        return [
+                            new Fact(
+                                topics.effect,
+                                "resources/audio/philosophers-stone-hold.mp3"
+                            ),
+                            new Fact(remindedAlreadyThisDeathCycleTopic, true),
+                        ];
+                    }
+                    if (
+                        respawnSeconds === 5 &&
+                        items.neutral?.id === "item_philosophers_stone"
+                    ) {
+                        return new Fact(
+                            topics.effect,
+                            "resources/audio/philosophers-stone-return.mp3"
+                        );
+                    }
                 }
             }
-        }
+        )
     )
 );

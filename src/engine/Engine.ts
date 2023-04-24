@@ -30,6 +30,8 @@ function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
     );
 }
 
+// TODO this is way too complicated;
+// there is only one topic from the fact that could have possibly changed
 function determineChangedTopics(db: FactStore, newFact: Fact<unknown>) {
     const changedTopics = new Set<Topic<unknown>>();
 
@@ -63,7 +65,7 @@ function applyRules(
     rules: Rule[],
     changedTopics: Set<Topic<unknown>>
 ) {
-    const newFacts: Array<Fact<unknown> | Promise<Fact<unknown> | void>> = [];
+    let newFacts: Array<Fact<unknown>> = [];
 
     rules.forEach((rule) => {
         // If a topic that a rule is interested in has changed
@@ -83,10 +85,11 @@ function applyRules(
             }
 
             // Calculate any database changes as a result of this rule being applied
-            const arrOut = Array.isArray(out) ? out : [out];
-            arrOut.forEach((fact) => {
-                newFacts.push(fact);
-            });
+            if (Array.isArray(out)) {
+                newFacts = newFacts.concat(out);
+            } else {
+                newFacts.push(out);
+            }
         }
     });
 
@@ -103,22 +106,10 @@ class Engine {
 
     public set = (db: FactStore, newFact: Fact<unknown>) => {
         const changedTopics = determineChangedTopics(db, newFact);
-
         db.set(newFact);
-
         const newFacts = applyRules(db, this.rules, changedTopics);
-        newFacts.forEach((factOrFactPromise) => {
-            if (factOrFactPromise instanceof Promise) {
-                // Is a promise of a fact (or undefined), set fact when promise is returned
-                factOrFactPromise.then((fact) => {
-                    if (fact) {
-                        this.set(db, fact);
-                    }
-                });
-            } else {
-                // Is a fact, set fact now
-                this.set(db, factOrFactPromise);
-            }
+        newFacts.forEach((fact) => {
+            this.set(db, fact);
         });
     };
 }
