@@ -1,3 +1,4 @@
+import topics from "../../topics";
 import Fact from "../Fact";
 import Rule from "../Rule";
 import RuleDecoratorAtMinute from "../RuleDecoratorAtMinute";
@@ -11,8 +12,13 @@ describe("RuleDecoratorAtMinute", () => {
         topic = new Topic<boolean>("hasTriggeredClosure");
         rule = new RuleDecoratorAtMinute(
             10,
-            new Rule("test", [], (get) => new Fact(topic, true))
+            new Rule("test", [topic], (get) => new Fact(topic, true))
         );
+    });
+
+    test("should subscribe to time topic", () => {
+        expect(rule.given).toContain(topics.time);
+        expect(rule.given).toContain(topic);
     });
 
     describe("in game", () => {

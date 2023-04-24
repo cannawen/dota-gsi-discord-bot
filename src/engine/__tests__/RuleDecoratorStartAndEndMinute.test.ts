@@ -2,6 +2,7 @@ import Fact from "../Fact";
 import Rule from "../Rule";
 import RuleDecoratorStartAndEndMinute from "../RuleDecoratorStartAndEndMinute";
 import Topic from "../Topic";
+import topics from "../../topics";
 
 describe("RuleDecoratorStartAndEndMinute", () => {
     let rule: RuleDecoratorStartAndEndMinute;
@@ -21,6 +22,11 @@ describe("RuleDecoratorStartAndEndMinute", () => {
                 const results = getResults(rule, { inGame: true, time: 0 });
                 expect(results).toBeUndefined();
             });
+        });
+
+        test("should subscribe to in game and time topic", () => {
+            expect(rule.given).toContain(topics.time);
+            expect(rule.given).toContain(topic);
         });
     });
 

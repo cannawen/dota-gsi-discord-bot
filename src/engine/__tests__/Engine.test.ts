@@ -4,45 +4,65 @@ import FactStore from "../FactStore";
 import Rule from "../Rule";
 import Topic from "../Topic";
 
-class TestEngine extends Engine {
-    public setPublic = (db: FactStore, newFact: Fact<unknown>) => {
-        this.set(db, newFact);
-    };
-}
-
 describe("Engine", () => {
-    let sut: TestEngine;
+    let sut: Engine;
     let db: FactStore;
 
     let numberTopic: Topic<number>;
     let addOneTopic: Topic<boolean>;
     beforeEach(() => {
-        sut = new TestEngine();
+        sut = new Engine();
         db = new FactStore();
 
         numberTopic = new Topic<number>("number");
         addOneTopic = new Topic<boolean>("add one");
     });
-    test("register rule - add once", () => {
-        sut.register(
-            new Rule("rule", [numberTopic, addOneTopic], (get) => {
-                const number = get(numberTopic)!;
-                const addOne = get(addOneTopic)!;
-                if (addOne) {
-                    // Because addOneTopic is reset first
-                    // the number is only incremented once
-                    return [
-                        new Fact(addOneTopic, undefined),
-                        new Fact(numberTopic, number + 1),
-                    ];
-                }
-            })
-        );
-        sut.setPublic(db, new Fact(numberTopic, 0));
-        sut.setPublic(db, new Fact(addOneTopic, true));
 
-        expect(db.get(numberTopic)).toBe(1);
-        expect(db.get(addOneTopic)).toBeUndefined();
+    describe("all topics are defined", () => {
+        test("executes rule", () => {
+            sut.register(
+                new Rule("rule", [numberTopic, addOneTopic], (get) => {
+                    const number = get(numberTopic)!;
+                    const addOne = get(addOneTopic)!;
+                    if (addOne) {
+                        // Because addOneTopic is reset first
+                        // the number is only incremented once
+                        return [
+                            new Fact(addOneTopic, undefined),
+                            new Fact(numberTopic, number + 1),
+                        ];
+                    }
+                })
+            );
+            sut.set(db, new Fact(numberTopic, 0));
+            sut.set(db, new Fact(addOneTopic, true));
+
+            expect(db.get(numberTopic)).toBe(1);
+            expect(db.get(addOneTopic)).toBeUndefined();
+        });
+    });
+
+    describe("one topic is not defined", () => {
+        test("does not execute rule", () => {
+            sut.set(db, new Fact(numberTopic, 0));
+
+            sut.register(
+                new Rule("rule", [numberTopic], (get) => {
+                    const number = get(numberTopic)!;
+                    const addOne = get(addOneTopic)!;
+                    if (addOne) {
+                        return [
+                            new Fact(addOneTopic, undefined),
+                            new Fact(numberTopic, number + 1),
+                        ];
+                    }
+                })
+            );
+            sut.set(db, new Fact(addOneTopic, true));
+
+            expect(db.get(numberTopic)).toBe(0);
+            expect(db.get(addOneTopic)).toBe(true);
+        });
     });
 
     // test("register rule - add twice", () => {

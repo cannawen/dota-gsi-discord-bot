@@ -2,6 +2,7 @@ import Fact from "../Fact";
 import Rule from "../Rule";
 import RuleDecoratorInGame from "../RuleDecoratorInGame";
 import Topic from "../Topic";
+import topics from "../../topics";
 
 describe("RuleDecoratorInGame", () => {
     let rule: RuleDecoratorInGame;
@@ -12,6 +13,11 @@ describe("RuleDecoratorInGame", () => {
         rule = new RuleDecoratorInGame(
             new Rule("test", [topic], (get) => new Fact(topic, true))
         );
+    });
+    test("should subscribe to in game and time topic", () => {
+        expect(rule.given).toContain(topics.time);
+        expect(rule.given).toContain(topics.inGame);
+        expect(rule.given).toContain(topic);
     });
 
     describe("in game", () => {
