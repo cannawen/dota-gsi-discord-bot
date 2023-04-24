@@ -42,7 +42,7 @@ describe("Engine", () => {
         });
     });
 
-    describe("one topic is not defined", () => {
+    describe("topic does not change", () => {
         test("does not execute rule", () => {
             sut.set(db, new Fact(numberTopic, 0));
 
