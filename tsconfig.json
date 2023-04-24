@@ -19,5 +19,6 @@
         "./.jest/jest.d.ts",
         "./data/*",
         "./global.d.ts"
-    ]
+    ],
+    "exclude": ["**/__mocks__/*"]
 }
