@@ -9,16 +9,6 @@ import log from "../log";
 import Rule from "./Rule";
 import Topic from "./Topic";
 
-function doesIntersect<T>(set: Set<T>, arr: Array<T>): boolean {
-    // eslint-disable-next-line no-loops/no-loops
-    for (const item of arr) {
-        if (set.has(item)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function removeLineBreaks(s: string) {
     return s.replace(/(\r\n|\n|\r)/gm, "");
 }
@@ -30,16 +20,12 @@ function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
     );
 }
 
-// TODO this is way too complicated;
-// there is only one topic from the fact that could have possibly changed
-function determineChangedTopics(db: FactStore, newFact: Fact<unknown>) {
-    const changedTopics = new Set<Topic<unknown>>();
-
+function hasFactChanged(db: FactStore, newFact: Fact<unknown>): boolean {
     const topic = newFact.topic;
     const oldValue = db.get(topic);
     const newValue = newFact.value;
 
-    if (!deepEqual(oldValue, newValue)) {
+    if (!deepEqual(oldValue, newValue, { strict: true })) {
         // Do not print out GSI data because it's too large
         if (topic.label !== "allData") {
             log.verbose(
@@ -55,45 +41,40 @@ function determineChangedTopics(db: FactStore, newFact: Fact<unknown>) {
                 removeLineBreaks(colors.green(newValue as string))
             );
         }
-        changedTopics.add(topic);
+        return true;
     }
-    return changedTopics;
+    return false;
 }
 
 function applyRules(
     db: FactStore,
     rules: Rule[],
-    changedTopics: Set<Topic<unknown>>
+    changedTopic: Topic<unknown>
 ) {
-    let newFacts: Array<Fact<unknown>> = [];
-
-    rules.forEach((rule) => {
+    return rules.reduce((memo, rule) => {
         // If a topic that a rule is interested in has changed
         // and there none of the givens are `undefined`
         // Note: anyone can still `set` a fact to be undefined,
         // But it will not be propogated downstream
-        // Note: this is why it is safe to do a !
-        // when we get any topics from the db if they are in the given array
         if (
-            doesIntersect(changedTopics, rule.given) &&
+            rule.given.find((topic) => topic.label === changedTopic.label) &&
+            // Note: this is why it is safe to do a !
+            // when we get any topics from the db if they are in the given array
             topicsAllDefined(rule.given, db)
         ) {
             // Process the rule
             const out = rule.then((topic) => db.get(topic));
-            if (!out) {
-                return;
-            }
-
-            // Calculate any database changes as a result of this rule being applied
-            if (Array.isArray(out)) {
-                newFacts = newFacts.concat(out);
-            } else {
-                newFacts.push(out);
+            if (out) {
+                // Calculate any database changes as a result of this rule being applied
+                if (Array.isArray(out)) {
+                    return memo.concat(out);
+                } else {
+                    memo.push(out);
+                }
             }
         }
-    });
-
-    return newFacts;
+        return memo;
+    }, [] as Fact<unknown>[]);
 }
 
 class Engine {
@@ -105,9 +86,11 @@ class Engine {
     };
 
     public set = (db: FactStore, newFact: Fact<unknown>) => {
-        const changedTopics = determineChangedTopics(db, newFact);
+        if (hasFactChanged(db, newFact) === false) {
+            return;
+        }
         db.set(newFact);
-        const newFacts = applyRules(db, this.rules, changedTopics);
+        const newFacts = applyRules(db, this.rules, newFact.topic);
         newFacts.forEach((fact) => {
             this.set(db, fact);
         });
