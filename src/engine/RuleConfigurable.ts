@@ -6,6 +6,9 @@ import Topic from "./Topic";
 /**
  * Note: When the effect changes, the `then` will be run once
  */
+// TODO we change this to a decorator by creating a "topics.effect"
+// And then this decorator swpas out the topics.effect to a get(configTopic)
+// version of the effect
 class RuleConfigurable extends Rule {
     constructor(
         label: string,
