@@ -13,18 +13,16 @@ export const configTopic = topicManager.createConfigTopic(
 export const defaultConfig = EffectConfig.PUBLIC_INTERRUPTING;
 export const assistantDescription = "Plays Jeopardy music while paused";
 
-export default new RuleDecoratorInGame(
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(rules.assistant.pause, [topics.paused], (get) => {
-            if (get(topics.paused)!) {
-                return new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/jeopardy.mp3"
-                );
-            } else {
-                return new Fact(topics.stopAudio, true);
-            }
-        })
-    )
+export default new RuleDecoratorConfigurable(
+    configTopic,
+    new Rule(rules.assistant.pause, [topics.paused], (get) => {
+        if (get(topics.paused)! && get(topics.inGame)) {
+            return new Fact(
+                topics.configurableEffect,
+                "resources/audio/jeopardy.mp3"
+            );
+        } else {
+            return new Fact(topics.stopAudio, true);
+        }
+    })
 );

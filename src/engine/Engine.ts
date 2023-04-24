@@ -86,14 +86,13 @@ class Engine {
     };
 
     public set = (db: FactStore, newFact: Fact<unknown>) => {
-        if (hasFactChanged(db, newFact) === false) {
-            return;
+        if (hasFactChanged(db, newFact)) {
+            db.set(newFact);
+            const newFacts = applyRules(db, this.rules, newFact.topic);
+            newFacts.forEach((fact) => {
+                this.set(db, fact);
+            });
         }
-        db.set(newFact);
-        const newFacts = applyRules(db, this.rules, newFact.topic);
-        newFacts.forEach((fact) => {
-            this.set(db, fact);
-        });
     };
 }
 
