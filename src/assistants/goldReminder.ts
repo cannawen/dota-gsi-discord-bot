@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import Topic from "../engine/Topic";
@@ -54,7 +54,7 @@ function handle(
 }
 
 export default new RuleDecoratorInGame(
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.goldReminder,

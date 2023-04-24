@@ -2,7 +2,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Item from "../gsi-data-classes/Item";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -40,7 +40,7 @@ function canCast(item: Item | null): boolean {
 }
 
 export default new RuleDecoratorInGame(
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.neutralItemDigReminder,

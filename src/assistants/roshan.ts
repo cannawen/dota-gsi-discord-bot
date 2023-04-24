@@ -4,7 +4,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -71,7 +71,7 @@ const roshRulesArray = [
 
     // When time is when roshan might be alive
     // Play audio and reset roshan maybe alive time state
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.roshan.maybeAliveTime,
@@ -92,7 +92,7 @@ const roshRulesArray = [
 
     // When time is when roshan should be alive
     // Play audio and reset roshan alive time state
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.roshan.aliveTime,
@@ -113,7 +113,7 @@ const roshRulesArray = [
             }
         )
     ),
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.roshan.voice,

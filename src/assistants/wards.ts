@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -33,7 +33,7 @@ const lastWardCountTopic =
  * The app may not know your ward count has increased.
  */
 export default new RuleDecoratorInGame(
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(rules.assistant.wards, [topics.time, topics.items], (get) => {
             const facts: Fact<unknown>[] = [];

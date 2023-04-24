@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
@@ -35,7 +35,7 @@ export default [
             }
         )
     ),
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.buyback.warnNoBuyback,

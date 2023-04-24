@@ -3,7 +3,7 @@ import Fact from "../engine/Fact";
 import fs from "fs";
 import path from "path";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -37,7 +37,7 @@ function whatShouldIBuy(message: string) {
     return message.match(/^what (do|should) I (buy|get)$/i) !== null;
 }
 
-export default new RuleConfigurable(
+export default new RuleDecoratorConfigurable(
     configTopic,
     new Rule(rules.assistant.glhf, [topics.lastDiscordUtterance], (get) => {
         const message = get(topics.lastDiscordUtterance)!;

@@ -1,7 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -24,7 +24,7 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
 export default new RuleDecoratorStartAndEndMinute(
     NEUTRAL_ITEM_REMINDER_START_MINUTE,
     undefined,
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.neutralItemDigReminder,

@@ -10,7 +10,7 @@ import topics from "../topics";
 // TODO we change this to a decorator by creating a "topics.effect"
 // And then this decorator swpas out the topics.effect to a get(configTopic)
 // version of the effect
-class RuleConfigurable extends Rule {
+class RuleDecoratorConfigurable extends Rule {
     constructor(configTopic: Topic<EffectConfig>, rule: Rule) {
         super(rule.label, [...rule.given, configTopic], (get) => {
             const config = get(configTopic)!;
@@ -36,4 +36,4 @@ class RuleConfigurable extends Rule {
     }
 }
 
-export default RuleConfigurable;
+export default RuleDecoratorConfigurable;

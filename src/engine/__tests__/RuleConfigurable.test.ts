@@ -1,19 +1,19 @@
 import { EffectConfig } from "../../effectConfigManager";
 import Fact from "../Fact";
 import Rule from "../Rule";
-import RuleConfigurable from "../RuleConfigurable";
+import RuleDecoratorConfigurable from "../RuleDecoratorConfigurable";
 import Topic from "../Topic";
 import topics from "../../topics";
 
-describe("RuleConfigurable", () => {
+describe("RuleDecoratorConfigurable", () => {
     let configTopic: Topic<EffectConfig>;
     let topic: Topic<number>;
-    let rule: RuleConfigurable;
+    let rule: RuleDecoratorConfigurable;
 
     beforeEach(() => {
         configTopic = new Topic<EffectConfig>("configTopic");
         topic = new Topic<number>("topic");
-        rule = new RuleConfigurable(
+        rule = new RuleDecoratorConfigurable(
             configTopic,
             new Rule(
                 "test",

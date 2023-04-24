@@ -2,8 +2,8 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
-import RuleConfigurable from "../engine/RuleConfigurable";
 import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
+import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -24,7 +24,7 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
 export default [
     new RuleDecoratorAtMinute(
         20,
-        new RuleConfigurable(
+        new RuleDecoratorConfigurable(
             configTopic,
             new Rule(
                 rules.assistant.tormenter,
@@ -33,7 +33,7 @@ export default [
             )
         )
     ),
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             "tormenter reminder",
@@ -50,7 +50,7 @@ export default [
             }
         )
     ),
-    new RuleConfigurable(
+    new RuleDecoratorConfigurable(
         configTopic,
         new Rule("tormenter voice", [topics.lastDiscordUtterance], (get) => {
             const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
