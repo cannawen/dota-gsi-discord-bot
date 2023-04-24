@@ -27,7 +27,7 @@ export default new RuleDecoratorStartAndEndMinute(
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
-            rules.assistant.neutralItemDigReminder,
+            rules.assistant.neutralItemReminder,
             [topics.items, topics.time],
             (get) => {
                 const items = get(topics.items)!;

@@ -21,7 +21,7 @@ export default [7, 17, 27, 37, 60].map(
             new RuleDecoratorConfigurable(
                 configTopic,
                 new Rule(
-                    rules.assistant.neutralItemDigReminder,
+                    rules.assistant.newNeutralTokens,
                     [],
                     (get) =>
                         new Fact(
