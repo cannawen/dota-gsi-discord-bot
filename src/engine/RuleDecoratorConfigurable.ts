@@ -5,8 +5,10 @@ import Topic from "./Topic";
 import topics from "../topics";
 
 /**
- * On output, replaces `topics.configurableEffect` fact with what is specified by `configTopic`
- * Note: When the effect changes, the `then` will be run once
+ * This allows a rule to be configurable by the user to play public, private, or no audio.
+ *
+ * On returning facts, replaces `topics.configurableEffect` fact with effect specified by `configTopic`
+ * Note: When the configTopic effect changes, the `then` will be run once
  */
 class RuleDecoratorConfigurable extends Rule {
     constructor(configTopic: Topic<EffectConfig>, rule: Rule) {
