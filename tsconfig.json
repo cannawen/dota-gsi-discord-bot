@@ -21,7 +21,11 @@
         "./global.d.ts"
     ],
     // Excluding mocks so our tests do not fail on CI
-    // If we exclude tests here, it will also help stop tests from failing on CI
-    // But then toContainFact does the angry red squiggle in VSCode
     "exclude": ["**/__mocks__/*"]
+    // If we exclude tests here, it will not compile our tests to js which is GOOD
+    // But then anything declared in jest.d.ts does the angry red squiggle in our test files
+    // "exclude": ["**/__tests__/*", "**/__mocks__/*"]
+    // Currently excluding .test.js files from jest.config.ts
+    // because our test.ts files are being tested already
+    // But it's still a bit yucky that we are transpiling our __test__ directory into js
 }
