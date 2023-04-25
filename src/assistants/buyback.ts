@@ -19,20 +19,22 @@ export default [
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
-        new Rule(
-            rules.assistant.buyback.availability,
-            [topics.gold, topics.buybackCost, topics.buybackCooldown],
-            (get) => {
-                const buybackAvailable = get(topics.buybackCooldown)! === 0;
-                const gold = get(topics.gold)!;
-                const buybackCost = get(topics.buybackCost)!;
-                if (buybackAvailable) {
-                    const hasBuyback = gold >= buybackCost;
-                    return new Fact(hasBuybackTopic, hasBuyback);
-                } else {
-                    return new Fact(hasBuybackTopic, false);
+        new RuleDecoratorInGame(
+            new Rule(
+                rules.assistant.buyback.availability,
+                [topics.gold, topics.buybackCost, topics.buybackCooldown],
+                (get) => {
+                    const buybackAvailable = get(topics.buybackCooldown)! === 0;
+                    const gold = get(topics.gold)!;
+                    const buybackCost = get(topics.buybackCost)!;
+                    if (buybackAvailable) {
+                        const hasBuyback = gold >= buybackCost;
+                        return new Fact(hasBuybackTopic, hasBuyback);
+                    } else {
+                        return new Fact(hasBuybackTopic, false);
+                    }
                 }
-            }
+            )
         )
     ),
     new RuleDecoratorConfigurable(
@@ -52,4 +54,4 @@ export default [
             }
         )
     ),
-].map((rule) => new RuleDecoratorInGame(rule));
+];
