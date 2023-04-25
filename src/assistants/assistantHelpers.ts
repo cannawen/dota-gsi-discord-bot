@@ -29,6 +29,11 @@ export const enum Tier {
 export class NeutralItemHelper {
     public tierTimeInfo = [7, 17, 27, 37, 60];
 
+    /**
+     * To de-duplicate names in itemNeutralTier copied from https://dota2.fandom.com/wiki/Neutral_Items
+     * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8"));
+     * const output = JSON.stringify(Object.fromEntries(Object.entries(x).map(([k,v]) => [k, v.map((itemName) => itemName.slice(Math.ceil(itemName.length/2)))])))
+     */
     private tierToNameObject = JSON.parse(
         fs.readFileSync(
             path.join(__dirname, "../../resources/itemNeutralTier.json"),
@@ -48,7 +53,7 @@ export class NeutralItemHelper {
         trustyShovel: "item_trusty_shovel",
     };
 
-    protected timeToTier(time: number): Tier {
+    public timeToTier(time: number): Tier {
         const index = this.tierTimeInfo
             .map((minute) => minute * 60)
             .map((s) => time < s)
@@ -60,19 +65,8 @@ export class NeutralItemHelper {
         }
     }
 
-    protected nameToTier(name: string): Tier {
+    public nameToTier(name: string): Tier {
         return this.nameToTierObject[name] || Tier.UNKNOWN;
-    }
-    /**
-     * To de-duplicate names in itemNeutralTier copied from https://dota2.fandom.com/wiki/Neutral_Items
-     * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8"));
-     * const output = JSON.stringify(Object.fromEntries(Object.entries(x).map(([k,v]) => [k, v.map((itemName) => itemName.slice(Math.ceil(itemName.length/2)))])))
-     */
-    public isItemAppropriateForTime(item: Item | null, time: number): boolean {
-        if (item === null) {
-            return false;
-        }
-        return true;
     }
 }
 

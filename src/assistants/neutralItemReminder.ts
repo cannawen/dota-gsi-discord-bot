@@ -22,6 +22,13 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
+function isItemAppropriateForTime(name: string | undefined, time: number) {
+    if (name === undefined) {
+        return false;
+    }
+    return true;
+}
+
 export default new RuleDecoratorStartAndEndMinute(
     NEUTRAL_ITEM_REMINDER_START_MINUTE,
     undefined,
@@ -34,8 +41,8 @@ export default new RuleDecoratorStartAndEndMinute(
                 const items = get(topics.items)!;
                 const time = get(topics.time)!;
                 const lastReminderTime = get(lastReminderTimeTopic);
-                const appropriateItem = helper.neutral.isItemAppropriateForTime(
-                    items.neutral,
+                const appropriateItem = isItemAppropriateForTime(
+                    items.neutral?.name,
                     time
                 );
 
