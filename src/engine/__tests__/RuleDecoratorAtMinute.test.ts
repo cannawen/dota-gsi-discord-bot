@@ -1,8 +1,8 @@
-import topics from "../../topics";
 import Fact from "../Fact";
 import Rule from "../Rule";
 import RuleDecoratorAtMinute from "../RuleDecoratorAtMinute";
 import Topic from "../Topic";
+import topics from "../../topics";
 
 describe("RuleDecoratorAtMinute", () => {
     let rule: RuleDecoratorAtMinute;

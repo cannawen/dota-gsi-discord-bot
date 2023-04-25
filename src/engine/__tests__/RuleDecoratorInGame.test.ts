@@ -14,9 +14,12 @@ describe("RuleDecoratorInGame", () => {
             new Rule("test", [topic], (get) => new Fact(topic, true))
         );
     });
-    test("should subscribe to in game and time topic", () => {
-        expect(rule.given).toContain(topics.time);
-        expect(rule.given).toContain(topics.inGame);
+    // Should not register to time or inGame topics because
+    // some rules (buyback, pause) are depending on the givens not changing
+    // to do their effect properly
+    test("should not subscribe to in game and time topic", () => {
+        expect(rule.given).not.toContain(topics.time);
+        expect(rule.given).not.toContain(topics.inGame);
         expect(rule.given).toContain(topic);
     });
 
