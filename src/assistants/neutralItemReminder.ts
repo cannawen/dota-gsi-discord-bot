@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
@@ -33,30 +34,31 @@ export default new RuleDecoratorStartAndEndMinute(
                 const items = get(topics.items)!;
                 const time = get(topics.time)!;
                 const lastReminderTime = get(lastReminderTimeTopic);
+                const appropriateItem = helper.neutral.isItemAppropriateForTime(
+                    items.neutral,
+                    time
+                );
 
-                // If we have a neutral item
-                if (items.neutral) {
-                    // If we have reminded them before
-                    if (lastReminderTime) {
-                        // Clear reminder time
-                        return new Fact(lastReminderTimeTopic, undefined);
-                    }
+                // If we have an appropriate neutral item
+                if (appropriateItem) {
+                    // Clear reminder time
+                    return new Fact(lastReminderTimeTopic, undefined);
                 } else {
-                    // If we do not have a nuetral item
+                    // If we do not have an appropriate nuetral item
                     // If we have never reminded them before
                     if (!lastReminderTime) {
                         // Set reminder time without effect to give them some grace
                         return new Fact(lastReminderTimeTopic, time);
                     }
                     // If we have been silent for the grace time
-                    // But they still do not have a neutral item
+                    // But they still do not have an appropriate neutral item
                     if (time - lastReminderTime >= TIME_BETWEEN_REMINDERS) {
+                        const audio = items.neutral
+                            ? "You should upgrade your neutral item"
+                            : "resources/audio/no-neutral.mp3";
                         // Remind them and update reminder time
                         return [
-                            new Fact(
-                                topics.configurableEffect,
-                                "resources/audio/no-neutral.mp3"
-                            ),
+                            new Fact(topics.configurableEffect, audio),
                             new Fact(lastReminderTimeTopic, time),
                         ];
                     }

@@ -14,12 +14,12 @@ const NO_ITEMS = new PlayerItems(
     null
 ) as DeepReadonly<PlayerItems>;
 
-const HAS_NEUTRAL_ITEM = new PlayerItems(
+const HAS_TIER_2_NEUTRAL_ITEM = new PlayerItems(
     [],
     [],
     [],
     null,
-    new Item("id", "name")
+    new Item("item_philosophers_stone", "Philosopher's Stone")
 ) as DeepReadonly<PlayerItems>;
 
 describe("neutralItemReminder", () => {
@@ -85,7 +85,7 @@ describe("neutralItemReminder", () => {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: (NEUTRAL_ITEM_REMINDER_START_MINUTE + 1) * 60,
                     inGame: true,
-                    items: HAS_NEUTRAL_ITEM,
+                    items: HAS_TIER_2_NEUTRAL_ITEM,
                 },
                 state1
             ) as any;
@@ -95,11 +95,59 @@ describe("neutralItemReminder", () => {
                     [rules.assistant.neutralItemReminder]: "PRIVATE",
                     time: 9 * 60,
                     inGame: true,
-                    items: HAS_NEUTRAL_ITEM,
+                    items: HAS_TIER_2_NEUTRAL_ITEM,
                 },
                 state2
             );
             expect(result).toBeUndefined();
+        });
+    });
+
+    describe("has a neutral item", () => {
+        describe("is an appropriate tier", () => {
+            test("do not remind", () => {
+                const state1 = getResults(rule, {
+                    [rules.assistant.neutralItemReminder]: "PRIVATE",
+                    time: 28 * 60, // Tier 3 zone
+                    inGame: true,
+                    items: HAS_TIER_2_NEUTRAL_ITEM,
+                }) as any;
+                const state2 = getResults(
+                    rule,
+                    {
+                        [rules.assistant.neutralItemReminder]: "PRIVATE",
+                        time: 30 * 60, // Tier 3 zone
+                        inGame: true,
+                        items: HAS_TIER_2_NEUTRAL_ITEM,
+                    },
+                    state1
+                ) as any;
+                expect(state2).not.toContainTopic("playPrivateAudio");
+            });
+        });
+        describe("is 2 below the current tier of items", () => {
+            test("remind to get a better neutral", () => {
+                const state1 = getResults(rule, {
+                    [rules.assistant.neutralItemReminder]: "PRIVATE",
+                    time: 38 * 60, // Tier 4 zone
+                    inGame: true,
+                    items: HAS_TIER_2_NEUTRAL_ITEM,
+                }) as any;
+                const state2 = getResults(
+                    rule,
+                    {
+                        [rules.assistant.neutralItemReminder]: "PRIVATE",
+                        time: 40 * 60, // Tier 4 zone
+                        inGame: true,
+                        items: HAS_TIER_2_NEUTRAL_ITEM,
+                    },
+                    state1
+                ) as any;
+                expect(state2).toContainFact(
+                    "playPrivateAudio",
+                    "You should upgrade your neutral item"
+                );
+            });
         });
     });
 });

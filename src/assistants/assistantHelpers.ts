@@ -1,3 +1,5 @@
+import Item from "../gsi-data-classes/Item";
+
 /**
  * NOTE: This function only returns minutes and seconds
  * If the game lasts for over an hour, it will drop the "1 hour" portion of the time
@@ -39,6 +41,12 @@ class NeutralItemHelper {
      * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8"));
      * const output = JSON.stringify(Object.fromEntries(Object.entries(x).map(([k,v]) => [k, v.map((itemName) => itemName.slice(Math.ceil(itemName.length/2)))])))
      */
+    public isItemAppropriateForTime(item: Item | null, time: number): boolean {
+        if (item === null) {
+            return false;
+        }
+        return true;
+    }
 }
 
 export default {
