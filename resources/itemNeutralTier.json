@@ -1,0 +1,68 @@
+{
+    "1": [
+        "Arcane Ring",
+        "Broom Handle",
+        "Fairy's Trinket",
+        "Lance of Pursuit",
+        "Occult Bracelet",
+        "Pig Pole",
+        "Possessed Mask",
+        "Seeds of Serenity",
+        "Trusty Shovel",
+        "Tumbler's Toy"
+    ],
+    "2": [
+        "Brigand's Blade",
+        "Bullwhip",
+        "Dagger of Ristul",
+        "Dragon Scale",
+        "Eye of the Vizier",
+        "Grove Bow",
+        "Nether Shawl",
+        "Philosopher's Stone",
+        "Pupil's Gift",
+        "Ring of Aquila",
+        "Specialist's Array",
+        "Vambrace,"
+    ],
+    "3": [
+        "Blast Rig",
+        "Ceremonial Robe",
+        "Cloak of Flames",
+        "Elven Tunic",
+        "Enchanted Quiver",
+        "Mind Breaker",
+        "Ogre Seal Totem",
+        "Paladin Sword",
+        "Psychic Headband",
+        "Quickening Charm",
+        "Titan Sliver"
+    ],
+    "4": [
+        "Ascetic's Cap",
+        "Flicker",
+        "Havoc Hammer",
+        "Ninja Gear",
+        "Penta-Edged Sword",
+        "Spell Prism",
+        "Stormcrafter",
+        "Telescope",
+        "Timeless Relic",
+        "Trickster Cloak",
+        "Witchbane"
+    ],
+    "5": [
+        "Apex",
+        "Arcanist's Armor",
+        "Book of Shadows",
+        "Book of the Dead",
+        "Ex Machina",
+        "Fallen Sky",
+        "Force Boots",
+        "Giant's Ring",
+        "Mirror Shield",
+        "Pirate Hat",
+        "Seer Stone",
+        "Stygian Desolator"
+    ]
+}

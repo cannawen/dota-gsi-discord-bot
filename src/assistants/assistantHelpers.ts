@@ -34,6 +34,11 @@ class NeutralItemHelper {
         pirateHat: "item_pirate_hat",
         trustyShovel: "item_trusty_shovel",
     };
+    /**
+     * To de-duplicate names in itemNeutralTier copied from https://dota2.fandom.com/wiki/Neutral_Items
+     * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8"));
+     * const output = JSON.stringify(Object.fromEntries(Object.entries(x).map(([k,v]) => [k, v.map((itemName) => itemName.slice(Math.ceil(itemName.length/2)))])))
+     */
 }
 
 export default {
