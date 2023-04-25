@@ -15,6 +15,11 @@ function secondsToTimeString(seconds: number) {
 
 class NeutralItemHelper {
     public spawnMinutes = [7, 17, 27, 37, 60];
+    public item = {
+        philosophersStone: "item_philosophers_stone",
+        pirateHat: "item_pirate_hat",
+        trustyShovel: "item_trusty_shovel",
+    };
 }
 
 export default {

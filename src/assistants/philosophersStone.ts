@@ -2,6 +2,7 @@
 import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
@@ -28,7 +29,7 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
 function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
     const stone = [...items.backpack, ...items.stash, items.neutral]
         .filter((item) => item !== null)
-        .find((item) => item!.id === "item_philosophers_stone");
+        .find((item) => item!.id === helper.neutral.item.philosophersStone);
     return stone !== undefined;
 }
 
