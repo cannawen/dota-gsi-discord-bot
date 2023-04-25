@@ -15,7 +15,7 @@ export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you when new neutral tokens are spawning";
 
-export default Object.values(helper.neutral.tierTimeInfo).map(
+export default helper.neutral.tierTimeInfo.map(
     (time) =>
         new RuleDecoratorAtMinute(
             time,
