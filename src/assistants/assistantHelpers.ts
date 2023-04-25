@@ -13,6 +13,11 @@ function secondsToTimeString(seconds: number) {
     return timeStringWithSpaces;
 }
 
+class NeutralItemHelper {
+    public spawnMinutes = [7, 17, 27, 37, 60];
+}
+
 export default {
+    neutral: new NeutralItemHelper(),
     secondsToTimeString,
 };

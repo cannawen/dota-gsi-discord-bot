@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
 import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
@@ -14,7 +15,7 @@ export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you when new neutral tokens are spawning";
 
-export default [7, 17, 27, 37, 60].map(
+export default helper.neutral.spawnMinutes.map(
     (time) =>
         new RuleDecoratorAtMinute(
             time,
