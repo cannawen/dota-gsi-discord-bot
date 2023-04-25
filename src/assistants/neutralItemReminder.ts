@@ -33,7 +33,7 @@ function isItemAppropriateForTime(name: string | undefined, time: number) {
     if (itemTier === Tier.UNKNOWN) {
         return true;
     }
-    // Inappropriate item when it is 2 below the current time tier
+    // Appropriate item when matching time tier or 1 below
     const timeTier = helper.neutral.timeToTier(time);
     return itemTier >= timeTier - 1;
 }
