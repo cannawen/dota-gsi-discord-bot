@@ -1,6 +1,6 @@
+import helper, { Tier } from "./assistantHelpers";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
-import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
@@ -23,10 +23,19 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
 );
 
 function isItemAppropriateForTime(name: string | undefined, time: number) {
+    // Having no neutral item is never appropriate
     if (name === undefined) {
         return false;
     }
-    return true;
+    const itemTier = helper.neutral.nameToTier(name);
+    // Having an unclassified neutral item is always appropriate
+    // This is probably a data issue on our end
+    if (itemTier === Tier.UNKNOWN) {
+        return true;
+    }
+    // Inappropriate item when it is 2 below the current time tier
+    const timeTier = helper.neutral.timeToTier(time);
+    return itemTier >= timeTier - 1;
 }
 
 export default new RuleDecoratorStartAndEndMinute(
