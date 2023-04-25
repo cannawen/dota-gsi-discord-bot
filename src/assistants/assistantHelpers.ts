@@ -26,15 +26,22 @@ export const enum Tier {
     FIVE = 5,
 }
 
-const tierToItemName = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, "../../resources/itemNeutralTier.json"),
-        "utf8"
-    )
-);
-
 export class NeutralItemHelper {
     public tierTimeInfo = [7, 17, 27, 37, 60];
+
+    private tierToNameObject = JSON.parse(
+        fs.readFileSync(
+            path.join(__dirname, "../../resources/itemNeutralTier.json"),
+            "utf8"
+        )
+    ) as { [key: string]: string[] };
+
+    private nameToTierObject = Object.fromEntries(
+        Object.entries(this.tierToNameObject)
+            .map(([tier, items]) => items.map((item) => [item, parseInt(tier)]))
+            .flat()
+    ) as { [key: string]: Tier };
+
     public item = {
         philosophersStone: "item_philosophers_stone",
         pirateHat: "item_pirate_hat",
@@ -53,8 +60,8 @@ export class NeutralItemHelper {
         }
     }
 
-    protected neutralItemTier(item: Item): Tier {
-        return Tier.UNKNOWN;
+    protected nameToTier(name: string): Tier {
+        return this.nameToTierObject[name] || Tier.UNKNOWN;
     }
     /**
      * To de-duplicate names in itemNeutralTier copied from https://dota2.fandom.com/wiki/Neutral_Items

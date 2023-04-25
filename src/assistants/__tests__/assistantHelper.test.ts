@@ -4,6 +4,9 @@ class TestNeutralItemHelper extends NeutralItemHelper {
     public timeToTierPublic(time: number): Tier {
         return this.timeToTier(time);
     }
+    public nameToTierPublic(itemName: string): Tier {
+        return this.nameToTier(itemName);
+    }
 }
 
 describe("assistantHelper", () => {
@@ -48,6 +51,21 @@ describe("assistantHelper", () => {
                 expect(sut.timeToTierPublic(60 * 60)).toBe(Tier.FIVE);
                 expect(sut.timeToTierPublic(2 * 60 * 60)).toBe(Tier.FIVE);
             });
+        });
+    });
+
+    describe("nameToTier", () => {
+        test("Unknown neutral item", () => {
+            expect(sut.nameToTierPublic("Healing Salve")).toBe(Tier.UNKNOWN);
+        });
+        test("Trusty Shovel", () => {
+            expect(sut.nameToTierPublic("Trusty Shovel")).toBe(Tier.ONE);
+        });
+        test("Philosopher's Stone", () => {
+            expect(sut.nameToTierPublic("Philosopher's Stone")).toBe(Tier.TWO);
+        });
+        test("Pirate Hat", () => {
+            expect(sut.nameToTierPublic("Pirate Hat")).toBe(Tier.FIVE);
         });
     });
 });
