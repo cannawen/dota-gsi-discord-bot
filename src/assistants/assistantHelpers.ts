@@ -13,8 +13,22 @@ function secondsToTimeString(seconds: number) {
     return timeStringWithSpaces;
 }
 
+const enum Tier {
+    ONE = 1,
+    TWO = 2,
+    THREE = 3,
+    FOUR = 4,
+    FIVE = 5,
+}
+
 class NeutralItemHelper {
-    public spawnMinutes = [7, 17, 27, 37, 60];
+    public tierTimeInfo = {
+        [Tier.ONE]: 7,
+        [Tier.TWO]: 17,
+        [Tier.THREE]: 27,
+        [Tier.FOUR]: 37,
+        [Tier.FIVE]: 60,
+    };
     public item = {
         philosophersStone: "item_philosophers_stone",
         pirateHat: "item_pirate_hat",
