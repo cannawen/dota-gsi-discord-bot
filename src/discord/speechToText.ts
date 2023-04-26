@@ -56,7 +56,7 @@ function transcribeNetworkCall(audioBuffer: Buffer): Promise<string | void> {
     });
 }
 
-export function transcribe(
+function transcribe(
     receiver: Voice.VoiceReceiver,
     userId: string
 ): Promise<string | void> {
@@ -88,3 +88,7 @@ export function transcribe(
         });
     });
 }
+
+export default {
+    transcribe,
+};

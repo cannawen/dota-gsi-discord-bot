@@ -1,3 +1,6 @@
+// TODO would it be helpful to give topics a default value (i.e. empty array, 0 number, false boolean)
+// So that when we start our app we don't need to do so many undefined checks all over
+
 /**
  * A `Topic` describes the type of data (i.e. Time is a number)
  */

@@ -25,7 +25,6 @@ function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
 
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
-    private channelIdToStudentId: Map<string, string> = new Map();
 
     public getSessions() {
         return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
@@ -46,13 +45,8 @@ export class CustomEngine extends Engine {
         }
     }
 
-    public updateChannelFact(channelId: string, fact: Fact<unknown>) {
-        const studentId = this.channelIdToStudentId.get(channelId);
-        this.setFact(studentId, fact);
-    }
-
     public getFactValue<T>(
-        studentId: string | null,
+        studentId: string | null | undefined,
         topic: Topic<T>
     ): T | void {
         if (studentId) {
@@ -98,9 +92,6 @@ export class CustomEngine extends Engine {
 
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
-        if (channelId) {
-            this.channelIdToStudentId.set(channelId, studentId);
-        }
 
         // Set guild or channel id
         // or null if not provided so we explicitly propogate the null information downstream
@@ -117,10 +108,6 @@ export class CustomEngine extends Engine {
                 "Deleting session for student %s",
                 studentId.substring(0, 10)
             );
-            const channelId = db.get(topics.discordGuildChannelId);
-            if (channelId) {
-                this.channelIdToStudentId.delete(channelId);
-            }
             try {
                 db.get(topics.discordSubscriptionTopic)?.connection.destroy();
             } catch (error) {}

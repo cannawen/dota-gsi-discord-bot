@@ -61,7 +61,7 @@ describe("startVoiceSubscription", () => {
                     );
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
-                        new Fact(topics.discordReadyToPlayAudio, true)
+                        new Fact(topics.audioPlayerReady, true)
                     );
                 });
 
@@ -110,7 +110,7 @@ describe("startVoiceSubscription", () => {
                     );
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
-                        new Fact(topics.discordReadyToPlayAudio, true)
+                        new Fact(topics.audioPlayerReady, true)
                     );
                 });
                 test("notify engine not ready to play audio when state changes to Buffering", () => {
@@ -120,7 +120,7 @@ describe("startVoiceSubscription", () => {
                     );
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
-                        new Fact(topics.discordReadyToPlayAudio, false)
+                        new Fact(topics.audioPlayerReady, false)
                     );
                 });
             });

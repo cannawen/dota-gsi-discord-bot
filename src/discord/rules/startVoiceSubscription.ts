@@ -4,10 +4,10 @@ import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
-import { transcribe } from "../speechToText";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
+import stt from "../speechToText";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
 
@@ -36,7 +36,7 @@ function onConnectionDisconnected(
             // So we can update our db with new channel id
             // The voice subscription is automagically updated.
         })
-        .catch((reason) => {
+        .catch((_) => {
             // Seems to be a real disconnect which SHOULDN'T be recovered from
             engine.setFact(studentId, new Fact(topics.discordGuildId, null));
             engine.setFact(
@@ -63,10 +63,7 @@ function onConnectionStateChange(
 
     switch (newState.status) {
         case Voice.VoiceConnectionStatus.Ready:
-            engine.setFact(
-                studentId,
-                new Fact(topics.discordReadyToPlayAudio, true)
-            );
+            engine.setFact(studentId, new Fact(topics.audioPlayerReady, true));
             break;
         case Voice.VoiceConnectionStatus.Disconnected:
             return onConnectionDisconnected(studentId, connection);
@@ -89,7 +86,7 @@ function onPlayerStateChange(
     );
 
     const ready = newState.status === Voice.AudioPlayerStatus.Idle;
-    engine.setFact(studentId, new Fact(topics.discordReadyToPlayAudio, ready));
+    engine.setFact(studentId, new Fact(topics.audioPlayerReady, ready));
 }
 
 export default new Rule(
@@ -135,19 +132,25 @@ export default new Rule(
         });
 
         connection.receiver.speaking.on("start", (userId) => {
-            engine.updateChannelFact(
-                channelId,
-                new Fact(topics.discordReadyToPlayAudio, false)
+            const numberOfPeopleTalking =
+                engine.getFactValue(studentId, topics.numberOfPeopleTalking) ||
+                0;
+            engine.setFact(
+                studentId,
+                new Fact(
+                    topics.numberOfPeopleTalking,
+                    numberOfPeopleTalking + 1
+                )
             );
-            transcribe(connection.receiver, userId)
+            stt.transcribe(connection.receiver, userId)
                 .then((utterance) => {
                     if (!utterance) return;
                     // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
                     if (userId === "169619011238232073") {
                         log.info("tts", utterance);
                     }
-                    engine.updateChannelFact(
-                        channelId,
+                    engine.setFact(
+                        studentId,
                         new Fact(topics.lastDiscordUtterance, utterance)
                     );
                 })
@@ -159,9 +162,17 @@ export default new Rule(
                     );
                 })
                 .finally(() => {
-                    engine.updateChannelFact(
-                        channelId,
-                        new Fact(topics.discordReadyToPlayAudio, true)
+                    const numberOfPeopleTalking =
+                        engine.getFactValue(
+                            studentId,
+                            topics.numberOfPeopleTalking
+                        ) || 0;
+                    engine.setFact(
+                        studentId,
+                        new Fact(
+                            topics.numberOfPeopleTalking,
+                            numberOfPeopleTalking - 1
+                        )
                     );
                 });
         });
