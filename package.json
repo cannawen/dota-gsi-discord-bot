@@ -8,7 +8,7 @@
         "start": "node build/index.js",
         "go": "npm run build && npm run start",
         "clean": "rimraf ./build ./resources/audio/tts-cache ./data ./test_PERSISTENCE_DATA_PATH",
-        "test": "jest --detectOpenHandles",
+        "test": "jest",
         "coverage": "npm test -- --coverage --collectCoverageFrom=\"./src/**\"",
         "discord": "npm run build && node build/discord/deployCommands.js",
         "lint": "eslint . --ext .ts",
