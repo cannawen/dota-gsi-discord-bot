@@ -128,17 +128,26 @@ const roshRulesArray = [
 
                 if (killedTime) {
                     if (time < killedTime + AEGIS_DURATION) {
-                        response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
-                            killedTime + AEGIS_DURATION
-                        )}`;
+                        response = `Roshan is dead. Aegis expires at ${
+                            (helper.secondsToTimeString(
+                                killedTime + AEGIS_DURATION
+                            ),
+                            true)
+                        }`;
                     } else if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
-                        response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
-                            killedTime + ROSHAN_MINIMUM_SPAWN_TIME
-                        )}`;
+                        response = `Roshan is dead. May respawn at ${
+                            (helper.secondsToTimeString(
+                                killedTime + ROSHAN_MINIMUM_SPAWN_TIME
+                            ),
+                            true)
+                        }`;
                     } else if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
-                        response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
-                            killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
-                        )}`;
+                        response = `Roshan may be alive. Guaranteed respawn at ${
+                            (helper.secondsToTimeString(
+                                killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
+                            ),
+                            true)
+                        }`;
                     }
                 }
                 return new Fact(topics.configurableEffect, response);

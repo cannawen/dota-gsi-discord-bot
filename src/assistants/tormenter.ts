@@ -71,9 +71,9 @@ export default [
                 const fallenTime = get(tormenterFallenTimeTopic);
                 let message: string;
                 if (fallenTime) {
-                    message = `Tormenter is dead. Will respawn at ${helper.secondsToTimeString(
-                        fallenTime + 10 * 60
-                    )}`;
+                    message = `Tormenter is dead. Will respawn at ${
+                        (helper.secondsToTimeString(fallenTime + 10 * 60), true)
+                    }`;
                 } else if (get(topics.time)! >= 20 * 60) {
                     return new Fact(
                         topics.configurableEffect,
