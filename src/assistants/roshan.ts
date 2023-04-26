@@ -19,13 +19,14 @@ const AEGIS_DURATION = 5 * 60;
 const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
 const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
-const roshanDeathTimes = topicManager.createTopic<number[]>(
-    "roshanDeathTimes",
+const roshanDeathTimesTopic = topicManager.createTopic<number[]>(
+    "roshanDeathTimesTopic",
     {
         persistAcrossRestarts: true,
     }
 );
 
+// TODO add test for alive message
 function aliveMessage(killedTimes: number[], dayTime: boolean) {
     const times = killedTimes.length;
     if (times === 0) {
@@ -54,15 +55,14 @@ function roshStatusMessage(message: string) {
 
 const roshRulesArray = [
     // When an event notifies us that roshan is killed
-    // Set roshan maybe time to 8 minutes from now
-    // Set roshan alibe time to 11 minutes from now
+    // Add time to list of times roshan has fallen
     new Rule(
         rules.assistant.roshan.killedEvent,
         [topics.time, topics.events],
         (get) => {
             if (roshanWasKilled(get(topics.events)!)) {
-                return new Fact(roshanDeathTimes, [
-                    ...(get(roshanDeathTimes) || []),
+                return new Fact(roshanDeathTimesTopic, [
+                    ...(get(roshanDeathTimesTopic) || []),
                     get(topics.time)!,
                 ]);
             }
@@ -70,16 +70,17 @@ const roshRulesArray = [
     ),
 
     // When time is when roshan might be alive
-    // Play audio and reset roshan maybe alive time state
+    // Play audio
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.roshan.maybeAliveTime,
-            [topics.time, roshanDeathTimes],
+            [topics.time, roshanDeathTimesTopic],
             (get) => {
                 if (
                     get(topics.time)! ===
-                    get(roshanDeathTimes)!.at(-1)! + ROSHAN_MINIMUM_SPAWN_TIME
+                    get(roshanDeathTimesTopic)!.at(-1)! +
+                        ROSHAN_MINIMUM_SPAWN_TIME
                 ) {
                     return new Fact(
                         topics.configurableEffect,
@@ -91,24 +92,22 @@ const roshRulesArray = [
     ),
 
     // When time is when roshan should be alive
-    // Play audio and reset roshan alive time state
+    // Play audio
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
             rules.assistant.roshan.aliveTime,
-            [topics.time, roshanDeathTimes],
+            [topics.time, roshanDeathTimesTopic],
             (get) => {
                 if (
                     get(topics.time)! ===
-                    get(roshanDeathTimes)!.at(-1)! + ROSHAN_MAXIMUM_SPAWN_TIME
+                    get(roshanDeathTimesTopic)!.at(-1)! +
+                        ROSHAN_MAXIMUM_SPAWN_TIME
                 ) {
-                    return [
-                        new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/rosh-alive.mp3"
-                        ),
-                        new Fact(roshanDeathTimes, undefined),
-                    ];
+                    return new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/rosh-alive.mp3"
+                    );
                 }
             }
         )
@@ -122,7 +121,7 @@ const roshRulesArray = [
                 if (!roshStatusMessage(get(topics.lastDiscordUtterance)!)) {
                     return;
                 }
-                const killedTimes = get(roshanDeathTimes) || [];
+                const killedTimes = get(roshanDeathTimesTopic) || [];
                 const killedTime = killedTimes?.at(-1);
                 const time = get(topics.time)!;
                 let response = aliveMessage(killedTimes, get(topics.dayTime)!);
