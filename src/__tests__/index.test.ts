@@ -12,6 +12,8 @@ describe("during app startup", () => {
     test("should register all rules with engine", () => {
         registerEverything();
 
+        const debugRuleCount = 2;
+
         const assistantCount = 19;
         const assistantExcessRuleCount = 11;
         const discordRuleCount = 4;
@@ -19,8 +21,9 @@ describe("during app startup", () => {
         const gsiRuleCount = 6;
 
         expect(engine.register).toHaveBeenCalledTimes(
-            // One for the main rule, one for the configuration rule
-            assistantCount * 2 +
+            debugRuleCount +
+                // One for the main rule, one for the configuration rule
+                assistantCount * 2 +
                 assistantExcessRuleCount +
                 discordRuleCount +
                 effectRuleCount +
