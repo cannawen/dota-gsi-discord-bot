@@ -46,7 +46,7 @@ export default [
                 if (!hasBuyback && buybackCooldown === 0) {
                     return new Fact(
                         topics.configurableEffect,
-                        "resources/audio/buyback-warning.mp3"
+                        "you do not have buyback gold"
                     );
                 }
             }

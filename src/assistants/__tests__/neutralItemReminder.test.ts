@@ -52,7 +52,7 @@ describe("neutralItemReminder", () => {
             ) as any;
             expect(result).toContainFact(
                 "playPrivateAudio",
-                "resources/audio/no-neutral.mp3"
+                "you do not have a neutral item"
             );
             const result2 = getResults(
                 rule,
@@ -66,7 +66,7 @@ describe("neutralItemReminder", () => {
             );
             expect(result2).toContainFact(
                 "playPrivateAudio",
-                "resources/audio/no-neutral.mp3"
+                "you do not have a neutral item"
             );
         });
     });
@@ -166,7 +166,7 @@ describe("neutralItemReminder", () => {
                 ) as any;
                 expect(state2).toContainFact(
                     "playPrivateAudio",
-                    "You should upgrade your neutral item"
+                    "you should upgrade your neutral item"
                 );
             });
         });
@@ -190,7 +190,7 @@ describe("neutralItemReminder", () => {
                 ) as any;
                 expect(state2).toContainFact(
                     "playPrivateAudio",
-                    "You should upgrade your neutral item"
+                    "you should upgrade your neutral item"
                 );
             });
         });

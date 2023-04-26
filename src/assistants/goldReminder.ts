@@ -36,16 +36,16 @@ function handle(
 
     let fileName: string;
     if (gold <= 1500) {
-        fileName = "gold";
+        fileName = "resources/audio/gold.mp3";
     } else if (gold <= 2500) {
-        fileName = "gold-lots";
+        fileName = "you have a lot of gold";
     } else {
-        fileName = "gold-lots-really";
+        fileName = "you really have a lot of gold";
     }
 
     if (newMultiplier > oldMultiplier) {
         return [
-            new Fact(effect, `resources/audio/${fileName}.mp3`),
+            new Fact(effect, fileName),
             new Fact(lastRemindedGoldTopic, gold),
         ];
     } else if (oldMultiplier > newMultiplier) {

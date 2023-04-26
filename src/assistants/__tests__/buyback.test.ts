@@ -79,7 +79,7 @@ describe("buyback gold reminder", () => {
                     });
                     expect(results).toContainFact(
                         "playPrivateAudio",
-                        "resources/audio/buyback-warning.mp3"
+                        "you do not have buyback gold"
                     );
                 });
             });

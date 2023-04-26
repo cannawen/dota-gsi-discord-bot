@@ -116,7 +116,7 @@ describe("philosopher's stone assistant", () => {
                 test("reminds", () => {
                     expect(deadSeenStoneBeforeState).toContainFact(
                         "playPrivateAudio",
-                        "resources/audio/philosophers-stone-hold.mp3"
+                        "you can hold the philosopher's stone"
                     );
                 });
                 describe("almost respawn and holding stone", () => {
@@ -137,7 +137,7 @@ describe("philosopher's stone assistant", () => {
                         );
                         expect(result).toContainFact(
                             "playPrivateAudio",
-                            "resources/audio/philosophers-stone-return.mp3"
+                            "you can return the philosopher's stone"
                         );
                     });
                 });

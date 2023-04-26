@@ -70,8 +70,8 @@ export default new RuleDecoratorStartAndEndMinute(
                     // But they still do not have an appropriate neutral item
                     if (time - lastReminderTime >= TIME_BETWEEN_REMINDERS) {
                         const audio = items.neutral
-                            ? "You should upgrade your neutral item"
-                            : "resources/audio/no-neutral.mp3";
+                            ? "you should upgrade your neutral item"
+                            : "you do not have a neutral item";
                         // Remind them and update reminder time
                         return [
                             new Fact(topics.configurableEffect, audio),

@@ -17,7 +17,7 @@ export default new RuleDecoratorConfigurable(
         if (get(topics.time) === 0 && get(topics.inGame)! === true) {
             return new Fact(
                 topics.configurableEffect,
-                "resources/audio/glhf.mp3"
+                "good luck and have fun"
             );
         }
     })

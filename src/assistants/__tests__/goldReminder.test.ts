@@ -229,7 +229,7 @@ describe("gold reminder", () => {
                     });
                     expect(results).toContainFact(
                         "playPrivateAudio",
-                        "resources/audio/gold-lots.mp3"
+                        "you have a lot of gold"
                     );
                 });
             });
@@ -243,7 +243,7 @@ describe("gold reminder", () => {
                     });
                     expect(results).toContainFact(
                         "playPrivateAudio",
-                        "resources/audio/gold-lots-really.mp3"
+                        "you really have a lot of gold"
                     );
                 });
             });

@@ -53,7 +53,7 @@ describe("wards", () => {
                 );
                 expect(noWardStateLater).toContainFact(
                     "playPrivateAudio",
-                    "resources/audio/wards.mp3"
+                    "buy wards"
                 );
             });
         });

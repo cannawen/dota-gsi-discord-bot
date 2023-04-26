@@ -30,7 +30,10 @@ export default [
                 rules.assistant.tormenter,
                 [],
                 (get) =>
-                    new Fact(topics.configurableEffect, "resources/audio/tormenter-spawned.mp3")
+                    new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/tormenters-up.mp3"
+                    )
             )
         )
     ),
