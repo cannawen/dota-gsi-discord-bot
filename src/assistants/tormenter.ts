@@ -30,7 +30,7 @@ export default [
                 rules.assistant.tormenter,
                 [],
                 (get) =>
-                    new Fact(topics.configurableEffect, "tormenter has spawned")
+                    new Fact(topics.configurableEffect, "resources/audio/tormenter-spawned.mp3")
             )
         )
     ),
@@ -46,7 +46,7 @@ export default [
                     return [
                         new Fact(
                             topics.configurableEffect,
-                            "Tormenter has respawned"
+                            "resources/audio/tormenters-up.mp3"
                         ),
                         new Fact(tormenterFallenTimeTopic, undefined),
                     ];
@@ -74,12 +74,12 @@ export default [
                 } else if (get(topics.time)! >= 20 * 60) {
                     return new Fact(
                         topics.configurableEffect,
-                        "Tormenter is alive"
+                        "resources/audio/tormenters-up.mp3"
                     );
                 } else {
                     return new Fact(
                         topics.configurableEffect,
-                        "Tormenter will spawn at 20 minutes"
+                        "resources/audio/tormenter-20-minutes.mp3"
                     );
                 }
                 return new Fact(topics.configurableEffect, message);

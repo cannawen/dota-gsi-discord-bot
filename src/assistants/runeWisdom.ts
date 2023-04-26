@@ -21,7 +21,7 @@ export default new RuleDecoratorInGame(
         new Rule(rules.assistant.runeWisdom, [topics.time], (get) => {
             const time = get(topics.time)!;
             if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
-                return new Fact(topics.configurableEffect, "wisdom rune soon");
+                return new Fact(topics.configurableEffect, "resources/audio/wisdom-rune-soon.mp3");
             }
         })
     )
