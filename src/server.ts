@@ -94,8 +94,15 @@ router.get("/coach/:studentId/", (req, res) => {
 });
 
 router.post("/coach/:studentId/start", (req, res) => {
-    if (engine.getSession(req.params.studentId) === undefined) {
-        engine.startCoachingSession(req.params.studentId);
+    const studentId = req.params.studentId;
+    const existingSession = engine.getSession(studentId);
+    if (existingSession) {
+        engine.setFact(
+            studentId,
+            new Fact(topics.privateAudioQueue, undefined)
+        );
+    } else {
+        engine.startCoachingSession(studentId);
     }
     res.status(200).send();
 });
