@@ -135,20 +135,33 @@ export default new Rule(
         });
 
         connection.receiver.speaking.on("start", (userId) => {
+            engine.updateChannelFact(
+                channelId,
+                new Fact(topics.discordAudioEnabled, false)
+            );
             transcribe(connection.receiver, userId)
-                .then((transcript) => {
-                    if (!transcript) return;
+                .then((utterance) => {
+                    if (!utterance) return;
                     // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
                     if (userId === "169619011238232073") {
-                        log.info("tts", transcript);
+                        log.info("tts", utterance);
                     }
-                    engine.updateChannelUtterance(channelId, transcript);
+                    engine.updateChannelFact(
+                        channelId,
+                        new Fact(topics.lastDiscordUtterance, utterance)
+                    );
                 })
                 .catch((error) => {
                     log.error(
                         "tts",
                         "Problem with transcription, %s",
                         error.message
+                    );
+                })
+                .finally(() => {
+                    engine.updateChannelFact(
+                        channelId,
+                        new Fact(topics.discordAudioEnabled, true)
                     );
                 });
         });

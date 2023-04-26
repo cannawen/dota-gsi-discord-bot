@@ -46,12 +46,9 @@ export class CustomEngine extends Engine {
         }
     }
 
-    public updateChannelUtterance(channelId: string, utterance: string) {
+    public updateChannelFact(channelId: string, fact: Fact<unknown>) {
         const studentId = this.channelIdToStudentId.get(channelId);
-        this.setFact(
-            studentId,
-            new Fact(topics.lastDiscordUtterance, utterance)
-        );
+        this.setFact(studentId, fact);
     }
 
     public getFactValue<T>(
