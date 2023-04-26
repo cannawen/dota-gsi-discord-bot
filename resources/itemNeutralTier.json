@@ -1,6 +1,7 @@
 {
     "1": [
         "item_tier1_token",
+        "item_faded_broach",
         "item_arcane_ring",
         "item_broom_handle",
         "item_mysterious_hat",
@@ -39,7 +40,6 @@
         "item_cloak_of_flames",
         "item_elven_tunic",
         "item_enchanted_quiver",
-        "item_mind_breaker",
         "item_ogre_seal_totem",
         "item_paladin_sword",
         "item_psychic_headband",
@@ -51,6 +51,7 @@
     ],
     "4": [
         "item_tier4_token",
+        "item_mind_breaker",
         "item_ascetic_cap",
         "item_flicker",
         "item_havoc_hammer",

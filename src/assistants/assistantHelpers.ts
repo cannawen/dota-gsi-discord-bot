@@ -1,5 +1,4 @@
 import fs from "fs";
-import Item from "../gsi-data-classes/Item";
 import path from "path";
 
 /**
