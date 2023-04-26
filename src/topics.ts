@@ -22,7 +22,9 @@ const gsi = {
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     // map
     dayTime: new Topic<boolean>("dayTime"),
-    inGame: new Topic<boolean>("inGame"),
+    inGame: new PersistentTopic<boolean>("inGame", {
+        persistAcrossGames: true,
+    }),
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),
     // player
