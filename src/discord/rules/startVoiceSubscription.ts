@@ -137,7 +137,7 @@ export default new Rule(
         connection.receiver.speaking.on("start", (userId) => {
             engine.updateChannelFact(
                 channelId,
-                new Fact(topics.discordAudioEnabled, false)
+                new Fact(topics.discordReadyToPlayAudio, false)
             );
             transcribe(connection.receiver, userId)
                 .then((utterance) => {
@@ -161,7 +161,7 @@ export default new Rule(
                 .finally(() => {
                     engine.updateChannelFact(
                         channelId,
-                        new Fact(topics.discordAudioEnabled, true)
+                        new Fact(topics.discordReadyToPlayAudio, true)
                     );
                 });
         });
