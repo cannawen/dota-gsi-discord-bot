@@ -5,5 +5,7 @@ import topics from "../topics";
 
 export default new Rule(rules.gsi.player, [topics.allData], (get) => {
     const player = get(topics.allData)!.player;
-    return new Fact(topics.gold, player?.gold);
+    if (player) {
+        return new Fact(topics.gold, player.gold);
+    }
 });
