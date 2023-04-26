@@ -4,7 +4,9 @@ import Rule from "../engine/Rule";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-const timeArrayTopic = topicManager.createTopic<number[]>("timeArray");
+const timeArrayTopic = topicManager.createTopic<number[]>("timeArray", {
+    persistAcrossGames: true,
+});
 
 function arrayFrom(start: number, end: number) {
     const arr = [];
@@ -18,15 +20,15 @@ export default [
     new Rule("debug_timeTracker", [topics.inGame, topics.time], (get) => {
         const inGame = get(topics.inGame)!;
         const time = get(topics.time)!;
-        const timeArray = get(timeArrayTopic) || [];
+        const timeArray = [...(get(timeArrayTopic) || [])];
         if (inGame) {
-            // This straight up modifies the db so we don't need to return a new fact to change the array
             timeArray.push(time);
         }
+        return new Fact(timeArrayTopic, timeArray);
     }),
     new Rule("debug_timeTracker_print", [topics.inGame], (get) => {
-        if (!get(topics.inGame)!) {
-            const timeArray = get(timeArrayTopic) || [];
+        const timeArray = get(timeArrayTopic) || [];
+        if (get(topics.inGame) === false && timeArray.length > 0) {
             const missingTimes = timeArray.reduce(
                 (memo: { prevTime: number; missingTimes: number[] }, time) => {
                     if (time === memo.prevTime + 1) {
