@@ -22,12 +22,12 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
-function isItemAppropriateForTime(name: string | undefined, time: number) {
+function isItemAppropriateForTime(id: string | undefined, time: number) {
     // Having no neutral item is never appropriate
-    if (name === undefined) {
+    if (id === undefined) {
         return false;
     }
-    const itemTier = helper.neutral.nameToTier(name);
+    const itemTier = helper.neutral.nameToTier(id);
     // Having an unclassified neutral item is always appropriate
     // This is probably a data issue on our end
     if (itemTier === Tier.UNKNOWN) {
@@ -51,7 +51,7 @@ export default new RuleDecoratorStartAndEndMinute(
                 const time = get(topics.time)!;
                 const lastReminderTime = get(lastReminderTimeTopic);
                 const appropriateItem = isItemAppropriateForTime(
-                    items.neutral?.name,
+                    items.neutral?.id,
                     time
                 );
 

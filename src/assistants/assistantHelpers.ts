@@ -34,6 +34,12 @@ export class NeutralItemHelper {
      * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8"));
      * const output = JSON.stringify(Object.fromEntries(Object.entries(x).map(([k,v]) => [k, v.map((itemName) => itemName.slice(Math.ceil(itemName.length/2)))])))
      */
+    /**
+     * To turn names into ids (mostly)
+     * const namesToId = Object.fromEntries(Object.entries(JSON.parse(fs.readFileSync(path.join("resources/items.json"), "utf8"))).map((a) => a.reverse())) as { [key: string]: string };
+     * const input = JSON.parse(fs.readFileSync(path.join("resources/itemNeutralTier.json"), "utf8")) as { [key: string]: string[] };
+     * const output = JSON.stringify(Object.fromEntries(Object.entries(input).map(([k, v]) => [k,v.map((itemName) => namesToId[itemName] || itemName),])));
+     */
     private tierToNameObject = JSON.parse(
         fs.readFileSync(
             path.join(__dirname, "../../resources/itemNeutralTier.json"),

@@ -47,16 +47,16 @@ describe("assistantHelper", () => {
 
     describe("nameToTier", () => {
         test("Unknown neutral item", () => {
-            expect(sut.nameToTier("Healing Salve")).toBe(Tier.UNKNOWN);
+            expect(sut.nameToTier("item_flask")).toBe(Tier.UNKNOWN);
         });
         test("Trusty Shovel", () => {
-            expect(sut.nameToTier("Trusty Shovel")).toBe(Tier.ONE);
+            expect(sut.nameToTier("item_trusty_shovel")).toBe(Tier.ONE);
         });
         test("Philosopher's Stone", () => {
-            expect(sut.nameToTier("Philosopher's Stone")).toBe(Tier.TWO);
+            expect(sut.nameToTier("item_philosophers_stone")).toBe(Tier.TWO);
         });
         test("Pirate Hat", () => {
-            expect(sut.nameToTier("Pirate Hat")).toBe(Tier.FIVE);
+            expect(sut.nameToTier("item_pirate_hat")).toBe(Tier.FIVE);
         });
     });
 });
