@@ -39,16 +39,21 @@ expect.extend({
 
     toContainFact(actual, label, value) {
         if (actual === undefined) {
-            throw new Error("Did not recieve any Facts. Recieved undefined");
+            return {
+                pass: false,
+                message: () => "Did not recieve any Fact. Recieved undefined",
+            };
         }
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
         if (factArray.length === 0) {
-            throw new Error(
-                `Received ${JSON.stringify(
-                    actual
-                )}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
-            );
+            return {
+                pass: false,
+                message: () =>
+                    `Received ${JSON.stringify(
+                        actual
+                    )}. Expected to recieve at least one Fact objects`,
+            };
         }
 
         const factsMatchingTopic = (actualArr as Fact<unknown>[]).filter(
@@ -80,7 +85,10 @@ expect.extend({
 
     toContainTopic(actual, label) {
         if (actual === undefined) {
-            throw new Error("Did not recieve any Facts. Recieved undefined");
+            return {
+                pass: false,
+                message: () => "Did not recieve any Topics. Recieved undefined",
+            };
         }
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
