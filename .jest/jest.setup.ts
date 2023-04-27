@@ -93,9 +93,10 @@ expect.extend({
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
         if (factArray.length === 0) {
-            throw new Error(
-                `Received ${actual}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
-            );
+            return {
+                pass: false,
+                message: () => "Did not recieve any Topics. Recieved []",
+            };
         }
 
         const fact = (actualArr as Fact<unknown>[]).find(
@@ -135,16 +136,51 @@ const getResults = (
     db: { [keys: string]: unknown },
     previousState?: Fact<unknown>[] | Fact<unknown> | undefined
 ) => {
+    let allState: { [keys: string]: unknown } = {};
+    if (rule.defaultValues) {
+        const defaultEntries = rule.defaultValues.map(([topic, value]) => [
+            topic.label,
+            value,
+        ]);
+        allState = Object.fromEntries(defaultEntries);
+    }
+    let out: Fact<unknown>[] = [];
+
     if (previousState) {
         const arrPreviousState = Array.isArray(previousState)
             ? previousState
             : [previousState];
-        return rule.then(
-            makeGetFunction({ ...factsToPlainObject(arrPreviousState), ...db })
-        );
+        allState = {
+            ...allState,
+            ...factsToPlainObject(arrPreviousState),
+            ...db,
+        };
     } else {
-        return rule.then(makeGetFunction(db));
+        allState = { ...allState, ...db };
     }
+
+    const getFn = makeGetFunction(allState);
+    const givenValues = rule.given.map((topic) => allState[topic.label]);
+    if (rule.when(givenValues, getFn)) {
+        const actionResult = rule.action(givenValues, getFn);
+        if (actionResult) {
+            if (Array.isArray(actionResult)) {
+                out = actionResult;
+            } else {
+                out.push(actionResult);
+            }
+        }
+    }
+    const thenResult = rule.then(makeGetFunction(allState));
+    if (thenResult) {
+        if (Array.isArray(thenResult)) {
+            out = [...out, ...thenResult];
+        } else {
+            out.push(thenResult);
+        }
+    }
+
+    return out;
 };
 
 global.getResults = getResults as any;

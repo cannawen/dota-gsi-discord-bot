@@ -23,7 +23,7 @@ describe("roshan", () => {
                 inGame: true,
                 lastDiscordUtterance: "The sky is blue",
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainTopic("playPublicAudio");
         });
     });
 

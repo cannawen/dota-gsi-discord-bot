@@ -59,14 +59,14 @@ const roshRulesArray = [
     new Rule(
         rules.assistant.roshan.killedEvent,
         [topics.time, topics.events],
-        (get) => {
-            if (roshanWasKilled(get(topics.events)!)) {
-                return new Fact(roshanDeathTimesTopic, [
-                    ...(get(roshanDeathTimesTopic) || []),
-                    get(topics.time)!,
-                ]);
-            }
-        }
+        (get) => {},
+        ([_, events]) => roshanWasKilled(events),
+        ([time, _], get) =>
+            new Fact(roshanDeathTimesTopic, [
+                ...get(roshanDeathTimesTopic)!,
+                time,
+            ]),
+        [[roshanDeathTimesTopic, []]]
     ),
 
     // When time is when roshan might be alive
