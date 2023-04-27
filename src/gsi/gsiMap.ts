@@ -20,13 +20,14 @@ function inGame(state: Dota2GameState) {
 }
 
 function getTimeFacts(oldTime: number | undefined, newTime: number) {
-    const timeFacts = [new Fact(topics.time, newTime)];
+    const timeFacts = [];
     if (oldTime && newTime > oldTime + 1 && newTime <= oldTime + 5) {
         // eslint-disable-next-line no-loops/no-loops
         for (let i = oldTime + 1; i < newTime; i++) {
             timeFacts.push(new Fact(topics.time, i));
         }
     }
+    timeFacts.push(new Fact(topics.time, newTime));
     return timeFacts;
 }
 
