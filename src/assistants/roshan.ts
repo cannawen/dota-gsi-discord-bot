@@ -42,6 +42,10 @@ function aliveMessage(deathTimes: number[], dayTime: boolean) {
     }
 }
 
+function lastRoshDeathTime(deathTimes: number[]) {
+    return deathTimes.at(-1);
+}
+
 function roshanWasKilled(events: DeepReadonly<Event[]>) {
     return events.reduce(
         (memo, event) => event.type === EventType.RoshanKilled || memo,
@@ -59,7 +63,7 @@ const roshRulesArray = [
     new Rule(
         rules.assistant.roshan.killedEvent,
         [topics.time, topics.events],
-        (get) => {},
+        () => {},
         ([_, events]) => roshanWasKilled(events),
         ([time, _], get) =>
             new Fact(roshanDeathTimesTopic, [
@@ -76,18 +80,15 @@ const roshRulesArray = [
         new Rule(
             rules.assistant.roshan.maybeAliveTime,
             [topics.time, roshanDeathTimesTopic],
-            (get) => {
-                if (
-                    get(topics.time)! ===
-                    get(roshanDeathTimesTopic)!.at(-1)! +
-                        ROSHAN_MINIMUM_SPAWN_TIME
-                ) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rosh-maybe.mp3"
-                    );
-                }
-            }
+            () => {},
+            ([time, deathTimes]) =>
+                time ===
+                lastRoshDeathTime(deathTimes)! + ROSHAN_MINIMUM_SPAWN_TIME,
+            () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/rosh-maybe.mp3"
+                )
         )
     ),
 
@@ -98,18 +99,15 @@ const roshRulesArray = [
         new Rule(
             rules.assistant.roshan.aliveTime,
             [topics.time, roshanDeathTimesTopic],
-            (get) => {
-                if (
-                    get(topics.time)! ===
-                    get(roshanDeathTimesTopic)!.at(-1)! +
-                        ROSHAN_MAXIMUM_SPAWN_TIME
-                ) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rosh-alive.mp3"
-                    );
-                }
-            }
+            () => {},
+            ([time, deathTimes]) =>
+                time ===
+                lastRoshDeathTime(deathTimes)! + ROSHAN_MAXIMUM_SPAWN_TIME,
+            () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/rosh-alive.mp3"
+                )
         )
     ),
     new RuleDecoratorConfigurable(
@@ -122,7 +120,7 @@ const roshRulesArray = [
                     return;
                 }
                 const deathTimes = get(roshanDeathTimesTopic) || [];
-                const deathTime = deathTimes?.at(-1);
+                const deathTime = lastRoshDeathTime(deathTimes)!;
                 const time = get(topics.time)!;
                 let response = aliveMessage(deathTimes, get(topics.dayTime)!);
 
