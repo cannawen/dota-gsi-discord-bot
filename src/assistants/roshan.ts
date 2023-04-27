@@ -27,8 +27,8 @@ const roshanDeathTimesTopic = topicManager.createTopic<number[]>(
 );
 
 // TODO add test for alive message
-function aliveMessage(killedTimes: number[], dayTime: boolean) {
-    const times = killedTimes.length;
+function aliveMessage(deathTimes: number[], dayTime: boolean) {
+    const times = deathTimes.length;
     if (times === 0) {
         return "Roshan is alive. Will drop aegis";
     }
@@ -121,30 +121,30 @@ const roshRulesArray = [
                 if (!roshStatusMessage(get(topics.lastDiscordUtterance)!)) {
                     return;
                 }
-                const killedTimes = get(roshanDeathTimesTopic) || [];
-                const killedTime = killedTimes?.at(-1);
+                const deathTimes = get(roshanDeathTimesTopic) || [];
+                const deathTime = deathTimes?.at(-1);
                 const time = get(topics.time)!;
-                let response = aliveMessage(killedTimes, get(topics.dayTime)!);
+                let response = aliveMessage(deathTimes, get(topics.dayTime)!);
 
-                if (killedTime) {
-                    if (time < killedTime + AEGIS_DURATION) {
+                if (deathTime) {
+                    if (time < deathTime + AEGIS_DURATION) {
                         response = `Roshan is dead. Aegis expires at ${
                             (helper.secondsToTimeString(
-                                killedTime + AEGIS_DURATION
+                                deathTime + AEGIS_DURATION
                             ),
                             true)
                         }`;
-                    } else if (time < killedTime + ROSHAN_MINIMUM_SPAWN_TIME) {
+                    } else if (time < deathTime + ROSHAN_MINIMUM_SPAWN_TIME) {
                         response = `Roshan is dead. May respawn at ${
                             (helper.secondsToTimeString(
-                                killedTime + ROSHAN_MINIMUM_SPAWN_TIME
+                                deathTime + ROSHAN_MINIMUM_SPAWN_TIME
                             ),
                             true)
                         }`;
-                    } else if (time < killedTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
+                    } else if (time < deathTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
                         response = `Roshan may be alive. Guaranteed respawn at ${
                             (helper.secondsToTimeString(
-                                killedTime + ROSHAN_MAXIMUM_SPAWN_TIME
+                                deathTime + ROSHAN_MAXIMUM_SPAWN_TIME
                             ),
                             true)
                         }`;
