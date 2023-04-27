@@ -46,7 +46,9 @@ function googleTranscribeRequest(requestData: Buffer): AxiosRequestConfig {
     };
 }
 
-function transcribeNetworkCall(audioBuffer: Buffer): Promise<string | void> {
+function transcribeNetworkCall(
+    audioBuffer: Buffer
+): Promise<string | undefined> {
     return axios(googleTranscribeRequest(audioBuffer)).then((response) => {
         if (response.data) {
             return response.data.result[0].alternative[0].transcript;
@@ -59,7 +61,7 @@ function transcribeNetworkCall(audioBuffer: Buffer): Promise<string | void> {
 function transcribe(
     receiver: Voice.VoiceReceiver,
     userId: string
-): Promise<string | void> {
+): Promise<string | undefined> {
     return new Promise((resolve) => {
         const stream = receiver.subscribe(userId, {
             end: {

@@ -48,7 +48,7 @@ export class CustomEngine extends Engine {
     public getFactValue<T>(
         studentId: string | null | undefined,
         topic: Topic<T>
-    ): T | void {
+    ): T | undefined {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {

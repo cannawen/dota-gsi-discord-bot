@@ -6,14 +6,14 @@ class Rule {
     public readonly label: string;
     public readonly given: Topic<unknown>[];
     public readonly then: (
-        get: <T>(topic: Topic<T>) => T | void
+        get: <T>(topic: Topic<T>) => T | undefined
     ) => Fact<unknown>[] | Fact<unknown> | void;
 
     constructor(
         label: string,
         given: Topic<unknown>[],
         then: (
-            get: <T>(topic: Topic<T>) => T | void
+            get: <T>(topic: Topic<T>) => T | undefined
         ) => Fact<unknown>[] | Fact<unknown> | void
     ) {
         this.label = label;

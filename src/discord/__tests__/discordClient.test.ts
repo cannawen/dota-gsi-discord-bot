@@ -29,7 +29,7 @@ describe("client", () => {
     });
 
     describe("interactions", () => {
-        let handleInteraction: (interaction: any) => void;
+        let handleInteraction: (interaction: any) => any;
 
         let spyOn: any;
         beforeEach(() => {

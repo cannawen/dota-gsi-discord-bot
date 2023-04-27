@@ -114,10 +114,9 @@ Object.values(allTopics).forEach((topic) => manager.registerTopic(topic));
 
 /**
  * These are topics that cross different modules
- * A module may still choose to store a locally owned topic
- * that no one else needs to know about,
- * in which case it can be declared inside the module
- * BUT IT STILL NEEDS TO BE REGISTERED TO BE PERSISTED PROPERLY
+ * A module may still choose to create a local topic
+ * But it must be created using topicManager
+ * so it can be registered properly
  */
 export default {
     ...allTopics,
