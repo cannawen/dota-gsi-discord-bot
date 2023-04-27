@@ -51,19 +51,23 @@ expect.extend({
             );
         }
 
-        const fact = (actualArr as Fact<unknown>[]).find(
+        const factsMatchingTopic = (actualArr as Fact<unknown>[]).filter(
             (f) => f.topic.label === label
         );
 
         let message: string;
-        const factExists = fact !== undefined;
+        const factExists = factsMatchingTopic.length > 0;
         message = factExists
             ? `Fact ${label} exists `
             : `Fact ${label} does not exist `;
-        const correctValue = this.equals(fact?.value, value);
+        const correctValue = factsMatchingTopic.reduce((memo, fact) => {
+            return memo || this.equals(fact.value, value);
+        }, false);
         message += correctValue
             ? `with value ${value}`
-            : `with incorrect value ${fact?.value} (expected ${value})`;
+            : `with incorrect value(s) ${factsMatchingTopic
+                  .map((fact) => fact.value)
+                  .join(", ")} (expected ${value})`;
         const pass = factExists && correctValue;
 
         return {
@@ -121,7 +125,7 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
 const getResults = (
     rule: Rule,
     db: { [keys: string]: unknown },
-    previousState?: Fact<unknown>[] | Fact<unknown> | void
+    previousState?: Fact<unknown>[] | Fact<unknown> | undefined
 ) => {
     if (previousState) {
         const arrPreviousState = Array.isArray(previousState)
