@@ -2,6 +2,7 @@ import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Item from "../gsi-data-classes/Item";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
@@ -43,42 +44,46 @@ function canCast(item: Item | null): boolean {
     return item.cooldown === 0;
 }
 
-export default new RuleDecoratorInGame(
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(
-            rules.assistant.neutralItemDigReminder,
-            [topics.alive, topics.items, topics.time],
-            (get) => {
-                const alive = get(topics.alive)!;
-                const items = get(topics.items)!;
-                const lastReminderTime = get(lastReminderTimeTopic);
-                const time = get(topics.time)!;
+function hasValidItem(items: PlayerItems) {
+    return (
+        [...items.backpack, items.neutral]
+            .filter(validNeutralItem)
+            .filter(canCast).length > 0
+    );
+}
 
-                const validItems = [...items.backpack, items.neutral]
-                    .filter(validNeutralItem)
-                    .filter(canCast);
-                // If we are dead or cannot cast any valid neutral items
-                // reset last reminder time
-                if (!alive || validItems.length === 0) {
-                    return new Fact(lastReminderTimeTopic, undefined);
-                }
-
-                // If we have never reminded the user before,
-                // Give them 15 seconds before we start reminding
-                if (!lastReminderTime) {
-                    return new Fact(lastReminderTimeTopic, time);
-                }
-                // If our last reminder time was more than 15 seconds ago
-                if (time >= lastReminderTime + TIME_BETWEEN_REMINDERS) {
-                    // Remind the user
-                    // And update the last reminder time
-                    return [
-                        new Fact(topics.configurableEffect, "dig"),
-                        new Fact(lastReminderTimeTopic, time),
-                    ];
-                }
-            }
+export default [
+    new Rule(
+        "reset reminder time",
+        [topics.alive, topics.items],
+        () => {},
+        ([alive, items]) => !alive || !hasValidItem(items),
+        () => new Fact(lastReminderTimeTopic, undefined)
+    ),
+    new Rule(
+        "give user some grace time if we have never reminded before",
+        [topics.alive, topics.items, topics.time],
+        () => {},
+        ([alive, items, _], get) =>
+            alive &&
+            hasValidItem(items) &&
+            get(lastReminderTimeTopic) === undefined,
+        ([_alive, _items, time]) => new Fact(lastReminderTimeTopic, time)
+    ),
+    new Rule(
+        "remind user to dig",
+        [topics.time, lastReminderTimeTopic],
+        () => {},
+        ([time, lastReminderTime]) =>
+            time >= lastReminderTime + TIME_BETWEEN_REMINDERS,
+        ([time, _]) => [
+            new Fact(topics.configurableEffect, "dig"),
+            new Fact(lastReminderTimeTopic, time),
+        ]
+    ),
+].map(
+    (rule) =>
+        new RuleDecoratorInGame(
+            new RuleDecoratorConfigurable(configTopic, rule)
         )
-    )
 );

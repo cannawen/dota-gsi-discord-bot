@@ -165,7 +165,7 @@ describe("neutral item dig reminder", () => {
                         lastNeutralItemDigReminderTimeTopic: 49,
                         time: 50,
                     });
-                    expect(result).toBeUndefined();
+                    expect(result).not.toContainTopic("playPrivateAudio");
                 });
             });
 
