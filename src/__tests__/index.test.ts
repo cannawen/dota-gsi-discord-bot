@@ -12,7 +12,7 @@ describe("during app startup", () => {
     test("should register all rules with engine", () => {
         registerEverything();
 
-        const debugRuleCount = 2;
+        const debugRuleCount = 0;
 
         const assistantCount = 19;
         const assistantExcessRuleCount = 11;
