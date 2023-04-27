@@ -65,6 +65,35 @@ describe("Engine", () => {
         });
     });
 
+    describe("when and action", () => {
+        test("when returns true", () => {
+            sut.register(
+                new Rule(
+                    "rule",
+                    [numberTopic],
+                    (get) => {},
+                    (values) => true,
+                    (values) => new Fact(numberTopic, 1)
+                )
+            );
+            sut.set(db, new Fact(numberTopic, 0));
+            expect(db.get(numberTopic)).toBe(1);
+        });
+        test("when returns false", () => {
+            sut.register(
+                new Rule(
+                    "rule",
+                    [numberTopic],
+                    (get) => {},
+                    (values) => false,
+                    (values) => new Fact(numberTopic, 1)
+                )
+            );
+            sut.set(db, new Fact(numberTopic, 0));
+            expect(db.get(numberTopic)).toBe(0);
+        });
+    });
+
     // test("register rule - add twice", () => {
     //     sut.register(
     //         new Rule("rule", [numberTopic, addOneTopic], (get) => {

@@ -63,17 +63,32 @@ function applyRules(
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.given, db))
             .reduce((memo, rule) => {
+                let returnMemo: Fact<unknown>[] = [];
+
+                if (rule.when && rule.when([])) {
+                    if (rule.action) {
+                        const action = rule.action([]);
+                        if (action) {
+                            if (Array.isArray(action)) {
+                                returnMemo = memo.concat(action);
+                            } else {
+                                returnMemo.push(action);
+                            }
+                        }
+                    }
+                }
+
                 // Process the rule
                 const out = rule.then((topic) => db.get(topic));
                 if (out) {
                     // Collect any database changes as a result of this rule being applied
                     if (Array.isArray(out)) {
-                        return memo.concat(out);
+                        returnMemo = memo.concat(out);
                     } else {
-                        memo.push(out);
+                        returnMemo.push(out);
                     }
                 }
-                return memo;
+                return returnMemo;
             }, [] as Fact<unknown>[])
     );
 }

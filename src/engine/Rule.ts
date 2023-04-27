@@ -12,17 +12,26 @@ class Rule {
     public readonly then: (
         get: <T>(topic: Topic<T>) => T | undefined
     ) => Fact<unknown>[] | Fact<unknown> | void;
+    public readonly when: ((values: unknown[]) => boolean) | undefined;
+    public readonly action:
+        | ((values: unknown[]) => Fact<unknown>[] | Fact<unknown> | void)
+        | undefined;
 
+    // eslint-disable-next-line max-params
     constructor(
         label: string,
         given: Topic<unknown>[],
         then: (
             get: <T>(topic: Topic<T>) => T | undefined
-        ) => Fact<unknown>[] | Fact<unknown> | void
+        ) => Fact<unknown>[] | Fact<unknown> | void,
+        when?: (values: unknown[]) => boolean,
+        action?: (values: unknown[]) => Fact<unknown>[] | Fact<unknown> | void
     ) {
         this.label = label;
         this.given = [...new Set(given)];
         this.then = then;
+        this.when = when;
+        this.action = action;
     }
 }
 
