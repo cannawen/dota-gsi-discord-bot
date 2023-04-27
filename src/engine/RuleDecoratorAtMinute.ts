@@ -16,7 +16,10 @@ class RuleDecoratorAtMinute extends Rule {
                     return inGameRule.then(get);
                 }
             },
-            ([dbTime], _) => dbTime === time * 60,
+            (values, get) => {
+                const dbTime = values.shift();
+                return rule.when(values, get) && dbTime === time * 60;
+            },
             (values, get) => {
                 values.shift();
                 return rule.action(values, get);

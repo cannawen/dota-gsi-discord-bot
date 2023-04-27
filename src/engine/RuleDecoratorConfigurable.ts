@@ -37,7 +37,9 @@ class RuleDecoratorConfigurable extends Rule {
                     );
                 }
             },
-            (_, get) => get(configTopic)! !== EffectConfig.NONE,
+            (values, get) =>
+                rule.when(values, get) &&
+                get(configTopic)! !== EffectConfig.NONE,
             (values, get) => {
                 const effect =
                     effectConfig.configToEffectTopic[get(configTopic)!];

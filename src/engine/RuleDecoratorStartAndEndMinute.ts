@@ -23,7 +23,8 @@ class RuleDecoratorStartAndEndMinute extends Rule {
 
                 return inGameRule.then(get);
             },
-            ([time], _) => {
+            (values, get) => {
+                const time = values.shift();
                 if (min && time < min * 60) {
                     return false;
                 }
@@ -31,7 +32,7 @@ class RuleDecoratorStartAndEndMinute extends Rule {
                     return false;
                 }
 
-                return true;
+                return rule.when(values, get);
             },
             (values, get) => {
                 values.shift();

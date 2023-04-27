@@ -14,7 +14,11 @@ class RuleDecoratorInGame extends Rule {
                     return rule.then(get);
                 }
             },
-            (_, get) => (get(topics.inGame) && get(topics.time) !== 0) || false,
+            (values, get) =>
+                (rule.when(values, get) &&
+                    get(topics.inGame) &&
+                    get(topics.time) !== 0) ||
+                false,
             rule.action,
             rule.defaultValues
         );
