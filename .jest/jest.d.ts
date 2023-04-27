@@ -4,7 +4,7 @@ import Rule from "../src/engine/Rule";
 
 declare global {
     function getResults(
-        rule: Rule,
+        rule: Rule | Rule[],
         db: { [keys: string]: unknown },
         previousState?: Fact<unknown>[] | Fact<unknown>
     ): Fact<unknown>[] | Fact<unknown>;

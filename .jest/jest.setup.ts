@@ -128,14 +128,25 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
         return memo;
     }, {});
 }
+// Taking a list of rules doesn't really work because our rules expect not to be run if the
+function getResults(
+    rule: Rule | Rule[],
+    db: { [keys: string]: unknown },
+    previousState?: Fact<unknown>[] | Fact<unknown> | undefined
+): Fact<unknown>[] {
+    if (Array.isArray(rule)) {
+        return rule.map((r) => getSingleResults(r, db, previousState)).flat();
+    } else {
+        return getSingleResults(rule, db, previousState);
+    }
+}
 
 // TODO refactor to be in function() format
-// TODO refactor to be able to take in a list of rules instead of just a single rule
-const getResults = (
+const getSingleResults = (
     rule: Rule,
     db: { [keys: string]: unknown },
     previousState?: Fact<unknown>[] | Fact<unknown> | undefined
-) => {
+): Fact<unknown>[] => {
     let allState: { [keys: string]: unknown } = {};
     if (rule.defaultValues) {
         const defaultEntries = rule.defaultValues.map(([topic, value]) => [
