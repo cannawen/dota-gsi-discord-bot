@@ -65,7 +65,7 @@ describe("Engine", () => {
         });
     });
 
-    describe("when and action", () => {
+    describe("when, action, and defaultValue", () => {
         beforeEach(() => {
             sut.register(
                 new Rule(
@@ -77,10 +77,7 @@ describe("Engine", () => {
                         new Fact(addOneTopic, false),
                         new Fact(numberTopic, number + 1),
                     ],
-                    [
-                        [numberTopic, 0],
-                        [addOneTopic, false],
-                    ]
+                    [[numberTopic, 0]]
                 )
             );
         });
