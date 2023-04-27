@@ -60,6 +60,15 @@ function applyRules(
             .filter((rule) =>
                 rule.given.find((topic) => topic.label === changedTopic.label)
             )
+            .map((rule) => {
+                rule.given.map((topic) => {
+                    const value = db.get(topic);
+                    if (value === undefined) {
+                        db.set(new Fact(topic, rule.defaultValues?.get(topic)));
+                    }
+                });
+                return rule;
+            })
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.given, db))
             .reduce((memo, rule) => {

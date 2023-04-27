@@ -76,17 +76,19 @@ describe("Engine", () => {
                     ([number, _]) => [
                         new Fact(addOneTopic, false),
                         new Fact(numberTopic, number + 1),
+                    ],
+                    [
+                        [numberTopic, 0],
+                        [addOneTopic, false],
                     ]
                 )
             );
         });
         test("when returns true", () => {
-            sut.set(db, new Fact(numberTopic, 0));
             sut.set(db, new Fact(addOneTopic, true));
             expect(db.get(numberTopic)).toBe(1);
         });
         test("when returns false", () => {
-            sut.set(db, new Fact(numberTopic, 0));
             sut.set(db, new Fact(addOneTopic, false));
             expect(db.get(numberTopic)).toBe(0);
         });
