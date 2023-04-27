@@ -28,7 +28,7 @@ const itemCosts: Array<[string, number]> = Object.entries(
 function randomItemCost(message: string) {
     try {
         const match = message.match(
-            /what (items? ?)should I buy .*?([0-9,]+)/i
+            /what (items? )?should I buy .*?([0-9,]+)/i
         );
         if (match === null) return;
         return parseInt(match[2].replace(/,/g, ""));
@@ -36,7 +36,7 @@ function randomItemCost(message: string) {
 }
 
 function whatShouldIBuy(message: string) {
-    return message.match(/^what (items? ?)(do|should) I (buy|get)$/i) !== null;
+    return message.match(/^what (items? )?(do|should) I (buy|get)$/i) !== null;
 }
 
 export default new RuleDecoratorConfigurable(
