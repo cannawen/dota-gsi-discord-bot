@@ -65,9 +65,11 @@ function applyRules(
             .reduce((memo, rule) => {
                 let returnMemo: Fact<unknown>[] = [];
 
-                if (rule.when && rule.when([])) {
+                const params = rule.given.map((topic) => db.get(topic));
+
+                if (rule.when && rule.when(params)) {
                     if (rule.action) {
-                        const action = rule.action([]);
+                        const action = rule.action(params);
                         if (action) {
                             if (Array.isArray(action)) {
                                 returnMemo = memo.concat(action);

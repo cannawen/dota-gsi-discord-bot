@@ -72,7 +72,7 @@ describe("Engine", () => {
                     "rule",
                     [numberTopic],
                     (get) => {},
-                    (values) => true,
+                    ([number]) => number === 0,
                     (values) => new Fact(numberTopic, 1)
                 )
             );
@@ -85,7 +85,7 @@ describe("Engine", () => {
                     "rule",
                     [numberTopic],
                     (get) => {},
-                    (values) => false,
+                    ([number]) => number === 1,
                     (values) => new Fact(numberTopic, 1)
                 )
             );
