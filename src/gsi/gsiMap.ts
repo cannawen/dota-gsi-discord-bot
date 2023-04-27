@@ -19,12 +19,23 @@ function inGame(state: Dota2GameState) {
     }
 }
 
+function getTimeFacts(oldTime: number | undefined, newTime: number) {
+    const timeFacts = [new Fact(topics.time, newTime)];
+    if (oldTime && newTime > oldTime + 1 && newTime <= oldTime + 5) {
+        // eslint-disable-next-line no-loops/no-loops
+        for (let i = oldTime + 1; i < newTime; i++) {
+            timeFacts.push(new Fact(topics.time, i));
+        }
+    }
+    return timeFacts;
+}
+
 export default new Rule(rules.gsi.map, [topics.allData], (get) => {
     const map = get(topics.allData)!.map;
     if (map) {
         return [
+            ...getTimeFacts(get(topics.time), map.clockTime),
             new Fact(topics.dayTime, map.dayTime),
-            new Fact(topics.time, map.clockTime),
             new Fact(topics.inGame, inGame(map.gameState)),
             new Fact(topics.paused, map.paused),
         ];
