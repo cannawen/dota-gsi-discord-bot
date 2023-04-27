@@ -1,6 +1,8 @@
 import Fact from "./Fact";
 import Topic from "./Topic";
 
+type getFn = <T>(topic: Topic<T>) => T | undefined;
+
 // TODO consider changing the get function to pass back an array of given values
 // so we don't need to use `get` to get our givens all the time
 // would need decorators to take out the givens they secretly added under the hood
@@ -10,31 +12,35 @@ class Rule {
     public readonly label: string;
     public readonly given: Topic<unknown>[];
     public readonly then: (
-        get: <T>(topic: Topic<T>) => T | undefined
+        get: getFn
     ) => Fact<unknown>[] | Fact<unknown> | void;
-    public readonly when: ((values: any[]) => boolean) | undefined;
-    public readonly action:
-        | ((values: any[]) => Fact<unknown>[] | Fact<unknown> | void)
-        | undefined;
-    public readonly defaultValues: Map<Topic<unknown>, unknown> | undefined;
+    public readonly when: (values: any[], get: getFn) => boolean;
+    public readonly action: (
+        values: any[],
+        get: getFn
+    ) => Fact<unknown>[] | Fact<unknown> | void;
+    public readonly defaultValues: [Topic<unknown>, unknown][] | undefined;
+    public readonly defaultValuesMap: Map<Topic<unknown>, unknown>;
 
     // eslint-disable-next-line max-params
     constructor(
         label: string,
         given: Topic<unknown>[],
-        then: (
-            get: <T>(topic: Topic<T>) => T | undefined
+        then: (get: getFn) => Fact<unknown>[] | Fact<unknown> | void,
+        when?: (values: any[], get: getFn) => boolean,
+        action?: (
+            values: any[],
+            get: getFn
         ) => Fact<unknown>[] | Fact<unknown> | void,
-        when?: (values: any[]) => boolean,
-        action?: (values: any[]) => Fact<unknown>[] | Fact<unknown> | void,
         defaultValues?: [Topic<unknown>, unknown][]
     ) {
         this.label = label;
-        this.given = [...new Set(given)];
+        this.given = given;
         this.then = then;
-        this.when = when;
-        this.action = action;
-        this.defaultValues = new Map(defaultValues);
+        this.when = when || (() => false);
+        this.action = action || (() => {});
+        this.defaultValues = defaultValues;
+        this.defaultValuesMap = new Map(defaultValues);
     }
 }
 

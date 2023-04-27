@@ -64,7 +64,9 @@ function applyRules(
                 rule.given.map((topic) => {
                     const value = db.get(topic);
                     if (value === undefined) {
-                        db.set(new Fact(topic, rule.defaultValues?.get(topic)));
+                        db.set(
+                            new Fact(topic, rule.defaultValuesMap?.get(topic))
+                        );
                     }
                 });
                 return rule;
@@ -76,15 +78,15 @@ function applyRules(
 
                 const params = rule.given.map((topic) => db.get(topic));
 
-                if (rule.when && rule.when(params)) {
-                    if (rule.action) {
-                        const action = rule.action(params);
-                        if (action) {
-                            if (Array.isArray(action)) {
-                                returnMemo = memo.concat(action);
-                            } else {
-                                returnMemo.push(action);
-                            }
+                if (rule.when(params, (topic) => db.get(topic))) {
+                    const action = rule.action(params, (topic) =>
+                        db.get(topic)
+                    );
+                    if (action) {
+                        if (Array.isArray(action)) {
+                            returnMemo = memo.concat(action);
+                        } else {
+                            returnMemo.push(action);
                         }
                     }
                 }

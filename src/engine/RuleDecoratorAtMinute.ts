@@ -8,11 +8,21 @@ import topics from "../topics";
 class RuleDecoratorAtMinute extends Rule {
     constructor(time: number, rule: Rule) {
         const inGameRule = new RuleDecoratorInGame(rule);
-        super(inGameRule.label, [...inGameRule.given, topics.time], (get) => {
-            if (get(topics.time) === time * 60) {
-                return inGameRule.then(get);
-            }
-        });
+        super(
+            inGameRule.label,
+            [topics.time, ...inGameRule.given],
+            (get) => {
+                if (get(topics.time) === time * 60) {
+                    return inGameRule.then(get);
+                }
+            },
+            ([dbTime], _) => dbTime === time * 60,
+            (values, get) => {
+                values.shift();
+                return rule.action(values, get);
+            },
+            rule.defaultValues
+        );
     }
 }
 
