@@ -12,9 +12,9 @@ class Rule {
     public readonly then: (
         get: <T>(topic: Topic<T>) => T | undefined
     ) => Fact<unknown>[] | Fact<unknown> | void;
-    public readonly when: ((values: unknown[]) => boolean) | undefined;
+    public readonly when: ((values: any[]) => boolean) | undefined;
     public readonly action:
-        | ((values: unknown[]) => Fact<unknown>[] | Fact<unknown> | void)
+        | ((values: any[]) => Fact<unknown>[] | Fact<unknown> | void)
         | undefined;
 
     // eslint-disable-next-line max-params
@@ -24,8 +24,8 @@ class Rule {
         then: (
             get: <T>(topic: Topic<T>) => T | undefined
         ) => Fact<unknown>[] | Fact<unknown> | void,
-        when?: (values: unknown[]) => boolean,
-        action?: (values: unknown[]) => Fact<unknown>[] | Fact<unknown> | void
+        when?: (values: any[]) => boolean,
+        action?: (values: any[]) => Fact<unknown>[] | Fact<unknown> | void
     ) {
         this.label = label;
         this.given = [...new Set(given)];

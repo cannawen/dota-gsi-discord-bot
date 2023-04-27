@@ -73,7 +73,7 @@ describe("Engine", () => {
                     [numberTopic],
                     (get) => {},
                     ([number]) => number === 0,
-                    (values) => new Fact(numberTopic, 1)
+                    ([number]) => new Fact(numberTopic, number + 1)
                 )
             );
             sut.set(db, new Fact(numberTopic, 0));
@@ -86,7 +86,7 @@ describe("Engine", () => {
                     [numberTopic],
                     (get) => {},
                     ([number]) => number === 1,
-                    (values) => new Fact(numberTopic, 1)
+                    ([number]) => new Fact(numberTopic, number + 1)
                 )
             );
             sut.set(db, new Fact(numberTopic, 0));
