@@ -66,30 +66,28 @@ describe("Engine", () => {
     });
 
     describe("when and action", () => {
-        test("when returns true", () => {
+        beforeEach(() => {
             sut.register(
                 new Rule(
                     "rule",
-                    [numberTopic],
+                    [numberTopic, addOneTopic],
                     (get) => {},
-                    ([number]) => number === 0,
-                    ([number]) => new Fact(numberTopic, number + 1)
+                    ([_, shouldAddOne]) => shouldAddOne,
+                    ([number, _]) => [
+                        new Fact(addOneTopic, false),
+                        new Fact(numberTopic, number + 1),
+                    ]
                 )
             );
+        });
+        test("when returns true", () => {
             sut.set(db, new Fact(numberTopic, 0));
+            sut.set(db, new Fact(addOneTopic, true));
             expect(db.get(numberTopic)).toBe(1);
         });
         test("when returns false", () => {
-            sut.register(
-                new Rule(
-                    "rule",
-                    [numberTopic],
-                    (get) => {},
-                    ([number]) => number === 1,
-                    ([number]) => new Fact(numberTopic, number + 1)
-                )
-            );
             sut.set(db, new Fact(numberTopic, 0));
+            sut.set(db, new Fact(addOneTopic, false));
             expect(db.get(numberTopic)).toBe(0);
         });
     });
