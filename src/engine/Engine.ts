@@ -78,8 +78,8 @@ function applyRules(
 
                 const params = rule.given.map((topic) => db.get(topic));
 
-                if (rule.when(params, (topic) => db.get(topic))) {
-                    const action = rule.action(params, (topic) =>
+                if (rule.when([...params], (topic) => db.get(topic))) {
+                    const action = rule.action([...params], (topic) =>
                         db.get(topic)
                     );
                     if (action) {

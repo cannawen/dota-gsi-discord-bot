@@ -32,10 +32,16 @@ describe("playInterruptingAudio", () => {
 
     describe("discord audio disabled", () => {
         test("should reset state", () => {
-            const results = getResults(rule, {
-                playInterruptingAudioFile: "foo.mp3",
-                discordAudioEnabled: false,
-            });
+            const results = getResults(
+                rule,
+                {
+                    playInterruptingAudioFile: "foo.mp3",
+                    discordAudioEnabled: false,
+                    discordSubscriptionTopic: {},
+                },
+                undefined,
+                true
+            );
             expect(results).not.toContainTopic("playInterruptingAudioFile");
         });
     });

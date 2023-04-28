@@ -164,10 +164,7 @@ function getResults(
     newFacts.forEach((fact) => engine.set(factStore, fact));
     const result = factStore.getAllFacts();
     if (debug) {
-        console.log("Input");
-        console.log(db);
-        console.log("Output");
-        console.log(factsToPlainObject(result));
+        console.log("input:", db, "\n\noutput:", factsToPlainObject(result));
     }
     return result;
 }

@@ -19,6 +19,7 @@ describe("gsi map parsing", () => {
         });
         // TODO now that we are passing getResults through the real engine,
         // We no longer get the "work in progress" states so we need to test this differently
+        // (i.e. make a rule for secondTicks and count that the correct numbers of seconds have passed)
         // test("given previous time is 10, parses time 12 without skipping 11", () => {
         //     const time12 = getResults(
         //         rule,

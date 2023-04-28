@@ -14,11 +14,12 @@ class RuleDecoratorInGame extends Rule {
                     return rule.then(get);
                 }
             },
-            (values, get) =>
-                (rule.when(values, get) &&
-                    get(topics.inGame) &&
-                    get(topics.time) !== 0) ||
-                false,
+            (values, get) => {
+                const ruleWhen = rule.when(values, get);
+                const inGame = get(topics.inGame) || false;
+                const timeNot0 = get(topics.time) !== 0 || false;
+                return ruleWhen && inGame && timeNot0;
+            },
             rule.action,
             rule.defaultValues
         );
