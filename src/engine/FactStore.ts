@@ -27,4 +27,11 @@ export default class FactStore {
             this.facts.set(fact.topic.label, fact);
         }
     };
+
+    /**
+     * This is only used in tests right now
+     */
+    public getAllFacts(): Fact<unknown>[] {
+        return Array.from(this.facts.values());
+    }
 }

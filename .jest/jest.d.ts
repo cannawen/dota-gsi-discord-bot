@@ -8,7 +8,7 @@ declare global {
         db: { [keys: string]: unknown },
         previousState?: Fact<unknown>[] | Fact<unknown>,
         debug?: boolean
-    ): Fact<unknown>[] | undefined;
+    ): Fact<unknown>[];
 
     namespace jest {
         interface Matchers<R, T> {
