@@ -204,8 +204,8 @@ const getSingleResults = (
 
     const getFn = makeGetFunction(allState);
     const givenValues = rule.given.map((topic) => allState[topic.label]);
-    if (rule.when(givenValues, getFn)) {
-        const actionResult = rule.action(givenValues, getFn);
+    if (rule.when([...givenValues], getFn)) {
+        const actionResult = rule.action([...givenValues], getFn);
         if (actionResult) {
             if (Array.isArray(actionResult)) {
                 out = actionResult;
