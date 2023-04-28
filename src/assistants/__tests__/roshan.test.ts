@@ -11,7 +11,7 @@ const params = {
 
 describe("roshan", () => {
     describe("not asking about rosh", () => {
-        test("voice should return nothing", () => {
+        test("bot should not respond", () => {
             const results = getResults(roshanRules, {
                 ...params,
                 lastDiscordUtterance: "The sky is blue",
@@ -21,14 +21,14 @@ describe("roshan", () => {
     });
 
     describe("asking about rosh", () => {
-        test("voice should return roshan is alive", () => {
+        test("bot should respond roshan has never been killed", () => {
             const results = getResults(roshanRules, {
                 ...params,
                 lastDiscordUtterance: "What's roshan timer",
             });
             expect(results).toContainFact(
                 "playPublicAudio",
-                expect.stringContaining("Roshan is alive")
+                "Roshan has not been killed yet"
             );
         });
         describe("roshan killed", () => {
