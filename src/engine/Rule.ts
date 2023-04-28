@@ -3,10 +3,7 @@ import Topic from "./Topic";
 
 type getFn = <T>(topic: Topic<T>) => T | undefined;
 
-// TODO consider changing the get function to pass back an array of given values
-// so we don't need to use `get` to get our givens all the time
-// would need decorators to take out the givens they secretly added under the hood
-// either use var args or pass back values as an array
+// TODO have Rule take keys { label: string, given: [], when: () => boolean, then: () => Fact<unknown>[]}
 class Rule {
     // label is only used for logging purposes
     public readonly label: string;
