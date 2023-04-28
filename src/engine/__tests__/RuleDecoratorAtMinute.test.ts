@@ -12,13 +12,12 @@ describe("RuleDecoratorAtMinute", () => {
         topic = new Topic<boolean>("hasTriggeredClosure");
         rule = new RuleDecoratorAtMinute(
             10,
-            new Rule("test", [topic], (get) => new Fact(topic, true))
+            new Rule("test", [], (_) => new Fact(topic, true))
         );
     });
 
     test("should subscribe to time topic", () => {
         expect(rule.given).toContain(topics.time);
-        expect(rule.given).toContain(topic);
     });
 
     describe("in game", () => {
@@ -28,14 +27,14 @@ describe("RuleDecoratorAtMinute", () => {
                     inGame: true,
                     time: 10 * 60 - 1,
                 })
-            ).toBeUndefined();
+            ).not.toContainTopic("hasTriggeredClosure");
 
             expect(
                 getResults(rule, {
                     inGame: true,
                     time: 10 * 60 + 1,
                 })
-            ).toBeUndefined();
+            ).not.toContainTopic("hasTriggeredClosure");
         });
 
         test("time 10 minutes, should trigger then closure", () => {
@@ -49,7 +48,7 @@ describe("RuleDecoratorAtMinute", () => {
         test("should not trigger then closure", () => {
             expect(
                 getResults(rule, { inGame: false, time: 10 * 60 })
-            ).toBeUndefined();
+            ).not.toContainTopic("hasTriggeredClosure");
         });
     });
 });
