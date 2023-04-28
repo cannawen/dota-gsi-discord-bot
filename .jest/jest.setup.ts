@@ -135,7 +135,39 @@ function getResults(
     previousState?: Fact<unknown>[] | Fact<unknown> | undefined
 ): Fact<unknown>[] {
     if (Array.isArray(rule)) {
-        return rule.map((r) => getSingleResults(r, db, previousState)).flat();
+        const defaultFacts = rule.reduce((memo: Fact<unknown>[], r) => {
+            if (r.defaultValues) {
+                return [
+                    ...memo,
+                    ...r.defaultValues.map(
+                        ([topic, value]) => new Fact(topic, value)
+                    ),
+                ];
+            } else {
+                return memo;
+            }
+        }, []);
+        if (previousState) {
+            if (Array.isArray(previousState)) {
+                return rule
+                    .map((r) =>
+                        getSingleResults(r, db, [
+                            ...defaultFacts,
+                            ...previousState,
+                        ])
+                    )
+                    .flat();
+            } else {
+                defaultFacts.push(previousState);
+                return rule
+                    .map((r) => getSingleResults(r, db, defaultFacts))
+                    .flat();
+            }
+        } else {
+            return rule
+                .map((r) => getSingleResults(r, db, defaultFacts))
+                .flat();
+        }
     } else {
         return getSingleResults(rule, db, previousState);
     }
