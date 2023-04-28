@@ -53,36 +53,35 @@ function handle(
     }
 }
 
-export default new RuleDecoratorInGame(
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(
-            rules.assistant.goldReminder,
-            [topics.gold, topics.time],
-            (get) => {
-                const time = get(topics.time)!;
-                const gold = get(topics.gold)!;
-                const lastRemindedGold = get(lastRemindedGoldTopic) || 0;
+export default [
+    new Rule(
+        rules.assistant.goldReminder,
+        [topics.gold, topics.time],
+        (get) => {
+            const time = get(topics.time)!;
+            const gold = get(topics.gold)!;
+            const lastRemindedGold = get(lastRemindedGoldTopic) || 0;
 
-                let excessGold = gold;
+            let excessGold = gold;
 
-                if (time >= 30 * 60) {
-                    const buybackCost = get(topics.buybackCost)!;
-                    const buybackCooldown = get(topics.buybackCooldown)!;
+            if (time >= 30 * 60) {
+                const buybackCost = get(topics.buybackCost)!;
+                const buybackCooldown = get(topics.buybackCooldown)!;
 
-                    if (buybackCooldown === 0) {
-                        excessGold = gold - buybackCost;
-                    }
+                if (buybackCooldown === 0) {
+                    excessGold = gold - buybackCost;
                 }
-                return handle(
-                    excessGold,
-                    lastRemindedGold,
-                    time < 10 * 60
-                        ? SMALL_REMINDER_INCREMENT
-                        : LARGE_REMINDER_INCREMENT,
-                    topics.configurableEffect
-                );
             }
-        )
-    )
-);
+            return handle(
+                excessGold,
+                lastRemindedGold,
+                time < 10 * 60
+                    ? SMALL_REMINDER_INCREMENT
+                    : LARGE_REMINDER_INCREMENT,
+                topics.configurableEffect
+            );
+        }
+    ),
+]
+    .map((rule) => new RuleDecoratorInGame(rule))
+    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));
