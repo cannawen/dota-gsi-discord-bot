@@ -131,13 +131,20 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
 function getResults(
     rule: Rule | Rule[],
     db: { [keys: string]: unknown },
-    previousState?: Fact<unknown>[] | Fact<unknown> | undefined
+    previousState?: Fact<unknown>[] | Fact<unknown> | undefined,
+    debug?: boolean
 ): Fact<unknown>[] | undefined {
-    const reuslts = getResultsImpl(rule, db, previousState);
-    if (reuslts.length === 0) {
+    const results = getResultsImpl(rule, db, previousState);
+    if (debug) {
+        console.log("Inputs");
+        console.log(db);
+        console.log("Outputs");
+        console.log(factsToPlainObject(results));
+    }
+    if (results.length === 0) {
         return undefined;
     } else {
-        return reuslts;
+        return results;
     }
 }
 

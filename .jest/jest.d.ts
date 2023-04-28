@@ -6,7 +6,8 @@ declare global {
     function getResults(
         rule: Rule | Rule[],
         db: { [keys: string]: unknown },
-        previousState?: Fact<unknown>[] | Fact<unknown>
+        previousState?: Fact<unknown>[] | Fact<unknown>,
+        debug?: boolean
     ): Fact<unknown>[] | undefined;
 
     namespace jest {
