@@ -60,6 +60,7 @@ function applyRules(
             .filter((rule) =>
                 rule.given.find((topic) => topic.label === changedTopic.label)
             )
+            // Find default values
             .map((rule) => {
                 rule.given.map((topic) => {
                     const value = db.get(topic);
@@ -74,7 +75,7 @@ function applyRules(
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.given, db))
             .reduce((memo, rule) => {
-                let returnMemo: Fact<unknown>[] = [];
+                let returnMemo: Fact<unknown>[] = [...memo];
 
                 const params = rule.given.map((topic) => db.get(topic));
 
@@ -117,8 +118,8 @@ class Engine {
     public set = (db: FactStore, newFact: Fact<unknown>) => {
         if (hasFactChanged(db, newFact)) {
             db.set(newFact);
-            const newFacts = applyRules(db, this.rules, newFact.topic);
-            newFacts.forEach((fact) => {
+            const out = applyRules(db, this.rules, newFact.topic);
+            out.forEach((fact) => {
                 this.set(db, fact);
             });
         }
