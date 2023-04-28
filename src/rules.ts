@@ -3,10 +3,7 @@
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 const assistant = {
-    buyback: {
-        availability: "buyback/availability",
-        warnNoBuyback: "buyback/warn_no_buyback",
-    },
+    buyback: "Buyback",
     glhf: "Good luck and have fun",
     goldReminder: "Gold",
     lotus: "Lotus",

@@ -15,7 +15,7 @@ describe("during app startup", () => {
         const debugRuleCount = 0;
 
         const assistantCount = 19;
-        const assistantExcessRuleCount = 13;
+        const assistantExcessRuleCount = 14;
         const discordRuleCount = 4;
         const effectRuleCount = 4;
         const gsiRuleCount = 6;
