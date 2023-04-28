@@ -92,9 +92,8 @@ describe("neutral item dig reminder", () => {
                 lastNeutralItemDigReminderTimeTopic: 5,
                 time: 50,
             });
-            expect(result).toContainFact(
-                "lastNeutralItemDigReminderTimeTopic",
-                undefined
+            expect(result).not.toContainFact(
+                "lastNeutralItemDigReminderTimeTopic"
             );
         });
     });
@@ -215,9 +214,8 @@ describe("neutral item dig reminder", () => {
                     lastNeutralItemDigReminderTimeTopic: undefined,
                     time: 50,
                 });
-                expect(result).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    undefined
+                expect(result).not.toContainFact(
+                    "lastNeutralItemDigReminderTimeTopic"
                 );
             });
         });

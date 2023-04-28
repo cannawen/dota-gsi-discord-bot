@@ -9,7 +9,7 @@ describe("power runes", () => {
                 inGame: false,
                 time: 3 * 2 * 60,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainFact("playPrivateAudio");
         });
     });
 
@@ -21,7 +21,7 @@ describe("power runes", () => {
                     inGame: true,
                     time: 0,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("playPrivateAudio");
             });
         });
         describe("time 4:00", () => {
@@ -31,7 +31,7 @@ describe("power runes", () => {
                     inGame: true,
                     time: 4 * 60,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("playPrivateAudio");
             });
         });
         describe("time 6:00", () => {

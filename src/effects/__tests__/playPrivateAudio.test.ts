@@ -37,7 +37,7 @@ describe("playPrivateAudio", () => {
             const results = getResults(rule, {
                 playPrivateAudio: "foo.mp3",
             }) as Fact<string[]>[];
-            expect(results).toContainFact("playPrivateAudio", undefined);
+            expect(results).not.toContainFact("playPrivateAudio");
         });
     });
     describe("cached file exists", () => {

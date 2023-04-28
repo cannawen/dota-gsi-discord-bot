@@ -7,18 +7,16 @@ import topics from "../../topics";
 
 describe("RuleDecoratorConfigurable", () => {
     let configTopic: Topic<EffectConfig>;
-    let topic: Topic<number>;
     let rule: RuleDecoratorConfigurable;
 
     beforeEach(() => {
         configTopic = new Topic<EffectConfig>("configTopic");
-        topic = new Topic<number>("topic");
         rule = new RuleDecoratorConfigurable(
             configTopic,
             new Rule(
                 "test",
-                [topic],
-                (get) => new Fact(topics.configurableEffect, "foo.mp3")
+                [configTopic],
+                (_) => new Fact(topics.configurableEffect, "foo.mp3")
             )
         );
     });
@@ -38,6 +36,10 @@ describe("RuleDecoratorConfigurable", () => {
     });
     test("NONE", () => {
         const results = getResults(rule, { configTopic: EffectConfig.NONE });
-        expect(results).toBeUndefined();
+        expect(results).not.toContainTopic("playPrivateAudio");
+        expect(results).not.toContainTopic("playPublicAudio");
+        expect(results).not.toContainTopic("playInterruptingAudioFile");
+        expect(results).toHaveLength(1);
+        expect(results).toContainFact("configTopic", EffectConfig.NONE);
     });
 });

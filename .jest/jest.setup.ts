@@ -40,6 +40,9 @@ expect.extend({
     },
 
     toContainFact(actual, label, value) {
+        if (label === undefined) {
+            return (expect as any).toContainTopic(actual, value);
+        }
         if (actual === undefined) {
             return {
                 pass: false,
@@ -116,11 +119,6 @@ expect.extend({
         };
     },
 });
-
-const makeGetFunction =
-    (input: { [keys: string]: unknown }) =>
-    <T>(t: Topic<T>): T =>
-        input[t.label] as T;
 
 // NOTE: Cannot re-use the existing code in PersistentFactStore
 // because the import will mess with jest.mock("topicManager")

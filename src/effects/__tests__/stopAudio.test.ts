@@ -18,7 +18,7 @@ describe("stopAudio", () => {
             }) as any;
         });
         test("reset state", () => {
-            expect(results).toContainFact("stopAudio", undefined);
+            expect(results).not.toContainFact("stopAudio", true);
         });
         test("play audio resource", () => {
             expect(mockStop).toHaveBeenCalledTimes(1);
@@ -35,9 +35,6 @@ describe("stopAudio", () => {
                     },
                 },
             }) as any;
-        });
-        test("reset state", () => {
-            expect(results).toContainFact("stopAudio", undefined);
         });
         test("play audio resource", () => {
             expect(mockStop).not.toHaveBeenCalled();

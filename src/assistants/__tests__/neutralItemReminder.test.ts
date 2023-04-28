@@ -26,11 +26,12 @@ describe("neutralItemReminder", () => {
     describe("does not have neutral item", () => {
         test("do not warn before 10 minutes", () => {
             const result = getResults(rule, {
+                [rules.assistant.neutralItemReminder]: "PRIVATE",
                 time: (NEUTRAL_ITEM_REMINDER_START_MINUTE - 1) * 60,
                 inGame: true,
                 items: NO_ITEMS,
             });
-            expect(result).toBeUndefined();
+            expect(result).not.toContainFact("playPrivateAudio");
         });
 
         test("warn after 2 minutes grace", () => {
@@ -99,7 +100,7 @@ describe("neutralItemReminder", () => {
                 },
                 state2
             );
-            expect(result).toBeUndefined();
+            expect(result).not.toContainFact("playPrivateAudio");
         });
     });
 

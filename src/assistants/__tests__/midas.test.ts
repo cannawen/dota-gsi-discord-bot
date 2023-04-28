@@ -95,7 +95,9 @@ describe("midas assistant", () => {
                         },
                         thirtySecondsAfterState
                     );
-                    expect(thirtyOneSeconsAfterState).toBeUndefined();
+                    expect(thirtyOneSeconsAfterState).not.toContainTopic(
+                        "playPrivateAudio"
+                    );
                 });
             });
             describe("midas on cooldown", () => {

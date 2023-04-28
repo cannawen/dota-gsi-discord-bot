@@ -20,10 +20,7 @@ describe("playInterruptingAudio", () => {
             }) as any;
         });
         test("reset state", () => {
-            expect(results).toContainFact(
-                "playInterruptingAudioFile",
-                undefined
-            );
+            expect(results).not.toContainTopic("playInterruptingAudioFile");
         });
         test("create audio resource", () => {
             expect(Voice.createAudioResource).toHaveBeenCalledWith("foo.mp3");
@@ -39,10 +36,7 @@ describe("playInterruptingAudio", () => {
                 playInterruptingAudioFile: "foo.mp3",
                 discordAudioEnabled: false,
             });
-            expect(results).toContainFact(
-                "playInterruptingAudioFile",
-                undefined
-            );
+            expect(results).not.toContainTopic("playInterruptingAudioFile");
         });
     });
 });

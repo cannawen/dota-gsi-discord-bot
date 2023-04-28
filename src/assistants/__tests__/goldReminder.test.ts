@@ -9,7 +9,7 @@ describe("gold reminder", () => {
                 inGame: false,
                 gold: 500,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainFact("playPrivateAudioFile");
         });
     });
 

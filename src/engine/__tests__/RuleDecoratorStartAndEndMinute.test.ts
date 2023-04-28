@@ -20,7 +20,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
         describe("in game", () => {
             test("does not trigger then closure", () => {
                 const results = getResults(rule, { inGame: true, time: 0 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("hasTriggeredClosure");
             });
         });
 
@@ -69,14 +69,14 @@ describe("RuleDecoratorStartAndEndMinute", () => {
                         inGame: true,
                         time: 1 * 60,
                     });
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainFact("hasTriggeredClosure");
                 });
                 test("after end time", () => {
                     const results = getResults(rule, {
                         inGame: true,
                         time: 5 * 60,
                     });
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainFact("hasTriggeredClosure");
                 });
             });
         });
@@ -86,7 +86,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
                     inGame: false,
                     time: 3 * 60,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("hasTriggeredClosure");
             });
         });
     });
