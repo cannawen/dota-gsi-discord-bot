@@ -4,6 +4,8 @@ import Topic from "./Topic";
 type getFn = <T>(topic: Topic<T>) => T | undefined;
 
 // TODO have Rule take keys { label: string, given: [], when: () => boolean, then: () => Fact<unknown>[]}
+// TODO consider: a list of keys we are also interested in, but do not need to trigger on change for
+// so we don't need to pass back the entire get function
 class Rule {
     // label is only used for logging purposes
     public readonly label: string;
