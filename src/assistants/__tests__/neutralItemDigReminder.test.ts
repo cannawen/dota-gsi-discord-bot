@@ -1,10 +1,9 @@
 import { DeepReadonly } from "ts-essentials";
+import Fact from "../../engine/Fact";
 import Item from "../../gsi-data-classes/Item";
 import neutralItemRule from "../neutralItemDigReminder";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rules from "../../rules";
-
-// TODO do not expose lastNeutralItemDigReminderTimeTopic in tests
 
 const NO_ITEMS = new PlayerItems(
     [],
@@ -54,233 +53,141 @@ const SHOVEL_READY_IN_BACKPACK = new PlayerItems(
     null
 );
 
-const TWO_NEUTRAL_ITEMS_ONE_READY_A = new PlayerItems(
-    [],
-    [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
-    [],
-    null,
-    new Item("item_pirate_hat", "Pirate Hat", 1)
-);
-
-const TWO_NEUTRAL_ITEMS_ONE_READY_B = new PlayerItems(
-    [],
-    [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
-    [],
-    null,
-    new Item("item_pirate_hat", "Pirate Hat", 0)
-);
-
-const TWO_NEUTRAL_ITEMS_ONE_READY_C = new PlayerItems(
-    [],
-    [
-        new Item("item_trusty_shovel", "Trusty Shovel", 1),
-        new Item("item_pirate_hat", "Pirate Hat", 0),
-    ],
-    [],
-    null,
-    null
-);
+const params = {
+    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
+    alive: true,
+    inGame: true,
+    items: TRUSTY_SHOVEL,
+    time: 100,
+};
 
 describe("neutral item dig reminder", () => {
     describe("player is dead", () => {
-        test("invalidate reminder time", () => {
+        test("do not remind of shovel", () => {
             const result = getResults(neutralItemRule, {
-                [rules.assistant.neutralItemDigReminder]: "PRIVATE",
+                ...params,
                 alive: false,
-                inGame: true,
-                items: TRUSTY_SHOVEL,
-                lastNeutralItemDigReminderTimeTopic: 5,
-                time: 50,
             });
-            expect(result).not.toContainFact(
-                "lastNeutralItemDigReminderTimeTopic"
-            );
+            expect(result).not.toContainFact("playPrivateAudio");
         });
     });
 
     describe("player is alive", () => {
         describe("no neutral item", () => {
-            test("invalidate reminder time", () => {
+            test("do not remind of shovel", () => {
                 const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
+                    ...params,
                     items: NO_ITEMS,
-                    lastNeutralItemDigReminderTimeTopic: 5,
-                    time: 50,
                 });
-                expect(result).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    undefined
-                );
+                expect(result).not.toContainFact("playPrivateAudio");
             });
         });
 
-        describe("pirate hat is ready to dig", () => {
-            describe("never reminded before", () => {
-                test("update reminder time, but do not play tts", () => {
-                    const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                        alive: true,
-                        inGame: true,
-                        items: PIRATE_HAT,
-                        lastNeutralItemDigReminderTimeTopic: undefined,
-                        time: 50,
-                    });
-                    expect(result).toContainFact(
-                        "lastNeutralItemDigReminderTimeTopic",
-                        50
+        describe("neutral item is ready to dig", () => {
+            let seenShovelState: Fact<unknown>[];
+            beforeEach(() => {
+                seenShovelState = getResults(neutralItemRule, {
+                    ...params,
+                    items: TRUSTY_SHOVEL,
+                });
+            });
+            test("should not remind immediately after seeing shovel", () => {
+                expect(seenShovelState).not.toContainTopic("playPrivateAudio");
+            });
+            describe("14 seconds after", () => {
+                test("trusty shovel in neutral slot", () => {
+                    const resultAfter14Sec = getResults(
+                        neutralItemRule,
+                        {
+                            ...params,
+                            items: TRUSTY_SHOVEL,
+                            time: 114,
+                        },
+                        seenShovelState
                     );
-                    expect(result).not.toContainTopic("playPrivateAudio");
-                });
-            });
-        });
-
-        describe("shovel is ready to dig", () => {
-            describe("never reminded before", () => {
-                test("update reminder time, but do not play tts", () => {
-                    const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                        alive: true,
-                        inGame: true,
-                        items: TRUSTY_SHOVEL,
-                        lastNeutralItemDigReminderTimeTopic: undefined,
-                        time: 50,
-                    });
-                    expect(result).toContainFact(
-                        "lastNeutralItemDigReminderTimeTopic",
-                        50
+                    expect(resultAfter14Sec).not.toContainFact(
+                        "playPrivateAudio"
                     );
-                    expect(result).not.toContainTopic("playPrivateAudio");
                 });
             });
-            describe("reminded 1 second ago", () => {
-                test("do not change any state", () => {
-                    const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                        alive: true,
-                        inGame: true,
-                        items: TRUSTY_SHOVEL,
-                        lastNeutralItemDigReminderTimeTopic: 49,
-                        time: 50,
+            describe("15 seconds after", () => {
+                describe("item ready", () => {
+                    test("trusty shovel in neutral slot", () => {
+                        const resultAfter15Sec = getResults(
+                            neutralItemRule,
+                            {
+                                ...params,
+                                items: TRUSTY_SHOVEL,
+                                time: 115,
+                            },
+                            seenShovelState
+                        );
+                        expect(resultAfter15Sec).toContainFact(
+                            "playPrivateAudio",
+                            "dig"
+                        );
                     });
-                    expect(result).not.toContainTopic("playPrivateAudio");
-                });
-            });
-
-            describe("reminded 15 seonds ago", () => {
-                test("play tts and update reminder time", () => {
-                    const result = getResults(neutralItemRule, {
-                        [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                        alive: true,
-                        inGame: true,
-                        items: TRUSTY_SHOVEL,
-                        lastNeutralItemDigReminderTimeTopic: 35,
-                        time: 50,
+                    test("trusty shovel in backpack", () => {
+                        const resultAfter15Sec = getResults(
+                            neutralItemRule,
+                            {
+                                ...params,
+                                items: SHOVEL_READY_IN_BACKPACK,
+                                time: 115,
+                            },
+                            seenShovelState
+                        );
+                        expect(resultAfter15Sec).toContainFact(
+                            "playPrivateAudio",
+                            "dig"
+                        );
                     });
-                    expect(result).toContainFact(
-                        "lastNeutralItemDigReminderTimeTopic",
-                        50
-                    );
-                    expect(result).toContainFact("playPrivateAudio", "dig");
+                    test("pirate hat in neutral slot", () => {
+                        const resultAfter15Sec = getResults(
+                            neutralItemRule,
+                            {
+                                ...params,
+                                items: PIRATE_HAT,
+                                time: 115,
+                            },
+                            seenShovelState
+                        );
+                        expect(resultAfter15Sec).toContainFact(
+                            "playPrivateAudio",
+                            "dig"
+                        );
+                    });
                 });
-            });
-        });
-
-        describe("shovel is not ready", () => {
-            test("invalidate reminder time", () => {
-                const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: SHOVEL_ON_COOLDOWN,
-                    lastNeutralItemDigReminderTimeTopic: undefined,
-                    time: 50,
+                describe("item not ready", () => {
+                    test("in neutral slot", () => {
+                        const resultAfter15Sec = getResults(
+                            neutralItemRule,
+                            {
+                                ...params,
+                                items: SHOVEL_ON_COOLDOWN,
+                                time: 115,
+                            },
+                            seenShovelState
+                        );
+                        expect(resultAfter15Sec).not.toContainTopic(
+                            "playPrivateAudio"
+                        );
+                    });
+                    test("in backpack slot", () => {
+                        const resultAfter15Sec = getResults(
+                            neutralItemRule,
+                            {
+                                ...params,
+                                items: SHOVEL_ON_COOLDOWN_IN_BACKPACK,
+                                time: 115,
+                            },
+                            seenShovelState
+                        );
+                        expect(resultAfter15Sec).not.toContainTopic(
+                            "playPrivateAudio"
+                        );
+                    });
                 });
-                expect(result).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    undefined
-                );
-            });
-        });
-
-        describe("shovel is not ready in backpack", () => {
-            test("invalidate reminder time", () => {
-                const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: SHOVEL_ON_COOLDOWN_IN_BACKPACK,
-                    lastNeutralItemDigReminderTimeTopic: undefined,
-                    time: 50,
-                });
-                expect(result).not.toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic"
-                );
-            });
-        });
-
-        describe("shovel is ready to dig in backpack", () => {
-            test("play tts and update reminder time", () => {
-                const result = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: SHOVEL_READY_IN_BACKPACK,
-                    lastNeutralItemDigReminderTimeTopic: 35,
-                    time: 50,
-                });
-                expect(result).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    50
-                );
-                expect(result).toContainFact("playPrivateAudio", "dig");
-            });
-        });
-
-        describe("two neutral items, one of which is ready to cast", () => {
-            test("play tts and update reminder time", () => {
-                const resultA = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: TWO_NEUTRAL_ITEMS_ONE_READY_A,
-                    lastNeutralItemDigReminderTimeTopic: 35,
-                    time: 50,
-                });
-                expect(resultA).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    50
-                );
-                expect(resultA).toContainFact("playPrivateAudio", "dig");
-
-                const resultB = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: TWO_NEUTRAL_ITEMS_ONE_READY_B,
-                    lastNeutralItemDigReminderTimeTopic: 35,
-                    time: 50,
-                });
-                expect(resultB).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    50
-                );
-                expect(resultB).toContainFact("playPrivateAudio", "dig");
-
-                const resultC = getResults(neutralItemRule, {
-                    [rules.assistant.neutralItemDigReminder]: "PRIVATE",
-                    alive: true,
-                    inGame: true,
-                    items: TWO_NEUTRAL_ITEMS_ONE_READY_C,
-                    lastNeutralItemDigReminderTimeTopic: 35,
-                    time: 50,
-                });
-                expect(resultC).toContainFact(
-                    "lastNeutralItemDigReminderTimeTopic",
-                    50
-                );
-                expect(resultC).toContainFact("playPrivateAudio", "dig");
             });
         });
     });

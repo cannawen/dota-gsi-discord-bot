@@ -60,16 +60,15 @@ function applyRules(
             .filter((rule) =>
                 rule.given.find((topic) => topic.label === changedTopic.label)
             )
-            // Find default values
+            // Set default values
             .map((rule) => {
-                rule.given.map((topic) => {
-                    const value = db.get(topic);
-                    if (value === undefined) {
-                        db.set(
-                            new Fact(topic, rule.defaultValuesMap?.get(topic))
-                        );
-                    }
-                });
+                if (rule.defaultValues) {
+                    rule.defaultValues.forEach(([topic, value]) => {
+                        if (db.get(topic) === undefined) {
+                            db.set(new Fact(topic, value));
+                        }
+                    });
+                }
                 return rule;
             })
             // and there none of the givens are `undefined`

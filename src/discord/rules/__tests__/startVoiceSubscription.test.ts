@@ -136,8 +136,7 @@ describe("startVoiceSubscription", () => {
             test("returns discord subscription fact", () => {
                 expect(result).toContainFact(
                     "discordSubscriptionTopic",
-                    (voiceConnection.subscribe as jest.Mock).mock.results[0]
-                        .value
+                    "mock subscription"
                 );
             });
         });

@@ -1,10 +1,12 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
+import Fact from "../../engine/Fact";
 import roshanRules from "../roshan";
 
 const params = {
     Roshan: "PUBLIC",
     inGame: true,
     time: 100,
+    dayTime: true,
     events: [],
     lastDiscordUtterance: "",
 };
@@ -32,13 +34,13 @@ describe("roshan", () => {
             );
         });
         describe("roshan killed", () => {
-            let roshKilledState: any;
+            let roshKilledState: Fact<unknown>[];
 
             beforeEach(() => {
                 roshKilledState = getResults(roshanRules, {
                     ...params,
                     events: [new Event(EventType.RoshanKilled, 200)],
-                }) as any;
+                }).filter((fact) => fact.topic.label !== "events") as any;
             });
 
             test("voice should say rosh is dead & aegis reminder until 5:00 after killed event", () => {

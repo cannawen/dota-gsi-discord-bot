@@ -161,8 +161,7 @@ export default [
                     get(topics.time),
                     get(topics.dayTime)
                 )
-            ),
-        [[roshanDeathTimesTopic, []]]
+            )
     ),
 ].map(
     (rule) =>

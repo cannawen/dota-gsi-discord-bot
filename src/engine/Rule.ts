@@ -19,7 +19,6 @@ class Rule {
         get: getFn
     ) => Fact<unknown>[] | Fact<unknown> | void;
     public readonly defaultValues: [Topic<unknown>, unknown][] | undefined;
-    public readonly defaultValuesMap: Map<Topic<unknown>, unknown>;
 
     // eslint-disable-next-line max-params
     constructor(
@@ -39,7 +38,6 @@ class Rule {
         this.when = when || (() => false);
         this.action = action || (() => {});
         this.defaultValues = defaultValues;
-        this.defaultValuesMap = new Map(defaultValues);
     }
 }
 

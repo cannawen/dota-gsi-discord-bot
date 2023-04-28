@@ -2,6 +2,7 @@ import Item from "../../gsi-data-classes/Item";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rule from "../midas";
 import rules from "../../rules";
+import Fact from "../../engine/Fact";
 
 const MIDAS_CAN_CAST = new PlayerItems(
     [new Item("item_hand_of_midas", "Hand of Midas", 0)],
@@ -64,7 +65,7 @@ describe("midas assistant", () => {
                             items: MIDAS_CAN_CAST,
                         },
                         firstSeenMidasState
-                    ) as any;
+                    ) as Fact<unknown>[];
                     expect(fifteenSecondsAfterState).toContainFact(
                         "playPrivateAudio",
                         "resources/audio/midas.mpeg"
@@ -78,8 +79,10 @@ describe("midas assistant", () => {
                             inGame: true,
                             items: MIDAS_CAN_CAST_BACKPACK,
                         },
-                        fifteenSecondsAfterState
-                    ) as any;
+                        fifteenSecondsAfterState.filter(
+                            (fact) => fact.topic.label !== "playPrivateAudio"
+                        )
+                    ) as Fact<unknown>[];
                     expect(thirtySecondsAfterState).toContainFact(
                         "playPrivateAudio",
                         "resources/audio/midas.mpeg"
@@ -93,7 +96,9 @@ describe("midas assistant", () => {
                             inGame: true,
                             items: MIDAS_CAN_CAST,
                         },
-                        thirtySecondsAfterState
+                        thirtySecondsAfterState.filter(
+                            (fact) => fact.topic.label !== "playPrivateAudio"
+                        )
                     );
                     expect(thirtyOneSeconsAfterState).not.toContainTopic(
                         "playPrivateAudio"
