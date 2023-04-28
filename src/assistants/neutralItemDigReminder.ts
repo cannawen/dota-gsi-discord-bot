@@ -71,7 +71,7 @@ export default [
         ([_alive, _items, time]) => new Fact(lastReminderTimeTopic, time)
     ),
     new Rule(
-        "remind user to dig",
+        "remind user to dig and update last reminder time",
         [topics.time, lastReminderTimeTopic],
         () => {},
         ([time, lastReminderTime]) =>

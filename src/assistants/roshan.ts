@@ -10,7 +10,9 @@ import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = topicManager.createConfigTopic("Roshan");
+export const configTopic = topicManager.createConfigTopic(
+    rules.assistant.roshan
+);
 export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
@@ -36,7 +38,7 @@ function aliveMessage(deathTimes: number[], dayTime: boolean | undefined) {
         return "Roshan is alive. Will drop aegis and cheese";
     }
     if (dayTime === undefined) {
-        return "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing or refresher";
+        return "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing or refresher shard";
     }
     if (dayTime) {
         return "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing";
@@ -67,7 +69,7 @@ function roshStatusResponse(
 ) {
     let response = "Rosh status is unknown";
     if (deathTimes !== undefined && time !== undefined) {
-        const deathTime = lastRoshDeathTime(deathTimes)!;
+        const deathTime = lastRoshDeathTime(deathTimes);
         response = aliveMessage(deathTimes, dayTime);
 
         if (deathTime) {
@@ -98,10 +100,8 @@ function roshStatusResponse(
 }
 
 const roshRulesArray = [
-    // When an event notifies us that roshan is killed
-    // Add time to list of times roshan has fallen
     new Rule(
-        rules.assistant.roshan.killedEvent,
+        "when we get an event that says rosh is killed, add time to array",
         [topics.time, topics.events],
         () => {},
         ([_, events]) => roshanWasKilled(events),
@@ -113,17 +113,20 @@ const roshRulesArray = [
         [[roshanDeathTimesTopic, []]]
     ),
 
-    // When time is when roshan might be alive
-    // Play audio
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
-            rules.assistant.roshan.maybeAliveTime,
+            "when time is 8 minutes after last roshan death, play reminder",
             [topics.time, roshanDeathTimesTopic],
             () => {},
-            ([time, deathTimes]) =>
-                time ===
-                lastRoshDeathTime(deathTimes)! + ROSHAN_MINIMUM_SPAWN_TIME,
+            ([time, deathTimes]) => {
+                const lastDeathTime = lastRoshDeathTime(deathTimes);
+                if (lastDeathTime) {
+                    return time === lastDeathTime + ROSHAN_MINIMUM_SPAWN_TIME;
+                } else {
+                    return false;
+                }
+            },
             () =>
                 new Fact(
                     topics.configurableEffect,
@@ -131,18 +134,20 @@ const roshRulesArray = [
                 )
         )
     ),
-
-    // When time is when roshan should be alive
-    // Play audio
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
-            rules.assistant.roshan.aliveTime,
+            "when time is 11 minutes after last roshan death, play reminder",
             [topics.time, roshanDeathTimesTopic],
             () => {},
-            ([time, deathTimes]) =>
-                time ===
-                lastRoshDeathTime(deathTimes)! + ROSHAN_MAXIMUM_SPAWN_TIME,
+            ([time, deathTimes]) => {
+                const lastDeathTime = lastRoshDeathTime(deathTimes);
+                if (lastDeathTime) {
+                    return time === lastDeathTime + ROSHAN_MAXIMUM_SPAWN_TIME;
+                } else {
+                    return false;
+                }
+            },
             () =>
                 new Fact(
                     topics.configurableEffect,
@@ -153,7 +158,7 @@ const roshRulesArray = [
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
-            rules.assistant.roshan.voice,
+            "when asked what roshan status is, respond with status",
             [topics.lastDiscordUtterance],
             () => {},
             ([utterance]) => isRoshStatusRequest(utterance),

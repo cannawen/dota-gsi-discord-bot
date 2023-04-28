@@ -17,12 +17,7 @@ const assistant = {
     pause: "Pause",
     philosophersStone: "Philosopher's stone",
     randomItem: "Random item suggestion",
-    roshan: {
-        killedEvent: "roshan/killed_event/set_future_audio_state",
-        maybeAliveTime: "roshan/maybe_alive_time/play_audio",
-        aliveTime: "roshan/alive_time/play_audio",
-        voice: "roshan/voice",
-    },
+    roshan: "Roshan",
     runeBounty: "Bounty rune",
     runePower: "Power rune",
     runeWater: "Water rune",

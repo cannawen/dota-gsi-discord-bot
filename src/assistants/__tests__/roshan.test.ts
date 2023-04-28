@@ -1,26 +1,19 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
 import roshanRules from "../roshan";
-import rules from "../../rules";
 
-const killedRule = roshanRules.find(
-    (rule) => rule.label === rules.assistant.roshan.killedEvent
-)!;
-const maybeAliveRule = roshanRules.find(
-    (rule) => rule.label === rules.assistant.roshan.maybeAliveTime
-)!;
-const aliveRule = roshanRules.find(
-    (rule) => rule.label === rules.assistant.roshan.aliveTime
-)!;
-const voiceRule = roshanRules.find(
-    (rule) => rule.label === rules.assistant.roshan.voice
-)!;
+const params = {
+    Roshan: "PUBLIC",
+    inGame: true,
+    time: 100,
+    events: [],
+    lastDiscordUtterance: "",
+};
 
 describe("roshan", () => {
     describe("not asking about rosh", () => {
         test("voice should return nothing", () => {
-            const results = getResults(voiceRule, {
-                Roshan: "PUBLIC",
-                inGame: true,
+            const results = getResults(roshanRules, {
+                ...params,
                 lastDiscordUtterance: "The sky is blue",
             });
             expect(results).not.toContainTopic("playPublicAudio");
@@ -29,10 +22,8 @@ describe("roshan", () => {
 
     describe("asking about rosh", () => {
         test("voice should return roshan is alive", () => {
-            const results = getResults(voiceRule, {
-                Roshan: "PUBLIC",
-                inGame: true,
-                time: 1,
+            const results = getResults(roshanRules, {
+                ...params,
                 lastDiscordUtterance: "What's roshan timer",
             });
             expect(results).toContainFact(
@@ -44,19 +35,17 @@ describe("roshan", () => {
             let roshKilledState: any;
 
             beforeEach(() => {
-                roshKilledState = getResults(killedRule, {
-                    time: 100,
-                    inGame: true,
+                roshKilledState = getResults(roshanRules, {
+                    ...params,
                     events: [new Event(EventType.RoshanKilled, 200)],
                 }) as any;
             });
 
             test("voice should say rosh is dead & aegis reminder until 5:00 after killed event", () => {
                 const results = getResults(
-                    voiceRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         lastDiscordUtterance: "what time",
                         time: 100 + 4 * 60,
                     },
@@ -70,10 +59,9 @@ describe("roshan", () => {
 
             test("voice should say rosh is dead & respawn reminder until 8:00 after killed event", () => {
                 const results = getResults(
-                    voiceRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         lastDiscordUtterance: "what time",
                         time: 100 + 7 * 60,
                     },
@@ -87,10 +75,9 @@ describe("roshan", () => {
 
             test("play maybe audio 8 minutes from now", () => {
                 const results = getResults(
-                    maybeAliveRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         time: 100 + 8 * 60,
                     },
                     roshKilledState
@@ -103,10 +90,9 @@ describe("roshan", () => {
 
             test("voice should say rosh may be alive & respawn reminder until 11:00 after killed event", () => {
                 const results = getResults(
-                    voiceRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         lastDiscordUtterance: "what status",
                         time: 100 + 10 * 60,
                     },
@@ -122,10 +108,9 @@ describe("roshan", () => {
 
             test("play alive audio 11 minutes from now", () => {
                 const results = getResults(
-                    aliveRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         time: 100 + 11 * 60,
                     },
                     roshKilledState
@@ -138,10 +123,9 @@ describe("roshan", () => {
 
             test("voice should say rosh is alive 11:00 after killed event", () => {
                 const results = getResults(
-                    voiceRule,
+                    roshanRules,
                     {
-                        Roshan: "PUBLIC",
-                        inGame: true,
+                        ...params,
                         lastDiscordUtterance: "Whats roshan time",
                         time: 100 + 12 * 60,
                     },
