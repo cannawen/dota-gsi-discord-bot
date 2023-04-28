@@ -7,7 +7,7 @@ import rule from "../playAudioQueue";
 import Voice from "@discordjs/voice";
 
 describe("playAudioQueue", () => {
-    let result: Fact<unknown>;
+    let result: any;
     beforeEach(() => {
         result = getResults(rule, {
             discordReadyToPlayAudio: true,
@@ -17,7 +17,7 @@ describe("playAudioQueue", () => {
                     play: mockPlay,
                 },
             },
-        }) as Fact<unknown>;
+        }) as any;
     });
     test("plays first audio file", () => {
         expect(result).toContainFact("publicAudioQueue", ["bar.mp3"]);

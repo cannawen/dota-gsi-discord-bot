@@ -10,7 +10,7 @@ import Voice from "@discordjs/voice";
 
 describe("startVoiceSubscription", () => {
     describe("has guildId and channelId", () => {
-        let result: Fact<unknown>;
+        let result: any;
 
         let voiceConnection: Voice.VoiceConnection;
         let audioPlayer: Voice.AudioPlayer;
@@ -19,7 +19,7 @@ describe("startVoiceSubscription", () => {
                 discordGuildChannelId: "channelId",
                 discordGuildId: "guildId",
                 studentId: "studentId",
-            }) as Fact<unknown>;
+            }) as any;
 
             voiceConnection = (Voice.joinVoiceChannel as jest.Mock).mock
                 .results[0].value;

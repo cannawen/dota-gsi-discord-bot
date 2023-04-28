@@ -128,8 +128,21 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
         return memo;
     }, {});
 }
-// Taking a list of rules doesn't really work because our rules expect not to be run if the
 function getResults(
+    rule: Rule | Rule[],
+    db: { [keys: string]: unknown },
+    previousState?: Fact<unknown>[] | Fact<unknown> | undefined
+): Fact<unknown>[] | undefined {
+    const reuslts = getResultsImpl(rule, db, previousState);
+    if (reuslts.length === 0) {
+        return undefined;
+    } else {
+        return reuslts;
+    }
+}
+
+// Taking a list of rules doesn't really work because our rules expect not to be run if the
+function getResultsImpl(
     rule: Rule | Rule[],
     db: { [keys: string]: unknown },
     previousState?: Fact<unknown>[] | Fact<unknown> | undefined

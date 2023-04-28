@@ -7,7 +7,7 @@ declare global {
         rule: Rule | Rule[],
         db: { [keys: string]: unknown },
         previousState?: Fact<unknown>[] | Fact<unknown>
-    ): Fact<unknown>[] | Fact<unknown>;
+    ): Fact<unknown>[] | undefined;
 
     namespace jest {
         interface Matchers<R, T> {
