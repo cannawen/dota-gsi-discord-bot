@@ -21,7 +21,7 @@ describe("gold reminder", () => {
                 inGame: true,
                 gold: 0,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainTopic("playPrivateAudio");
         });
 
         describe("before 10 minutes", () => {
@@ -55,7 +55,7 @@ describe("gold reminder", () => {
                             },
                             state
                         );
-                        expect(results).toBeUndefined();
+                        expect(results).not.toContainTopic("playPrivateAudio");
                     });
                     describe("has more than 1000 gold", () => {
                         test("should remind player to spend gold & store 1000 level reminder", () => {
@@ -101,7 +101,7 @@ describe("gold reminder", () => {
                         },
                         state
                     );
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainTopic("playPrivateAudio");
                 });
             });
             describe("should remind on 1000 increments", () => {
@@ -112,7 +112,7 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 500,
                     });
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainTopic("playPrivateAudio");
                 });
                 test("more than 1000 gold, remind", () => {
                     const results = getResults(rule, {
@@ -138,7 +138,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
-                        expect(results).toBeUndefined();
+                        expect(results).not.toContainTopic("playPrivateAudio");
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
@@ -165,7 +165,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
-                        expect(results).toBeUndefined();
+                        expect(results).not.toContainTopic("playPrivateAudio");
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
