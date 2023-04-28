@@ -23,9 +23,9 @@ const lastRemindedGoldTopic = topicManager.createTopic<number>(
         persistAcrossRestarts: true,
     }
 );
-// const remindGoldIncrementTopic = topicManager.createTopic<number>(
-//     "remindGoldIncrementTopic"
-// );
+const remindGoldIncrementTopic = topicManager.createTopic<number>(
+    "remindGoldIncrementTopic"
+);
 // const excessGoldTopic = topicManager.createTopic<number>("excessGoldTopic");
 // const audioToPlayTopic = topicManager.createTopic<string>("audioToPlayTopic");
 
@@ -38,10 +38,7 @@ function oldMultiplier(get: any) {
 }
 
 function warningIncrement(get: any) {
-    const time = get(topics.time)!;
-    return time <= 10 * 60
-        ? SMALL_REMINDER_INCREMENT
-        : LARGE_REMINDER_INCREMENT;
+    return get(remindGoldIncrementTopic);
 }
 
 function warningAudio(get: any) {
@@ -67,21 +64,20 @@ function excessGold(get: any) {
 }
 
 export default [
-    // new Rule(
-    //     "when time is before 10:00, warn every 500 gold",
-    //     [topics.time],
-    //     () => {},
-    //     ([time]) => time <= 10 * 60,
-    //     () => new Fact(remindGoldIncrementTopic, SMALL_REMINDER_INCREMENT),
-    //     [[remindGoldIncrementTopic, SMALL_REMINDER_INCREMENT]]
-    // ),
-    // new Rule(
-    //     "when time is after 10:00, warn every 1000 gold",
-    //     [topics.time],
-    //     () => {},
-    //     ([time]) => time > 10 * 60,
-    //     () => new Fact(remindGoldIncrementTopic, LARGE_REMINDER_INCREMENT)
-    // ),
+    new Rule(
+        "when time is before 10:00, warn every 500 gold",
+        [topics.time],
+        () => {},
+        ([time]) => time <= 10 * 60,
+        () => new Fact(remindGoldIncrementTopic, SMALL_REMINDER_INCREMENT)
+    ),
+    new Rule(
+        "when time is after 10:00, warn every 1000 gold",
+        [topics.time],
+        () => {},
+        ([time]) => time > 10 * 60,
+        () => new Fact(remindGoldIncrementTopic, LARGE_REMINDER_INCREMENT)
+    ),
 
     // new Rule(
     //     "when time is before 30:00, remind about all your gold",
