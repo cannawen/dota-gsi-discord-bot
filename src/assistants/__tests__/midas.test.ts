@@ -2,7 +2,6 @@ import Item from "../../gsi-data-classes/Item";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rule from "../midas";
 import rules from "../../rules";
-import Fact from "../../engine/Fact";
 
 const MIDAS_CAN_CAST = new PlayerItems(
     [new Item("item_hand_of_midas", "Hand of Midas", 0)],
@@ -40,111 +39,84 @@ const NO_MIDAS = new PlayerItems(
     null
 );
 
+const params = {
+    [rules.assistant.midas]: "PRIVATE",
+    time: 100,
+    alive: true,
+    inGame: true,
+    items: MIDAS_CAN_CAST,
+};
+
 describe("midas assistant", () => {
     describe("alive", () => {
         describe("has midas", () => {
             describe("available to be cast", () => {
                 test("should remind every 15 seconds", () => {
-                    const firstSeenMidasState = getResults(rule, {
-                        [rules.assistant.midas]: "PRIVATE",
-                        time: 100,
-                        alive: true,
-                        inGame: true,
-                        items: MIDAS_CAN_CAST,
-                    }) as any;
-                    expect(firstSeenMidasState).not.toContainTopic(
-                        "playPrivateAudio"
-                    );
+                    const firstSeenMidasState = getResults(rule, params) as any;
+                    expect(firstSeenMidasState).not.toContainAudioEffect();
                     const fifteenSecondsAfterState = getResults(
                         rule,
                         {
-                            [rules.assistant.midas]: "PRIVATE",
+                            ...params,
                             time: 115,
-                            alive: true,
-                            inGame: true,
-                            items: MIDAS_CAN_CAST,
                         },
                         firstSeenMidasState
-                    ) as Fact<unknown>[];
-                    expect(fifteenSecondsAfterState).toContainFact(
-                        "playPrivateAudio",
+                    );
+                    expect(fifteenSecondsAfterState).toContainAudioEffect(
                         "resources/audio/midas.mpeg"
                     );
                     const thirtySecondsAfterState = getResults(
                         rule,
                         {
-                            [rules.assistant.midas]: "PRIVATE",
-                            time: 130,
-                            alive: true,
-                            inGame: true,
+                            ...params,
                             items: MIDAS_CAN_CAST_BACKPACK,
+                            time: 130,
                         },
-                        fifteenSecondsAfterState.filter(
-                            (fact) => fact.topic.label !== "playPrivateAudio"
-                        )
-                    ) as Fact<unknown>[];
-                    expect(thirtySecondsAfterState).toContainFact(
-                        "playPrivateAudio",
+                        removeEphemeralState(fifteenSecondsAfterState)
+                    );
+                    expect(thirtySecondsAfterState).toContainAudioEffect(
                         "resources/audio/midas.mpeg"
                     );
                     const thirtyOneSeconsAfterState = getResults(
                         rule,
                         {
-                            [rules.assistant.midas]: "PRIVATE",
+                            ...params,
                             time: 131,
-                            alive: true,
-                            inGame: true,
-                            items: MIDAS_CAN_CAST,
                         },
-                        thirtySecondsAfterState.filter(
-                            (fact) => fact.topic.label !== "playPrivateAudio"
-                        )
+                        removeEphemeralState(thirtySecondsAfterState)
                     );
-                    expect(thirtyOneSeconsAfterState).not.toContainTopic(
-                        "playPrivateAudio"
-                    );
+                    expect(
+                        thirtyOneSeconsAfterState
+                    ).not.toContainAudioEffect();
                 });
             });
             describe("midas on cooldown", () => {
                 test("should not remind about midas", () => {
                     const firstSeenMidasState = getResults(rule, {
-                        [rules.assistant.midas]: "PRIVATE",
-                        time: 100,
-                        alive: true,
-                        inGame: true,
+                        ...params,
                         items: MIDAS_ON_COOLDOWN,
-                    }) as any;
-                    expect(firstSeenMidasState).not.toContainTopic(
-                        "playPrivateAudio"
-                    );
+                    });
+                    expect(firstSeenMidasState).not.toContainAudioEffect();
                     const fifteenSecondsAfterState = getResults(
                         rule,
                         {
-                            [rules.assistant.midas]: "PRIVATE",
+                            ...params,
                             time: 115,
-                            alive: true,
-                            inGame: true,
                             items: MIDAS_ON_COOLDOWN,
                         },
                         firstSeenMidasState
-                    ) as any;
-                    expect(fifteenSecondsAfterState).not.toContainTopic(
-                        "playPrivateAudio"
                     );
+                    expect(fifteenSecondsAfterState).not.toContainAudioEffect();
                     const thirtySecondsAfterState = getResults(
                         rule,
                         {
-                            [rules.assistant.midas]: "PRIVATE",
+                            ...params,
                             time: 130,
-                            alive: true,
-                            inGame: true,
                             items: MIDAS_ON_COOLDOWN_BACKPACK,
                         },
                         fifteenSecondsAfterState
-                    ) as any;
-                    expect(thirtySecondsAfterState).not.toContainTopic(
-                        "playPrivateAudio"
                     );
+                    expect(thirtySecondsAfterState).not.toContainAudioEffect();
                 });
             });
         });
@@ -153,54 +125,39 @@ describe("midas assistant", () => {
     describe("dead", () => {
         test("should not remind about midas", () => {
             const firstSeenMidasState = getResults(rule, {
-                [rules.assistant.midas]: "PRIVATE",
-                time: 100,
+                ...params,
                 alive: false,
-                inGame: true,
-                items: MIDAS_CAN_CAST,
-            }) as any;
-            expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
+            });
+            expect(firstSeenMidasState).not.toContainAudioEffect();
             const fifteenSecondsAfterState = getResults(
                 rule,
                 {
-                    [rules.assistant.midas]: "PRIVATE",
+                    ...params,
                     time: 115,
                     alive: false,
-                    inGame: true,
-                    items: MIDAS_CAN_CAST,
                 },
                 firstSeenMidasState
-            ) as any;
-            expect(fifteenSecondsAfterState).not.toContainTopic(
-                "playPrivateAudio"
             );
+            expect(fifteenSecondsAfterState).not.toContainAudioEffect();
         });
     });
 
     describe("has no midas", () => {
         test("should not remind about midas", () => {
             const firstSeenMidasState = getResults(rule, {
-                [rules.assistant.midas]: "PRIVATE",
-                time: 100,
-                alive: true,
-                inGame: true,
+                ...params,
                 items: NO_MIDAS,
-            }) as any;
-            expect(firstSeenMidasState).not.toContainTopic("playPrivateAudio");
+            });
+            expect(firstSeenMidasState).not.toContainAudioEffect();
             const fifteenSecondsAfterState = getResults(
                 rule,
                 {
-                    [rules.assistant.midas]: "PRIVATE",
-                    time: 115,
-                    alive: true,
-                    inGame: true,
+                    ...params,
                     items: NO_MIDAS,
                 },
                 firstSeenMidasState
-            ) as any;
-            expect(fifteenSecondsAfterState).not.toContainTopic(
-                "playPrivateAudio"
             );
+            expect(fifteenSecondsAfterState).not.toContainAudioEffect();
         });
     });
 });
