@@ -19,8 +19,8 @@ export default new RuleDecoratorConfigurable(
         new Rule({
             label: rules.assistant.pause,
             trigger: [topics.paused],
-            then: (_t, _g, get) => {
-                if (get(topics.paused)!) {
+            then: ([paused]) => {
+                if (paused) {
                     return new Fact(
                         topics.configurableEffect,
                         "resources/audio/jeopardy.mp3"

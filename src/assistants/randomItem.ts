@@ -44,8 +44,7 @@ export default new RuleDecoratorConfigurable(
     new Rule({
         label: rules.assistant.glhf,
         trigger: [topics.lastDiscordUtterance],
-        then: (_t, _g, get) => {
-            const message = get(topics.lastDiscordUtterance)!;
+        then: ([message]) => {
             if (whatShouldIBuy(message)) {
                 const randomIndex = Math.floor(
                     Math.random() * itemCosts.length

@@ -25,8 +25,7 @@ export default new RuleDecoratorStartAndEndMinute(
         new Rule({
             label: rules.assistant.lotus,
             trigger: [topics.time],
-            then: (_t, _g, get) => {
-                const time = get(topics.time)!;
+            then: ([time]) => {
                 if ((time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0) {
                     return new Fact(
                         topics.configurableEffect,

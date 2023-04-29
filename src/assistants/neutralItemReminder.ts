@@ -46,10 +46,8 @@ export default new RuleDecoratorStartAndEndMinute(
         new Rule({
             label: rules.assistant.neutralItemReminder,
             trigger: [topics.items, topics.time],
-            then: (_t, _g, get) => {
-                const items = get(topics.items)!;
-                const time = get(topics.time)!;
-                const lastReminderTime = get(lastReminderTimeTopic);
+            given: [lastReminderTimeTopic],
+            then: ([items, time], [lastReminderTime]) => {
                 const appropriateItem = isItemAppropriateForTime(
                     items.neutral?.id,
                     time

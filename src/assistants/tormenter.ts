@@ -59,23 +59,22 @@ export default [
         new Rule({
             label: "tormenter voice",
             trigger: [topics.lastDiscordUtterance],
-            then: (_t, _g, get) => {
-                const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
+            given: [topics.time, tormenterFallenTimeTopic],
+            then: ([lastDiscordUtterance], [time, fallenTime]) => {
                 if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
                     return [
-                        new Fact(tormenterFallenTimeTopic, get(topics.time)),
+                        new Fact(tormenterFallenTimeTopic, time),
                         new Fact(topics.configurableEffect, "OK"),
                     ];
                 }
                 if (lastDiscordUtterance.match(/^torment status$/i)) {
-                    const fallenTime = get(tormenterFallenTimeTopic);
                     let message: string;
                     if (fallenTime) {
                         message = `Tormenter is dead. Will respawn at ${
                             (helper.secondsToTimeString(fallenTime + 10 * 60),
                             true)
                         }`;
-                    } else if (get(topics.time)! >= 20 * 60) {
+                    } else if (time >= 20 * 60) {
                         return new Fact(
                             topics.configurableEffect,
                             "resources/audio/tormenters-up.mp3"

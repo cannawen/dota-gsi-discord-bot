@@ -1,5 +1,6 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
@@ -38,14 +39,11 @@ export default new RuleDecoratorInGame(
         new Rule({
             label: rules.assistant.wards,
             trigger: [topics.time, topics.items],
-            then: (_t, _g, get) => {
+            given: [lastWardReminderTimeTopic, lastWardCountTopic],
+            then: ([time, items], [lastWardReminderTime, lastWardCount]) => {
                 const facts: Fact<unknown>[] = [];
-                const time = get(topics.time)!;
-                const lastWardReminderTime =
-                    get(lastWardReminderTimeTopic) || 0;
-                const lastWardCount = get(lastWardCountTopic) || 0;
 
-                const currentWardCount = get(topics.items)!
+                const currentWardCount = (items as PlayerItems)
                     .allItems()
                     .filter(
                         (item) =>
@@ -70,6 +68,10 @@ export default new RuleDecoratorInGame(
                 }
                 return facts;
             },
+            defaultValues: [
+                new Fact(lastWardReminderTimeTopic, 0),
+                new Fact(lastWardCountTopic, 0),
+            ],
         })
     )
 );

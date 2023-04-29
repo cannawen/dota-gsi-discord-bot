@@ -38,11 +38,15 @@ export default new RuleDecoratorInGame(
         configTopic,
         new Rule({
             label: rules.assistant.philosophersStone,
-            trigger: [topics.items, topics.respawnSeconds, topics.alive],
-            then: (_t, _g, get) => {
-                const items = get(topics.items)!;
-
-                const seenBefore = get(seenPhilosophersStoneTopic);
+            trigger: [topics.items, topics.alive, topics.respawnSeconds],
+            given: [
+                seenPhilosophersStoneTopic,
+                remindedAlreadyThisDeathCycleTopic,
+            ],
+            then: (
+                [items, alive, respawnSeconds],
+                [seenBefore, alreadyReminded]
+            ) => {
                 if (seenBefore === undefined && hasPhilosophersStone(items)) {
                     return new Fact(seenPhilosophersStoneTopic, true);
                 }
@@ -50,19 +54,12 @@ export default new RuleDecoratorInGame(
                     return;
                 }
 
-                const alive = get(topics.alive)!;
-
                 if (alive) {
                     return new Fact(
                         remindedAlreadyThisDeathCycleTopic,
                         undefined
                     );
                 } else {
-                    const respawnSeconds = get(topics.respawnSeconds)!;
-                    const alreadyReminded = get(
-                        remindedAlreadyThisDeathCycleTopic
-                    );
-
                     if (
                         alreadyReminded === undefined &&
                         items.neutral?.id !== "item_philosophers_stone"

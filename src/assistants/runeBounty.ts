@@ -22,8 +22,7 @@ export default new RuleDecoratorInGame(
         new Rule({
             label: rules.assistant.runeBounty,
             trigger: [topics.time],
-            then: (_t, _g, get) => {
-                const time = get(topics.time)!;
+            then: ([time]) => {
                 if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
                     return new Fact(
                         topics.configurableEffect,

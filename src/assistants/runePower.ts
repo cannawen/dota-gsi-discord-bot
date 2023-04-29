@@ -26,8 +26,7 @@ export default new RuleDecoratorStartAndEndMinute(
             new Rule({
                 label: rules.assistant.runePower,
                 trigger: [topics.time],
-                then: (_t, _g, get) => {
-                    const time = get(topics.time)!;
+                then: ([time]) => {
                     if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
                         return new Fact(
                             topics.configurableEffect,

@@ -95,16 +95,16 @@ function roshStatusResponse(
     return response;
 }
 
+// This needs fixing
+// https://github.com/cannawen/dota-gsi-discord-bot/issues/63
 export default [
     new Rule({
         label: "when we get an event that says rosh is killed, add time to array",
         trigger: [topics.events],
+        given: [topics.time, roshanDeathTimesTopic],
         when: ([events]) => roshanWasKilled(events),
-        then: (_t, _g, get) =>
-            new Fact(roshanDeathTimesTopic, [
-                ...get(roshanDeathTimesTopic)!,
-                get(topics.time)!,
-            ]),
+        then: (_, [time, deathTimes]) =>
+            new Fact(roshanDeathTimesTopic, [...deathTimes, time]),
         defaultValues: [new Fact(roshanDeathTimesTopic, [])],
     }),
     new Rule({
@@ -144,15 +144,12 @@ export default [
     new Rule({
         label: "when asked what roshan status is, respond with status",
         trigger: [topics.lastDiscordUtterance],
+        given: [roshanDeathTimesTopic, topics.time, topics.dayTime],
         when: ([utterance]) => isRoshStatusRequest(utterance),
-        then: (_t, _g, get) =>
+        then: (_, [deathTimes, time, dayTime]) =>
             new Fact(
                 topics.configurableEffect,
-                roshStatusResponse(
-                    get(roshanDeathTimesTopic),
-                    get(topics.time),
-                    get(topics.dayTime)
-                )
+                roshStatusResponse(deathTimes, time, dayTime)
             ),
     }),
 ].map(
