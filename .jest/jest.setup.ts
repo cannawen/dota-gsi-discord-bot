@@ -85,7 +85,9 @@ expect.extend({
             };
         }
         const actualArr = Array.isArray(actual) ? actual : [actual];
-        const factArray = actualArr.filter((fact) => fact instanceof Fact);
+        const factArray: Fact<unknown>[] = actualArr.filter(
+            (fact) => fact instanceof Fact
+        );
         if (factArray.length === 0) {
             return {
                 pass: false,
@@ -113,7 +115,12 @@ expect.extend({
                 ? () => "Found audio effect topic. Expected none"
                 : () =>
                       value
-                          ? `Did not find audio effect topic with value ${value}`
+                          ? `Did not find audio effect topic with value ${value}. Found actual values: [${factArray
+                                .filter((fact) =>
+                                    isAudioEffect(fact.topic.label)
+                                )
+                                .map((fact) => fact.value)
+                                .join(", ")}]`
                           : "Did not find any audio effect topics",
         };
     },
@@ -206,8 +213,9 @@ function getResults(
     }
     const factStore = new FactStore();
     const newFacts = plainObjectToFacts(db);
+    let prevStateArray: Fact<unknown>[] = [];
     if (previousState) {
-        const prevStateArray = Array.isArray(previousState)
+        prevStateArray = Array.isArray(previousState)
             ? previousState
             : [previousState];
         removeEphemeralState(prevStateArray).forEach((fact) =>
@@ -217,13 +225,24 @@ function getResults(
     newFacts.forEach((fact) => engine.set(factStore, fact));
     const result = factStore.getAllFacts();
     if (debug) {
-        console.log("input:", db, "\n\noutput:", factsToPlainObject(result));
+        console.log(
+            "prevState:",
+            factsToPlainObject(prevStateArray),
+            "\n\ninput:",
+            db,
+            "\n\nmerged:",
+            { ...factsToPlainObject(prevStateArray), ...db },
+            "\n\noutput:",
+            factsToPlainObject(result)
+        );
     }
     return result;
 }
 
 function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[] {
-    return facts.filter((fact) => !isAudioEffect(fact.topic.label));
+    return facts
+        .filter((fact) => !isAudioEffect(fact.topic.label))
+        .filter((fact) => fact.topic.label !== "events");
 }
 
 global.getResults = getResults;
