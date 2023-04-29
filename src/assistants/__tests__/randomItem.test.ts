@@ -7,12 +7,11 @@ describe("random item", () => {
     });
 
     test("responds you should buy an item", () => {
-        let results = getResults(rule, {
+        const results = getResults(rule, {
             [rules.assistant.randomItem]: "PUBLIC",
             lastDiscordUtterance: "what should I buy with 570 gold",
         });
-        expect(results).toContainFact(
-            "playPublicAudio",
+        expect(results).toContainAudioEffect(
             expect.stringContaining("Chainmail")
         );
     });

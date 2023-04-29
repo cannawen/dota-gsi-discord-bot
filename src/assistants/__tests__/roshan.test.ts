@@ -18,7 +18,7 @@ describe("roshan", () => {
                 ...params,
                 lastDiscordUtterance: "The sky is blue",
             });
-            expect(results).not.toContainTopic("playPublicAudio");
+            expect(results).not.toContainAudioEffect();
         });
     });
 
@@ -28,8 +28,7 @@ describe("roshan", () => {
                 ...params,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainFact(
-                "playPublicAudio",
+            expect(results).toContainAudioEffect(
                 "Roshan has not been killed yet"
             );
         });
@@ -40,7 +39,7 @@ describe("roshan", () => {
                 roshKilledState = getResults(roshanRules, {
                     ...params,
                     events: [new Event(EventType.RoshanKilled, 200)],
-                }).filter((fact) => fact.topic.label !== "events") as any;
+                });
             });
 
             test("voice should say rosh is dead & aegis reminder until 5:00 after killed event", () => {
@@ -53,8 +52,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     expect.stringContaining("Roshan is dead. Aegis expires at")
                 );
             });
@@ -69,8 +67,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     expect.stringContaining("Roshan is dead. May respawn at")
                 );
             });
@@ -84,8 +81,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     "resources/audio/rosh-maybe.mp3"
                 );
             });
@@ -100,8 +96,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     expect.stringContaining(
                         "Roshan may be alive. Guaranteed respawn at"
                     )
@@ -117,8 +112,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     "resources/audio/rosh-alive.mp3"
                 );
             });
@@ -133,8 +127,7 @@ describe("roshan", () => {
                     },
                     roshKilledState
                 );
-                expect(results).toContainFact(
-                    "playPublicAudio",
+                expect(results).toContainAudioEffect(
                     expect.stringContaining("Roshan is alive")
                 );
             });

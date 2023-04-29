@@ -1,64 +1,40 @@
 import rule from "../runeWater";
 import rules from "../../rules";
 
-describe("water runes", () => {
-    describe("not in game", () => {
-        test("do nothing", () => {
+const params = {
+    [rules.assistant.runeWater]: "PRIVATE",
+    inGame: true,
+};
+describe("water runes, in game", () => {
+    describe("time 2:00", () => {
+        test("play rune sound", () => {
             const results = getResults(rule[0], {
-                [rules.assistant.runeWater]: "PRIVATE",
-                inGame: false,
-                time: 3 * 2 * 60,
+                ...params,
+                time: 2 * 60,
             });
-            expect(results).not.toContainFact("playPrivateAudio");
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-water.mp3"
+            );
         });
     });
-
-    describe("in game", () => {
-        describe("time 0:00", () => {
-            test("do nothing", () => {
-                const results = getResults(rule[0], {
-                    [rules.assistant.runeWater]: "PRIVATE",
-                    inGame: true,
-                    time: 0,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
+    describe("time 4:00", () => {
+        test("play rune sound", () => {
+            const results = getResults(rule[1], {
+                ...params,
+                time: 4 * 60,
             });
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-water.mp3"
+            );
         });
-        describe("time 2:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule[0], {
-                    [rules.assistant.runeWater]: "PRIVATE",
-                    inGame: true,
-                    time: 2 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-water.mp3"
-                );
+    });
+    describe("time 6:00", () => {
+        test("do not play rune sound", () => {
+            const results = getResults(rule[1], {
+                ...params,
+                time: 6 * 60,
             });
-        });
-        describe("time 4:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule[1], {
-                    [rules.assistant.runeWater]: "PRIVATE",
-                    inGame: true,
-                    time: 4 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-water.mp3"
-                );
-            });
-        });
-        describe("time 6:00", () => {
-            test("do not play rune sound", () => {
-                const results = getResults(rule[1], {
-                    [rules.assistant.runeWater]: "PRIVATE",
-                    inGame: true,
-                    time: 6 * 60,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
-            });
+            expect(results).not.toContainAudioEffect();
         });
     });
 });

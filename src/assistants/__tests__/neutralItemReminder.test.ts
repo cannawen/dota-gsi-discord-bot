@@ -31,7 +31,7 @@ describe("neutralItemReminder", () => {
                 inGame: true,
                 items: NO_ITEMS,
             });
-            expect(result).not.toContainFact("playPrivateAudio");
+            expect(result).not.toContainAudioEffect();
         });
 
         test("warn after 2 minutes grace", () => {
@@ -40,7 +40,7 @@ describe("neutralItemReminder", () => {
                 time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
                 inGame: true,
                 items: NO_ITEMS,
-            }) as any;
+            });
             const result = getResults(
                 rule,
                 {
@@ -50,9 +50,8 @@ describe("neutralItemReminder", () => {
                     items: NO_ITEMS,
                 },
                 state
-            ) as any;
-            expect(result).toContainFact(
-                "playPrivateAudio",
+            );
+            expect(result).toContainAudioEffect(
                 "you do not have a neutral item"
             );
             const result2 = getResults(
@@ -65,8 +64,7 @@ describe("neutralItemReminder", () => {
                 },
                 result
             );
-            expect(result2).toContainFact(
-                "playPrivateAudio",
+            expect(result2).toContainAudioEffect(
                 "you do not have a neutral item"
             );
         });
@@ -79,7 +77,7 @@ describe("neutralItemReminder", () => {
                 time: NEUTRAL_ITEM_REMINDER_START_MINUTE * 60,
                 inGame: true,
                 items: NO_ITEMS,
-            }) as any;
+            });
             const state2 = getResults(
                 rule,
                 {
@@ -89,7 +87,7 @@ describe("neutralItemReminder", () => {
                     items: HAS_TIER_2_NEUTRAL_ITEM,
                 },
                 state1
-            ) as any;
+            );
             const result = getResults(
                 rule,
                 {
@@ -100,7 +98,7 @@ describe("neutralItemReminder", () => {
                 },
                 state2
             );
-            expect(result).not.toContainFact("playPrivateAudio");
+            expect(result).not.toContainAudioEffect();
         });
     });
 
@@ -112,7 +110,7 @@ describe("neutralItemReminder", () => {
                     time: 18 * 60, // Tier 2 zone
                     inGame: true,
                     items: HAS_TIER_2_NEUTRAL_ITEM,
-                }) as any;
+                });
                 const state2 = getResults(
                     rule,
                     {
@@ -122,8 +120,8 @@ describe("neutralItemReminder", () => {
                         items: HAS_TIER_2_NEUTRAL_ITEM,
                     },
                     state1
-                ) as any;
-                expect(state2).not.toContainTopic("playPrivateAudio");
+                );
+                expect(state2).not.toContainAudioEffect();
             });
         });
         describe("is one tier below", () => {
@@ -133,7 +131,7 @@ describe("neutralItemReminder", () => {
                     time: 28 * 60, // Tier 3 zone
                     inGame: true,
                     items: HAS_TIER_2_NEUTRAL_ITEM,
-                }) as any;
+                });
                 const state2 = getResults(
                     rule,
                     {
@@ -143,8 +141,8 @@ describe("neutralItemReminder", () => {
                         items: HAS_TIER_2_NEUTRAL_ITEM,
                     },
                     state1
-                ) as any;
-                expect(state2).not.toContainTopic("playPrivateAudio");
+                );
+                expect(state2).not.toContainAudioEffect();
             });
         });
         describe("is 2 tiers below", () => {
@@ -154,7 +152,7 @@ describe("neutralItemReminder", () => {
                     time: 38 * 60, // Tier 4 zone
                     inGame: true,
                     items: HAS_TIER_2_NEUTRAL_ITEM,
-                }) as any;
+                });
                 const state2 = getResults(
                     rule,
                     {
@@ -164,9 +162,8 @@ describe("neutralItemReminder", () => {
                         items: HAS_TIER_2_NEUTRAL_ITEM,
                     },
                     state1
-                ) as any;
-                expect(state2).toContainFact(
-                    "playPrivateAudio",
+                );
+                expect(state2).toContainAudioEffect(
                     "you should upgrade your neutral item"
                 );
             });
@@ -178,7 +175,7 @@ describe("neutralItemReminder", () => {
                     time: 60 * 60, // Tier 5 zone
                     inGame: true,
                     items: HAS_TIER_2_NEUTRAL_ITEM,
-                }) as any;
+                });
                 const state2 = getResults(
                     rule,
                     {
@@ -188,9 +185,8 @@ describe("neutralItemReminder", () => {
                         items: HAS_TIER_2_NEUTRAL_ITEM,
                     },
                     state1
-                ) as any;
-                expect(state2).toContainFact(
-                    "playPrivateAudio",
+                );
+                expect(state2).toContainAudioEffect(
                     "you should upgrade your neutral item"
                 );
             });

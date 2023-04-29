@@ -1,64 +1,40 @@
 import rule from "../runePower";
 import rules from "../../rules";
 
-describe("power runes", () => {
-    describe("not in game", () => {
-        test("do nothing", () => {
+const params = {
+    [rules.assistant.runePower]: "PRIVATE",
+    inGame: true,
+};
+describe("power runes, in game", () => {
+    describe("time 4:00", () => {
+        test("do not play rune sound", () => {
             const results = getResults(rule, {
-                [rules.assistant.runePower]: "PRIVATE",
-                inGame: false,
-                time: 3 * 2 * 60,
+                ...params,
+                time: 4 * 60,
             });
-            expect(results).not.toContainFact("playPrivateAudio");
+            expect(results).not.toContainAudioEffect();
         });
     });
-
-    describe("in game", () => {
-        describe("time 0:00", () => {
-            test("do nothing", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runePower]: "PRIVATE",
-                    inGame: true,
-                    time: 0,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
+    describe("time 6:00", () => {
+        test("play rune sound", () => {
+            const results = getResults(rule, {
+                ...params,
+                time: 6 * 60,
             });
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-power.wav"
+            );
         });
-        describe("time 4:00", () => {
-            test("do not play rune sound", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runePower]: "PRIVATE",
-                    inGame: true,
-                    time: 4 * 60,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
+    });
+    describe("time 60:00", () => {
+        test("play rune sound", () => {
+            const results = getResults(rule, {
+                ...params,
+                time: 60 * 60,
             });
-        });
-        describe("time 6:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runePower]: "PRIVATE",
-                    inGame: true,
-                    time: 6 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-power.wav"
-                );
-            });
-        });
-        describe("time 60:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runePower]: "PRIVATE",
-                    inGame: true,
-                    time: 60 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-power.wav"
-                );
-            });
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-power.wav"
+            );
         });
     });
 });

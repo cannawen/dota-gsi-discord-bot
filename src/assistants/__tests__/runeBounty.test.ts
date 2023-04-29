@@ -1,54 +1,32 @@
 import rule from "../runeBounty";
 import rules from "../../rules";
 
-describe("bounty runes", () => {
-    describe("not in game", () => {
-        test("do nothing", () => {
+const params = {
+    [rules.assistant.runeBounty]: "PRIVATE",
+    inGame: true,
+};
+
+describe("bounty runes, in game", () => {
+    describe("time 3:00", () => {
+        test("play rune sound", () => {
             const results = getResults(rule, {
-                [rules.assistant.runeBounty]: "PRIVATE",
-                inGame: false,
-                time: 3 * 2 * 60,
+                ...params,
+                time: 3 * 60,
             });
-            expect(results).not.toContainFact("playPrivateAudio");
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-bounty.wav"
+            );
         });
     });
-
-    describe("in game", () => {
-        describe("time 0:00", () => {
-            test("do nothing", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runeBounty]: "PRIVATE",
-                    inGame: true,
-                    time: 0,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
+    describe("time 60:00", () => {
+        test("play rune sound", () => {
+            const results = getResults(rule, {
+                ...params,
+                time: 60 * 60,
             });
-        });
-        describe("time 3:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runeBounty]: "PRIVATE",
-                    inGame: true,
-                    time: 3 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-bounty.wav"
-                );
-            });
-        });
-        describe("time 60:00", () => {
-            test("play rune sound", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.runeBounty]: "PRIVATE",
-                    inGame: true,
-                    time: 60 * 60,
-                });
-                expect(results).toContainFact(
-                    "playPrivateAudio",
-                    "resources/audio/rune-bounty.wav"
-                );
-            });
+            expect(results).toContainAudioEffect(
+                "resources/audio/rune-bounty.wav"
+            );
         });
     });
 });

@@ -98,13 +98,13 @@ function roshStatusResponse(
 export default [
     new Rule(
         "when we get an event that says rosh is killed, add time to array",
-        [topics.time, topics.events],
+        [topics.events],
         () => {},
-        ([_, events]) => roshanWasKilled(events),
-        ([time, _], get) =>
+        ([events]) => roshanWasKilled(events),
+        (_, get) =>
             new Fact(roshanDeathTimesTopic, [
                 ...get(roshanDeathTimesTopic)!,
-                time,
+                get(topics.time)!,
             ]),
         [[roshanDeathTimesTopic, []]]
     ),

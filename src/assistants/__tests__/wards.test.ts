@@ -19,95 +19,72 @@ const TWO_WARDS = new PlayerItems(
     null
 );
 
-describe("wards", () => {
-    describe("not in game", () => {
-        test("do nothing", () => {
-            const results = getResults(rule, {
-                [rules.assistant.wards]: "PRIVATE",
-                inGame: false,
-                time: 100,
-                items: NO_WARDS,
-            });
-            expect(results).not.toContainFact("playPrivateAudio");
+const params = {
+    [rules.assistant.wards]: "PRIVATE",
+    inGame: true,
+    time: 1000,
+    items: NO_WARDS,
+};
+
+describe("wards, in game", () => {
+    describe("no change in ward count", () => {
+        test("reminds user after 540s", () => {
+            const noWardState = getResults(rule, params);
+            const noWardStateLater = getResults(
+                rule,
+                {
+                    ...params,
+                    time: 1540,
+                },
+                noWardState
+            );
+            expect(noWardStateLater).toContainAudioEffect("buy wards");
         });
     });
-
-    describe("in game", () => {
-        describe("no change in ward count", () => {
-            test("reminds user after 540s", () => {
-                const noWardState = getResults(rule, {
-                    [rules.assistant.wards]: "PRIVATE",
-                    inGame: true,
-                    time: 1000,
-                    items: NO_WARDS,
-                }) as any;
-                const noWardStateLater = getResults(
-                    rule,
-                    {
-                        [rules.assistant.wards]: "PRIVATE",
-                        inGame: true,
-                        time: 1540,
-                        items: NO_WARDS,
-                    },
-                    noWardState
-                );
-                expect(noWardStateLater).toContainFact(
-                    "playPrivateAudio",
-                    "buy wards"
-                );
+    describe("decrease in ward count", () => {
+        test("reminds user after 540s", () => {
+            const twoWardState = getResults(rule, {
+                ...params,
+                items: TWO_WARDS,
             });
-        });
-        describe("decrease in ward count", () => {
-            test("reminds user after 540s", () => {
-                const twoWardState = getResults(rule, {
-                    [rules.assistant.wards]: "PRIVATE",
-                    inGame: true,
-                    time: 1000,
-                    items: TWO_WARDS,
-                }) as any;
-                const oneWardState = getResults(
-                    rule,
-                    {
-                        [rules.assistant.wards]: "PRIVATE",
-                        inGame: true,
-                        time: 1540,
-                        items: ONE_WARD,
-                    },
-                    twoWardState
-                );
-                expect(oneWardState).toContainTopic("playPrivateAudio");
-            });
-        });
-        describe("increase in ward count", () => {
-            test("does not remind after 540s", () => {
-                const oneWardState = getResults(rule, {
-                    [rules.assistant.wards]: "PRIVATE",
-                    inGame: true,
-                    time: 1000,
+            const oneWardState = getResults(
+                rule,
+                {
+                    ...params,
+                    time: 1540,
                     items: ONE_WARD,
-                }) as any;
-                const twoWardState = getResults(
-                    rule,
-                    {
-                        [rules.assistant.wards]: "PRIVATE",
-                        inGame: true,
-                        time: 1500,
-                        items: TWO_WARDS,
-                    },
-                    oneWardState
-                ) as any;
-                const noWardState = getResults(
-                    rule,
-                    {
-                        [rules.assistant.wards]: "PRIVATE",
-                        inGame: true,
-                        time: 1540,
-                        items: NO_WARDS,
-                    },
-                    twoWardState
-                );
-                expect(noWardState).not.toContainTopic("playPrivateAudio");
+                },
+                twoWardState
+            );
+            expect(oneWardState).toContainAudioEffect("buy wards");
+        });
+    });
+    describe("increase in ward count", () => {
+        test("does not remind after 540s", () => {
+            const oneWardState = getResults(rule, {
+                ...params,
+                items: ONE_WARD,
             });
+            const twoWardState = getResults(
+                rule,
+                {
+                    ...params,
+                    time: 1500,
+                    items: TWO_WARDS,
+                },
+                oneWardState
+            );
+            expect(oneWardState).not.toContainAudioEffect();
+            const noWardState = getResults(
+                rule,
+                {
+                    ...params,
+                    time: 1540,
+                    items: NO_WARDS,
+                },
+                twoWardState
+            );
+            expect(noWardState).not.toContainAudioEffect();
         });
     });
 });

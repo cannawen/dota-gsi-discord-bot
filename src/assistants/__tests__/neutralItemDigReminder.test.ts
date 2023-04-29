@@ -68,7 +68,7 @@ describe("neutral item dig reminder", () => {
                 ...params,
                 alive: false,
             });
-            expect(result).not.toContainFact("playPrivateAudio");
+            expect(result).not.toContainAudioEffect();
         });
     });
 
@@ -79,7 +79,7 @@ describe("neutral item dig reminder", () => {
                     ...params,
                     items: NO_ITEMS,
                 });
-                expect(result).not.toContainFact("playPrivateAudio");
+                expect(result).not.toContainAudioEffect();
             });
         });
 
@@ -92,7 +92,7 @@ describe("neutral item dig reminder", () => {
                 });
             });
             test("should not remind immediately after seeing shovel", () => {
-                expect(seenShovelState).not.toContainTopic("playPrivateAudio");
+                expect(seenShovelState).not.toContainAudioEffect();
             });
             describe("14 seconds after", () => {
                 test("trusty shovel in neutral slot", () => {
@@ -105,9 +105,7 @@ describe("neutral item dig reminder", () => {
                         },
                         seenShovelState
                     );
-                    expect(resultAfter14Sec).not.toContainFact(
-                        "playPrivateAudio"
-                    );
+                    expect(resultAfter14Sec).not.toContainAudioEffect();
                 });
             });
             describe("15 seconds after", () => {
@@ -122,10 +120,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainFact(
-                            "playPrivateAudio",
-                            "dig"
-                        );
+                        expect(resultAfter15Sec).toContainAudioEffect("dig");
                     });
                     test("trusty shovel in backpack", () => {
                         const resultAfter15Sec = getResults(
@@ -137,10 +132,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainFact(
-                            "playPrivateAudio",
-                            "dig"
-                        );
+                        expect(resultAfter15Sec).toContainAudioEffect("dig");
                     });
                     test("pirate hat in neutral slot", () => {
                         const resultAfter15Sec = getResults(
@@ -152,10 +144,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainFact(
-                            "playPrivateAudio",
-                            "dig"
-                        );
+                        expect(resultAfter15Sec).toContainAudioEffect("dig");
                     });
                 });
                 describe("item not ready", () => {
@@ -169,9 +158,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).not.toContainTopic(
-                            "playPrivateAudio"
-                        );
+                        expect(resultAfter15Sec).not.toContainAudioEffect();
                     });
                     test("in backpack slot", () => {
                         const resultAfter15Sec = getResults(
@@ -183,9 +170,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).not.toContainTopic(
-                            "playPrivateAudio"
-                        );
+                        expect(resultAfter15Sec).not.toContainAudioEffect();
                     });
                 });
             });

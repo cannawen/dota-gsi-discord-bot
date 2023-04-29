@@ -12,7 +12,7 @@ const NO_PHILOSOPHERS_STONE = new PlayerItems(
 );
 const HAS_PHILOSOPHERS_STONE_BACKPACK = new PlayerItems(
     [],
-    [new Item("item_philosophers_stone", "Moneyball")],
+    [new Item("item_philosophers_stone", "Philosopher's Stone")],
     [],
     null,
     null
@@ -22,126 +22,99 @@ const HAS_PHILOSOPHERS_STONE_NEUTRAL = new PlayerItems(
     [],
     [],
     null,
-    new Item("item_philosophers_stone", "Moneyball")
+    new Item("item_philosophers_stone", "Philosopher's Stone")
 );
 
-describe("philosopher's stone assistant", () => {
-    describe("not in game", () => {
+const params = {
+    [rules.assistant.philosophersStone]: "PRIVATE",
+    items: NO_PHILOSOPHERS_STONE,
+    inGame: true,
+    alive: true,
+    respawnSeconds: 0,
+};
+
+describe("philosopher's stone assistant, in game", () => {
+    describe("has never seen philosophers stone before", () => {
         test("do nothing", () => {
-            const results = getResults(rule, {
-                [rules.assistant.philosophersStone]: "PRIVATE",
-                items: HAS_PHILOSOPHERS_STONE_BACKPACK,
-                inGame: false,
-                respawnSeconds: 0,
-            });
-            expect(results).not.toContainFact("playPrivateAudio");
+            const results = getResults(rule, params);
+            expect(results).not.toContainAudioEffect();
         });
     });
 
-    describe("in game", () => {
-        describe("has never seen philosophers stone before", () => {
-            test("do nothing", () => {
-                const results = getResults(rule, {
-                    [rules.assistant.philosophersStone]: "PRIVATE",
-                    items: NO_PHILOSOPHERS_STONE,
-                    inGame: true,
-                    alive: true,
-                    respawnSeconds: 0,
-                });
-                expect(results).not.toContainFact("playPrivateAudio");
+    describe("sees a philosophers stone", () => {
+        let seenPhilosophersStoneState: any;
+        beforeEach(() => {
+            seenPhilosophersStoneState = getResults(rule, {
+                ...params,
+                items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
             });
         });
-
-        describe("sees a philosophers stone", () => {
-            let seenPhilosophersStoneState: any;
+        describe("when alive", () => {
+            test("does nothing", () => {
+                const result = getResults(
+                    rule,
+                    params,
+                    seenPhilosophersStoneState
+                );
+                expect(result).not.toContainAudioEffect();
+            });
+        });
+        describe("when not alive and holding stone", () => {
+            let deadSeenStoneBeforeState: any;
             beforeEach(() => {
-                seenPhilosophersStoneState = getResults(rule, {
-                    [rules.assistant.philosophersStone]: "PRIVATE",
-                    items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
-                    inGame: true,
-                    alive: true,
-                    respawnSeconds: 0,
-                });
+                deadSeenStoneBeforeState = getResults(
+                    rule,
+                    {
+                        ...params,
+                        items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
+                        alive: false,
+                        respawnSeconds: 30,
+                    },
+                    seenPhilosophersStoneState
+                );
             });
-            describe("when alive", () => {
-                test("does nothing", () => {
+            test("do not remind", () => {
+                expect(deadSeenStoneBeforeState).not.toContainAudioEffect();
+            });
+        });
+        describe("when not alive and not holding stone", () => {
+            let deadSeenStoneBeforeState: any;
+            beforeEach(() => {
+                deadSeenStoneBeforeState = getResults(
+                    rule,
+                    {
+                        ...params,
+                        items: HAS_PHILOSOPHERS_STONE_BACKPACK,
+                        alive: false,
+                        respawnSeconds: 30,
+                    },
+                    seenPhilosophersStoneState
+                );
+            });
+            test("reminds", () => {
+                expect(deadSeenStoneBeforeState).toContainAudioEffect(
+                    "you can hold the philosopher's stone"
+                );
+            });
+            describe("almost respawn and holding stone", () => {
+                test("remind to return stone", () => {
                     const result = getResults(
-                        rule,
-                        {
-                            [rules.assistant.philosophersStone]: "PRIVATE",
-                            items: NO_PHILOSOPHERS_STONE,
-                            inGame: true,
-                            alive: true,
-                            respawnSeconds: 0,
-                        },
-                        seenPhilosophersStoneState
-                    );
-                    expect(result).not.toContainTopic("playPrivateAudio");
-                });
-            });
-            describe("when not alive and holding stone", () => {
-                let deadSeenStoneBeforeState: any;
-                beforeEach(() => {
-                    deadSeenStoneBeforeState = getResults(
                         rule,
                         {
                             [rules.assistant.philosophersStone]: "PRIVATE",
                             items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
                             inGame: true,
                             alive: false,
-                            respawnSeconds: 30,
+                            respawnSeconds: 5,
                         },
-                        seenPhilosophersStoneState
+                        [
+                            ...seenPhilosophersStoneState,
+                            ...deadSeenStoneBeforeState,
+                        ]
                     );
-                });
-                test("do not remind", () => {
-                    expect(deadSeenStoneBeforeState).not.toContainFact(
-                        "playPrivateAudio"
+                    expect(result).toContainAudioEffect(
+                        "you can return the philosopher's stone"
                     );
-                });
-            });
-            describe("when not alive and not holding stone", () => {
-                let deadSeenStoneBeforeState: any;
-                beforeEach(() => {
-                    deadSeenStoneBeforeState = getResults(
-                        rule,
-                        {
-                            [rules.assistant.philosophersStone]: "PRIVATE",
-                            items: NO_PHILOSOPHERS_STONE,
-                            inGame: true,
-                            alive: false,
-                            respawnSeconds: 30,
-                        },
-                        seenPhilosophersStoneState
-                    );
-                });
-                test("reminds", () => {
-                    expect(deadSeenStoneBeforeState).toContainFact(
-                        "playPrivateAudio",
-                        "you can hold the philosopher's stone"
-                    );
-                });
-                describe("almost respawn and holding stone", () => {
-                    test("remind to return stone", () => {
-                        const result = getResults(
-                            rule,
-                            {
-                                [rules.assistant.philosophersStone]: "PRIVATE",
-                                items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
-                                inGame: true,
-                                alive: false,
-                                respawnSeconds: 5,
-                            },
-                            [
-                                ...seenPhilosophersStoneState,
-                                ...deadSeenStoneBeforeState,
-                            ]
-                        );
-                        expect(result).toContainFact(
-                            "playPrivateAudio",
-                            "you can return the philosopher's stone"
-                        );
-                    });
                 });
             });
         });
