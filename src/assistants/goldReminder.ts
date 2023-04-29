@@ -30,7 +30,6 @@ const excessGoldTopic = topicManager.createTopic<number>("excessGoldTopic");
 const audioToPlayTopic = topicManager.createTopic<string>("audioToPlayTopic");
 
 function newMultiplier(get: any) {
-    // return Math.floor(excessGold(get)! / warningIncrement(get));
     const gold = get(excessGoldTopic)!;
     const increment = get(remindGoldIncrementTopic)!;
     return Math.floor(gold / increment);
@@ -41,36 +40,6 @@ function oldMultiplier(get: any) {
     const increment = get(remindGoldIncrementTopic)!;
     return Math.floor(gold / increment);
 }
-
-// function warningIncrement(get: any) {
-//     // return get(remindGoldIncrementTopic);
-//     const time = get(topics.time)!;
-//     return time <= 10 * 60
-//         ? SMALL_REMINDER_INCREMENT
-//         : LARGE_REMINDER_INCREMENT;
-// }
-
-// function warningAudio(get: any) {
-// const gold = excessGold(get)!;
-// if (gold <= 1500) {
-//     return "resources/audio/gold.mp3";
-// } else if (gold <= 2500) {
-//     return "you have a lot of gold";
-// } else {
-//     return "you really have a lot of gold";
-// }
-// }
-
-// function excessGold(get: any) {
-//     const time = get(topics.time)!;
-//     const gold = get(topics.gold)!;
-//     const buybackCooldown = get(topics.buybackCooldown)!;
-//     if (time >= 30 * 60 && buybackCooldown === 0) {
-//         return gold - get(topics.buybackCost);
-//     } else {
-//         return gold;
-//     }
-// }
 
 export default [
     new Rule(
@@ -109,7 +78,10 @@ export default [
         ([time, _, buybackCooldown]) =>
             time >= 30 * 60 && buybackCooldown === 0,
         ([_, gold], get) =>
-            new Fact(excessGoldTopic, gold - get(topics.buybackCost)!)
+            new Fact(
+                excessGoldTopic,
+                Math.max(0, gold - get(topics.buybackCost)!)
+            )
     ),
 
     new Rule(
