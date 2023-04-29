@@ -5,9 +5,9 @@ import rules from "../../rules";
 const params = {
     [rules.assistant.goldReminder]: "PRIVATE",
     inGame: true,
-    time: 9 * 60,
-    buybackCooldown: 0,
     buybackCost: 0,
+    buybackCooldown: 0,
+    time: 9 * 60,
     gold: 0,
 };
 
@@ -37,8 +37,8 @@ describe("gold reminder", () => {
                 let result500Gold: Fact<unknown>[];
                 beforeEach(() => {
                     result500Gold = getResults(rule, {
-                        ...params,
-                        gold: 500,
+                            ...params,
+                            gold: 500,
                     });
                 });
                 describe("has not reminded before", () => {

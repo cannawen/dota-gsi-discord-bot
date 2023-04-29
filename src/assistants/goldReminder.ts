@@ -23,115 +23,120 @@ const lastRemindedGoldTopic = topicManager.createTopic<number>(
         persistAcrossRestarts: true,
     }
 );
-// const remindGoldIncrementTopic = topicManager.createTopic<number>(
-//     "remindGoldIncrementTopic"
-// );
-// const excessGoldTopic = topicManager.createTopic<number>("excessGoldTopic");
-// const audioToPlayTopic = topicManager.createTopic<string>("audioToPlayTopic");
+const remindGoldIncrementTopic = topicManager.createTopic<number>(
+    "remindGoldIncrementTopic"
+);
+const excessGoldTopic = topicManager.createTopic<number>("excessGoldTopic");
+const audioToPlayTopic = topicManager.createTopic<string>("audioToPlayTopic");
 
 function newMultiplier(get: any) {
-    return Math.floor(excessGold(get)! / warningIncrement(get));
+    // return Math.floor(excessGold(get)! / warningIncrement(get));
+    const gold = get(excessGoldTopic)!;
+    const increment = get(remindGoldIncrementTopic)!;
+    return Math.floor(gold / increment);
 }
 
 function oldMultiplier(get: any) {
-    return Math.floor(get(lastRemindedGoldTopic)! / warningIncrement(get));
+    const gold = get(lastRemindedGoldTopic)!;
+    const increment = get(remindGoldIncrementTopic)!;
+    return Math.floor(gold / increment);
 }
 
-function warningIncrement(get: any) {
-    // return get(remindGoldIncrementTopic);
-    const time = get(topics.time)!;
-    return time <= 10 * 60
-        ? SMALL_REMINDER_INCREMENT
-        : LARGE_REMINDER_INCREMENT;
-}
+// function warningIncrement(get: any) {
+//     // return get(remindGoldIncrementTopic);
+//     const time = get(topics.time)!;
+//     return time <= 10 * 60
+//         ? SMALL_REMINDER_INCREMENT
+//         : LARGE_REMINDER_INCREMENT;
+// }
 
-function warningAudio(get: any) {
-    const gold = excessGold(get)!;
-    if (gold <= 1500) {
-        return "resources/audio/gold.mp3";
-    } else if (gold <= 2500) {
-        return "you have a lot of gold";
-    } else {
-        return "you really have a lot of gold";
-    }
-}
+// function warningAudio(get: any) {
+// const gold = excessGold(get)!;
+// if (gold <= 1500) {
+//     return "resources/audio/gold.mp3";
+// } else if (gold <= 2500) {
+//     return "you have a lot of gold";
+// } else {
+//     return "you really have a lot of gold";
+// }
+// }
 
-function excessGold(get: any) {
-    const time = get(topics.time)!;
-    const gold = get(topics.gold)!;
-    const buybackCooldown = get(topics.buybackCooldown)!;
-    if (time >= 30 * 60 && buybackCooldown === 0) {
-        return gold - get(topics.buybackCost);
-    } else {
-        return gold;
-    }
-}
+// function excessGold(get: any) {
+//     const time = get(topics.time)!;
+//     const gold = get(topics.gold)!;
+//     const buybackCooldown = get(topics.buybackCooldown)!;
+//     if (time >= 30 * 60 && buybackCooldown === 0) {
+//         return gold - get(topics.buybackCost);
+//     } else {
+//         return gold;
+//     }
+// }
 
 export default [
-    // new Rule(
-    //     "when time is before 10:00, warn every 500 gold",
-    //     [topics.time],
-    //     () => {},
-    //     ([time]) => time <= 10 * 60,
-    //     () => new Fact(remindGoldIncrementTopic, SMALL_REMINDER_INCREMENT)
-    // ),
-    // new Rule(
-    //     "when time is after 10:00, warn every 1000 gold",
-    //     [topics.time],
-    //     () => {},
-    //     ([time]) => time > 10 * 60,
-    //     () => new Fact(remindGoldIncrementTopic, LARGE_REMINDER_INCREMENT)
-    // ),
+    new Rule(
+        "when time is before 10:00, warn every 500 gold",
+        [topics.time],
+        () => {},
+        ([time]) => time <= 10 * 60,
+        () => new Fact(remindGoldIncrementTopic, SMALL_REMINDER_INCREMENT)
+    ),
+    new Rule(
+        "when time is after 10:00, warn every 1000 gold",
+        [topics.time],
+        () => {},
+        ([time]) => time > 10 * 60,
+        () => new Fact(remindGoldIncrementTopic, LARGE_REMINDER_INCREMENT)
+    ),
 
-    // new Rule(
-    //     "when time is before 30:00, remind about all your gold",
-    //     [topics.time, topics.gold],
-    //     () => {},
-    //     ([time]) => time < 30 * 60,
-    //     ([_, gold]) => new Fact(excessGoldTopic, gold)
-    // ),
-    // new Rule(
-    //     "when time is after 30:00, and you do not have buyback, remind about all your gold",
-    //     [topics.time, topics.gold, topics.buybackCooldown],
-    //     () => {},
-    //     ([time, _, buybackCooldown]) => time >= 30 * 60 && buybackCooldown > 0,
-    //     ([_, gold]) => new Fact(excessGoldTopic, gold)
-    // ),
-    // new Rule(
-    //     "when time is after 30:00, and you have buyback, remind about your gold above buyback",
-    //     [topics.time, topics.gold, topics.buybackCooldown],
-    //     () => {},
-    //     ([time, _, buybackCooldown]) =>
-    //         time >= 30 * 60 && buybackCooldown === 0,
-    //     ([_, gold], get) =>
-    //         new Fact(excessGoldTopic, get(topics.buybackCost)! - gold)
-    // ),
+    new Rule(
+        "when time is before 30:00, remind about all your gold",
+        [topics.time, topics.gold],
+        () => {},
+        ([time]) => time < 30 * 60,
+        ([_, gold]) => new Fact(excessGoldTopic, gold)
+    ),
+    new Rule(
+        "when time is after 30:00, and you do not have buyback, remind about all your gold",
+        [topics.time, topics.gold, topics.buybackCooldown],
+        () => {},
+        ([time, _, buybackCooldown]) => time >= 30 * 60 && buybackCooldown > 0,
+        ([_, gold]) => new Fact(excessGoldTopic, gold)
+    ),
+    new Rule(
+        "when time is after 30:00, and you have buyback, remind about your gold above buyback",
+        [topics.time, topics.gold, topics.buybackCooldown],
+        () => {},
+        ([time, _, buybackCooldown]) =>
+            time >= 30 * 60 && buybackCooldown === 0,
+        ([_, gold], get) =>
+            new Fact(excessGoldTopic, gold - get(topics.buybackCost)!)
+    ),
 
-    // new Rule(
-    //     "when you have under 1500 gold, play sound reminder",
-    //     [topics.gold],
-    //     () => {},
-    //     ([gold]) => gold < 1500,
-    //     () => new Fact(audioToPlayTopic, "resources/audio/gold.mp3")
-    // ),
-    // new Rule(
-    //     "when you have under 2500 gold, play tts reminder",
-    //     [topics.gold],
-    //     () => {},
-    //     ([gold]) => gold < 2500,
-    //     () => new Fact(audioToPlayTopic, "you have a lot of gold")
-    // ),
-    // new Rule(
-    //     "when you have over 2500 gold, play aggresive tts reminder",
-    //     [topics.gold],
-    //     () => {},
-    //     ([gold]) => gold >= 2500,
-    //     () => new Fact(audioToPlayTopic, "you really have a lot of gold")
-    // ),
+    new Rule(
+        "when you have under 1500 gold, play sound reminder",
+        [excessGoldTopic],
+        () => {},
+        ([gold]) => gold <= 1500,
+        () => new Fact(audioToPlayTopic, "resources/audio/gold.mp3")
+    ),
+    new Rule(
+        "when you have 1500-2500 gold, play tts reminder",
+        [excessGoldTopic],
+        () => {},
+        ([gold]) => gold > 1500 && gold <= 2500,
+        () => new Fact(audioToPlayTopic, "you have a lot of gold")
+    ),
+    new Rule(
+        "when you have over 2500 gold, play aggresive tts reminder",
+        [excessGoldTopic],
+        () => {},
+        ([gold]) => gold > 2500,
+        () => new Fact(audioToPlayTopic, "you really have a lot of gold")
+    ),
 
     new Rule(
         "if we have spent gold, update our gold topic",
-        [topics.gold],
+        [excessGoldTopic],
         () => {},
         (_, get) => oldMultiplier(get) > newMultiplier(get),
         ([gold]) => new Fact(lastRemindedGoldTopic, gold),
@@ -140,11 +145,11 @@ export default [
 
     new Rule(
         "if we have passed a warning threshold, warn user and update our gold topic",
-        [topics.gold],
+        [excessGoldTopic, audioToPlayTopic],
         () => {},
         (_, get) => newMultiplier(get) > oldMultiplier(get),
         ([gold], get) => [
-            new Fact(topics.configurableEffect, warningAudio(get)),
+            new Fact(topics.configurableEffect, get(audioToPlayTopic)!),
             new Fact(lastRemindedGoldTopic, gold),
         ]
     ),
