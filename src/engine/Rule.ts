@@ -1,43 +1,54 @@
 import Fact from "./Fact";
+import FactStore from "./FactStore";
 import Topic from "./Topic";
 
 type getFn = <T>(topic: Topic<T>) => T | undefined;
 
-// TODO have Rule take keys { label: string, given: [], when: () => boolean, then: () => Fact<unknown>[]}
-// TODO consider: a list of keys we are also interested in, but do not need to trigger on change for
-// so we don't need to pass back the entire get function
 class Rule {
-    // label is only used for logging purposes
     public readonly label: string;
+    public readonly trigger: Topic<unknown>[];
     public readonly given: Topic<unknown>[];
+    public readonly when: (trigger: any[], given: any[], get: getFn) => boolean;
     public readonly then: (
+        trigger: any[],
+        given: any[],
         get: getFn
     ) => Fact<unknown>[] | Fact<unknown> | void;
-    public readonly when: (values: any[], get: getFn) => boolean;
-    public readonly action: (
-        values: any[],
-        get: getFn
-    ) => Fact<unknown>[] | Fact<unknown> | void;
-    public readonly defaultValues: [Topic<unknown>, unknown][] | undefined;
+    public readonly defaultValues: Fact<unknown>[];
 
-    // eslint-disable-next-line max-params
-    constructor(
-        label: string,
-        given: Topic<unknown>[],
-        then: (get: getFn) => Fact<unknown>[] | Fact<unknown> | void,
-        when?: (values: any[], get: getFn) => boolean,
-        action?: (
-            values: any[],
+    constructor(params: {
+        label: string;
+        trigger?: Topic<unknown>[];
+        given?: Topic<unknown>[];
+        when?: (trigger: any[], given: any[], get: getFn) => boolean;
+        then: (
+            trigger: any[],
+            given: any[],
             get: getFn
-        ) => Fact<unknown>[] | Fact<unknown> | void,
-        defaultValues?: [Topic<unknown>, unknown][]
-    ) {
-        this.label = label;
-        this.given = given;
-        this.then = then;
-        this.when = when || (() => false);
-        this.action = action || (() => {});
-        this.defaultValues = defaultValues;
+        ) => Fact<unknown>[] | Fact<unknown> | void;
+        defaultValues?: Fact<unknown>[];
+    }) {
+        this.label = params.label;
+        this.trigger = params.trigger || [];
+        this.given = params.given || [];
+        this.when = params.when || (() => true);
+        this.then = params.then;
+        this.defaultValues = params.defaultValues || [];
+    }
+
+    public apply(trigger: any[], given: any[], get: getFn): Fact<unknown>[] {
+        let facts: Fact<unknown>[] = [];
+        if (this.when([...trigger], [...given], get)) {
+            const out = this.then([...trigger], [...given], get);
+            if (out) {
+                if (Array.isArray(out)) {
+                    facts = out;
+                } else {
+                    facts.push(out);
+                }
+            }
+        }
+        return facts;
     }
 }
 

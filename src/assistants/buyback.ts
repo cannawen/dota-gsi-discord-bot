@@ -22,12 +22,11 @@ export default [
         30,
         undefined,
         new Rule(
-            "when buyback is available",
-            [topics.buybackCooldown, topics.gold, topics.buybackCost],
-            () => {},
-            ([cooldown]) => cooldown === 0,
-            ([_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost)
-        )
+            {label: "when buyback is available",
+        trigger:[topics.buybackCooldown, topics.gold, topics.buybackCost],
+        when:(_get, [cooldown]) => cooldown === 0,
+        then:(_get, [_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost)
+    }
     ),
     new RuleDecoratorStartAndEndMinute(
         30,

@@ -6,23 +6,20 @@ import topics from "../topics";
  */
 class RuleDecoratorInGame extends Rule {
     constructor(rule: Rule) {
-        super(
-            rule.label,
-            rule.given,
-            (get) => {
-                if (get(topics.inGame) && get(topics.time) !== 0) {
-                    return rule.then(get);
-                }
-            },
-            (values, get) => {
-                const ruleWhen = rule.when(values, get);
+        super({
+            label: rule.label,
+            trigger: rule.trigger,
+            given: rule.given,
+            when: (trigger, given, get) => {
+                const ruleWhen = rule.when(trigger, given, get);
                 const inGame = get(topics.inGame) || false;
-                const timeNot0 = get(topics.time) !== 0 || false;
-                return ruleWhen && inGame && timeNot0;
+                const time = get(topics.time);
+                const timeCheck = time !== undefined && time > 0;
+                return ruleWhen && inGame && timeCheck;
             },
-            rule.action,
-            rule.defaultValues
-        );
+            then: rule.then,
+            defaultValues: rule.defaultValues,
+        });
     }
 }
 

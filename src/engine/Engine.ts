@@ -62,46 +62,21 @@ function applyRules(
             )
             // Set default values
             .map((rule) => {
-                if (rule.defaultValues) {
-                    rule.defaultValues.forEach(([topic, value]) => {
-                        if (db.get(topic) === undefined) {
-                            db.set(new Fact(topic, value));
-                        }
-                    });
-                }
+                rule.defaultValues.forEach((fact) => {
+                    if (db.get(fact.topic) === undefined) {
+                        db.set(fact);
+                    }
+                });
                 return rule;
             })
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.given, db))
             .reduce((memo, rule) => {
-                let returnMemo: Fact<unknown>[] = [...memo];
-
-                const params = rule.given.map((topic) => db.get(topic));
-
-                if (rule.when([...params], (topic) => db.get(topic))) {
-                    const action = rule.action([...params], (topic) =>
-                        db.get(topic)
-                    );
-                    if (action) {
-                        if (Array.isArray(action)) {
-                            returnMemo = memo.concat(action);
-                        } else {
-                            returnMemo.push(action);
-                        }
-                    }
-                }
-
-                // Process the rule
-                const out = rule.then((topic) => db.get(topic));
-                if (out) {
-                    // Collect any database changes as a result of this rule being applied
-                    if (Array.isArray(out)) {
-                        returnMemo = memo.concat(out);
-                    } else {
-                        returnMemo.push(out);
-                    }
-                }
-                return returnMemo;
+                const trigger = rule.trigger.map((topic) => db.get(topic));
+                const given = rule.given.map((topic) => db.get(topic));
+                return memo.concat(
+                    rule.apply(trigger, given, (topic) => db.get(topic))
+                );
             }, [] as Fact<unknown>[])
     );
 }

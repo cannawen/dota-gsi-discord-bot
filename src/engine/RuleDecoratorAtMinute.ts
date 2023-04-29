@@ -1,5 +1,5 @@
 import Rule from "./Rule";
-import RuleDecoratorInGame from "./RuleDecoratorInGame";
+import RuleDecoratorStartAndEndMinute from "./RuleDecoratorStartAndEndMinute";
 import topics from "../topics";
 
 /**
@@ -7,25 +7,19 @@ import topics from "../topics";
  */
 class RuleDecoratorAtMinute extends Rule {
     constructor(time: number, rule: Rule) {
-        const inGameRule = new RuleDecoratorInGame(rule);
-        super(
-            inGameRule.label,
-            [topics.time, ...inGameRule.given],
-            (get) => {
-                if (get(topics.time) === time * 60) {
-                    return inGameRule.then(get);
-                }
-            },
-            (values, get) => {
-                const dbTime = values.shift();
-                return rule.when(values, get) && dbTime === time * 60;
-            },
-            (values, get) => {
-                values.shift();
-                return rule.action(values, get);
-            },
-            rule.defaultValues
+        const startEndRule = new RuleDecoratorStartAndEndMinute(
+            time,
+            time,
+            rule
         );
+        super({
+            label: startEndRule.label,
+            trigger: startEndRule.trigger,
+            given: startEndRule.given,
+            when: startEndRule.when,
+            then: startEndRule.then,
+            defaultValues: startEndRule.defaultValues,
+        });
     }
 }
 
