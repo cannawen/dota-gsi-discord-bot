@@ -15,30 +15,28 @@ class RuleDecoratorConfigurable extends Rule {
         super({
             label: rule.label,
             trigger: rule.trigger,
-            given: rule.given,
-            when: (trigger, given, get) =>
-                rule.when(trigger, given, get) &&
-                get(configTopic)! !== EffectConfig.NONE,
-            then: (trigger, given, get) => {
-                const effect =
-                    effectConfig.configToEffectTopic[get(configTopic)!];
+            given: [configTopic, ...rule.given],
+            when: (trigger, given) => {
+                const config = given.shift();
+                if (config === EffectConfig.NONE) {
+                    return false;
+                }
+                return rule.when(trigger, given);
+            },
+            then: (trigger, given) => {
+                const config: EffectConfig = given.shift();
+                const effect = effectConfig.configToEffectTopic[config];
                 if (effect) {
-                    const result = rule.then(trigger, given, get);
-                    if (result === undefined) {
-                        return;
-                    }
-                    return (Array.isArray(result) ? result : [result]).map(
-                        (fact) => {
-                            if (
-                                fact.topic.label ===
-                                topics.configurableEffect.label
-                            ) {
-                                return new Fact(effect, fact.value);
-                            } else {
-                                return fact;
-                            }
+                    const result = rule.thenArray(trigger, given);
+                    return result.map((fact) => {
+                        if (
+                            fact.topic.label === topics.configurableEffect.label
+                        ) {
+                            return new Fact(effect, fact.value);
+                        } else {
+                            return fact;
                         }
-                    );
+                    });
                 }
             },
             defaultValues: rule.defaultValues,

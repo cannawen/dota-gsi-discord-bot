@@ -13,7 +13,7 @@ class RuleDecoratorStartAndEndMinute extends Rule {
             label: inGameRule.label,
             trigger: [topics.time, ...inGameRule.trigger],
             given: inGameRule.given,
-            when: (trigger, given, get) => {
+            when: (trigger, given) => {
                 const time = trigger.shift();
                 if (min && time < min * 60) {
                     return false;
@@ -21,11 +21,11 @@ class RuleDecoratorStartAndEndMinute extends Rule {
                 if (max && time > max * 60) {
                     return false;
                 }
-                return inGameRule.when(trigger, given, get);
+                return inGameRule.when(trigger, given);
             },
-            then: (trigger, given, get) => {
+            then: (trigger, given) => {
                 trigger.shift();
-                return inGameRule.then(trigger, given, get);
+                return inGameRule.then(trigger, given);
             },
             defaultValues: inGameRule.defaultValues,
         });

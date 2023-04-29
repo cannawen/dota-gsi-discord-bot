@@ -74,9 +74,7 @@ function applyRules(
             .reduce((memo, rule) => {
                 const trigger = rule.trigger.map((topic) => db.get(topic));
                 const given = rule.given.map((topic) => db.get(topic));
-                return memo.concat(
-                    rule.apply(trigger, given, (topic) => db.get(topic))
-                );
+                return memo.concat(rule.apply(trigger, given));
             }, [] as Fact<unknown>[])
     );
 }

@@ -1,8 +1,6 @@
 import Fact from "./Fact";
 import Topic from "./Topic";
 
-type getFn = <T>(topic: Topic<T>) => T | undefined;
-
 class Rule {
     public readonly label: string;
     public readonly trigger: Topic<unknown>[];
@@ -10,11 +8,10 @@ class Rule {
     /**
      * TODO trigger and given are passed based on order which is kinda sketchy
      */
-    public readonly when: (trigger: any[], given: any[], get: getFn) => boolean;
+    public readonly when: (trigger: any[], given: any[]) => boolean;
     public readonly then: (
         trigger: any[],
-        given: any[],
-        get: getFn
+        given: any[]
     ) => Fact<unknown>[] | Fact<unknown> | void;
     /**
      * TODO Do we want defaultValues as part of a rule, or as part of a separate mechanism?
@@ -27,11 +24,10 @@ class Rule {
         label: string;
         trigger?: Topic<unknown>[];
         given?: Topic<unknown>[];
-        when?: (trigger: any[], given: any[], get: getFn) => boolean;
+        when?: (trigger: any[], given: any[]) => boolean;
         then: (
             trigger: any[],
-            given: any[],
-            get: getFn
+            given: any[]
         ) => Fact<unknown>[] | Fact<unknown> | void;
         defaultValues?: Fact<unknown>[];
     }) {
@@ -43,19 +39,28 @@ class Rule {
         this.defaultValues = params.defaultValues || [];
     }
 
-    public apply(trigger: any[], given: any[], get: getFn): Fact<unknown>[] {
-        let facts: Fact<unknown>[] = [];
-        if (this.when([...trigger], [...given], get)) {
-            const out = this.then([...trigger], [...given], get);
-            if (out) {
-                if (Array.isArray(out)) {
-                    facts = out;
-                } else {
-                    facts.push(out);
-                }
-            }
+    // TODO test
+    public apply(trigger: any[], given: any[]): Fact<unknown>[] {
+        if (this.when([...trigger], [...given])) {
+            return this.thenArray([...trigger], [...given]);
         }
-        return facts;
+        return [];
+    }
+
+    // TODO test
+    /**
+     * Helper that turns output facts into an array of facts
+     * Instead of `Fact<unknown>[] | Fact<unknown> | void`
+     */
+    public thenArray(trigger: any[], given: any[]): Fact<unknown>[] {
+        const out = this.then([...trigger], [...given]);
+        if (Array.isArray(out)) {
+            return out;
+        }
+        if (out instanceof Fact) {
+            return [out];
+        }
+        return [];
     }
 }
 

@@ -1,6 +1,5 @@
 import Rule from "./Rule";
 import RuleDecoratorStartAndEndMinute from "./RuleDecoratorStartAndEndMinute";
-import topics from "../topics";
 
 /**
  * This rule will happen at `time` minutes when we are in a game.

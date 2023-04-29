@@ -9,15 +9,18 @@ class RuleDecoratorInGame extends Rule {
         super({
             label: rule.label,
             trigger: rule.trigger,
-            given: rule.given,
-            when: (trigger, given, get) => {
-                const ruleWhen = rule.when(trigger, given, get);
-                const inGame = get(topics.inGame) || false;
-                const time = get(topics.time);
+            given: [topics.inGame, topics.time, ...rule.given],
+            when: (trigger, given) => {
+                const inGame = given.shift() || false;
+                const time = given.shift();
                 const timeCheck = time !== undefined && time > 0;
-                return ruleWhen && inGame && timeCheck;
+                return rule.when(trigger, given) && inGame && timeCheck;
             },
-            then: rule.then,
+            then: (trigger, given) => {
+                given.shift();
+                given.shift();
+                return rule.then(trigger, given);
+            },
             defaultValues: rule.defaultValues,
         });
     }
