@@ -13,11 +13,12 @@ export const assistantDescription =
 
 export default new RuleDecoratorConfigurable(
     configTopic,
-    new Rule(
-        rules.assistant.glhf,
-        [topics.inGame],
-        () => {},
-        ([inGame], get) => inGame && get(topics.time) === 0,
-        () => new Fact(topics.configurableEffect, "good luck and have fun")
-    )
+    new Rule({
+        label: rules.assistant.glhf,
+        trigger: [topics.inGame],
+        given: [topics.time],
+        when: ([inGame], [time]) => inGame && time === 0,
+        then: () =>
+            new Fact(topics.configurableEffect, "good luck and have fun"),
+    })
 );

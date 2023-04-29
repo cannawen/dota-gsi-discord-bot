@@ -10,10 +10,10 @@ import tts from "./tts";
 /**
  * The actual playing happens in server /coach/:studentId/poll
  */
-export default new Rule(
-    rules.effect.playPrivateAudio,
-    [topics.playPrivateAudio],
-    (get) => {
+export default new Rule({
+    label: rules.effect.playPrivateAudio,
+    trigger: [topics.playPrivateAudio],
+    then: (_t, _g, get) => {
         const audio = get(topics.playPrivateAudio)!;
         const queue = [...(get(topics.privateAudioQueue) || [])];
 
@@ -37,5 +37,5 @@ export default new Rule(
             new Fact(topics.privateAudioQueue, queue),
             new Fact(topics.playPrivateAudio, undefined),
         ];
-    }
-);
+    },
+});

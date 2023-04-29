@@ -16,15 +16,19 @@ export const assistantDescription = "Plays Jeopardy music while paused";
 export default new RuleDecoratorConfigurable(
     configTopic,
     new RuleDecoratorInGame(
-        new Rule(rules.assistant.pause, [topics.paused], (get) => {
-            if (get(topics.paused)!) {
-                return new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/jeopardy.mp3"
-                );
-            } else {
-                return new Fact(topics.stopAudio, true);
-            }
+        new Rule({
+            label: rules.assistant.pause,
+            trigger: [topics.paused],
+            then: (_t, _g, get) => {
+                if (get(topics.paused)!) {
+                    return new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/jeopardy.mp3"
+                    );
+                } else {
+                    return new Fact(topics.stopAudio, true);
+                }
+            },
         })
     )
 );

@@ -41,28 +41,34 @@ function whatShouldIBuy(message: string) {
 
 export default new RuleDecoratorConfigurable(
     configTopic,
-    new Rule(rules.assistant.glhf, [topics.lastDiscordUtterance], (get) => {
-        const message = get(topics.lastDiscordUtterance)!;
-        if (whatShouldIBuy(message)) {
-            const randomIndex = Math.floor(Math.random() * itemCosts.length);
+    new Rule({
+        label: rules.assistant.glhf,
+        trigger: [topics.lastDiscordUtterance],
+        then: (_t, _g, get) => {
+            const message = get(topics.lastDiscordUtterance)!;
+            if (whatShouldIBuy(message)) {
+                const randomIndex = Math.floor(
+                    Math.random() * itemCosts.length
+                );
+                return new Fact(
+                    topics.configurableEffect,
+                    `Buy a ${itemCosts[randomIndex][0]}`
+                );
+            }
+            const cost = randomItemCost(message);
+            if (cost === undefined) {
+                return;
+            }
+            const sortedItems = itemCosts.sort(
+                ([_nameA, costA], [_nameB, costB]) =>
+                    Math.abs(costA - cost) - Math.abs(costB - cost)
+            );
+            const closestItems = sortedItems.slice(0, 10);
+            const randomIndex = Math.floor(Math.random() * closestItems.length);
             return new Fact(
                 topics.configurableEffect,
-                `Buy a ${itemCosts[randomIndex][0]}`
+                `Buy a ${closestItems[randomIndex][0]}`
             );
-        }
-        const cost = randomItemCost(message);
-        if (cost === undefined) {
-            return;
-        }
-        const sortedItems = itemCosts.sort(
-            ([_nameA, costA], [_nameB, costB]) =>
-                Math.abs(costA - cost) - Math.abs(costB - cost)
-        );
-        const closestItems = sortedItems.slice(0, 10);
-        const randomIndex = Math.floor(Math.random() * closestItems.length);
-        return new Fact(
-            topics.configurableEffect,
-            `Buy a ${closestItems[randomIndex][0]}`
-        );
+        },
     })
 );

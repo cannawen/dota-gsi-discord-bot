@@ -21,15 +21,14 @@ export default helper.neutral.tierTimeInfo.map(
             time,
             new RuleDecoratorConfigurable(
                 configTopic,
-                new Rule(
-                    rules.assistant.newNeutralTokens,
-                    [],
-                    (get) =>
+                new Rule({
+                    label: rules.assistant.newNeutralTokens,
+                    then: () =>
                         new Fact(
                             topics.configurableEffect,
                             "resources/audio/new-neutral-tokens.mp3"
-                        )
-                )
+                        ),
+                })
             )
         )
 );

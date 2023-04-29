@@ -22,11 +22,18 @@ export default new RuleDecoratorStartAndEndMinute(
     12,
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(rules.assistant.lotus, [topics.time], (get) => {
-            const time = get(topics.time)!;
-            if ((time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0) {
-                return new Fact(topics.configurableEffect, "resources/audio/lotus-soon.mp3");
-            }
+        new Rule({
+            label: rules.assistant.lotus,
+            trigger: [topics.time],
+            then: (_t, _g, get) => {
+                const time = get(topics.time)!;
+                if ((time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0) {
+                    return new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/lotus-soon.mp3"
+                    );
+                }
+            },
         })
     )
 );

@@ -141,21 +141,19 @@ export class CustomEngine extends Engine {
 
 const engine = new CustomEngine();
 
+// TODO test
 engine.register(
-    new Rule(
-        "engine/reset_state_across_game",
-        [topics.inGame, topics.studentId],
-        (get) => {
-            const inGame = get(topics.inGame)!;
-            const studentId = get(topics.studentId)!;
-
+    new Rule({
+        label: "engine/reset_state_across_game",
+        trigger: [topics.inGame, topics.studentId],
+        then: ([inGame, studentId]) => {
             if (!inGame) {
                 engine
                     .getSession(studentId)
                     ?.updatePersistentFactsAcrossGames();
             }
-        }
-    )
+        },
+    })
 );
 
 export default engine;

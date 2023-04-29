@@ -10,10 +10,10 @@ import tts from "./tts";
 /**
  * The actual playing happens in discord/playAudioQueue
  */
-export default new Rule(
-    rules.effect.playAudio,
-    [topics.playPublicAudio, topics.discordAudioEnabled],
-    (get) => {
+export default new Rule({
+    label: rules.effect.playAudio,
+    trigger: [topics.playPublicAudio, topics.discordAudioEnabled],
+    then: (_t, _g, get) => {
         const audio = get(topics.playPublicAudio)!;
         const queue = [...(get(topics.publicAudioQueue) || [])];
 
@@ -43,5 +43,5 @@ export default new Rule(
             new Fact(topics.publicAudioQueue, queue),
             new Fact(topics.playPublicAudio, undefined),
         ];
-    }
-);
+    },
+});

@@ -18,11 +18,13 @@ export default new RuleDecoratorAtMinute(
     15,
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.shard,
-            [],
-            (get) =>
-                new Fact(topics.configurableEffect, "resources/audio/shard-available.mp3")
-        )
+        new Rule({
+            label: rules.assistant.shard,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/shard-available.mp3"
+                ),
+        })
     )
 );

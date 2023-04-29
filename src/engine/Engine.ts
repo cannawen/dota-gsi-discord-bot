@@ -58,7 +58,7 @@ function applyRules(
         rules
             // If the rule is interested in this changed topic
             .filter((rule) =>
-                rule.given.find((topic) => topic.label === changedTopic.label)
+                rule.trigger.find((topic) => topic.label === changedTopic.label)
             )
             // Set default values
             .map((rule) => {

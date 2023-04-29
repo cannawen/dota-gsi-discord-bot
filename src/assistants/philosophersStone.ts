@@ -36,10 +36,10 @@ function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.philosophersStone,
-            [topics.items, topics.respawnSeconds, topics.alive],
-            (get) => {
+        new Rule({
+            label: rules.assistant.philosophersStone,
+            trigger: [topics.items, topics.respawnSeconds, topics.alive],
+            then: (_t, _g, get) => {
                 const items = get(topics.items)!;
 
                 const seenBefore = get(seenPhilosophersStoneTopic);
@@ -85,7 +85,7 @@ export default new RuleDecoratorInGame(
                         );
                     }
                 }
-            }
-        )
+            },
+        })
     )
 );

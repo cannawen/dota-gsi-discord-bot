@@ -35,31 +35,41 @@ const lastWardCountTopic =
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(rules.assistant.wards, [topics.time, topics.items], (get) => {
-            const facts: Fact<unknown>[] = [];
-            const time = get(topics.time)!;
-            const lastWardReminderTime = get(lastWardReminderTimeTopic) || 0;
-            const lastWardCount = get(lastWardCountTopic) || 0;
+        new Rule({
+            label: rules.assistant.wards,
+            trigger: [topics.time, topics.items],
+            then: (_t, _g, get) => {
+                const facts: Fact<unknown>[] = [];
+                const time = get(topics.time)!;
+                const lastWardReminderTime =
+                    get(lastWardReminderTimeTopic) || 0;
+                const lastWardCount = get(lastWardCountTopic) || 0;
 
-            const currentWardCount = get(topics.items)!
-                .allItems()
-                .filter(
-                    (item) =>
-                        item?.id === "item_ward_observer" ||
-                        item?.id === "item_ward_sentry" ||
-                        item?.id === "item_ward_dispenser"
-                ).length;
-            if (lastWardCount !== currentWardCount) {
-                facts.push(new Fact(lastWardCountTopic, currentWardCount));
-            }
+                const currentWardCount = get(topics.items)!
+                    .allItems()
+                    .filter(
+                        (item) =>
+                            item?.id === "item_ward_observer" ||
+                            item?.id === "item_ward_sentry" ||
+                            item?.id === "item_ward_dispenser"
+                    ).length;
+                if (lastWardCount !== currentWardCount) {
+                    facts.push(new Fact(lastWardCountTopic, currentWardCount));
+                }
 
-            if (currentWardCount > lastWardCount) {
-                facts.push(new Fact(lastWardReminderTimeTopic, time));
-            } else if (time - lastWardReminderTime >= WARD_REMINDER_INTERVAL) {
-                facts.push(new Fact(topics.configurableEffect, "buy wards"));
-                facts.push(new Fact(lastWardReminderTimeTopic, time));
-            }
-            return facts;
+                if (currentWardCount > lastWardCount) {
+                    facts.push(new Fact(lastWardReminderTimeTopic, time));
+                } else if (
+                    time - lastWardReminderTime >=
+                    WARD_REMINDER_INTERVAL
+                ) {
+                    facts.push(
+                        new Fact(topics.configurableEffect, "buy wards")
+                    );
+                    facts.push(new Fact(lastWardReminderTimeTopic, time));
+                }
+                return facts;
+            },
         })
     )
 );

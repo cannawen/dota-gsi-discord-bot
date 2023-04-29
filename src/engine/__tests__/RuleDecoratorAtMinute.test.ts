@@ -12,7 +12,10 @@ describe("RuleDecoratorAtMinute", () => {
         topic = new Topic<boolean>("hasTriggeredClosure");
         rule = new RuleDecoratorAtMinute(
             10,
-            new Rule("test", [], (_) => new Fact(topic, true))
+            new Rule({
+                label: "test",
+                then: () => new Fact(topic, true),
+            })
         );
     });
 

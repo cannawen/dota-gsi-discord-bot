@@ -22,10 +22,10 @@ const REMINDER_INTERVAL = 15;
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.midas,
-            [topics.items, topics.alive, topics.time],
-            (get) => {
+        new Rule({
+            label: rules.assistant.midas,
+            given: [topics.items, topics.alive, topics.time],
+            then: (_t, _g, get) => {
                 if (!get(topics.alive)!) {
                     return new Fact(lastReminderTimeTopic, undefined);
                 }
@@ -54,7 +54,7 @@ export default new RuleDecoratorInGame(
                         new Fact(lastReminderTimeTopic, time),
                     ];
                 }
-            }
-        )
+            },
+        })
     )
 );

@@ -89,14 +89,14 @@ function onPlayerStateChange(
     engine.setFact(studentId, new Fact(topics.audioPlayerReady, ready));
 }
 
-export default new Rule(
-    rules.discord.startVoiceSubscription,
-    [topics.discordGuildId, topics.discordGuildChannelId, topics.studentId],
-    (get) => {
-        const guildId = get(topics.discordGuildId)!;
-        const channelId = get(topics.discordGuildChannelId)!;
-        const studentId = get(topics.studentId)!;
-
+export default new Rule({
+    label: rules.discord.startVoiceSubscription,
+    trigger: [
+        topics.discordGuildId,
+        topics.discordGuildChannelId,
+        topics.studentId,
+    ],
+    then: ([guildId, channelId, studentId]) => {
         if (guildId === null || channelId === null) {
             return;
         }
@@ -185,5 +185,5 @@ export default new Rule(
 
         const subscription = connection.subscribe(player);
         return new Fact(topics.discordSubscriptionTopic, subscription);
-    }
-);
+    },
+});

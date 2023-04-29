@@ -96,23 +96,21 @@ function roshStatusResponse(
 }
 
 export default [
-    new Rule(
-        "when we get an event that says rosh is killed, add time to array",
-        [topics.events],
-        () => {},
-        ([events]) => roshanWasKilled(events),
-        (_, get) =>
+    new Rule({
+        label: "when we get an event that says rosh is killed, add time to array",
+        trigger: [topics.events],
+        when: ([events]) => roshanWasKilled(events),
+        then: (_t, _g, get) =>
             new Fact(roshanDeathTimesTopic, [
                 ...get(roshanDeathTimesTopic)!,
                 get(topics.time)!,
             ]),
-        [[roshanDeathTimesTopic, []]]
-    ),
-    new Rule(
-        "when time is 8 minutes after last roshan death, play reminder",
-        [topics.time, roshanDeathTimesTopic],
-        () => {},
-        ([time, deathTimes]) => {
+        defaultValues: [new Fact(roshanDeathTimesTopic, [])],
+    }),
+    new Rule({
+        label: "when time is 8 minutes after last roshan death, play reminder",
+        trigger: [topics.time, roshanDeathTimesTopic],
+        when: ([time, deathTimes]) => {
             const lastDeathTime = lastRoshDeathTime(deathTimes);
             if (lastDeathTime) {
                 return time === lastDeathTime + ROSHAN_MINIMUM_SPAWN_TIME;
@@ -120,17 +118,16 @@ export default [
                 return false;
             }
         },
-        () =>
+        then: () =>
             new Fact(
                 topics.configurableEffect,
                 "resources/audio/rosh-maybe.mp3"
-            )
-    ),
-    new Rule(
-        "when time is 11 minutes after last roshan death, play reminder",
-        [topics.time, roshanDeathTimesTopic],
-        () => {},
-        ([time, deathTimes]) => {
+            ),
+    }),
+    new Rule({
+        label: "when time is 11 minutes after last roshan death, play reminder",
+        trigger: [topics.time, roshanDeathTimesTopic],
+        when: ([time, deathTimes]) => {
             const lastDeathTime = lastRoshDeathTime(deathTimes);
             if (lastDeathTime) {
                 return time === lastDeathTime + ROSHAN_MAXIMUM_SPAWN_TIME;
@@ -138,18 +135,17 @@ export default [
                 return false;
             }
         },
-        () =>
+        then: () =>
             new Fact(
                 topics.configurableEffect,
                 "resources/audio/rosh-alive.mp3"
-            )
-    ),
-    new Rule(
-        "when asked what roshan status is, respond with status",
-        [topics.lastDiscordUtterance],
-        () => {},
-        ([utterance]) => isRoshStatusRequest(utterance),
-        (_, get) =>
+            ),
+    }),
+    new Rule({
+        label: "when asked what roshan status is, respond with status",
+        trigger: [topics.lastDiscordUtterance],
+        when: ([utterance]) => isRoshStatusRequest(utterance),
+        then: (_t, _g, get) =>
             new Fact(
                 topics.configurableEffect,
                 roshStatusResponse(
@@ -157,8 +153,8 @@ export default [
                     get(topics.time),
                     get(topics.dayTime)
                 )
-            )
-    ),
+            ),
+    }),
 ].map(
     (rule) =>
         new RuleDecoratorConfigurable(

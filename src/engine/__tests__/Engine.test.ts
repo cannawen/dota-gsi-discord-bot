@@ -21,17 +21,19 @@ describe("Engine", () => {
     describe("all topics are defined", () => {
         test("executes rule", () => {
             sut.register(
-                new Rule("rule", [numberTopic, addOneTopic], (get) => {
-                    const number = get(numberTopic)!;
-                    const addOne = get(addOneTopic)!;
-                    if (addOne) {
-                        // Because addOneTopic is reset first
-                        // the number is only incremented once
-                        return [
-                            new Fact(addOneTopic, undefined),
-                            new Fact(numberTopic, number + 1),
-                        ];
-                    }
+                new Rule({
+                    label: "rule",
+                    trigger: [numberTopic, addOneTopic],
+                    then: ([number, addOne]) => {
+                        if (addOne) {
+                            // Because addOneTopic is reset first
+                            // the number is only incremented once
+                            return [
+                                new Fact(addOneTopic, undefined),
+                                new Fact(numberTopic, number + 1),
+                            ];
+                        }
+                    },
                 })
             );
             sut.set(db, new Fact(numberTopic, 0));
@@ -47,15 +49,18 @@ describe("Engine", () => {
             sut.set(db, new Fact(numberTopic, 0));
 
             sut.register(
-                new Rule("rule", [numberTopic], (get) => {
-                    const number = get(numberTopic)!;
-                    const addOne = get(addOneTopic)!;
-                    if (addOne) {
-                        return [
-                            new Fact(addOneTopic, undefined),
-                            new Fact(numberTopic, number + 1),
-                        ];
-                    }
+                new Rule({
+                    label: "rule",
+                    trigger: [numberTopic],
+                    given: [addOneTopic],
+                    then: ([number], [addOne]) => {
+                        if (addOne) {
+                            return [
+                                new Fact(addOneTopic, undefined),
+                                new Fact(numberTopic, number + 1),
+                            ];
+                        }
+                    },
                 })
             );
             sut.set(db, new Fact(addOneTopic, true));
@@ -68,17 +73,17 @@ describe("Engine", () => {
     describe("when, action, and defaultValue", () => {
         beforeEach(() => {
             sut.register(
-                new Rule(
-                    "rule",
-                    [numberTopic, addOneTopic],
-                    (get) => {},
-                    ([_, shouldAddOne]) => shouldAddOne,
-                    ([number, _]) => [
+                new Rule({
+                    label: "rule",
+                    trigger: [addOneTopic],
+                    given: [numberTopic],
+                    when: ([shouldAddOne]) => shouldAddOne,
+                    then: (_, [number]) => [
                         new Fact(addOneTopic, false),
                         new Fact(numberTopic, number + 1),
                     ],
-                    [[numberTopic, 0]]
-                )
+                    defaultValues: [new Fact(numberTopic, 0)],
+                })
             );
         });
         test("when returns true", () => {

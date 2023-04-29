@@ -43,10 +43,10 @@ export default new RuleDecoratorStartAndEndMinute(
     undefined,
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.neutralItemReminder,
-            [topics.items, topics.time],
-            (get) => {
+        new Rule({
+            label: rules.assistant.neutralItemReminder,
+            given: [topics.items, topics.time],
+            then: (_t, _g, get) => {
                 const items = get(topics.items)!;
                 const time = get(topics.time)!;
                 const lastReminderTime = get(lastReminderTimeTopic);
@@ -79,7 +79,7 @@ export default new RuleDecoratorStartAndEndMinute(
                         ];
                     }
                 }
-            }
-        )
+            },
+        })
     )
 );

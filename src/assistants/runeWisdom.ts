@@ -18,11 +18,17 @@ const ADVANCED_WARNING = 20;
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(rules.assistant.runeWisdom, [topics.time], (get) => {
-            const time = get(topics.time)!;
-            if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
-                return new Fact(topics.configurableEffect, "resources/audio/wisdom-rune-soon.mp3");
-            }
+        new Rule({
+            label: rules.assistant.runeWisdom,
+            given: [topics.time],
+            then: ([time]) => {
+                if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
+                    return new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/wisdom-rune-soon.mp3"
+                    );
+                }
+            },
         })
     )
 );

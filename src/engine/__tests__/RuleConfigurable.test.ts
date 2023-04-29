@@ -13,11 +13,11 @@ describe("RuleDecoratorConfigurable", () => {
         configTopic = new Topic<EffectConfig>("configTopic");
         rule = new RuleDecoratorConfigurable(
             configTopic,
-            new Rule(
-                "test",
-                [configTopic],
-                (_) => new Fact(topics.configurableEffect, "foo.mp3")
-            )
+            new Rule({
+                label: "test",
+                trigger: [configTopic],
+                then: () => new Fact(topics.configurableEffect, "foo.mp3"),
+            })
         );
     });
     test("PRIVATE", () => {

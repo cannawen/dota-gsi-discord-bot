@@ -20,15 +20,14 @@ export default [2, 4].map(
             time,
             new RuleDecoratorConfigurable(
                 configTopic,
-                new Rule(
-                    rules.assistant.runeWater,
-                    [],
-                    (get) =>
+                new Rule({
+                    label: rules.assistant.runeWater,
+                    then: () =>
                         new Fact(
                             topics.configurableEffect,
                             "resources/audio/rune-water.mp3"
-                        )
-                )
+                        ),
+                })
             )
         )
 );

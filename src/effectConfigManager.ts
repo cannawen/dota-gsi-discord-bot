@@ -26,11 +26,11 @@ function registerEffectConfigRule(
     topic: Topic<EffectConfig>
 ) {
     engine.register(
-        new Rule(
-            `${ruleName}_effect_config`,
-            [topic],
-            (_) => new Fact(topics.updateFrontend, true)
-        )
+        new Rule({
+            label: `${ruleName}_effect_config`,
+            trigger: [topic],
+            then: () => new Fact(topics.updateFrontend, true),
+        })
     );
 }
 
