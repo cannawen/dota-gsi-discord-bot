@@ -15,34 +15,26 @@ export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you when you do not have enough gold for buyback (after 30:00)";
 
-const hasBuybackTopic = topicManager.createTopic<boolean>("hasBuybackTopic");
+const hasGoldForBuybackTopic = topicManager.createTopic<boolean>(
+    "hasGoldForBuybackTopic"
+);
 
 export default [
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
         new Rule({
-            label: "when buyback is available",
-            trigger: [topics.buybackCooldown, topics.gold, topics.buybackCost],
-            when: ([cooldown]) => cooldown === 0,
-            then: ([_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost),
-        })
-    ),
-    new RuleDecoratorStartAndEndMinute(
-        30,
-        undefined,
-        new Rule({
-            label: "when buyback is not available",
-            trigger: [topics.buybackCooldown, topics.gold, topics.buybackCost],
-            when: ([cooldown]) => cooldown !== 0,
-            then: () => new Fact(hasBuybackTopic, false),
+            label: "check to see if you have gold for buyback",
+            trigger: [topics.gold, topics.buybackCost],
+            then: ([gold, cost]) =>
+                new Fact(hasGoldForBuybackTopic, gold >= cost),
         })
     ),
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule({
-            label: "warn about buyback",
-            trigger: [hasBuybackTopic, topics.buybackCooldown],
+            label: "warn if you have buyback cooldown available but do not have buyback due to gold",
+            trigger: [hasGoldForBuybackTopic, topics.buybackCooldown],
             when: ([hasBuyback, cooldown]) => !hasBuyback && cooldown === 0,
             then: () =>
                 new Fact(
