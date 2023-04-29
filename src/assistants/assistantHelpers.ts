@@ -74,6 +74,22 @@ export class NeutralItemHelper {
     public nameToTier(name: string): Tier {
         return this.nameToTierObject[name] || Tier.UNKNOWN;
     }
+
+    public isItemAppropriateForTime(id: string | undefined, time: number) {
+        // Having no neutral item is never appropriate
+        if (id === undefined) {
+            return false;
+        }
+        const itemTier = this.nameToTier(id);
+        // Having an unclassified neutral item is always appropriate
+        // This is probably a data issue on our end
+        if (itemTier === Tier.UNKNOWN) {
+            return true;
+        }
+        // Appropriate item when matching time tier or 1 below
+        const timeTier = this.timeToTier(time);
+        return itemTier >= timeTier - 1;
+    }
 }
 
 export default {

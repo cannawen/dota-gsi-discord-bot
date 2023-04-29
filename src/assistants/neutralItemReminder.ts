@@ -1,6 +1,6 @@
-import helper, { Tier } from "./assistantHelpers";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
@@ -22,22 +22,6 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
-function isItemAppropriateForTime(id: string | undefined, time: number) {
-    // Having no neutral item is never appropriate
-    if (id === undefined) {
-        return false;
-    }
-    const itemTier = helper.neutral.nameToTier(id);
-    // Having an unclassified neutral item is always appropriate
-    // This is probably a data issue on our end
-    if (itemTier === Tier.UNKNOWN) {
-        return true;
-    }
-    // Appropriate item when matching time tier or 1 below
-    const timeTier = helper.neutral.timeToTier(time);
-    return itemTier >= timeTier - 1;
-}
-
 export default new RuleDecoratorStartAndEndMinute(
     NEUTRAL_ITEM_REMINDER_START_MINUTE,
     undefined,
@@ -48,7 +32,7 @@ export default new RuleDecoratorStartAndEndMinute(
             trigger: [topics.items, topics.time],
             given: [lastReminderTimeTopic],
             then: ([items, time], [lastReminderTime]) => {
-                const appropriateItem = isItemAppropriateForTime(
+                const appropriateItem = helper.neutral.isItemAppropriateForTime(
                     items.neutral?.id,
                     time
                 );
