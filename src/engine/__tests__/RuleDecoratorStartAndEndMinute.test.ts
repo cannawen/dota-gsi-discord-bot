@@ -25,7 +25,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
         });
 
         test("should subscribe to time topic", () => {
-            expect(rule.given).toEqual([topics.time]);
+            expect(rule.trigger).toEqual([topics.time]);
         });
     });
 

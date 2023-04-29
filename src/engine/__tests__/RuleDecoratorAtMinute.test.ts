@@ -20,7 +20,7 @@ describe("RuleDecoratorAtMinute", () => {
     });
 
     test("should subscribe to time topic", () => {
-        expect(rule.given).toContain(topics.time);
+        expect(rule.trigger).toContain(topics.time);
     });
 
     describe("in game", () => {

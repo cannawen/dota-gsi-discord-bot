@@ -20,7 +20,7 @@ export default new RuleDecoratorInGame(
         configTopic,
         new Rule({
             label: rules.assistant.runeWisdom,
-            given: [topics.time],
+            trigger: [topics.time],
             then: ([time]) => {
                 if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
                     return new Fact(

@@ -42,12 +42,7 @@ describe("RuleDecoratorInGame", () => {
 
         describe("in game", () => {
             test("time not 0", () => {
-                const results = getResults(
-                    rule,
-                    { inGame: true, time: 5 },
-                    undefined,
-                    true
-                );
+                const results = getResults(rule, { inGame: true, time: 5 });
                 expect(results).toContainFact("hasTriggeredClosure", true);
             });
             test("time 0", () => {

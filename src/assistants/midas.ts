@@ -24,7 +24,7 @@ export default new RuleDecoratorInGame(
         configTopic,
         new Rule({
             label: rules.assistant.midas,
-            given: [topics.items, topics.alive, topics.time],
+            trigger: [topics.items, topics.alive, topics.time],
             then: (_t, _g, get) => {
                 if (!get(topics.alive)!) {
                     return new Fact(lastReminderTimeTopic, undefined);

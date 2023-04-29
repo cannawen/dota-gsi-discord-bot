@@ -70,7 +70,7 @@ function applyRules(
                 return rule;
             })
             // and there none of the givens are `undefined`
-            .filter((rule) => topicsAllDefined(rule.given, db))
+            .filter((rule) => topicsAllDefined(rule.trigger, db))
             .reduce((memo, rule) => {
                 const trigger = rule.trigger.map((topic) => db.get(topic));
                 const given = rule.given.map((topic) => db.get(topic));
