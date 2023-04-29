@@ -9,7 +9,7 @@ function isAudioEffect(topic: string) {
     return (
         topic === "playPrivateAudio" ||
         topic === "playInterruptingAudioFile" ||
-        topic === "playPrivateAudio"
+        topic === "playPublicAudio"
     );
 }
 
@@ -101,7 +101,8 @@ expect.extend({
                 return isAudioEffect(fact.topic.label) || memo;
             } else {
                 return (
-                    (isAudioEffect(fact.topic.label) && fact.value === value) ||
+                    (isAudioEffect(fact.topic.label) &&
+                        this.equals(fact.value, value)) ||
                     memo
                 );
             }
