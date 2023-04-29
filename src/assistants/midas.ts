@@ -1,5 +1,7 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import Item from "../gsi-data-classes/Item";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
@@ -16,42 +18,57 @@ export const assistantDescription = "Reminds you to use your midas";
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastMidasReminderTimeTopic"
 );
+const canCastMidasTopic =
+    topicManager.createTopic<boolean>("canCastMidasTopic");
 
 const REMINDER_INTERVAL = 15;
 
-export default new RuleDecoratorInGame(
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule({
-            label: rules.assistant.midas,
-            trigger: [topics.alive, topics.items, topics.time],
-            given: [lastReminderTimeTopic],
-            then: ([alive, items, time], [lastReminderTime]) => {
-                if (!alive) {
-                    return new Fact(lastReminderTimeTopic, undefined);
-                }
+function getMidas(items: PlayerItems): Item | undefined {
+    return [...items.inventory, ...items.backpack]
+        .filter((item): item is Item => item !== null)
+        .find((item) => item!.id === "item_hand_of_midas");
+}
 
-                const midas = [...items.inventory, ...items.backpack]
-                    .filter((item) => item !== null)
-                    .find((item) => item!.id === "item_hand_of_midas");
-
-                if (midas === undefined || midas!.cooldown! > 0) {
-                    return new Fact(lastReminderTimeTopic, undefined);
-                }
-
-                if (lastReminderTime === undefined) {
-                    return new Fact(lastReminderTimeTopic, time);
-                }
-                if (time >= lastReminderTime + REMINDER_INTERVAL) {
-                    return [
-                        new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/midas.mpeg"
-                        ),
-                        new Fact(lastReminderTimeTopic, time),
-                    ];
-                }
-            },
-        })
-    )
-);
+export default [
+    new Rule({
+        label: "save state if midas available to cast",
+        trigger: [topics.items, topics.alive],
+        then: ([items, alive]) => {
+            const midas = getMidas(items);
+            // If we are dead or we have no midas, we cannot cast it
+            if (!alive || midas === undefined) {
+                return new Fact(canCastMidasTopic, false);
+            } else {
+                // If we have a midas, we can cast it if our cooldown is 0
+                return new Fact(canCastMidasTopic, midas.cooldown === 0);
+            }
+        },
+    }),
+    new Rule({
+        label: "when we cannot cast our midas, clear last reminder time topic",
+        trigger: [canCastMidasTopic],
+        when: ([canCast]) => canCast === false,
+        then: () => [new Fact(lastReminderTimeTopic, undefined)],
+    }),
+    new Rule({
+        label: "if we see a castable midas, but we have never warned before, do not warn but set the reminder time",
+        trigger: [topics.time, canCastMidasTopic],
+        given: [lastReminderTimeTopic],
+        when: ([_, canCastMidas], [lastReminderTime]) =>
+            canCastMidas && lastReminderTime === undefined,
+        then: ([time]) => new Fact(lastReminderTimeTopic, time),
+    }),
+    new Rule({
+        label: "if we can cast midas and it has been 15 seconds after our last reminder time, warn user about midas",
+        trigger: [topics.time, canCastMidasTopic],
+        given: [lastReminderTimeTopic],
+        when: ([time, canCastMidas], [lastReminderTime]) =>
+            canCastMidas && time === lastReminderTime + REMINDER_INTERVAL,
+        then: ([time]) => [
+            new Fact(lastReminderTimeTopic, time),
+            new Fact(topics.configurableEffect, "resources/audio/midas.mpeg"),
+        ],
+    }),
+]
+    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule))
+    .map((rule) => new RuleDecoratorInGame(rule));
