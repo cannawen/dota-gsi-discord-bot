@@ -74,24 +74,20 @@ function roshStatusResponse(
 
         if (deathTime) {
             if (time < deathTime + AEGIS_DURATION) {
-                response = `Roshan is dead. Aegis expires at ${
-                    (helper.secondsToTimeString(deathTime + AEGIS_DURATION),
-                    true)
-                }`;
+                response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
+                    deathTime + AEGIS_DURATION,
+                    true
+                )}`;
             } else if (time < deathTime + ROSHAN_MINIMUM_SPAWN_TIME) {
-                response = `Roshan is dead. May respawn at ${
-                    (helper.secondsToTimeString(
-                        deathTime + ROSHAN_MINIMUM_SPAWN_TIME
-                    ),
-                    true)
-                }`;
+                response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
+                    deathTime + ROSHAN_MINIMUM_SPAWN_TIME,
+                    true
+                )}`;
             } else if (time < deathTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
-                response = `Roshan may be alive. Guaranteed respawn at ${
-                    (helper.secondsToTimeString(
-                        deathTime + ROSHAN_MAXIMUM_SPAWN_TIME
-                    ),
-                    true)
-                }`;
+                response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
+                    deathTime + ROSHAN_MAXIMUM_SPAWN_TIME,
+                    true
+                )}`;
             }
         }
     }
