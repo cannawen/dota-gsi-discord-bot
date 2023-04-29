@@ -220,4 +220,9 @@ function getResults(
     return result;
 }
 
-global.getResults = getResults as any;
+function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[] {
+    return facts.filter((fact) => !isAudioEffect(fact.topic.label));
+}
+
+global.getResults = getResults;
+global.removeEphemeralState = removeEphemeralState;

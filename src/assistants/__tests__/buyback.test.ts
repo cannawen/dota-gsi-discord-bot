@@ -21,9 +21,7 @@ describe("buyback gold reminder in a game after 30 minutes", () => {
                 const alreadyWarned = getResults(
                     rule,
                     { ...params, gold: 98 },
-                    warningResult.filter(
-                        (fact) => fact.topic.label !== "playPrivateAudio"
-                    )
+                    removeEphemeralState(warningResult)
                 );
                 expect(alreadyWarned).not.toContainAudioEffect();
             });
