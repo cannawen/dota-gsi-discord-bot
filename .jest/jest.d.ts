@@ -14,6 +14,7 @@ declare global {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;
             setContaining(expected: T extends Set<infer V> ? V[] : never): R;
+            // TODO create a helper that says "hasNoEffect" that checks both private and public audio
             toContainFact(label: string, value?: unknown): R;
             toContainTopic(label: string): R;
         }
