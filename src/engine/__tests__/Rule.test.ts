@@ -10,11 +10,16 @@ describe("Rule", () => {
     beforeEach(() => {
         configTopic = new Topic<EffectConfig>("configTopic");
         topic = new Topic<number>("topic");
-        rule = new Rule("test", [topic, topic, configTopic], (get) => {});
+        rule = new Rule({
+            label: "test",
+            trigger: [topic, topic, configTopic],
+            then: () => {},
+        });
     });
     test("does not de-duplicate given topics", () => {
-        expect(rule.given.length).toBe(3);
-        expect(rule.given).toContain(topic);
-        expect(rule.given).toContain(configTopic);
+        expect(rule.trigger.length).toBe(3);
+        expect(rule.trigger).toContain(topic);
+        expect(rule.trigger).toContain(configTopic);
     });
+    // TODO test apply
 });

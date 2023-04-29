@@ -225,16 +225,24 @@ function getResults(
     newFacts.forEach((fact) => engine.set(factStore, fact));
     const result = factStore.getAllFacts();
     if (debug) {
-        console.log(
-            "prevState:",
-            factsToPlainObject(prevStateArray),
-            "\n\ninput:",
-            db,
-            "\n\nmerged:",
-            { ...factsToPlainObject(prevStateArray), ...db },
-            "\n\noutput:",
-            factsToPlainObject(result)
-        );
+        let message: any[] = [];
+        if (previousState) {
+            message.push("prevState");
+            message.push(factsToPlainObject(prevStateArray));
+            message.push("\n\n");
+        }
+        message.push("input");
+        message.push(db);
+        message.push("\n\n");
+        if (previousState) {
+            message.push("merged");
+            message.push({ ...factsToPlainObject(prevStateArray), ...db });
+            message.push("\n\n");
+        }
+        message.push("output");
+        message.push(factsToPlainObject(result));
+
+        console.log(...message);
     }
     return result;
 }

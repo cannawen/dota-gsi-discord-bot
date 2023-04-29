@@ -19,14 +19,17 @@ export const assistantDescription =
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(rules.assistant.runeBounty, [topics.time], (get) => {
-            const time = get(topics.time)!;
-            if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
-                return new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/rune-bounty.wav"
-                );
-            }
+        new Rule({
+            label: rules.assistant.runeBounty,
+            trigger: [topics.time],
+            then: ([time]) => {
+                if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
+                    return new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/rune-bounty.wav"
+                    );
+                }
+            },
         })
     )
 );

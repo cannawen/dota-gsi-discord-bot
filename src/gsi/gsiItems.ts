@@ -4,11 +4,15 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-export default new Rule(rules.gsi.playerItems, [topics.allData], (get) => {
-    const items = get(topics.allData)!.items;
-    if (items) {
-        return new Fact(topics.items, PlayerItems.create(items));
-    } else {
-        return new Fact(topics.items, undefined);
-    }
+export default new Rule({
+    label: rules.gsi.playerItems,
+    trigger: [topics.allData],
+    then: ([data]) => {
+        const items = data.items;
+        if (items) {
+            return new Fact(topics.items, PlayerItems.create(items));
+        } else {
+            return new Fact(topics.items, undefined);
+        }
+    },
 });

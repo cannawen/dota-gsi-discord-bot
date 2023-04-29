@@ -12,28 +12,32 @@ describe("RuleDecoratorInGame", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
             rule = new RuleDecoratorInGame(
-                new Rule("test", [], (_) => new Fact(topic, true))
+                new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });
         // Should not register to time or inGame topics because
         // some rules (buyback, pause) are depending on the givens not changing
         // to do their effect properly
         test("should not subscribe to in game and time topic", () => {
-            expect(rule.given).not.toContain(topics.time);
-            expect(rule.given).not.toContain(topics.inGame);
+            expect(rule.trigger).not.toContain(topics.time);
+            expect(rule.trigger).not.toContain(topics.inGame);
         });
     });
 
-    describe("inner rule subscribes to time topic", () => {
+    describe("inner rule triggers on time topic", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
             rule = new RuleDecoratorInGame(
-                new Rule("test", [topics.time], (_) => new Fact(topic, true))
+                new Rule({
+                    label: "test",
+                    trigger: [topics.time],
+                    then: () => new Fact(topic, true),
+                })
             );
         });
         test("should subscribe to time topic", () => {
-            expect(rule.given).toContain(topics.time);
-            expect(rule.given).toHaveLength(1);
+            expect(rule.trigger).toContain(topics.time);
+            expect(rule.trigger).toHaveLength(1);
         });
 
         describe("in game", () => {

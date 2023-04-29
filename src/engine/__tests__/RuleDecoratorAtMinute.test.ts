@@ -12,12 +12,15 @@ describe("RuleDecoratorAtMinute", () => {
         topic = new Topic<boolean>("hasTriggeredClosure");
         rule = new RuleDecoratorAtMinute(
             10,
-            new Rule("test", [], (_) => new Fact(topic, true))
+            new Rule({
+                label: "test",
+                then: () => new Fact(topic, true),
+            })
         );
     });
 
     test("should subscribe to time topic", () => {
-        expect(rule.given).toContain(topics.time);
+        expect(rule.trigger).toContain(topics.time);
     });
 
     describe("in game", () => {

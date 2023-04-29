@@ -21,37 +21,34 @@ export default [
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
-        new Rule(
-            "when buyback is available",
-            [topics.buybackCooldown, topics.gold, topics.buybackCost],
-            () => {},
-            ([cooldown]) => cooldown === 0,
-            ([_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost)
-        )
+        new Rule({
+            label: "when buyback is available",
+            trigger: [topics.buybackCooldown, topics.gold, topics.buybackCost],
+            when: ([cooldown]) => cooldown === 0,
+            then: ([_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost),
+        })
     ),
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
-        new Rule(
-            "when buyback is not available",
-            [topics.buybackCooldown, topics.gold, topics.buybackCost],
-            () => {},
-            ([cooldown]) => cooldown !== 0,
-            () => new Fact(hasBuybackTopic, false)
-        )
+        new Rule({
+            label: "when buyback is not available",
+            trigger: [topics.buybackCooldown, topics.gold, topics.buybackCost],
+            when: ([cooldown]) => cooldown !== 0,
+            then: () => new Fact(hasBuybackTopic, false),
+        })
     ),
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            "warn about buyback",
-            [hasBuybackTopic, topics.buybackCooldown],
-            () => {},
-            ([hasBuyback, cooldown]) => !hasBuyback && cooldown === 0,
-            () =>
+        new Rule({
+            label: "warn about buyback",
+            trigger: [hasBuybackTopic, topics.buybackCooldown],
+            when: ([hasBuyback, cooldown]) => !hasBuyback && cooldown === 0,
+            then: () =>
                 new Fact(
                     topics.configurableEffect,
                     "you do not have buyback gold"
-                )
-        )
+                ),
+        })
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

@@ -14,7 +14,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
             rule = new RuleDecoratorStartAndEndMinute(
                 0,
                 4,
-                new Rule("test", [], (get) => new Fact(topic, true))
+                new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });
         describe("in game", () => {
@@ -25,7 +25,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
         });
 
         test("should subscribe to time topic", () => {
-            expect(rule.given).toEqual([topics.time]);
+            expect(rule.trigger).toEqual([topics.time]);
         });
     });
 
@@ -35,7 +35,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
             rule = new RuleDecoratorStartAndEndMinute(
                 2,
                 4,
-                new Rule("test", [], (get) => new Fact(topic, true))
+                new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });
         describe("in game", () => {

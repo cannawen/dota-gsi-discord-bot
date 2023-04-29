@@ -22,15 +22,15 @@ const REMINDER_INTERVAL = 15;
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.midas,
-            [topics.items, topics.alive, topics.time],
-            (get) => {
-                if (!get(topics.alive)!) {
+        new Rule({
+            label: rules.assistant.midas,
+            trigger: [topics.alive, topics.items, topics.time],
+            given: [lastReminderTimeTopic],
+            then: ([alive, items, time], [lastReminderTime]) => {
+                if (!alive) {
                     return new Fact(lastReminderTimeTopic, undefined);
                 }
 
-                const items = get(topics.items)!;
                 const midas = [...items.inventory, ...items.backpack]
                     .filter((item) => item !== null)
                     .find((item) => item!.id === "item_hand_of_midas");
@@ -38,9 +38,6 @@ export default new RuleDecoratorInGame(
                 if (midas === undefined || midas!.cooldown! > 0) {
                     return new Fact(lastReminderTimeTopic, undefined);
                 }
-
-                const time = get(topics.time)!;
-                const lastReminderTime = get(lastReminderTimeTopic);
 
                 if (lastReminderTime === undefined) {
                     return new Fact(lastReminderTimeTopic, time);
@@ -54,7 +51,7 @@ export default new RuleDecoratorInGame(
                         new Fact(lastReminderTimeTopic, time),
                     ];
                 }
-            }
-        )
+            },
+        })
     )
 );

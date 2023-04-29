@@ -41,15 +41,7 @@ const excessGoldTopic = topicManager.createTopic<number>("excessGoldTopic");
  */
 const audioToPlayTopic = topicManager.createTopic<string>("audioToPlayTopic");
 
-function newMultiplier(get: any) {
-    const gold = get(excessGoldTopic)!;
-    const increment = get(remindGoldIncrementTopic)!;
-    return Math.floor(gold / increment);
-}
-
-function oldMultiplier(get: any) {
-    const gold = get(lastRemindedGoldTopic)!;
-    const increment = get(remindGoldIncrementTopic)!;
+function multiplier(gold: number, increment: number) {
     return Math.floor(gold / increment);
 }
 
@@ -58,106 +50,95 @@ export default [
     new RuleDecoratorStartAndEndMinute(
         0,
         10,
-        new Rule(
-            "when time is before 10:00, warn every 500 gold",
-            [topics.time],
-            () => {},
-            () => true,
-            () => new Fact(remindGoldIncrementTopic, 500)
-        )
+        new Rule({
+            label: "when time is before 10:00, set reminder increment to 500 gold",
+            then: () => new Fact(remindGoldIncrementTopic, 500),
+        })
     ),
     new RuleDecoratorStartAndEndMinute(
         10,
         undefined,
-        new Rule(
-            "when time is after 10:00, warn every 1000 gold",
-            [topics.time],
-            () => {},
-            () => true,
-            () => new Fact(remindGoldIncrementTopic, 1000)
-        )
+        new Rule({
+            label: "when time is after 10:00, set reminder increment to 1000 gold",
+            then: () => new Fact(remindGoldIncrementTopic, 1000),
+        })
     ),
     // Store excess gold
     new RuleDecoratorStartAndEndMinute(
         0,
         30,
-        new Rule(
-            "when time is before 30:00, remind about all your gold",
-            [topics.gold, topics.time],
-            () => {},
-            () => true,
-            ([gold]) => new Fact(excessGoldTopic, gold)
-        )
+        new Rule({
+            label: "when time is before 30:00, remind about all your gold",
+            trigger: [topics.gold],
+            then: ([gold]) => new Fact(excessGoldTopic, gold),
+        })
     ),
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
-        new Rule(
-            "when time is after 30:00, and you do not have buyback, remind about all your gold",
-            [topics.gold, topics.buybackCooldown, topics.time],
-            () => {},
-            ([_, buybackCooldown]) => buybackCooldown > 0,
-            ([gold]) => new Fact(excessGoldTopic, gold)
-        )
+        new Rule({
+            label: "when time is after 30:00, and you do not have buyback, remind about all your gold",
+            trigger: [topics.gold, topics.buybackCooldown],
+            when: ([_, buybackCooldown]) => buybackCooldown > 0,
+            then: ([gold]) => new Fact(excessGoldTopic, gold),
+        })
     ),
     new RuleDecoratorStartAndEndMinute(
         30,
         undefined,
-        new Rule(
-            "when time is after 30:00, and you have buyback, remind about your gold above buyback",
-            [topics.gold, topics.buybackCooldown, topics.time],
-            () => {},
-            ([_, buybackCooldown]) => buybackCooldown === 0,
-            ([gold], get) =>
-                new Fact(
-                    excessGoldTopic,
-                    Math.max(0, gold - get(topics.buybackCost)!)
-                )
-        )
+        new Rule({
+            label: "when time is after 30:00, and you have buyback, remind about your gold above buyback",
+            trigger: [topics.gold, topics.buybackCooldown],
+            given: [topics.buybackCost],
+            when: ([_, cooldown]) => cooldown === 0,
+            then: ([gold], [buybackCost]) =>
+                new Fact(excessGoldTopic, Math.max(0, gold - buybackCost)),
+        })
     ),
     // Store audio string
-    new Rule(
-        "when you have under 1500 gold, play sound reminder",
-        [excessGoldTopic],
-        () => {},
-        ([gold]) => gold <= 1500,
-        () => new Fact(audioToPlayTopic, "resources/audio/gold.mp3")
-    ),
-    new Rule(
-        "when you have 1500-2500 gold, play tts reminder",
-        [excessGoldTopic],
-        () => {},
-        ([gold]) => gold > 1500 && gold <= 2500,
-        () => new Fact(audioToPlayTopic, "you have a lot of gold")
-    ),
-    new Rule(
-        "when you have over 2500 gold, play aggresive tts reminder",
-        [excessGoldTopic],
-        () => {},
-        ([gold]) => gold > 2500,
-        () => new Fact(audioToPlayTopic, "you really have a lot of gold")
-    ),
+    new Rule({
+        label: "when you have 1500 gold or less, use sound reminder",
+        trigger: [excessGoldTopic],
+        when: ([gold]) => gold <= 1500,
+        then: () => new Fact(audioToPlayTopic, "resources/audio/gold.mp3"),
+    }),
+    new Rule({
+        label: "when you have 1501-2500 gold, use tts reminder",
+        trigger: [excessGoldTopic],
+        when: ([gold]) => gold > 1500 && gold <= 2500,
+        then: () => new Fact(audioToPlayTopic, "you have a lot of gold"),
+    }),
+    new Rule({
+        label: "when you have over 2500 gold, use aggresive tts reminder",
+        trigger: [excessGoldTopic],
+        when: ([gold]) => gold > 2500,
+        then: () => new Fact(audioToPlayTopic, "you really have a lot of gold"),
+    }),
     // After we spend gold past a multiplier threshold, save the new gold amount as our new baseline to check against
-    new Rule(
-        "if we have spent gold, update our gold topic",
-        [excessGoldTopic],
-        () => {},
-        (_, get) => oldMultiplier(get) > newMultiplier(get),
-        ([gold]) => new Fact(lastRemindedGoldTopic, gold),
-        [[lastRemindedGoldTopic, 0]]
-    ),
+    new Rule({
+        label: "if we have spent gold, update our gold topic",
+        trigger: [excessGoldTopic],
+        given: [lastRemindedGoldTopic, remindGoldIncrementTopic],
+        when: ([excessGold], [lastRemindedGold, increment]) =>
+            multiplier(lastRemindedGold, increment) >
+            multiplier(excessGold, increment),
+        then: ([gold]) => new Fact(lastRemindedGoldTopic, gold),
+        defaultValues: [new Fact(lastRemindedGoldTopic, 0)],
+    }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            "if we have passed a warning threshold, warn user and update our gold topic",
-            [excessGoldTopic, audioToPlayTopic],
-            () => {},
-            (_, get) => newMultiplier(get) > oldMultiplier(get),
-            ([gold], get) => [
-                new Fact(topics.configurableEffect, get(audioToPlayTopic)!),
+        new Rule({
+            label: "if we have passed a warning threshold, warn user and update our gold topic",
+            trigger: [excessGoldTopic, audioToPlayTopic],
+            given: [lastRemindedGoldTopic, remindGoldIncrementTopic],
+            when: ([excessGold], [lastRemindedGold, increment]) =>
+                multiplier(excessGold, increment) >
+                multiplier(lastRemindedGold, increment),
+            then: ([gold, audioToPlay]) => [
+                new Fact(topics.configurableEffect, audioToPlay),
                 new Fact(lastRemindedGoldTopic, gold),
-            ]
-        )
+            ],
+        })
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

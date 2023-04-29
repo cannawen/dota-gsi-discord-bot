@@ -19,6 +19,11 @@ function inGame(state: Dota2GameState) {
     }
 }
 
+/**
+ * Backfills time facts for any time ticks that we may have skipped
+ * If time jump is greater than 5 seconds, does not backfill.
+ * TODO needs tests
+ */
 function getTimeFacts(oldTime: number | undefined, newTime: number) {
     const timeFacts = [];
     if (oldTime && newTime > oldTime + 1 && newTime <= oldTime + 5) {
@@ -31,14 +36,19 @@ function getTimeFacts(oldTime: number | undefined, newTime: number) {
     return timeFacts;
 }
 
-export default new Rule(rules.gsi.map, [topics.allData], (get) => {
-    const map = get(topics.allData)!.map;
-    if (map) {
-        return [
-            ...getTimeFacts(get(topics.time), map.clockTime),
-            new Fact(topics.dayTime, map.dayTime),
-            new Fact(topics.inGame, inGame(map.gameState)),
-            new Fact(topics.paused, map.paused),
-        ];
-    }
+export default new Rule({
+    label: rules.gsi.map,
+    trigger: [topics.allData],
+    given: [topics.time],
+    then: ([data], [time]) => {
+        const map = data.map;
+        if (map) {
+            return [
+                ...getTimeFacts(time, map.clockTime),
+                new Fact(topics.dayTime, map.dayTime),
+                new Fact(topics.inGame, inGame(map.gameState)),
+                new Fact(topics.paused, map.paused),
+            ];
+        }
+    },
 });

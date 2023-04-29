@@ -10,14 +10,14 @@ import tts from "./tts";
 /**
  * The actual playing happens in discord/playAudioQueue
  */
-export default new Rule(
-    rules.effect.playAudio,
-    [topics.playPublicAudio, topics.discordAudioEnabled],
-    (get) => {
-        const audio = get(topics.playPublicAudio)!;
-        const queue = [...(get(topics.publicAudioQueue) || [])];
+export default new Rule({
+    label: rules.effect.playAudio,
+    trigger: [topics.discordAudioEnabled, topics.playPublicAudio],
+    given: [topics.publicAudioQueue, topics.studentId],
+    then: ([enabled, audio], [publicAudioQueue, studentId]) => {
+        const queue = [...publicAudioQueue];
 
-        if (get(topics.discordAudioEnabled)!) {
+        if (enabled) {
             const hardCodedFile = path.join(__dirname, "../../", audio);
             const cachedTtsFile = path.join(
                 __dirname,
@@ -32,7 +32,7 @@ export default new Rule(
             } else {
                 tts.create(audio).then(() => {
                     engine.setFact(
-                        get(topics.studentId)!,
+                        studentId,
                         new Fact(topics.playPublicAudio, audio)
                     );
                 });
@@ -43,5 +43,6 @@ export default new Rule(
             new Fact(topics.publicAudioQueue, queue),
             new Fact(topics.playPublicAudio, undefined),
         ];
-    }
-);
+    },
+    defaultValues: [new Fact(topics.publicAudioQueue, [])],
+});

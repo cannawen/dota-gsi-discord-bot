@@ -29,11 +29,12 @@ const params = {
     [rules.assistant.philosophersStone]: "PRIVATE",
     items: NO_PHILOSOPHERS_STONE,
     inGame: true,
-    alive: true,
+    time: 100,
     respawnSeconds: 0,
+    alive: true,
 };
 
-describe("philosopher's stone assistant, in game", () => {
+describe("philosophers stone assistant, in game", () => {
     describe("has never seen philosophers stone before", () => {
         test("do nothing", () => {
             const results = getResults(rule, params);

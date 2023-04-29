@@ -53,34 +53,30 @@ function hasValidItem(items: PlayerItems) {
 }
 
 export default [
-    new Rule(
-        "reset reminder time",
-        [topics.alive, topics.items],
-        () => {},
-        ([alive, items]) => !alive || !hasValidItem(items),
-        () => new Fact(lastReminderTimeTopic, undefined)
-    ),
-    new Rule(
-        "give user some grace time if we have never reminded before",
-        [topics.alive, topics.items, topics.time],
-        () => {},
-        ([alive, items, _], get) =>
-            alive &&
-            hasValidItem(items) &&
-            get(lastReminderTimeTopic) === undefined,
-        ([_alive, _items, time]) => new Fact(lastReminderTimeTopic, time)
-    ),
-    new Rule(
-        "remind user to dig and update last reminder time",
-        [topics.time, lastReminderTimeTopic],
-        () => {},
-        ([time, lastReminderTime]) =>
+    new Rule({
+        label: "reset reminder time",
+        trigger: [topics.alive, topics.items],
+        when: ([alive, items]) => !alive || !hasValidItem(items),
+        then: () => new Fact(lastReminderTimeTopic, undefined),
+    }),
+    new Rule({
+        label: "give user some grace time if we have never reminded before",
+        trigger: [topics.alive, topics.items, topics.time],
+        given: [lastReminderTimeTopic],
+        when: ([alive, items, _], [lastReminderTime]) =>
+            alive && hasValidItem(items) && lastReminderTime === undefined,
+        then: ([_alive, _items, time]) => new Fact(lastReminderTimeTopic, time),
+    }),
+    new Rule({
+        label: "remind user to dig and update last reminder time",
+        trigger: [topics.time, lastReminderTimeTopic],
+        when: ([time, lastReminderTime]) =>
             time >= lastReminderTime + TIME_BETWEEN_REMINDERS,
-        ([time, _]) => [
+        then: ([time]) => [
             new Fact(topics.configurableEffect, "dig"),
             new Fact(lastReminderTimeTopic, time),
-        ]
-    ),
+        ],
+    }),
 ].map(
     (rule) =>
         new RuleDecoratorInGame(

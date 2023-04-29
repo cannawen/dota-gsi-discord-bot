@@ -23,14 +23,17 @@ export default new RuleDecoratorStartAndEndMinute(
     new RuleDecoratorInGame(
         new RuleDecoratorConfigurable(
             configTopic,
-            new Rule(rules.assistant.runePower, [topics.time], (get) => {
-                const time = get(topics.time)!;
-                if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rune-power.wav"
-                    );
-                }
+            new Rule({
+                label: rules.assistant.runePower,
+                trigger: [topics.time],
+                then: ([time]) => {
+                    if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
+                        return new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/rune-power.wav"
+                        );
+                    }
+                },
             })
         )
     )

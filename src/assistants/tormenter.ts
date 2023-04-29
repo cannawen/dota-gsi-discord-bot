@@ -26,25 +26,22 @@ export default [
         20,
         new RuleDecoratorConfigurable(
             configTopic,
-            new Rule(
-                rules.assistant.tormenter,
-                [],
-                (get) =>
+            new Rule({
+                label: rules.assistant.tormenter,
+                then: () =>
                     new Fact(
                         topics.configurableEffect,
                         "resources/audio/tormenters-up.mp3"
-                    )
-            )
+                    ),
+            })
         )
     ),
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            "tormenter reminder",
-            [topics.time, tormenterFallenTimeTopic],
-            (get) => {
-                const time = get(topics.time);
-                const fallenTime = get(tormenterFallenTimeTopic)!;
+        new Rule({
+            label: "tormenter reminder",
+            trigger: [topics.time, tormenterFallenTimeTopic],
+            then: ([time, fallenTime]) => {
                 if (time === fallenTime + 60 * 10) {
                     return [
                         new Fact(
@@ -54,39 +51,43 @@ export default [
                         new Fact(tormenterFallenTimeTopic, undefined),
                     ];
                 }
-            }
-        )
+            },
+        })
     ),
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule("tormenter voice", [topics.lastDiscordUtterance], (get) => {
-            const lastDiscordUtterance = get(topics.lastDiscordUtterance)!;
-            if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
-                return [
-                    new Fact(tormenterFallenTimeTopic, get(topics.time)),
-                    new Fact(topics.configurableEffect, "OK"),
-                ];
-            }
-            if (lastDiscordUtterance.match(/^torment status$/i)) {
-                const fallenTime = get(tormenterFallenTimeTopic);
-                let message: string;
-                if (fallenTime) {
-                    message = `Tormenter is dead. Will respawn at ${
-                        (helper.secondsToTimeString(fallenTime + 10 * 60), true)
-                    }`;
-                } else if (get(topics.time)! >= 20 * 60) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/tormenters-up.mp3"
-                    );
-                } else {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/tormenter-20-minutes.mp3"
-                    );
+        new Rule({
+            label: "tormenter voice",
+            trigger: [topics.lastDiscordUtterance],
+            given: [topics.time, tormenterFallenTimeTopic],
+            then: ([lastDiscordUtterance], [time, fallenTime]) => {
+                if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
+                    return [
+                        new Fact(tormenterFallenTimeTopic, time),
+                        new Fact(topics.configurableEffect, "OK"),
+                    ];
                 }
-                return new Fact(topics.configurableEffect, message);
-            }
+                if (lastDiscordUtterance.match(/^torment status$/i)) {
+                    let message: string;
+                    if (fallenTime) {
+                        message = `Tormenter is dead. Will respawn at ${
+                            (helper.secondsToTimeString(fallenTime + 10 * 60),
+                            true)
+                        }`;
+                    } else if (time >= 20 * 60) {
+                        return new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/tormenters-up.mp3"
+                        );
+                    } else {
+                        return new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/tormenter-20-minutes.mp3"
+                        );
+                    }
+                    return new Fact(topics.configurableEffect, message);
+                }
+            },
         })
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

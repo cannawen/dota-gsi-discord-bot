@@ -36,13 +36,17 @@ function hasPhilosophersStone(items: DeepReadonly<PlayerItems>): boolean {
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
         configTopic,
-        new Rule(
-            rules.assistant.philosophersStone,
-            [topics.items, topics.respawnSeconds, topics.alive],
-            (get) => {
-                const items = get(topics.items)!;
-
-                const seenBefore = get(seenPhilosophersStoneTopic);
+        new Rule({
+            label: rules.assistant.philosophersStone,
+            trigger: [topics.items, topics.alive, topics.respawnSeconds],
+            given: [
+                seenPhilosophersStoneTopic,
+                remindedAlreadyThisDeathCycleTopic,
+            ],
+            then: (
+                [items, alive, respawnSeconds],
+                [seenBefore, alreadyReminded]
+            ) => {
                 if (seenBefore === undefined && hasPhilosophersStone(items)) {
                     return new Fact(seenPhilosophersStoneTopic, true);
                 }
@@ -50,19 +54,12 @@ export default new RuleDecoratorInGame(
                     return;
                 }
 
-                const alive = get(topics.alive)!;
-
                 if (alive) {
                     return new Fact(
                         remindedAlreadyThisDeathCycleTopic,
                         undefined
                     );
                 } else {
-                    const respawnSeconds = get(topics.respawnSeconds)!;
-                    const alreadyReminded = get(
-                        remindedAlreadyThisDeathCycleTopic
-                    );
-
                     if (
                         alreadyReminded === undefined &&
                         items.neutral?.id !== "item_philosophers_stone"
@@ -85,7 +82,7 @@ export default new RuleDecoratorInGame(
                         );
                     }
                 }
-            }
-        )
+            },
+        })
     )
 );

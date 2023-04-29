@@ -9,30 +9,29 @@ import Voice = require("@discordjs/voice");
 
 const emColor = colors.cyan;
 
-export default new Rule(
-    rules.discord.playNext,
-    [
+export default new Rule({
+    label: rules.discord.playNext,
+    trigger: [
         topics.discordReadyToPlayAudio,
         topics.publicAudioQueue,
         topics.discordSubscriptionTopic,
     ],
-    (get) => {
-        const ready = get(topics.discordReadyToPlayAudio)!;
-        const subscription = get(topics.discordSubscriptionTopic)!;
-        const audioQueue = [...get(topics.publicAudioQueue)!];
+    given: [topics.time, topics.studentId],
+    then: ([ready, queue, subscription], [time, studentId]) => {
+        const audioQueue = [...queue];
 
         if (ready && audioQueue.length > 0) {
-            const filePath = audioQueue.splice(0, 1)[0];
+            const filePath = audioQueue.shift();
             log.info(
                 "discord",
                 "%s - Playing %s for student %s",
-                helper.secondsToTimeString(get(topics.time) || 0),
+                helper.secondsToTimeString(time || 0),
                 emColor(filePath),
-                get(topics.studentId)?.substring(0, 10)
+                studentId?.substring(0, 10)
             );
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return new Fact(topics.publicAudioQueue, audioQueue);
         }
-    }
-);
+    },
+});

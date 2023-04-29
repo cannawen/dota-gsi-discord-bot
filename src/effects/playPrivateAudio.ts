@@ -10,13 +10,12 @@ import tts from "./tts";
 /**
  * The actual playing happens in server /coach/:studentId/poll
  */
-export default new Rule(
-    rules.effect.playPrivateAudio,
-    [topics.playPrivateAudio],
-    (get) => {
-        const audio = get(topics.playPrivateAudio)!;
-        const queue = [...(get(topics.privateAudioQueue) || [])];
-
+export default new Rule({
+    label: rules.effect.playPrivateAudio,
+    trigger: [topics.playPrivateAudio],
+    given: [topics.privateAudioQueue, topics.studentId],
+    then: ([audio], [privateAudioQueue, studentId]) => {
+        const queue = [...privateAudioQueue];
         const hardCodedFile = path.join(__dirname, "../../", audio);
         const cachedTtsFile = path.join(__dirname, "../../", tts.path(audio));
 
@@ -27,7 +26,7 @@ export default new Rule(
         } else {
             tts.create(audio).then(() => {
                 engine.setFact(
-                    get(topics.studentId)!,
+                    studentId,
                     new Fact(topics.playPrivateAudio, audio)
                 );
             });
@@ -37,5 +36,6 @@ export default new Rule(
             new Fact(topics.privateAudioQueue, queue),
             new Fact(topics.playPrivateAudio, undefined),
         ];
-    }
-);
+    },
+    defaultValues: [new Fact(topics.privateAudioQueue, [])],
+});
