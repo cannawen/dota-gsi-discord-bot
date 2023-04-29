@@ -8,7 +8,7 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const LOTUS_SPAWN_INTERVAL = 3 * 60;
-const ADVANCED_WARNING = 10;
+const ADVANCED_WARNING = 15;
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.lotus
@@ -25,14 +25,13 @@ export default new RuleDecoratorStartAndEndMinute(
         new Rule({
             label: rules.assistant.lotus,
             trigger: [topics.time],
-            then: ([time]) => {
-                if ((time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/lotus-soon.mp3"
-                    );
-                }
-            },
+            when: ([time]) =>
+                (time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/lotus-soon.mp3"
+                ),
         })
     )
 );
