@@ -28,7 +28,7 @@ describe("wards", () => {
                 time: 100,
                 items: NO_WARDS,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainFact("playPrivateAudio");
         });
     });
 

@@ -20,8 +20,9 @@ describe("playAudio", () => {
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
-                expect(results).toContainTopic("publicAudioQueue");
-                expect(results[0].value[0]).toContain("foo.mp3");
+                expect(results).toContainFact("publicAudioQueue", [
+                    expect.stringContaining("foo.mp3"),
+                ]);
             });
             test("should add to audio queue and reset state", () => {
                 const results = getResults(rule, {
@@ -41,7 +42,7 @@ describe("playAudio", () => {
                     discordAudioEnabled: true,
                 }) as Fact<string[]>[];
 
-                expect(results).toContainFact("playPublicAudio", undefined);
+                expect(results).not.toContainTopic("playPublicAudio");
             });
         });
         describe("cached file exists", () => {
@@ -100,7 +101,7 @@ describe("playAudio", () => {
             }) as Fact<string[]>[];
 
             expect(results).toContainFact("publicAudioQueue", []);
-            expect(results).toContainFact("playPublicAudio", undefined);
+            expect(results).not.toContainTopic("playPublicAudio");
         });
     });
 });

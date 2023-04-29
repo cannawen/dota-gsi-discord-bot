@@ -1,13 +1,12 @@
 jest.mock("../../log");
 
-import Fact from "../../engine/Fact";
 import rule from "../stopAudio";
 
 const mockStop = jest.fn();
 
 describe("stopAudio", () => {
     describe("true", () => {
-        let results: Fact<unknown>;
+        let results: any;
         beforeEach(() => {
             results = getResults(rule, {
                 stopAudio: true,
@@ -16,17 +15,17 @@ describe("stopAudio", () => {
                         stop: mockStop,
                     },
                 },
-            }) as Fact<unknown>;
+            }) as any;
         });
         test("reset state", () => {
-            expect(results).toContainFact("stopAudio", undefined);
+            expect(results).not.toContainFact("stopAudio", true);
         });
         test("play audio resource", () => {
             expect(mockStop).toHaveBeenCalledTimes(1);
         });
     });
     describe("false", () => {
-        let results: Fact<unknown>;
+        let results: any;
         beforeEach(() => {
             results = getResults(rule, {
                 stopAudio: false,
@@ -35,10 +34,7 @@ describe("stopAudio", () => {
                         stop: mockStop,
                     },
                 },
-            }) as Fact<unknown>;
-        });
-        test("reset state", () => {
-            expect(results).toContainFact("stopAudio", undefined);
+            }) as any;
         });
         test("play audio resource", () => {
             expect(mockStop).not.toHaveBeenCalled();

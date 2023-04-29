@@ -65,6 +65,32 @@ describe("Engine", () => {
         });
     });
 
+    describe("when, action, and defaultValue", () => {
+        beforeEach(() => {
+            sut.register(
+                new Rule(
+                    "rule",
+                    [numberTopic, addOneTopic],
+                    (get) => {},
+                    ([_, shouldAddOne]) => shouldAddOne,
+                    ([number, _]) => [
+                        new Fact(addOneTopic, false),
+                        new Fact(numberTopic, number + 1),
+                    ],
+                    [[numberTopic, 0]]
+                )
+            );
+        });
+        test("when returns true", () => {
+            sut.set(db, new Fact(addOneTopic, true));
+            expect(db.get(numberTopic)).toBe(1);
+        });
+        test("when returns false", () => {
+            sut.set(db, new Fact(addOneTopic, false));
+            expect(db.get(numberTopic)).toBe(0);
+        });
+    });
+
     // test("register rule - add twice", () => {
     //     sut.register(
     //         new Rule("rule", [numberTopic, addOneTopic], (get) => {

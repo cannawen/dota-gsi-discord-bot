@@ -1,109 +1,50 @@
 import rule from "../buyback";
 import rules from "../../rules";
 
-const availabilityRule = rule.find(
-    (r) => r.label === rules.assistant.buyback.availability
-)!;
-const warnRule = rule.find(
-    (r) => r.label === rules.assistant.buyback.warnNoBuyback
-)!;
+const params = {
+    [rules.assistant.buyback]: "PRIVATE",
+    inGame: true,
+    buybackCooldown: 0,
+    buybackCost: 100,
+    time: 30 * 60 + 1,
+    gold: 100,
+};
 
-describe("buyback gold reminder", () => {
-    describe("availablity", () => {
-        describe("not in game", () => {
-            test("reset buyback state", () => {
-                const results = getResults(availabilityRule, { inGame: false });
-                expect(results).toBeUndefined();
+describe("buyback gold reminder in a game after 30 minutes", () => {
+    describe("buyback available", () => {
+        describe("has no buyback gold", () => {
+            test("warn if we have not warned before", () => {
+                const warningResult = getResults(rule, { ...params, gold: 99 });
+                expect(warningResult).toContainFact(
+                    "playPrivateAudio",
+                    "you do not have buyback gold"
+                );
+                const alreadyWarned = getResults(
+                    rule,
+                    { ...params, gold: 98 },
+                    warningResult
+                );
+                expect(alreadyWarned).not.toContainFact("playPrivateAudio");
             });
         });
-
-        describe("in game, before 30 minutes", () => {
-            test("no actions", () => {
-                const results = getResults(availabilityRule, {
-                    inGame: true,
-                    time: 10 * 60,
+        describe("has buyback gold", () => {
+            test("do not warn", () => {
+                const warningResult = getResults(rule, {
+                    ...params,
+                    gold: 101,
                 });
-                expect(results).toBeUndefined();
-            });
-        });
-
-        describe("in game, after 30 minutes", () => {
-            describe("buyback is on cooldown", () => {
-                test("should return has no buyback", () => {
-                    const results = getResults(availabilityRule, {
-                        inGame: true,
-                        time: 31 * 60,
-                        gold: 0,
-                        buybackCost: 0,
-                        buybackCooldown: 1,
-                    });
-                    expect(results).toContainFact("hasBuybackTopic", false);
-                });
-            });
-            describe("not enough gold for buyback", () => {
-                test("should return has no buyback", () => {
-                    const results = getResults(availabilityRule, {
-                        inGame: true,
-                        time: 31 * 60,
-                        gold: 0,
-                        buybackCost: 1,
-                        buybackCooldown: 0,
-                    });
-                    expect(results).toContainFact("hasBuybackTopic", false);
-                });
-            });
-            describe("enough gold for buyback & buyback not on cooldown", () => {
-                test("should return has buyback", () => {
-                    const results = getResults(availabilityRule, {
-                        inGame: true,
-                        time: 31 * 60,
-                        gold: 1,
-                        buybackCost: 1,
-                        buybackCooldown: 0,
-                    });
-                    expect(results).toContainFact("hasBuybackTopic", true);
-                });
+                expect(warningResult).not.toContainFact("playPrivateAudio");
             });
         });
     });
-
-    describe("warn", () => {
-        describe("hasBuybackTopic changed to false", () => {
-            describe("buyback not on cooldown", () => {
-                test("play effect", () => {
-                    const results = getResults(warnRule, {
-                        Buyback: "PRIVATE",
-                        buybackCooldown: 0,
-                        hasBuybackTopic: false,
-                        inGame: true,
-                    });
-                    expect(results).toContainFact(
-                        "playPrivateAudio",
-                        "you do not have buyback gold"
-                    );
-                });
+    describe("buyback not available", () => {
+        test("do not warn", () => {
+            const warningResult = getResults(rule, {
+                ...params,
+                gold: 99,
+                buybackCooldown: 1,
             });
-            describe("buyback on cooldown", () => {
-                test("do nothing", () => {
-                    const results = getResults(warnRule, {
-                        Buyback: "PRIVATE",
-                        buybackCooldown: 1,
-                        hasBuybackTopic: false,
-                        inGame: true,
-                    });
-                    expect(results).toBeUndefined();
-                });
-            });
-        });
-        describe("hasBuybackTopic changed to true", () => {
-            test("do nothing", () => {
-                const results = getResults(warnRule, {
-                    Buyback: "PRIVATE",
-                    hasBuybackTopic: true,
-                    inGame: true,
-                });
-                expect(results).toBeUndefined();
-            });
+            expect(warningResult).not.toContainFact("playPrivateAudio");
         });
     });
 });

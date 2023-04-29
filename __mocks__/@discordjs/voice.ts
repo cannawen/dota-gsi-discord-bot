@@ -6,7 +6,7 @@ const voice = {
     joinVoiceChannel: jest.fn().mockReturnValue({
         destroy: jest.fn(),
         on: jest.fn(),
-        subscribe: jest.fn(),
+        subscribe: jest.fn().mockReturnValue("mock subscription"),
         receiver: { speaking: { on: jest.fn() } },
     }),
     AudioPlayerStatus: {

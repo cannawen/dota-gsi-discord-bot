@@ -10,7 +10,9 @@ import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = topicManager.createConfigTopic("Roshan");
+export const configTopic = topicManager.createConfigTopic(
+    rules.assistant.roshan
+);
 export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
@@ -26,20 +28,27 @@ const roshanDeathTimesTopic = topicManager.createTopic<number[]>(
     }
 );
 
-// TODO add test for alive message
-function aliveMessage(deathTimes: number[], dayTime: boolean) {
+// TODO add test for alive message time
+function aliveMessage(deathTimes: number[], dayTime: boolean | undefined) {
     const times = deathTimes.length;
     if (times === 0) {
-        return "Roshan is alive. Will drop aegis";
+        return "Roshan has not been killed yet";
     }
     if (times === 1) {
         return "Roshan is alive. Will drop aegis and cheese";
+    }
+    if (dayTime === undefined) {
+        return "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing or refresher shard";
     }
     if (dayTime) {
         return "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing";
     } else {
         return "Roshan is alive. Will drop aegis, cheese, and refresher shard";
     }
+}
+
+function lastRoshDeathTime(deathTimes: number[]) {
+    return deathTimes.at(-1);
 }
 
 function roshanWasKilled(events: DeepReadonly<Event[]>) {
@@ -49,111 +58,111 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
     );
 }
 
-function roshStatusMessage(message: string) {
+function isRoshStatusRequest(message: string) {
     return message.match(/^(what).{1,15}(status|timer?)$/i) !== null;
 }
 
-const roshRulesArray = [
-    // When an event notifies us that roshan is killed
-    // Add time to list of times roshan has fallen
-    new Rule(
-        rules.assistant.roshan.killedEvent,
-        [topics.time, topics.events],
-        (get) => {
-            if (roshanWasKilled(get(topics.events)!)) {
-                return new Fact(roshanDeathTimesTopic, [
-                    ...(get(roshanDeathTimesTopic) || []),
-                    get(topics.time)!,
-                ]);
+function roshStatusResponse(
+    deathTimes: number[] | undefined,
+    time: number | undefined,
+    dayTime: boolean | undefined
+) {
+    let response = "Rosh status is unknown";
+    if (deathTimes !== undefined && time !== undefined) {
+        const deathTime = lastRoshDeathTime(deathTimes);
+        response = aliveMessage(deathTimes, dayTime);
+
+        if (deathTime) {
+            if (time < deathTime + AEGIS_DURATION) {
+                response = `Roshan is dead. Aegis expires at ${helper.secondsToTimeString(
+                    deathTime + AEGIS_DURATION,
+                    true
+                )}`;
+            } else if (time < deathTime + ROSHAN_MINIMUM_SPAWN_TIME) {
+                response = `Roshan is dead. May respawn at ${helper.secondsToTimeString(
+                    deathTime + ROSHAN_MINIMUM_SPAWN_TIME,
+                    true
+                )}`;
+            } else if (time < deathTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
+                response = `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTimeString(
+                    deathTime + ROSHAN_MAXIMUM_SPAWN_TIME,
+                    true
+                )}`;
             }
         }
-    ),
+    }
 
-    // When time is when roshan might be alive
-    // Play audio
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(
-            rules.assistant.roshan.maybeAliveTime,
-            [topics.time, roshanDeathTimesTopic],
-            (get) => {
-                if (
-                    get(topics.time)! ===
-                    get(roshanDeathTimesTopic)!.at(-1)! +
-                        ROSHAN_MINIMUM_SPAWN_TIME
-                ) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rosh-maybe.mp3"
-                    );
-                }
+    return response;
+}
+
+export default [
+    new Rule(
+        "when we get an event that says rosh is killed, add time to array",
+        [topics.time, topics.events],
+        () => {},
+        ([_, events]) => roshanWasKilled(events),
+        ([time, _], get) =>
+            new Fact(roshanDeathTimesTopic, [
+                ...get(roshanDeathTimesTopic)!,
+                time,
+            ]),
+        [[roshanDeathTimesTopic, []]]
+    ),
+    new Rule(
+        "when time is 8 minutes after last roshan death, play reminder",
+        [topics.time, roshanDeathTimesTopic],
+        () => {},
+        ([time, deathTimes]) => {
+            const lastDeathTime = lastRoshDeathTime(deathTimes);
+            if (lastDeathTime) {
+                return time === lastDeathTime + ROSHAN_MINIMUM_SPAWN_TIME;
+            } else {
+                return false;
             }
-        )
+        },
+        () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rosh-maybe.mp3"
+            )
     ),
-
-    // When time is when roshan should be alive
-    // Play audio
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(
-            rules.assistant.roshan.aliveTime,
-            [topics.time, roshanDeathTimesTopic],
-            (get) => {
-                if (
-                    get(topics.time)! ===
-                    get(roshanDeathTimesTopic)!.at(-1)! +
-                        ROSHAN_MAXIMUM_SPAWN_TIME
-                ) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rosh-alive.mp3"
-                    );
-                }
+    new Rule(
+        "when time is 11 minutes after last roshan death, play reminder",
+        [topics.time, roshanDeathTimesTopic],
+        () => {},
+        ([time, deathTimes]) => {
+            const lastDeathTime = lastRoshDeathTime(deathTimes);
+            if (lastDeathTime) {
+                return time === lastDeathTime + ROSHAN_MAXIMUM_SPAWN_TIME;
+            } else {
+                return false;
             }
-        )
+        },
+        () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rosh-alive.mp3"
+            )
     ),
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule(
-            rules.assistant.roshan.voice,
-            [topics.lastDiscordUtterance],
-            (get) => {
-                if (!roshStatusMessage(get(topics.lastDiscordUtterance)!)) {
-                    return;
-                }
-                const deathTimes = get(roshanDeathTimesTopic) || [];
-                const deathTime = deathTimes?.at(-1);
-                const time = get(topics.time)!;
-                let response = aliveMessage(deathTimes, get(topics.dayTime)!);
-
-                if (deathTime) {
-                    if (time < deathTime + AEGIS_DURATION) {
-                        response = `Roshan is dead. Aegis expires at ${
-                            (helper.secondsToTimeString(
-                                deathTime + AEGIS_DURATION
-                            ),
-                            true)
-                        }`;
-                    } else if (time < deathTime + ROSHAN_MINIMUM_SPAWN_TIME) {
-                        response = `Roshan is dead. May respawn at ${
-                            (helper.secondsToTimeString(
-                                deathTime + ROSHAN_MINIMUM_SPAWN_TIME
-                            ),
-                            true)
-                        }`;
-                    } else if (time < deathTime + ROSHAN_MAXIMUM_SPAWN_TIME) {
-                        response = `Roshan may be alive. Guaranteed respawn at ${
-                            (helper.secondsToTimeString(
-                                deathTime + ROSHAN_MAXIMUM_SPAWN_TIME
-                            ),
-                            true)
-                        }`;
-                    }
-                }
-                return new Fact(topics.configurableEffect, response);
-            }
-        )
+    new Rule(
+        "when asked what roshan status is, respond with status",
+        [topics.lastDiscordUtterance],
+        () => {},
+        ([utterance]) => isRoshStatusRequest(utterance),
+        (_, get) =>
+            new Fact(
+                topics.configurableEffect,
+                roshStatusResponse(
+                    get(roshanDeathTimesTopic),
+                    get(topics.time),
+                    get(topics.dayTime)
+                )
+            )
     ),
-].map((rule) => new RuleDecoratorInGame(rule));
-
-export default roshRulesArray;
+].map(
+    (rule) =>
+        new RuleDecoratorConfigurable(
+            configTopic,
+            new RuleDecoratorInGame(rule)
+        )
+);

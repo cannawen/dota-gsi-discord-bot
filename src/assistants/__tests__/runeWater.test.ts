@@ -9,7 +9,7 @@ describe("water runes", () => {
                 inGame: false,
                 time: 3 * 2 * 60,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainFact("playPrivateAudio");
         });
     });
 
@@ -21,7 +21,7 @@ describe("water runes", () => {
                     inGame: true,
                     time: 0,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("playPrivateAudio");
             });
         });
         describe("time 2:00", () => {
@@ -57,7 +57,7 @@ describe("water runes", () => {
                     inGame: true,
                     time: 6 * 60,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("playPrivateAudio");
             });
         });
     });

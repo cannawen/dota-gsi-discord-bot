@@ -14,19 +14,18 @@ describe("RuleDecoratorStartAndEndMinute", () => {
             rule = new RuleDecoratorStartAndEndMinute(
                 0,
                 4,
-                new Rule("test", [topic], (get) => new Fact(topic, true))
+                new Rule("test", [], (get) => new Fact(topic, true))
             );
         });
         describe("in game", () => {
             test("does not trigger then closure", () => {
                 const results = getResults(rule, { inGame: true, time: 0 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("hasTriggeredClosure");
             });
         });
 
-        test("should subscribe to in game and time topic", () => {
-            expect(rule.given).toContain(topics.time);
-            expect(rule.given).toContain(topic);
+        test("should subscribe to time topic", () => {
+            expect(rule.given).toEqual([topics.time]);
         });
     });
 
@@ -36,7 +35,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
             rule = new RuleDecoratorStartAndEndMinute(
                 2,
                 4,
-                new Rule("test", [topic], (get) => new Fact(topic, true))
+                new Rule("test", [], (get) => new Fact(topic, true))
             );
         });
         describe("in game", () => {
@@ -69,14 +68,14 @@ describe("RuleDecoratorStartAndEndMinute", () => {
                         inGame: true,
                         time: 1 * 60,
                     });
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainFact("hasTriggeredClosure");
                 });
                 test("after end time", () => {
                     const results = getResults(rule, {
                         inGame: true,
                         time: 5 * 60,
                     });
-                    expect(results).toBeUndefined();
+                    expect(results).not.toContainFact("hasTriggeredClosure");
                 });
             });
         });
@@ -86,7 +85,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
                     inGame: false,
                     time: 3 * 60,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("hasTriggeredClosure");
             });
         });
     });

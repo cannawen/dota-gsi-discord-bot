@@ -2,13 +2,12 @@ jest.mock("../../log");
 jest.mock("@discordjs/voice");
 const mockPlay = jest.fn();
 
-import Fact from "../../engine/Fact";
 import rule from "../playInterruptingAudio";
 import Voice from "@discordjs/voice";
 
 describe("playInterruptingAudio", () => {
     describe("discord audio enabled", () => {
-        let results: Fact<unknown>;
+        let results: any;
         beforeEach(() => {
             results = getResults(rule, {
                 playInterruptingAudioFile: "foo.mp3",
@@ -18,13 +17,10 @@ describe("playInterruptingAudio", () => {
                         play: mockPlay,
                     },
                 },
-            }) as Fact<unknown>;
+            }) as any;
         });
         test("reset state", () => {
-            expect(results).toContainFact(
-                "playInterruptingAudioFile",
-                undefined
-            );
+            expect(results).not.toContainTopic("playInterruptingAudioFile");
         });
         test("create audio resource", () => {
             expect(Voice.createAudioResource).toHaveBeenCalledWith("foo.mp3");
@@ -39,11 +35,9 @@ describe("playInterruptingAudio", () => {
             const results = getResults(rule, {
                 playInterruptingAudioFile: "foo.mp3",
                 discordAudioEnabled: false,
+                discordSubscriptionTopic: {},
             });
-            expect(results).toContainFact(
-                "playInterruptingAudioFile",
-                undefined
-            );
+            expect(results).not.toContainTopic("playInterruptingAudioFile");
         });
     });
 });

@@ -62,6 +62,6 @@ describe("gsi items parsing", () => {
         const results = getResults(rule, {
             allData: new GsiData({}),
         });
-        expect(results).toContainFact("items", undefined);
+        expect(results).not.toContainFact("items");
     });
 });

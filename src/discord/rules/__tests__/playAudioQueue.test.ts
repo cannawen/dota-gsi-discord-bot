@@ -2,12 +2,11 @@ const mockPlay = jest.fn();
 jest.mock("@discordjs/voice");
 jest.mock("../../../log");
 
-import Fact from "../../../engine/Fact";
 import rule from "../playAudioQueue";
 import Voice from "@discordjs/voice";
 
 describe("playAudioQueue", () => {
-    let result: Fact<unknown>;
+    let result: any;
     beforeEach(() => {
         result = getResults(rule, {
             discordReadyToPlayAudio: true,
@@ -17,15 +16,17 @@ describe("playAudioQueue", () => {
                     play: mockPlay,
                 },
             },
-        }) as Fact<unknown>;
+        }) as any;
     });
-    test("plays first audio file", () => {
-        expect(result).toContainFact("publicAudioQueue", ["bar.mp3"]);
+    test("plays both audio files", () => {
+        expect(result).toContainFact("publicAudioQueue", []);
     });
     test("create audio resource", () => {
         expect(Voice.createAudioResource).toHaveBeenCalledWith("foo.mp3");
+        expect(Voice.createAudioResource).toHaveBeenCalledWith("bar.mp3");
     });
     test("play audio resource", () => {
         expect(mockPlay).toHaveBeenCalledWith("AudioResource");
+        expect(mockPlay).toHaveBeenCalledTimes(2);
     });
 });

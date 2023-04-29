@@ -8,7 +8,9 @@ import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = topicManager.createConfigTopic("Buyback");
+export const configTopic = topicManager.createConfigTopic(
+    rules.assistant.buyback
+);
 export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you when you do not have enough gold for buyback (after 30:00)";
@@ -20,36 +22,36 @@ export default [
         30,
         undefined,
         new Rule(
-            rules.assistant.buyback.availability,
-            [topics.gold, topics.buybackCost, topics.buybackCooldown],
-            (get) => {
-                const buybackAvailable = get(topics.buybackCooldown)! === 0;
-                const gold = get(topics.gold)!;
-                const buybackCost = get(topics.buybackCost)!;
-                if (buybackAvailable) {
-                    const hasBuyback = gold >= buybackCost;
-                    return new Fact(hasBuybackTopic, hasBuyback);
-                } else {
-                    return new Fact(hasBuybackTopic, false);
-                }
-            }
+            "when buyback is available",
+            [topics.buybackCooldown, topics.gold, topics.buybackCost],
+            () => {},
+            ([cooldown]) => cooldown === 0,
+            ([_, gold, cost]) => new Fact(hasBuybackTopic, gold >= cost)
+        )
+    ),
+    new RuleDecoratorStartAndEndMinute(
+        30,
+        undefined,
+        new Rule(
+            "when buyback is not available",
+            [topics.buybackCooldown, topics.gold, topics.buybackCost],
+            () => {},
+            ([cooldown]) => cooldown !== 0,
+            () => new Fact(hasBuybackTopic, false)
         )
     ),
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule(
-            rules.assistant.buyback.warnNoBuyback,
+            "warn about buyback",
             [hasBuybackTopic, topics.buybackCooldown],
-            (get) => {
-                const hasBuyback = get(hasBuybackTopic)!;
-                const buybackCooldown = get(topics.buybackCooldown)!;
-                if (!hasBuyback && buybackCooldown === 0) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "you do not have buyback gold"
-                    );
-                }
-            }
+            () => {},
+            ([hasBuyback, cooldown]) => !hasBuyback && cooldown === 0,
+            () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "you do not have buyback gold"
+                )
         )
     ),
 ].map((rule) => new RuleDecoratorInGame(rule));

@@ -34,7 +34,7 @@ describe("philosopher's stone assistant", () => {
                 inGame: false,
                 respawnSeconds: 0,
             });
-            expect(results).toBeUndefined();
+            expect(results).not.toContainFact("playPrivateAudio");
         });
     });
 
@@ -48,7 +48,7 @@ describe("philosopher's stone assistant", () => {
                     alive: true,
                     respawnSeconds: 0,
                 });
-                expect(results).toBeUndefined();
+                expect(results).not.toContainFact("playPrivateAudio");
             });
         });
 
@@ -95,7 +95,9 @@ describe("philosopher's stone assistant", () => {
                     );
                 });
                 test("do not remind", () => {
-                    expect(deadSeenStoneBeforeState).toBeUndefined();
+                    expect(deadSeenStoneBeforeState).not.toContainFact(
+                        "playPrivateAudio"
+                    );
                 });
             });
             describe("when not alive and not holding stone", () => {

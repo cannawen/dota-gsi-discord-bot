@@ -3,10 +3,7 @@
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 const assistant = {
-    buyback: {
-        availability: "buyback/availability",
-        warnNoBuyback: "buyback/warn_no_buyback",
-    },
+    buyback: "Buyback",
     glhf: "Good luck and have fun",
     goldReminder: "Gold",
     lotus: "Lotus",
@@ -17,12 +14,7 @@ const assistant = {
     pause: "Pause",
     philosophersStone: "Philosopher's stone",
     randomItem: "Random item suggestion",
-    roshan: {
-        killedEvent: "roshan/killed_event/set_future_audio_state",
-        maybeAliveTime: "roshan/maybe_alive_time/play_audio",
-        aliveTime: "roshan/alive_time/play_audio",
-        voice: "roshan/voice",
-    },
+    roshan: "Roshan",
     runeBounty: "Bounty rune",
     runePower: "Power rune",
     runeWater: "Water rune",

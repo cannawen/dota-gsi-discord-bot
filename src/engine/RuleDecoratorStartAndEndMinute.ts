@@ -9,17 +9,37 @@ import topics from "../topics";
 class RuleDecoratorStartAndEndMinute extends Rule {
     constructor(min: number | undefined, max: number | undefined, rule: Rule) {
         const inGameRule = new RuleDecoratorInGame(rule);
-        super(inGameRule.label, [...inGameRule.given, topics.time], (get) => {
-            const time = get(topics.time)!;
-            if (min && time < min * 60) {
-                return;
-            }
-            if (max && time > max * 60) {
-                return;
-            }
+        super(
+            inGameRule.label,
+            [topics.time, ...inGameRule.given],
+            (get) => {
+                const time = get(topics.time)!;
+                if (min && time < min * 60) {
+                    return;
+                }
+                if (max && time > max * 60) {
+                    return;
+                }
 
-            return inGameRule.then(get);
-        });
+                return inGameRule.then(get);
+            },
+            (values, get) => {
+                const time = values.shift();
+                if (min && time < min * 60) {
+                    return false;
+                }
+                if (max && time > max * 60) {
+                    return false;
+                }
+
+                return rule.when(values, get);
+            },
+            (values, get) => {
+                values.shift();
+                return rule.action(values, get);
+            },
+            rule.defaultValues
+        );
     }
 }
 

@@ -60,20 +60,48 @@ function applyRules(
             .filter((rule) =>
                 rule.given.find((topic) => topic.label === changedTopic.label)
             )
+            // Set default values
+            .map((rule) => {
+                if (rule.defaultValues) {
+                    rule.defaultValues.forEach(([topic, value]) => {
+                        if (db.get(topic) === undefined) {
+                            db.set(new Fact(topic, value));
+                        }
+                    });
+                }
+                return rule;
+            })
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.given, db))
             .reduce((memo, rule) => {
+                let returnMemo: Fact<unknown>[] = [...memo];
+
+                const params = rule.given.map((topic) => db.get(topic));
+
+                if (rule.when([...params], (topic) => db.get(topic))) {
+                    const action = rule.action([...params], (topic) =>
+                        db.get(topic)
+                    );
+                    if (action) {
+                        if (Array.isArray(action)) {
+                            returnMemo = memo.concat(action);
+                        } else {
+                            returnMemo.push(action);
+                        }
+                    }
+                }
+
                 // Process the rule
                 const out = rule.then((topic) => db.get(topic));
                 if (out) {
                     // Collect any database changes as a result of this rule being applied
                     if (Array.isArray(out)) {
-                        return memo.concat(out);
+                        returnMemo = memo.concat(out);
                     } else {
-                        memo.push(out);
+                        returnMemo.push(out);
                     }
                 }
-                return memo;
+                return returnMemo;
             }, [] as Fact<unknown>[])
     );
 }
@@ -89,8 +117,8 @@ class Engine {
     public set = (db: FactStore, newFact: Fact<unknown>) => {
         if (hasFactChanged(db, newFact)) {
             db.set(newFact);
-            const newFacts = applyRules(db, this.rules, newFact.topic);
-            newFacts.forEach((fact) => {
+            const out = applyRules(db, this.rules, newFact.topic);
+            out.forEach((fact) => {
                 this.set(db, fact);
             });
         }

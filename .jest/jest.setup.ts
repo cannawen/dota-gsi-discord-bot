@@ -2,6 +2,8 @@
 import Fact from "../src/engine/Fact";
 import Rule from "../src/engine/Rule";
 import Topic from "../src/engine/Topic";
+import Engine from "../src/engine/Engine";
+import FactStore from "../src/engine/FactStore";
 
 /* eslint-disable sort-keys */
 expect.extend({
@@ -38,6 +40,9 @@ expect.extend({
     },
 
     toContainFact(actual, label, value) {
+        if (label === undefined) {
+            return (expect as any).toContainTopic(actual, value);
+        }
         if (actual === undefined) {
             return {
                 pass: false,
@@ -93,9 +98,10 @@ expect.extend({
         const actualArr = Array.isArray(actual) ? actual : [actual];
         const factArray = actualArr.filter((fact) => fact instanceof Fact);
         if (factArray.length === 0) {
-            throw new Error(
-                `Received ${actual}. Expected to recieve at least one Fact objects (Currently not handling Promise<Fact>).`
-            );
+            return {
+                pass: false,
+                message: () => "Did not recieve any Topics. Recieved []",
+            };
         }
 
         const fact = (actualArr as Fact<unknown>[]).find(
@@ -114,13 +120,9 @@ expect.extend({
     },
 });
 
-const makeGetFunction =
-    (input: { [keys: string]: unknown }) =>
-    <T>(t: Topic<T>): T =>
-        input[t.label] as T;
-
-// NOTE: Cannot re-use the existing code in topicManager
+// NOTE: Cannot re-use the existing code in PersistentFactStore
 // because the import will mess with jest.mock("topicManager")
+// becuase we will need to use the real topic manager
 function factsToPlainObject(facts: Fact<unknown>[]) {
     return facts.reduce((memo: { [key: string]: unknown }, fact) => {
         memo[fact.topic.label] = fact.value;
@@ -128,23 +130,43 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
     }, {});
 }
 
-// TODO refactor to be in function() format
-// TODO refactor to be able to take in a list of rules instead of just a single rule
-const getResults = (
-    rule: Rule,
+function plainObjectToFacts(object: { [key: string]: unknown }) {
+    return Object.entries(object).reduce(
+        (memo: Fact<unknown>[], [topicLabel, value]) => {
+            memo.push(new Fact(new Topic(topicLabel), value));
+            return memo;
+        },
+        []
+    );
+}
+
+function getResults(
+    rule: Rule | Rule[],
     db: { [keys: string]: unknown },
-    previousState?: Fact<unknown>[] | Fact<unknown> | undefined
-) => {
-    if (previousState) {
-        const arrPreviousState = Array.isArray(previousState)
-            ? previousState
-            : [previousState];
-        return rule.then(
-            makeGetFunction({ ...factsToPlainObject(arrPreviousState), ...db })
-        );
+    previousState?: Fact<unknown>[] | Fact<unknown> | undefined,
+    debug?: boolean
+): Fact<unknown>[] {
+    const engine = new Engine();
+    if (Array.isArray(rule)) {
+        rule.forEach((r) => engine.register(r));
     } else {
-        return rule.then(makeGetFunction(db));
+        engine.register(rule);
     }
-};
+    const factStore = new FactStore();
+    const newFacts = plainObjectToFacts(db);
+    if (previousState) {
+        if (Array.isArray(previousState)) {
+            previousState.forEach((fact) => factStore.set(fact));
+        } else {
+            factStore.set(previousState);
+        }
+    }
+    newFacts.forEach((fact) => engine.set(factStore, fact));
+    const result = factStore.getAllFacts();
+    if (debug) {
+        console.log("input:", db, "\n\noutput:", factsToPlainObject(result));
+    }
+    return result;
+}
 
 global.getResults = getResults as any;

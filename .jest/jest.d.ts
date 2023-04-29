@@ -4,16 +4,18 @@ import Rule from "../src/engine/Rule";
 
 declare global {
     function getResults(
-        rule: Rule,
+        rule: Rule | Rule[],
         db: { [keys: string]: unknown },
-        previousState?: Fact<unknown>[] | Fact<unknown>
-    ): Fact<unknown>[] | Fact<unknown>;
+        previousState?: Fact<unknown>[] | Fact<unknown>,
+        debug?: boolean
+    ): Fact<unknown>[];
 
     namespace jest {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;
             setContaining(expected: T extends Set<infer V> ? V[] : never): R;
-            toContainFact(label: string, value: unknown): R;
+            // TODO create a helper that says "hasNoEffect" that checks both private and public audio
+            toContainFact(label: string, value?: unknown): R;
             toContainTopic(label: string): R;
         }
 
