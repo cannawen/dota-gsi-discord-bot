@@ -13,7 +13,7 @@ export const configTopic = topicManager.createConfigTopic(
 export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription = "Reminds you of wisdom rune every 7:00";
 
-const ADVANCED_WARNING = 20;
+const ADVANCED_WARNING = 30;
 
 export default new RuleDecoratorInGame(
     new RuleDecoratorConfigurable(
@@ -21,14 +21,12 @@ export default new RuleDecoratorInGame(
         new Rule({
             label: rules.assistant.runeWisdom,
             trigger: [topics.time],
-            then: ([time]) => {
-                if (time > 0 && (time + ADVANCED_WARNING) % (7 * 60) === 0) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/wisdom-rune-soon.mp3"
-                    );
-                }
-            },
+            when: ([time]) => (time + ADVANCED_WARNING) % (7 * 60) === 0,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/wisdom-rune-soon.mp3"
+                ),
         })
     )
 );
