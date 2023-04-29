@@ -32,7 +32,7 @@ describe("buyback gold reminder in a game after 30 minutes", () => {
                     ...params,
                     gold: 101,
                 });
-                expect(warningResult).not.toContainFact("playPrivateAudio");
+                expect(warningResult).not.toContainAudioEffect();
             });
         });
     });
@@ -43,7 +43,7 @@ describe("buyback gold reminder in a game after 30 minutes", () => {
                 gold: 99,
                 buybackCooldown: 1,
             });
-            expect(warningResult).not.toContainFact("playPrivateAudio");
+            expect(warningResult).not.toContainAudioEffect();
         });
     });
 });
