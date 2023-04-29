@@ -54,7 +54,7 @@ describe("gold reminder", () => {
                                 ...params,
                                 gold: 500,
                             },
-                            removeEphemeralState(result500Gold)
+                            result500Gold
                         );
                         expect(results).not.toContainAudioEffect();
                     });
@@ -66,7 +66,7 @@ describe("gold reminder", () => {
                                     ...params,
                                     gold: 1000,
                                 },
-                                removeEphemeralState(result500Gold)
+                                result500Gold
                             );
                             expect(results).toContainAudioEffect();
                         });
@@ -89,7 +89,7 @@ describe("gold reminder", () => {
                             time: 11 * 60,
                             gold: 2000,
                         },
-                        removeEphemeralState(state)
+                        state
                     );
                     expect(results).not.toContainAudioEffect();
                 });
@@ -181,7 +181,7 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 500,
                     },
-                    removeEphemeralState(state)
+                    state
                 );
                 expect(results).not.toContainAudioEffect();
             });

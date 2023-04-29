@@ -10,8 +10,6 @@ declare global {
         debug?: boolean
     ): Fact<unknown>[];
 
-    function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[];
-
     namespace jest {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;

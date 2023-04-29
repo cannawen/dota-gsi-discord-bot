@@ -206,11 +206,12 @@ function getResults(
     const factStore = new FactStore();
     const newFacts = plainObjectToFacts(db);
     if (previousState) {
-        if (Array.isArray(previousState)) {
-            previousState.forEach((fact) => factStore.set(fact));
-        } else {
-            factStore.set(previousState);
-        }
+        const prevStateArray = Array.isArray(previousState)
+            ? previousState
+            : [previousState];
+        removeEphemeralState(prevStateArray).forEach((fact) =>
+            factStore.set(fact)
+        );
     }
     newFacts.forEach((fact) => engine.set(factStore, fact));
     const result = factStore.getAllFacts();
@@ -225,4 +226,3 @@ function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[] {
 }
 
 global.getResults = getResults;
-global.removeEphemeralState = removeEphemeralState;

@@ -72,7 +72,7 @@ describe("midas assistant", () => {
                             items: MIDAS_CAN_CAST_BACKPACK,
                             time: 130,
                         },
-                        removeEphemeralState(fifteenSecondsAfterState)
+                        fifteenSecondsAfterState
                     );
                     expect(thirtySecondsAfterState).toContainAudioEffect(
                         "resources/audio/midas.mpeg"
@@ -83,7 +83,7 @@ describe("midas assistant", () => {
                             ...params,
                             time: 131,
                         },
-                        removeEphemeralState(thirtySecondsAfterState)
+                        thirtySecondsAfterState
                     );
                     expect(
                         thirtyOneSeconsAfterState

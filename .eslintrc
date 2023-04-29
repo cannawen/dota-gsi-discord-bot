@@ -28,8 +28,7 @@
         }
     ],
     "globals": {
-        "getResults": "readonly",
-        "removeEphemeralState": "readonly"
+        "getResults": "readonly"
     },
     "rules": {
         // jest plugin rules
