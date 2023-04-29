@@ -19,7 +19,7 @@ describe("gold reminder", () => {
                 inGame: false,
                 gold: 500,
             });
-            expect(results).not.toContainFact("playPrivateAudioFile");
+            expect(results).not.toContainAudioEffect();
         });
     });
 
@@ -29,7 +29,7 @@ describe("gold reminder", () => {
                 ...params,
                 gold: 0,
             });
-            expect(results).not.toContainTopic("playPrivateAudio");
+            expect(results).not.toContainAudioEffect();
         });
 
         describe("before 10 minutes", () => {
@@ -37,24 +37,16 @@ describe("gold reminder", () => {
                 let result500Gold: Fact<unknown>[];
                 beforeEach(() => {
                     result500Gold = getResults(rule, {
-                            ...params,
-                            gold: 500,
+                        ...params,
+                        gold: 500,
                     });
                 });
                 describe("has not reminded before", () => {
                     test("should remind player to spend gold", () => {
-                        expect(result500Gold).toContainTopic(
-                            "playPrivateAudio"
-                        );
+                        expect(result500Gold).toContainAudioEffect();
                     });
                 });
                 describe("has reminded before at the same level", () => {
-                    let hasReminded500BeforeState: Fact<unknown>[];
-                    beforeEach(() => {
-                        hasReminded500BeforeState = result500Gold.filter(
-                            (fact) => fact.topic.label !== "playPrivateAudio"
-                        );
-                    });
                     test("should not remind player to spend gold", () => {
                         const results = getResults(
                             rule,
@@ -62,9 +54,9 @@ describe("gold reminder", () => {
                                 ...params,
                                 gold: 500,
                             },
-                            hasReminded500BeforeState
+                            removeEphemeralState(result500Gold)
                         );
-                        expect(results).not.toContainTopic("playPrivateAudio");
+                        expect(results).not.toContainAudioEffect();
                     });
                     describe("has more than 1000 gold", () => {
                         test("should remind player to spend gold", () => {
@@ -74,9 +66,9 @@ describe("gold reminder", () => {
                                     ...params,
                                     gold: 1000,
                                 },
-                                hasReminded500BeforeState
+                                removeEphemeralState(result500Gold)
                             );
-                            expect(results).toContainTopic("playPrivateAudio");
+                            expect(results).toContainAudioEffect();
                         });
                     });
                 });
@@ -97,11 +89,9 @@ describe("gold reminder", () => {
                             time: 11 * 60,
                             gold: 2000,
                         },
-                        state.filter(
-                            (fact) => fact.topic.label !== "playPrivateAudio"
-                        )
+                        removeEphemeralState(state)
                     );
-                    expect(results).not.toContainTopic("playPrivateAudio");
+                    expect(results).not.toContainAudioEffect();
                 });
             });
             describe("should remind on 1000 increments", () => {
@@ -111,7 +101,7 @@ describe("gold reminder", () => {
                         time: 11 * 60,
                         gold: 500,
                     });
-                    expect(results).not.toContainTopic("playPrivateAudio");
+                    expect(results).not.toContainAudioEffect();
                 });
                 test("more than 1000 gold, remind", () => {
                     const results = getResults(rule, {
@@ -119,7 +109,7 @@ describe("gold reminder", () => {
                         time: 11 * 60,
                         gold: 1000,
                     });
-                    expect(results).toContainTopic("playPrivateAudio");
+                    expect(results).toContainAudioEffect();
                 });
             });
         });
@@ -135,7 +125,7 @@ describe("gold reminder", () => {
                             buybackCost: 2500,
                             gold: 3000,
                         });
-                        expect(results).not.toContainTopic("playPrivateAudio");
+                        expect(results).not.toContainAudioEffect();
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
@@ -145,7 +135,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 0,
                             buybackCost: 2500,
                         });
-                        expect(results).toContainTopic("playPrivateAudio");
+                        expect(results).toContainAudioEffect();
                     });
                 });
             });
@@ -160,7 +150,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
-                        expect(results).not.toContainTopic("playPrivateAudio");
+                        expect(results).not.toContainAudioEffect();
                     });
                     test("more than 1000 gold, remind", () => {
                         const results = getResults(rule, {
@@ -170,7 +160,7 @@ describe("gold reminder", () => {
                             buybackCooldown: 10,
                             buybackCost: 2500,
                         });
-                        expect(results).toContainTopic("playPrivateAudio");
+                        expect(results).toContainAudioEffect();
                     });
                 });
             });
@@ -191,11 +181,9 @@ describe("gold reminder", () => {
                         inGame: true,
                         gold: 500,
                     },
-                    state.filter(
-                        (fact) => fact.topic.label !== "playPrivateAudio"
-                    )
+                    removeEphemeralState(state)
                 );
-                expect(results).not.toContainTopic("playPrivateAudio");
+                expect(results).not.toContainAudioEffect();
             });
         });
 
@@ -206,8 +194,7 @@ describe("gold reminder", () => {
                         ...params,
                         gold: 1500,
                     });
-                    expect(results).toContainFact(
-                        "playPrivateAudio",
+                    expect(results).toContainAudioEffect(
                         "resources/audio/gold.mp3"
                     );
                 });
@@ -218,8 +205,7 @@ describe("gold reminder", () => {
                         ...params,
                         gold: 2500,
                     });
-                    expect(results).toContainFact(
-                        "playPrivateAudio",
+                    expect(results).toContainAudioEffect(
                         "you have a lot of gold"
                     );
                 });
@@ -230,8 +216,7 @@ describe("gold reminder", () => {
                         ...params,
                         gold: 2501,
                     });
-                    expect(results).toContainFact(
-                        "playPrivateAudio",
+                    expect(results).toContainAudioEffect(
                         "you really have a lot of gold"
                     );
                 });
