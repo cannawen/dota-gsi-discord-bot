@@ -5,6 +5,44 @@ import Topic from "../src/engine/Topic";
 import Engine from "../src/engine/Engine";
 import FactStore from "../src/engine/FactStore";
 
+function isAudioEffect(topic: string) {
+    return (
+        topic === "playPrivateAudio" ||
+        topic === "playInterruptingAudioFile" ||
+        topic === "playPrivateAudio"
+    );
+}
+
+function handleToContainTopic(actual: any, label: any) {
+    if (actual === undefined) {
+        return {
+            pass: false,
+            message: () => "Did not recieve any Topics. Recieved undefined",
+        };
+    }
+    const actualArr = Array.isArray(actual) ? actual : [actual];
+    const factArray = actualArr.filter((fact) => fact instanceof Fact);
+    if (factArray.length === 0) {
+        return {
+            pass: false,
+            message: () => "Did not recieve any Topics. Recieved []",
+        };
+    }
+
+    const fact = (actualArr as Fact<unknown>[]).find(
+        (f) => f.topic.label === label
+    );
+
+    const pass = fact !== undefined;
+
+    return {
+        pass,
+        message: pass
+            ? () => `Topic ${label} exists. Expected to contain no such topic.`
+            : () => `Topic ${label} does not exist`,
+    };
+}
+
 /* eslint-disable sort-keys */
 expect.extend({
     toBeWithinRange(actual, min, max) {
@@ -39,9 +77,49 @@ expect.extend({
         };
     },
 
+    toContainAudioEffect(actual, value) {
+        if (actual === undefined) {
+            return {
+                pass: false,
+                message: () => "Did not recieve any Fact. Recieved undefined",
+            };
+        }
+        const actualArr = Array.isArray(actual) ? actual : [actual];
+        const factArray = actualArr.filter((fact) => fact instanceof Fact);
+        if (factArray.length === 0) {
+            return {
+                pass: false,
+                message: () =>
+                    `Received ${JSON.stringify(
+                        actual
+                    )}. Expected to recieve at least one Fact objects`,
+            };
+        }
+
+        const pass = factArray.reduce((memo, fact) => {
+            if (value === undefined) {
+                return isAudioEffect(fact.topic.label) || memo;
+            } else {
+                return (
+                    (isAudioEffect(fact.topic.label) && fact.value === value) ||
+                    memo
+                );
+            }
+        }, false);
+        return {
+            pass,
+            message: pass
+                ? () => "Found audio effect topic. Expected none"
+                : () =>
+                      value
+                          ? `Did not find audio effect topic with value ${value}`
+                          : "Did not find any audio effect topics",
+        };
+    },
+
     toContainFact(actual, label, value) {
-        if (label === undefined) {
-            return (expect as any).toContainTopic(actual, value);
+        if (value === undefined) {
+            return handleToContainTopic(actual, label);
         }
         if (actual === undefined) {
             return {
@@ -89,34 +167,7 @@ expect.extend({
     },
 
     toContainTopic(actual, label) {
-        if (actual === undefined) {
-            return {
-                pass: false,
-                message: () => "Did not recieve any Topics. Recieved undefined",
-            };
-        }
-        const actualArr = Array.isArray(actual) ? actual : [actual];
-        const factArray = actualArr.filter((fact) => fact instanceof Fact);
-        if (factArray.length === 0) {
-            return {
-                pass: false,
-                message: () => "Did not recieve any Topics. Recieved []",
-            };
-        }
-
-        const fact = (actualArr as Fact<unknown>[]).find(
-            (f) => f.topic.label === label
-        );
-
-        const pass = fact !== undefined;
-
-        return {
-            pass,
-            message: pass
-                ? () =>
-                      `Topic ${label} exists. Expected to contain no such topic.`
-                : () => `Topic ${label} does not exist`,
-        };
+        return handleToContainTopic(actual, label);
     },
 });
 

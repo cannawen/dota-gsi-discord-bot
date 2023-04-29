@@ -15,16 +15,17 @@ describe("buyback gold reminder in a game after 30 minutes", () => {
         describe("has no buyback gold", () => {
             test("warn if we have not warned before", () => {
                 const warningResult = getResults(rule, { ...params, gold: 99 });
-                expect(warningResult).toContainFact(
-                    "playPrivateAudio",
+                expect(warningResult).toContainAudioEffect(
                     "you do not have buyback gold"
                 );
                 const alreadyWarned = getResults(
                     rule,
                     { ...params, gold: 98 },
-                    warningResult
+                    warningResult.filter(
+                        (fact) => fact.topic.label !== "playPrivateAudio"
+                    )
                 );
-                expect(alreadyWarned).not.toContainFact("playPrivateAudio");
+                expect(alreadyWarned).not.toContainAudioEffect();
             });
         });
         describe("has buyback gold", () => {

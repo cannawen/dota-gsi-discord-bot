@@ -14,9 +14,9 @@ declare global {
         interface Matchers<R, T> {
             toBeWithinRange(min: number, max: number): R;
             setContaining(expected: T extends Set<infer V> ? V[] : never): R;
-            // TODO create a helper that says "hasNoEffect" that checks both private and public audio
             toContainFact(label: string, value?: unknown): R;
             toContainTopic(label: string): R;
+            toContainAudioEffect(value?: string): R;
         }
 
         interface Expect {
@@ -26,8 +26,9 @@ declare global {
         interface ExpectExtendMap {
             toBeWithinRange: MatcherFunction<[min: number, max: number]>;
             setContaining: MatcherFunction<[unknown[]]>;
-            toContainFact: MatcherFunction<[label: string, value: unknown]>;
+            toContainFact: MatcherFunction<[label: string, value?: unknown]>;
             toContainTopic: MatcherFunction<[label: string]>;
+            toContainAudioEffect: MatcherFunction<[value?: string]>;
         }
     }
 }
