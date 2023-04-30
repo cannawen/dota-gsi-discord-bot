@@ -80,11 +80,16 @@ class Engine {
 
     public set = (db: FactStore, newFact: Fact<unknown>) => {
         if (hasFactChanged(db, newFact)) {
+            // Need to set the db after checking if fact has changed
             db.set(newFact);
             const out = applyRules(db, this.rules, newFact.topic);
             out.forEach((fact) => {
                 this.set(db, fact);
             });
+        } else {
+            // If the facts have not changed, set the fact anyways just in case
+            // we are trying to set the fact to be the same as its default value
+            db.set(newFact);
         }
     };
 }

@@ -1,7 +1,7 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
 import configurable from "../engine/rules/configurable";
 import { DeepReadonly } from "ts-essentials";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
@@ -11,9 +11,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.roshan
+    rules.assistant.roshan,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
 

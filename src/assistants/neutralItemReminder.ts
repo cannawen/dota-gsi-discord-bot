@@ -1,6 +1,6 @@
 import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
@@ -9,9 +9,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.neutralItemReminder
+    rules.assistant.neutralItemReminder,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to pick up a neutral item (after 12:00)";
 

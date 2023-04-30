@@ -98,10 +98,11 @@ describe("playAudio", () => {
         test("should reset state", () => {
             const results = getResults(rule, {
                 playPublicAudio: "foo.mp3",
+                publicAudioQueue: ["foo"],
                 discordAudioEnabled: false,
             }) as Fact<string[]>[];
 
-            expect(results).not.toContainFact("publicAudioQueue");
+            expect(results).toContainFact("publicAudioQueue", ["foo"]);
             expect(results).not.toContainTopic("playPublicAudio");
         });
     });

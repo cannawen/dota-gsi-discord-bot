@@ -8,14 +8,18 @@ describe("Engine", () => {
     let sut: Engine;
     let db: FactStore;
 
-    let numberTopic: Topic<number>;
-    let addOneTopic: Topic<boolean>;
+    let topicOne: Topic<boolean>;
+    let topicTwo: Topic<boolean>;
+    let topicClosureExecuted: Topic<boolean>;
+    let topicDefaultZero: Topic<number>;
     beforeEach(() => {
         sut = new Engine();
         db = new FactStore();
 
-        numberTopic = new Topic<number>("number");
-        addOneTopic = new Topic<boolean>("add one");
+        topicOne = new Topic<boolean>("topicOne");
+        topicTwo = new Topic<boolean>("topicTwo");
+        topicClosureExecuted = new Topic<boolean>("topicClosureExecuted");
+        topicDefaultZero = new Topic<number>("topicDefaultZero", 0);
     });
 
     describe("all topics are defined", () => {
@@ -23,101 +27,57 @@ describe("Engine", () => {
             sut.register(
                 new Rule({
                     label: "rule",
-                    trigger: [numberTopic, addOneTopic],
-                    then: ([number, addOne]) => {
-                        if (addOne) {
-                            // Because addOneTopic is reset first
-                            // the number is only incremented once
-                            return [
-                                new Fact(addOneTopic, undefined),
-                                new Fact(numberTopic, number + 1),
-                            ];
-                        }
-                    },
+                    trigger: [topicOne, topicTwo],
+                    then: (_) => new Fact(topicClosureExecuted, true),
                 })
             );
-            sut.set(db, new Fact(numberTopic, 0));
-            sut.set(db, new Fact(addOneTopic, true));
+            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            sut.set(db, new Fact(topicOne, true));
+            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            sut.set(db, new Fact(topicTwo, false));
 
-            expect(db.get(numberTopic)).toBe(1);
-            expect(db.get(addOneTopic)).toBeUndefined();
+            expect(db.get(topicClosureExecuted)).toBe(true);
         });
     });
 
     describe("topic does not change", () => {
         test("does not execute rule", () => {
-            sut.set(db, new Fact(numberTopic, 0));
+            sut.set(db, new Fact(topicOne, true));
 
             sut.register(
                 new Rule({
                     label: "rule",
-                    trigger: [numberTopic],
-                    given: [addOneTopic],
-                    then: ([number], [addOne]) => {
-                        if (addOne) {
-                            return [
-                                new Fact(addOneTopic, undefined),
-                                new Fact(numberTopic, number + 1),
-                            ];
-                        }
-                    },
+                    trigger: [topicOne],
+                    then: (_) => new Fact(topicClosureExecuted, true),
                 })
             );
-            sut.set(db, new Fact(addOneTopic, true));
-
-            expect(db.get(numberTopic)).toBe(0);
-            expect(db.get(addOneTopic)).toBe(true);
+            sut.set(db, new Fact(topicOne, true));
+            expect(db.get(topicClosureExecuted)).toBeUndefined();
         });
     });
 
-    describe("when, action, and defaultValue", () => {
-        let numberTopicDefault: any;
-        beforeEach(() => {
-            numberTopicDefault = new Topic<number>("numberTopicDefault", 0);
+    describe("when", () => {
+        test("only triggers if when returns true", () => {
             sut.register(
                 new Rule({
                     label: "rule",
-                    trigger: [addOneTopic],
-                    given: [numberTopicDefault],
-                    when: ([shouldAddOne]) => shouldAddOne,
-                    then: (_, [number]) => [
-                        new Fact(addOneTopic, false),
-                        new Fact(numberTopicDefault, number + 1),
-                    ],
+                    trigger: [topicOne],
+                    when: ([one]) => one,
+                    then: (_) => new Fact(topicClosureExecuted, true),
                 })
             );
-        });
-        test("when returns true", () => {
-            sut.set(db, new Fact(addOneTopic, true));
-            expect(db.get(numberTopicDefault)).toBe(1);
-        });
-        test("when returns false", () => {
-            sut.set(db, new Fact(addOneTopic, false));
-            expect(db.get(numberTopicDefault)).toBe(0);
+            sut.set(db, new Fact(topicOne, false));
+            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            sut.set(db, new Fact(topicOne, true));
+            expect(db.get(topicClosureExecuted)).toBe(true);
         });
     });
 
-    // test("register rule - add twice", () => {
-    //     sut.register(
-    //         new Rule("rule", [numberTopic, addOneTopic], (get) => {
-    //             const number = get(numberTopic)!;
-    //             const addOne = get(addOneTopic)!;
-    //             if (addOne) {
-    //                 // Because numberTopic is returned first
-    //                 // addOneTopic is still true but we are doing depth first changes
-    //                 // so it will lead to an infinite loop
-    //                 // TODO: Is this weird behaviour the return order of facts matters?
-    //                 return [
-    //                     new Fact(numberTopic, number + 1),
-    //                     new Fact(addOneTopic, undefined),
-    //                 ];
-    //             }
-    //         })
-    //     );
-    //     sut.setPublic(db, new Fact(numberTopic, 0));
-    //     sut.setPublic(db, new Fact(addOneTopic, true));
-
-    //     expect(db.get(numberTopic)).toBe(2);
-    //     expect(db.get(addOneTopic)).toBeUndefined();
-    // });
+    describe("default values", () => {
+        test("if we write default value, make sure it is saved into db", () => {
+            expect(db.getAllFacts()).toHaveLength(0);
+            sut.set(db, new Fact(topicDefaultZero, 0));
+            expect(db.getAllFacts()).toHaveLength(1);
+        });
+    });
 });

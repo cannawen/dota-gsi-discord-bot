@@ -1,12 +1,15 @@
 import configurable from "../configurable";
-import { EffectConfig } from "../../../effectConfigManager";
+import EffectConfig from "../../../effects/EffectConfig";
 import Fact from "../../Fact";
 import Rule from "../../Rule";
 import topicManager from "../../topicManager";
 import topics from "../../../topics";
 
 describe("configurable", () => {
-    let configTopic = topicManager.createConfigTopic("configTopic");
+    let configTopic = topicManager.createConfigTopic(
+        "configTopic",
+        EffectConfig.NONE
+    );
     let rule: Rule;
 
     beforeEach(() => {

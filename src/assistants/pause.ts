@@ -1,5 +1,5 @@
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
@@ -8,9 +8,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.pause
+    rules.assistant.pause,
+    EffectConfig.PUBLIC_INTERRUPTING
 );
-export const defaultConfig = EffectConfig.PUBLIC_INTERRUPTING;
 export const assistantDescription = "Plays Jeopardy music while paused";
 
 export default configurable(

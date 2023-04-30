@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
@@ -11,9 +11,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.philosophersStone
+    rules.assistant.philosophersStone,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to use Philosopher's Stone while you are dead";
 

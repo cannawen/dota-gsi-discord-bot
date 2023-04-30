@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
@@ -10,9 +10,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.tormenter
+    rules.assistant.tormenter,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Reminds you of tormenter. Responds to "torment has fallen" and "torment status"';
 

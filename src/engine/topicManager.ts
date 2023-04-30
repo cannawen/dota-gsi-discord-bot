@@ -1,4 +1,4 @@
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import log from "../log";
 import PersistentTopic from "./PersistentTopic";
 import Topic from "./Topic";
@@ -39,8 +39,9 @@ class TopicManager {
         return topic;
     }
 
-    public createConfigTopic(label: string) {
+    public createConfigTopic(label: string, defaultConfig: EffectConfig) {
         const topic = this.createTopic<EffectConfig>(label, {
+            defaultValue: defaultConfig,
             persistForever: true,
         });
         this.configTopics.push(topic);

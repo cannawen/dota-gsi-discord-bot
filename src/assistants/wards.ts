@@ -1,5 +1,5 @@
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
@@ -9,9 +9,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.wards
+    rules.assistant.wards,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to buy wards if you have not done so recently";
 

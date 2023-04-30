@@ -1,13 +1,15 @@
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
-export const configTopic = topicManager.createConfigTopic(rules.assistant.glhf);
-export const defaultConfig = EffectConfig.PRIVATE;
+export const configTopic = topicManager.createConfigTopic(
+    rules.assistant.glhf,
+    EffectConfig.PRIVATE
+);
 export const assistantDescription =
     "Wishes you good fortune at the start of the game";
 

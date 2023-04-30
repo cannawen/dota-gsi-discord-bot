@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
@@ -9,9 +9,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.newNeutralTokens
+    rules.assistant.newNeutralTokens,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you when new neutral tokens are spawning";
 

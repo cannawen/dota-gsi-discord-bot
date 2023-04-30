@@ -2,12 +2,12 @@ jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
 jest.mock("../log");
 jest.mock("../persistence");
-
-import effectConfig, { EffectConfig } from "../effectConfigManager";
 import PersistentFactStore, {
     factsToPlainObject,
 } from "../engine/PersistentFactStore";
 import { CustomEngine } from "../customEngine";
+import EffectConfig from "../effects/EffectConfig";
+import effectConfig from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import persistence from "../persistence";
 import PersistentTopic from "../engine/PersistentTopic";

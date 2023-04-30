@@ -1,4 +1,4 @@
-import { EffectConfig } from "../../effectConfigManager";
+import EffectConfig from "../../effects/EffectConfig";
 import Rule from "../Rule";
 import Topic from "../Topic";
 
