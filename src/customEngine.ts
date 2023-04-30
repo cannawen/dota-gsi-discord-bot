@@ -27,7 +27,7 @@ export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
     public getSessions() {
-        return this.sessions as DeepReadonly<Map<string, PersistentFactStore>>;
+        return this.sessions as Map<string, PersistentFactStore>;
     }
 
     public getSession(studentId: string) {
@@ -52,7 +52,7 @@ export class CustomEngine extends Engine {
         if (studentId) {
             const db = this.sessions.get(studentId);
             if (db) {
-                return db.get(topic);
+                return Engine.get(db, topic);
             }
         }
     }
@@ -109,7 +109,10 @@ export class CustomEngine extends Engine {
                 studentId.substring(0, 10)
             );
             try {
-                db.get(topics.discordSubscriptionTopic)?.connection.destroy();
+                Engine.get(
+                    db,
+                    topics.discordSubscriptionTopic
+                )?.connection.destroy();
             } catch (error) {}
             const facts = factsToPlainObject(db.getPersistentForeverFacts());
 
@@ -130,7 +133,7 @@ export class CustomEngine extends Engine {
         Array.from(this.sessions.entries())
             .filter(([_, db]) => {
                 const currentTime = Date.now() / 1000;
-                const lastInteractionTime = db.get(topics.timestamp)!;
+                const lastInteractionTime = Engine.get(db, topics.timestamp)!;
                 const oneHour = 60 * 60;
 
                 return currentTime - lastInteractionTime > oneHour;

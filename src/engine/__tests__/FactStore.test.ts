@@ -30,12 +30,12 @@ describe("FactStore", () => {
             });
         });
         describe("topic has a default value", () => {
-            test("returns default value", () => {
+            test("returns undefined", () => {
                 const topicDefaultZero = new Topic<number>(
                     "topicDefaultZero",
                     0
                 );
-                expect(sut.get(topicDefaultZero)).toBe(0);
+                expect(sut.get(topicDefaultZero)).toBeUndefined();
             });
         });
     });

@@ -15,13 +15,14 @@ function removeLineBreaks(s: string) {
 
 function topicsAllDefined(topics: Topic<unknown>[], db: FactStore): boolean {
     return topics.reduce(
-        (memo, topic) => memo && db.get(topic) !== undefined,
+        (memo, topic) => memo && Engine.get(db, topic) !== undefined,
         true
     );
 }
 
 function hasFactChanged(db: FactStore, newFact: Fact<unknown>): boolean {
     const topic = newFact.topic;
+    // Use the real db value ignoring default value to determine if the fact has changed
     const oldValue = db.get(topic);
     const newValue = newFact.value;
 
@@ -63,8 +64,10 @@ function applyRules(
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.trigger, db))
             .reduce((memo, rule) => {
-                const trigger = rule.trigger.map((topic) => db.get(topic));
-                const given = rule.given.map((topic) => db.get(topic));
+                const trigger = rule.trigger.map((topic) =>
+                    Engine.get(db, topic)
+                );
+                const given = rule.given.map((topic) => Engine.get(db, topic));
                 return memo.concat(rule.apply(trigger, given));
             }, [] as Fact<unknown>[])
     );
@@ -86,12 +89,17 @@ class Engine {
             out.forEach((fact) => {
                 this.set(db, fact);
             });
-        } else {
-            // If the facts have not changed, set the fact anyways just in case
-            // we are trying to set the fact to be the same as its default value
-            db.set(newFact);
         }
     };
+
+    public static get<T>(db: FactStore, topic: Topic<T>): T | undefined {
+        const value = db.get(topic);
+        if (value === undefined) {
+            return topic.defaultValue;
+        } else {
+            return value;
+        }
+    }
 }
 
 export default Engine;

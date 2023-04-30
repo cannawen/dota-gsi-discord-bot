@@ -31,12 +31,12 @@ describe("Engine", () => {
                     then: (_) => new Fact(topicClosureExecuted, true),
                 })
             );
-            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            expect(Engine.get(db, topicClosureExecuted)).toBeUndefined();
             sut.set(db, new Fact(topicOne, true));
-            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            expect(Engine.get(db, topicClosureExecuted)).toBeUndefined();
             sut.set(db, new Fact(topicTwo, false));
 
-            expect(db.get(topicClosureExecuted)).toBe(true);
+            expect(Engine.get(db, topicClosureExecuted)).toBe(true);
         });
     });
 
@@ -52,7 +52,7 @@ describe("Engine", () => {
                 })
             );
             sut.set(db, new Fact(topicOne, true));
-            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            expect(Engine.get(db, topicClosureExecuted)).toBeUndefined();
         });
     });
 
@@ -67,9 +67,9 @@ describe("Engine", () => {
                 })
             );
             sut.set(db, new Fact(topicOne, false));
-            expect(db.get(topicClosureExecuted)).toBeUndefined();
+            expect(Engine.get(db, topicClosureExecuted)).toBeUndefined();
             sut.set(db, new Fact(topicOne, true));
-            expect(db.get(topicClosureExecuted)).toBe(true);
+            expect(Engine.get(db, topicClosureExecuted)).toBe(true);
         });
     });
 

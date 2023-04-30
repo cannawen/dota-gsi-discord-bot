@@ -32,6 +32,7 @@ const gsi = {
     // provider
     // Also set when we create a new coaching session
     timestamp: new PersistentTopic<number>("timestamp", {
+        defaultValue: 0,
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
