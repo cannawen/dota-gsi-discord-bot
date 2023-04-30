@@ -1,10 +1,10 @@
+import atMinute from "../engine/rules/atMinute";
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorAtMinute from "../engine/RuleDecoratorAtMinute";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -22,7 +22,7 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
 );
 
 export default [
-    new RuleDecoratorAtMinute(
+    atMinute(
         20,
         new Rule({
             label: rules.assistant.tormenter,
@@ -84,5 +84,5 @@ export default [
         },
     }),
 ]
-    .map((rule) => new RuleDecoratorInGame(rule))
-    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));
+    .map(inGame)
+    .map((rule) => configurable(configTopic, rule));

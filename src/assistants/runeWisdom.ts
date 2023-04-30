@@ -1,8 +1,8 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -15,8 +15,8 @@ export const assistantDescription = "Reminds you of wisdom rune every 7:00";
 
 const ADVANCED_WARNING = 30;
 
-export default new RuleDecoratorInGame(
-    new RuleDecoratorConfigurable(
+export default inGame(
+    configurable(
         configTopic,
         new Rule({
             label: rules.assistant.runeWisdom,

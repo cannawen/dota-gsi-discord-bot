@@ -1,17 +1,17 @@
-import Fact from "../Fact";
-import Rule from "../Rule";
-import RuleDecoratorStartAndEndMinute from "../RuleDecoratorStartAndEndMinute";
-import Topic from "../Topic";
-import topics from "../../topics";
+import betweenMinutes from "../betweenMinutes";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
 describe("RuleDecoratorStartAndEndMinute", () => {
-    let rule: RuleDecoratorStartAndEndMinute;
+    let rule: Rule;
     let topic: Topic<boolean>;
 
     describe("handling start time 0", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = new RuleDecoratorStartAndEndMinute(
+            rule = betweenMinutes(
                 0,
                 4,
                 new Rule({ label: "test", then: () => new Fact(topic, true) })
@@ -32,7 +32,7 @@ describe("RuleDecoratorStartAndEndMinute", () => {
     describe("handling starting time > 0", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = new RuleDecoratorStartAndEndMinute(
+            rule = betweenMinutes(
                 2,
                 4,
                 new Rule({ label: "test", then: () => new Fact(topic, true) })

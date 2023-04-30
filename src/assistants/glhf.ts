@@ -1,7 +1,7 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -11,7 +11,7 @@ export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Wishes you good fortune at the start of the game";
 
-export default new RuleDecoratorConfigurable(
+export default configurable(
     configTopic,
     new Rule({
         label: rules.assistant.glhf,

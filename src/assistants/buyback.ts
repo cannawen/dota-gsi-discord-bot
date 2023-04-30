@@ -1,9 +1,9 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
-import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -20,7 +20,7 @@ const hasGoldForBuybackTopic = topicManager.createTopic<boolean>(
 );
 
 export default [
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         30,
         undefined,
         new Rule({
@@ -30,7 +30,7 @@ export default [
                 new Fact(hasGoldForBuybackTopic, gold >= cost),
         })
     ),
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: "warn if you have buyback cooldown available but do not have buyback due to gold",
@@ -43,4 +43,4 @@ export default [
                 ),
         })
     ),
-].map((rule) => new RuleDecoratorInGame(rule));
+].map(inGame);

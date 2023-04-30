@@ -1,9 +1,9 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
-import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -49,7 +49,7 @@ function multiplier(gold: number, increment: number) {
 
 export default [
     // Store reminder increment
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         0,
         10,
         new Rule({
@@ -57,7 +57,7 @@ export default [
             then: () => new Fact(remindGoldIncrementTopic, 500),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         10,
         undefined,
         new Rule({
@@ -66,7 +66,7 @@ export default [
         })
     ),
     // Store excess gold
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         0,
         30,
         new Rule({
@@ -75,7 +75,7 @@ export default [
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         30,
         undefined,
         new Rule({
@@ -85,7 +85,7 @@ export default [
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         30,
         undefined,
         new Rule({
@@ -131,7 +131,7 @@ export default [
         defaultValues: [new Fact(lastRemindedGoldTopic, 0)],
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: "if we have passed a warning threshold, warn user and update our gold topic",
@@ -146,4 +146,4 @@ export default [
             ],
         })
     ),
-].map((rule) => new RuleDecoratorInGame(rule));
+].map(inGame);

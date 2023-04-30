@@ -1,16 +1,16 @@
-import Fact from "../Fact";
-import Rule from "../Rule";
-import RuleDecoratorAtMinute from "../RuleDecoratorAtMinute";
-import Topic from "../Topic";
-import topics from "../../topics";
+import atMinute from "../atMinute";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
-describe("RuleDecoratorAtMinute", () => {
-    let rule: RuleDecoratorAtMinute;
+describe("atMinute", () => {
+    let rule: Rule;
     let topic: Topic<boolean>;
 
     beforeEach(() => {
         topic = new Topic<boolean>("hasTriggeredClosure");
-        rule = new RuleDecoratorAtMinute(
+        rule = atMinute(
             10,
             new Rule({
                 label: "test",

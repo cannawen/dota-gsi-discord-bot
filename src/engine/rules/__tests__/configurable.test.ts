@@ -1,17 +1,17 @@
-import { EffectConfig } from "../../effectConfigManager";
-import Fact from "../Fact";
-import Rule from "../Rule";
-import RuleDecoratorConfigurable from "../RuleDecoratorConfigurable";
-import Topic from "../Topic";
-import topics from "../../topics";
+import configurable from "../configurable";
+import { EffectConfig } from "../../../effectConfigManager";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
-describe("RuleDecoratorConfigurable", () => {
+describe("configurable", () => {
     let configTopic: Topic<EffectConfig>;
-    let rule: RuleDecoratorConfigurable;
+    let rule: Rule;
 
     beforeEach(() => {
         configTopic = new Topic<EffectConfig>("configTopic");
-        rule = new RuleDecoratorConfigurable(
+        rule = configurable(
             configTopic,
             new Rule({
                 label: "test",

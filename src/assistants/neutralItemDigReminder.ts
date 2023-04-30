@@ -1,11 +1,11 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
+import inGame from "../engine/rules/inGame";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -77,9 +77,6 @@ export default [
             new Fact(lastReminderTimeTopic, time),
         ],
     }),
-].map(
-    (rule) =>
-        new RuleDecoratorInGame(
-            new RuleDecoratorConfigurable(configTopic, rule)
-        )
-);
+]
+    .map(inGame)
+    .map((rule) => configurable(configTopic, rule));
