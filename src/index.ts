@@ -3,6 +3,7 @@ import {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import topics, { registerAllTopics } from "./topics";
 import cron from "node-cron";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
@@ -19,7 +20,6 @@ import persistence from "./persistence";
 import Rule from "./engine/Rule";
 import server from "./server";
 import Topic from "./engine/Topic";
-import topics from "./topics";
 
 dotenv.config();
 
@@ -67,6 +67,8 @@ export function registerEverything() {
     registerRulesInDirectory("gsi");
 
     registerAssistantConfig();
+
+    registerAllTopics();
 }
 
 registerEverything();

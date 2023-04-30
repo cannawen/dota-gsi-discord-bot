@@ -1,7 +1,6 @@
 /* eslint-disable max-statements */
 import Fact from "../src/engine/Fact";
 import Rule from "../src/engine/Rule";
-import Topic from "../src/engine/Topic";
 import topicManager from "../src/engine/topicManager";
 import Engine from "../src/engine/Engine";
 import FactStore from "../src/engine/FactStore";
@@ -255,3 +254,8 @@ function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[] {
 }
 
 global.getResults = getResults;
+
+global.beforeEach(() => {
+    const module = require("../src/topics");
+    module.registerAllTopics();
+});

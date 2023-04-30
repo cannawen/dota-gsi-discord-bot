@@ -110,8 +110,9 @@ const allTopics = {
     ...discord,
 };
 
-Object.values(allTopics).forEach((topic) => manager.registerTopic(topic));
-
+export function registerAllTopics() {
+    Object.values(allTopics).forEach((topic) => manager.registerTopic(topic));
+}
 /**
  * These are topics that cross different modules
  * A module may still choose to create a local topic
