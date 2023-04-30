@@ -1,6 +1,6 @@
-import Rule from "./Rule";
+import Rule from "../Rule";
 import RuleDecoratorInGame from "./RuleDecoratorInGame";
-import topics from "../topics";
+import topics from "../../topics";
 
 /**
  * This rule will only trigger between start and end time (inclusive)

@@ -1,9 +1,9 @@
-import { EffectConfig } from "../../effectConfigManager";
-import Fact from "../Fact";
-import Rule from "../Rule";
+import { EffectConfig } from "../../../effectConfigManager";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
 import RuleDecoratorConfigurable from "../RuleDecoratorConfigurable";
-import Topic from "../Topic";
-import topics from "../../topics";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
 describe("RuleDecoratorConfigurable", () => {
     let configTopic: Topic<EffectConfig>;

@@ -1,8 +1,8 @@
-import effectConfig, { EffectConfig } from "../effectConfigManager";
-import Fact from "./Fact";
-import Rule from "./Rule";
-import Topic from "./Topic";
-import topics from "../topics";
+import effectConfig, { EffectConfig } from "../../effectConfigManager";
+import Fact from "../Fact";
+import Rule from "../Rule";
+import Topic from "../Topic";
+import topics from "../../topics";
 
 /**
  * This allows a rule to be configurable by the user to play public, private, or no audio.

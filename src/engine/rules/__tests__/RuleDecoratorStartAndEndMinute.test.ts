@@ -1,8 +1,8 @@
-import Fact from "../Fact";
-import Rule from "../Rule";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
 import RuleDecoratorStartAndEndMinute from "../RuleDecoratorStartAndEndMinute";
-import Topic from "../Topic";
-import topics from "../../topics";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
 describe("RuleDecoratorStartAndEndMinute", () => {
     let rule: RuleDecoratorStartAndEndMinute;

@@ -1,8 +1,8 @@
-import Fact from "../Fact";
-import Rule from "../Rule";
+import Fact from "../../Fact";
+import Rule from "../../Rule";
 import RuleDecoratorInGame from "../RuleDecoratorInGame";
-import Topic from "../Topic";
-import topics from "../../topics";
+import Topic from "../../Topic";
+import topics from "../../../topics";
 
 describe("RuleDecoratorInGame", () => {
     let rule: RuleDecoratorInGame;

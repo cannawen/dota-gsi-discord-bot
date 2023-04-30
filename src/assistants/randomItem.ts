@@ -3,7 +3,7 @@ import Fact from "../engine/Fact";
 import fs from "fs";
 import path from "path";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
+import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";

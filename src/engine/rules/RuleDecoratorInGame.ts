@@ -1,5 +1,5 @@
-import Rule from "./Rule";
-import topics from "../topics";
+import Rule from "../Rule";
+import topics from "../../topics";
 
 /**
  * This rule will happen when we are in a game and the time is not 0

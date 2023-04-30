@@ -1,9 +1,9 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/RuleDecoratorInGame";
-import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
+import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
+import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
+import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";

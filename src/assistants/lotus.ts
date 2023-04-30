@@ -1,8 +1,8 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/RuleDecoratorConfigurable";
-import RuleDecoratorStartAndEndMinute from "../engine/RuleDecoratorStartAndEndMinute";
+import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
+import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
