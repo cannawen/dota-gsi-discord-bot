@@ -2,6 +2,10 @@ import { EffectConfig } from "../../effectConfigManager";
 import PersistentTopic from "../PersistentTopic";
 import Topic from "../Topic";
 
+/**
+ * These are topics that we use in our tests
+ * Have them already be registered with TopicManager so that it doesn't throw exceptions
+ */
 const topicMap = new Map<string, Topic<unknown>>(
     Object.entries({
         configTopicOne: new Topic<EffectConfig>("configTopicOne"),
@@ -25,17 +29,13 @@ const topicMap = new Map<string, Topic<unknown>>(
 );
 
 const manager = {
-    createConfigTopic: jest
-        .fn()
-        .mockReturnValue(new PersistentTopic<EffectConfig>("configTopic")),
+    createConfigTopic: jest.fn(),
     createTopic: jest.fn(),
     getConfigTopics: jest.fn(),
     findTopic: jest
         .fn()
         .mockImplementation((label: string) => topicMap.get(label)),
-    registerTopic: jest.fn().mockImplementation((topic: Topic<unknown>) => {
-        topicMap.set(topic.label, topic);
-    }),
+    registerTopic: jest.fn(),
 };
 
 export default manager;

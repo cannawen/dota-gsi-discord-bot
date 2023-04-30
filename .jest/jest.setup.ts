@@ -2,6 +2,7 @@
 import Fact from "../src/engine/Fact";
 import Rule from "../src/engine/Rule";
 import Topic from "../src/engine/Topic";
+import topicManager from "../src/engine/topicManager";
 import Engine from "../src/engine/Engine";
 import FactStore from "../src/engine/FactStore";
 
@@ -192,7 +193,7 @@ function factsToPlainObject(facts: Fact<unknown>[]) {
 function plainObjectToFacts(object: { [key: string]: unknown }) {
     return Object.entries(object).reduce(
         (memo: Fact<unknown>[], [topicLabel, value]) => {
-            memo.push(new Fact(new Topic(topicLabel), value));
+            memo.push(new Fact(topicManager.findTopic(topicLabel), value));
             return memo;
         },
         []
