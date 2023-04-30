@@ -1,9 +1,9 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -49,7 +49,7 @@ function multiplier(gold: number, increment: number) {
 
 export default [
     // Store reminder increment
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         0,
         10,
         new Rule({
@@ -57,7 +57,7 @@ export default [
             then: () => new Fact(remindGoldIncrementTopic, 500),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         10,
         undefined,
         new Rule({
@@ -66,7 +66,7 @@ export default [
         })
     ),
     // Store excess gold
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         0,
         30,
         new Rule({
@@ -75,7 +75,7 @@ export default [
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         30,
         undefined,
         new Rule({
@@ -85,7 +85,7 @@ export default [
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    new RuleDecoratorStartAndEndMinute(
+    betweenMinutes(
         30,
         undefined,
         new Rule({

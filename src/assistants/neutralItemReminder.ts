@@ -1,9 +1,9 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import Rule from "../engine/Rule";
-import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -22,7 +22,7 @@ const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
-export default new RuleDecoratorStartAndEndMinute(
+export default betweenMinutes(
     NEUTRAL_ITEM_REMINDER_START_MINUTE,
     undefined,
     configurable(

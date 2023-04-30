@@ -1,8 +1,8 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -17,7 +17,7 @@ export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you of lotus every 3:00 before 12:00";
 
-export default new RuleDecoratorStartAndEndMinute(
+export default betweenMinutes(
     0,
     12,
     configurable(
