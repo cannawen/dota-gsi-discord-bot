@@ -70,7 +70,7 @@ describe("Engine", () => {
         });
     });
 
-    describe.only("when, action, and defaultValue", () => {
+    describe("when, action, and defaultValue", () => {
         let numberTopicDefault: any;
         beforeEach(() => {
             numberTopicDefault = new Topic<number>("numberTopicDefault", 0);
