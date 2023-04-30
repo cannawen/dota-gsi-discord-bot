@@ -19,7 +19,7 @@ export const assistantDescription =
 
 const seenPhilosophersStoneTopic = topicManager.createTopic<boolean>(
     "seenPhilosophersStoneTopic",
-    { persistAcrossRestarts: true }
+    { defaultValue: false, persistAcrossRestarts: true }
 );
 const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
     "remindedAlreadyThisDeathCycleTopic"

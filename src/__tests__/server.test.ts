@@ -237,7 +237,10 @@ describe("server", () => {
                             expect(engine.setFact).toHaveBeenCalledWith(
                                 "studentId",
                                 new Fact(
-                                    new Topic<string[]>("privateAudioQueue"),
+                                    new Topic<string[]>(
+                                        "privateAudioQueue",
+                                        []
+                                    ),
                                     ["bar.mp3"]
                                 )
                             );
@@ -288,14 +291,14 @@ describe("server", () => {
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
-                            new Topic<string[]>("privateAudioQueue"),
+                            new Topic<string[]>("privateAudioQueue", []),
                             undefined
                         )
                     );
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
-                            new Topic<string[]>("publicAudioQueue"),
+                            new Topic<string[]>("publicAudioQueue", []),
                             undefined
                         )
                     );

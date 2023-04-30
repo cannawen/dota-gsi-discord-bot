@@ -20,10 +20,13 @@ const MAX_WARDS_IN_STOCK = 4;
 const WARD_REMINDER_INTERVAL = WARD_RESTOCK_SECONDS * MAX_WARDS_IN_STOCK;
 
 const lastWardReminderTimeTopic = topicManager.createTopic<number>(
-    "lastWardReminderTimeTopic"
+    "lastWardReminderTimeTopic",
+    { defaultValue: 0 }
 );
-const lastWardCountTopic =
-    topicManager.createTopic<number>("lastWardCountTopic");
+const lastWardCountTopic = topicManager.createTopic<number>(
+    "lastWardCountTopic",
+    { defaultValue: 0 }
+);
 
 /**
  * NOTE: We do not actually know how many wards a player has

@@ -22,7 +22,8 @@ export const assistantDescription =
  * Set the lastReminderGoldTopic to the amount of gold that the interaction was at
  */
 const lastRemindedGoldTopic = topicManager.createTopic<number>(
-    "lastRemindedGoldTopic"
+    "lastRemindedGoldTopic",
+    { defaultValue: 0 }
 );
 /**
  * How often should we remind the user about their excess gold?

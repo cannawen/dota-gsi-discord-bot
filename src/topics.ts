@@ -12,7 +12,7 @@ const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
 
     // events
-    events: new Topic<DeepReadonly<Event[]>>("events"),
+    events: new Topic<DeepReadonly<Event[]>>("events", []),
     // hero
     alive: new Topic<boolean>("alive"),
     buybackCost: new Topic<number>("buybackCost"),
@@ -47,10 +47,13 @@ const effect = {
     configurableEffect: new Topic<string>("configurableEffect"),
 
     playPublicAudio: new Topic<string>("playPublicAudio"),
-    publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue"),
+    publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue", []),
 
     playPrivateAudio: new Topic<string>("playPrivateAudio"),
-    privateAudioQueue: new Topic<DeepReadonly<string[]>>("privateAudioQueue"),
+    privateAudioQueue: new Topic<DeepReadonly<string[]>>(
+        "privateAudioQueue",
+        []
+    ),
 
     playInterruptingAudioFile: new Topic<string>("playInterruptingAudioFile"),
 
@@ -73,6 +76,7 @@ const discord = {
     numberOfPeopleTalking: new PersistentTopic<number>(
         "numberOfPeopleTalking",
         {
+            defaultValue: 0,
             persistAcrossGames: true,
         }
     ),

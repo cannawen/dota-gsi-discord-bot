@@ -1,5 +1,5 @@
-import configurable from "../engine/rules/configurable";
 import Event, { EventType } from "../gsi-data-classes/Event";
+import configurable from "../engine/rules/configurable";
 import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
@@ -24,6 +24,7 @@ const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 const roshanDeathTimesTopic = topicManager.createTopic<number[]>(
     "roshanDeathTimesTopic",
     {
+        defaultValue: [],
         persistAcrossRestarts: true,
     }
 );
