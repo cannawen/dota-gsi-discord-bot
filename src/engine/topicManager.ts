@@ -10,6 +10,7 @@ class TopicManager {
     public createTopic<T>(
         label: string,
         options?: {
+            defaultValue?: T;
             persistAcrossRestarts?: boolean;
             persistAcrossGames?: boolean;
             persistForever?: boolean;
@@ -25,10 +26,14 @@ class TopicManager {
         }
 
         let topic;
-        if (options) {
+        if (
+            options?.persistAcrossGames ||
+            options?.persistAcrossRestarts ||
+            options?.persistForever
+        ) {
             topic = new PersistentTopic<T>(label, options);
         } else {
-            topic = new Topic<T>(label);
+            topic = new Topic<T>(label, options?.defaultValue);
         }
         this.registerTopic(topic);
         return topic;
