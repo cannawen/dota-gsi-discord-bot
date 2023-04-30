@@ -1,9 +1,9 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -33,7 +33,7 @@ const lastWardCountTopic =
  * This means if you buy wards from fountain and it does not pass through your stash,
  * The app may not know your ward count has increased.
  */
-export default new RuleDecoratorInGame(
+export default inGame(
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule({

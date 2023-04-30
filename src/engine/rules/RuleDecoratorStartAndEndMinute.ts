@@ -1,5 +1,5 @@
+import inGame from "./inGame";
 import Rule from "../Rule";
-import RuleDecoratorInGame from "./RuleDecoratorInGame";
 import topics from "../../topics";
 
 /**
@@ -8,7 +8,7 @@ import topics from "../../topics";
  */
 class RuleDecoratorStartAndEndMinute extends Rule {
     constructor(min: number | undefined, max: number | undefined, rule: Rule) {
-        const inGameRule = new RuleDecoratorInGame(rule);
+        const inGameRule = inGame(rule);
         super({
             label: inGameRule.label,
             trigger: [topics.time, ...inGameRule.trigger],

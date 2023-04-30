@@ -1,17 +1,17 @@
 import Fact from "../../Fact";
+import inGame from "../inGame";
 import Rule from "../../Rule";
-import RuleDecoratorInGame from "../RuleDecoratorInGame";
 import Topic from "../../Topic";
 import topics from "../../../topics";
 
-describe("RuleDecoratorInGame", () => {
-    let rule: RuleDecoratorInGame;
+describe("inGame", () => {
+    let rule: Rule;
     let topic: Topic<boolean>;
 
     describe("inner rule does not subscribe to time topic", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = new RuleDecoratorInGame(
+            rule = inGame(
                 new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });
@@ -27,7 +27,7 @@ describe("RuleDecoratorInGame", () => {
     describe("inner rule triggers on time topic", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = new RuleDecoratorInGame(
+            rule = inGame(
                 new Rule({
                     label: "test",
                     trigger: [topics.time],

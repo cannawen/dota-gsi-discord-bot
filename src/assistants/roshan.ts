@@ -3,9 +3,9 @@ import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -149,10 +149,6 @@ export default [
                 roshStatusResponse(deathTimes, time, dayTime)
             ),
     }),
-].map(
-    (rule) =>
-        new RuleDecoratorConfigurable(
-            configTopic,
-            new RuleDecoratorInGame(rule)
-        )
-);
+]
+    .map(inGame)
+    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));

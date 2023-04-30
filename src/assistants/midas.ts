@@ -1,10 +1,10 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -71,4 +71,4 @@ export default [
     }),
 ]
     .map((rule) => new RuleDecoratorConfigurable(configTopic, rule))
-    .map((rule) => new RuleDecoratorInGame(rule));
+    .map(inGame);

@@ -1,8 +1,8 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
 import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -20,7 +20,7 @@ export const assistantDescription =
 export default new RuleDecoratorStartAndEndMinute(
     6,
     undefined,
-    new RuleDecoratorInGame(
+    inGame(
         new RuleDecoratorConfigurable(
             configTopic,
             new Rule({

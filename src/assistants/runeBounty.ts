@@ -1,8 +1,8 @@
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
-import RuleDecoratorInGame from "../engine/rules/RuleDecoratorInGame";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -16,7 +16,7 @@ export const defaultConfig = EffectConfig.NONE;
 export const assistantDescription =
     "Reminds you of bounty rune spawn every 3:00";
 
-export default new RuleDecoratorInGame(
+export default inGame(
     new RuleDecoratorConfigurable(
         configTopic,
         new Rule({
