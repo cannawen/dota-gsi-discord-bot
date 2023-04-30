@@ -71,10 +71,6 @@ export default inGame(
                 }
                 return facts;
             },
-            defaultValues: [
-                new Fact(lastWardReminderTimeTopic, 0),
-                new Fact(lastWardCountTopic, 0),
-            ],
         })
     )
 );

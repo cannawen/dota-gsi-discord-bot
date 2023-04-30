@@ -44,5 +44,4 @@ export default new Rule({
             new Fact(topics.playPublicAudio, undefined),
         ];
     },
-    defaultValues: [new Fact(topics.publicAudioQueue, [])],
 });

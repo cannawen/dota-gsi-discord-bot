@@ -20,6 +20,5 @@ export default function inGame(rule: Rule) {
             given.shift();
             return rule.then(trigger, given);
         },
-        defaultValues: rule.defaultValues,
     });
 }

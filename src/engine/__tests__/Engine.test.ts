@@ -70,29 +70,30 @@ describe("Engine", () => {
         });
     });
 
-    describe("when, action, and defaultValue", () => {
+    describe.only("when, action, and defaultValue", () => {
+        let numberTopicDefault: any;
         beforeEach(() => {
+            numberTopicDefault = new Topic<number>("numberTopicDefault", 0);
             sut.register(
                 new Rule({
                     label: "rule",
                     trigger: [addOneTopic],
-                    given: [numberTopic],
+                    given: [numberTopicDefault],
                     when: ([shouldAddOne]) => shouldAddOne,
                     then: (_, [number]) => [
                         new Fact(addOneTopic, false),
-                        new Fact(numberTopic, number + 1),
+                        new Fact(numberTopicDefault, number + 1),
                     ],
-                    defaultValues: [new Fact(numberTopic, 0)],
                 })
             );
         });
         test("when returns true", () => {
             sut.set(db, new Fact(addOneTopic, true));
-            expect(db.get(numberTopic)).toBe(1);
+            expect(db.get(numberTopicDefault)).toBe(1);
         });
         test("when returns false", () => {
             sut.set(db, new Fact(addOneTopic, false));
-            expect(db.get(numberTopic)).toBe(0);
+            expect(db.get(numberTopicDefault)).toBe(0);
         });
     });
 

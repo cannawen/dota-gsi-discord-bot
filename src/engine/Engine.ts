@@ -60,15 +60,6 @@ function applyRules(
             .filter((rule) =>
                 rule.trigger.find((topic) => topic.label === changedTopic.label)
             )
-            // Set default values
-            .map((rule) => {
-                rule.defaultValues.forEach((fact) => {
-                    if (db.get(fact.topic) === undefined) {
-                        db.set(fact);
-                    }
-                });
-                return rule;
-            })
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.trigger, db))
             .reduce((memo, rule) => {

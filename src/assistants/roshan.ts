@@ -103,7 +103,6 @@ export default [
         when: ([events]) => roshanWasKilled(events),
         then: (_, [time, deathTimes]) =>
             new Fact(roshanDeathTimesTopic, [...deathTimes, time]),
-        defaultValues: [new Fact(roshanDeathTimesTopic, [])],
     }),
     new Rule({
         label: "when time is 8 minutes after last roshan death, play reminder",

@@ -13,12 +13,6 @@ class Rule {
         trigger: any[],
         given: any[]
     ) => Fact<unknown>[] | Fact<unknown> | void;
-    /**
-     * TODO Do we want defaultValues as part of a rule, or as part of a separate mechanism?
-     * This seems a bit dangerous because any rule can set a default value for any topic
-     * And it won't be clear where our defaults are coming from.
-     */
-    public readonly defaultValues: Fact<unknown>[];
 
     constructor(params: {
         label: string;
@@ -29,14 +23,12 @@ class Rule {
             trigger: any[],
             given: any[]
         ) => Fact<unknown>[] | Fact<unknown> | void;
-        defaultValues?: Fact<unknown>[];
     }) {
         this.label = params.label;
         this.trigger = params.trigger || [];
         this.given = params.given || [];
         this.when = params.when || (() => true);
         this.then = params.then;
-        this.defaultValues = params.defaultValues || [];
     }
 
     // TODO test

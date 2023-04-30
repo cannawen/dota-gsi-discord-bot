@@ -12,6 +12,5 @@ export default function atMinute(time: number, rule: Rule) {
         given: startEndRule.given,
         when: startEndRule.when,
         then: startEndRule.then,
-        defaultValues: startEndRule.defaultValues,
     });
 }

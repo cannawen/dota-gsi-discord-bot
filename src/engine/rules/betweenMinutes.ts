@@ -30,6 +30,5 @@ export default function betweenMinutes(
             trigger.shift();
             return inGameRule.then(trigger, given);
         },
-        defaultValues: inGameRule.defaultValues,
     });
 }

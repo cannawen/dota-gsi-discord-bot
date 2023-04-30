@@ -129,7 +129,6 @@ export default [
             multiplier(lastRemindedGold, increment) >
             multiplier(discretionaryGold, increment),
         then: ([gold]) => new Fact(lastRemindedGoldTopic, gold),
-        defaultValues: [new Fact(lastRemindedGoldTopic, 0)],
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     configurable(

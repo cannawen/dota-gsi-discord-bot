@@ -42,7 +42,6 @@ export default [
         trigger: [topics.items],
         when: ([items]) => hasPhilosophersStone(items),
         then: () => new Fact(seenPhilosophersStoneTopic, true),
-        defaultValues: [new Fact(seenPhilosophersStoneTopic, false)],
     }),
     new Rule({
         label: "tell you to take the philosopher's stone while you are dead",

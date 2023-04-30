@@ -37,5 +37,4 @@ export default new Rule({
             new Fact(topics.playPrivateAudio, undefined),
         ];
     },
-    defaultValues: [new Fact(topics.privateAudioQueue, [])],
 });
