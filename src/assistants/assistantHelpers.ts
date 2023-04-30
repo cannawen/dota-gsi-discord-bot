@@ -1,20 +1,22 @@
 import fs from "fs";
 import path from "path";
 
+function secondsToTimeString(seconds: number) {
+    const totalMs = seconds * 1000;
+    const hourString = new Date(totalMs).toISOString().slice(11, 19);
+    return hourString.replace(/^0/, "").replace(/^0:/, "");
+}
+
 /**
  * NOTE: This function only returns minutes and seconds
  * If the game lasts for over an hour, it will drop the "1 hour" portion of the time
  */
-function secondsToTimeString(seconds: number, formatTts?: boolean) {
-    const totalMs = seconds * 1000;
-
-    const minutesAndSeconds = new Date(totalMs).toISOString().slice(14, 19);
-
-    if (formatTts) {
-        return minutesAndSeconds.replace(/^0/, "").replace(":", " ");
-    } else {
-        return minutesAndSeconds;
-    }
+function secondsToTtsTimeString(seconds: number): string {
+    const minutesOnlyTimeString = secondsToTimeString(seconds).slice(-5);
+    return minutesOnlyTimeString
+        .replace(/^0/, "")
+        .replace(/:00$/, " minutes")
+        .replace(":", " ");
 }
 
 export const enum Tier {
@@ -26,6 +28,7 @@ export const enum Tier {
     FIVE = 5,
 }
 
+// TODO does this have to be a class? Can we just make it some functions?
 export class NeutralItemHelper {
     public tierTimeInfo = [7, 17, 27, 37, 60];
 
@@ -95,4 +98,5 @@ export class NeutralItemHelper {
 export default {
     neutral: new NeutralItemHelper(),
     secondsToTimeString,
+    secondsToTtsTimeString,
 };

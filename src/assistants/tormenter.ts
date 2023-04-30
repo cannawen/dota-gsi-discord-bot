@@ -24,70 +24,65 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
 export default [
     new RuleDecoratorAtMinute(
         20,
-        new RuleDecoratorConfigurable(
-            configTopic,
-            new Rule({
-                label: rules.assistant.tormenter,
-                then: () =>
+        new Rule({
+            label: rules.assistant.tormenter,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/tormenters-up.mp3"
+                ),
+        })
+    ),
+    new Rule({
+        label: "tormenter reminder",
+        trigger: [topics.time, tormenterFallenTimeTopic],
+        then: ([time, fallenTime]) => {
+            if (time === fallenTime + 60 * 10) {
+                return [
                     new Fact(
                         topics.configurableEffect,
                         "resources/audio/tormenters-up.mp3"
                     ),
-            })
-        )
-    ),
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule({
-            label: "tormenter reminder",
-            trigger: [topics.time, tormenterFallenTimeTopic],
-            then: ([time, fallenTime]) => {
-                if (time === fallenTime + 60 * 10) {
-                    return [
-                        new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/tormenters-up.mp3"
-                        ),
-                        new Fact(tormenterFallenTimeTopic, undefined),
-                    ];
-                }
-            },
-        })
-    ),
-    new RuleDecoratorConfigurable(
-        configTopic,
-        new Rule({
-            label: "tormenter voice",
-            trigger: [topics.lastDiscordUtterance],
-            given: [topics.time, tormenterFallenTimeTopic],
-            then: ([lastDiscordUtterance], [time, fallenTime]) => {
-                if (lastDiscordUtterance.match(/^torment has fallen$/i)) {
-                    return [
-                        new Fact(tormenterFallenTimeTopic, time),
-                        new Fact(topics.configurableEffect, "OK"),
-                    ];
-                }
-                if (lastDiscordUtterance.match(/^torment status$/i)) {
-                    let message: string;
-                    if (fallenTime) {
-                        message = `Tormenter is dead. Will respawn at ${
-                            (helper.secondsToTimeString(fallenTime + 10 * 60),
-                            true)
-                        }`;
-                    } else if (time >= 20 * 60) {
-                        return new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/tormenters-up.mp3"
-                        );
-                    } else {
-                        return new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/tormenter-20-minutes.mp3"
-                        );
-                    }
-                    return new Fact(topics.configurableEffect, message);
-                }
-            },
-        })
-    ),
-].map((rule) => new RuleDecoratorInGame(rule));
+                    new Fact(tormenterFallenTimeTopic, undefined),
+                ];
+            }
+        },
+    }),
+    new Rule({
+        label: "tormenter has fallen",
+        trigger: [topics.lastDiscordUtterance],
+        given: [topics.time],
+        when: ([utterance]) => utterance.match(/^torment has fallen$/i),
+        then: (_, [time]) => [
+            new Fact(tormenterFallenTimeTopic, time),
+            new Fact(topics.configurableEffect, "OK"),
+        ],
+    }),
+    new Rule({
+        label: "tormenter status",
+        trigger: [topics.lastDiscordUtterance],
+        given: [topics.time, tormenterFallenTimeTopic],
+        when: ([utterance]) => utterance.match(/^torment status$/i),
+        then: (_, [time, fallenTime]) => {
+            let message: string;
+            if (fallenTime) {
+                message = `Tormenter is dead. Will respawn at ${helper.secondsToTtsTimeString(
+                    fallenTime + 10 * 60
+                )}`;
+            } else if (time >= 20 * 60) {
+                return new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/tormenters-up.mp3"
+                );
+            } else {
+                return new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/tormenter-20-minutes.mp3"
+                );
+            }
+            return new Fact(topics.configurableEffect, message);
+        },
+    }),
+]
+    .map((rule) => new RuleDecoratorInGame(rule))
+    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));
