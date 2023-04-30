@@ -1,9 +1,15 @@
 import EffectConfig from "../../effects/EffectConfig";
-import effectConfig from "../../effectConfigManager";
 import Fact from "../Fact";
 import Rule from "../Rule";
 import Topic from "../Topic";
 import topics from "../../topics";
+
+const configToEffectTopic = {
+    [EffectConfig.PUBLIC]: topics.playPublicAudio,
+    [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
+    [EffectConfig.PRIVATE]: topics.playPrivateAudio,
+    [EffectConfig.NONE]: undefined,
+};
 
 /**
  * This allows a rule to be configurable by the user to play public, private, or no audio.
@@ -27,7 +33,7 @@ export default function configurable(
         },
         then: (trigger, given) => {
             const config: EffectConfig = given.shift();
-            const effect = effectConfig.configToEffectTopic[config];
+            const effect = configToEffectTopic[config];
             if (effect) {
                 const result = rule.thenArray(trigger, given);
                 return result.map((fact) => {

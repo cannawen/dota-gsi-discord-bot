@@ -8,13 +8,6 @@ import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
-const configToEffectTopic = {
-    [EffectConfig.PUBLIC]: topics.playPublicAudio,
-    [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,
-    [EffectConfig.PRIVATE]: topics.playPrivateAudio,
-    [EffectConfig.NONE]: undefined,
-};
-
 function registerEffectConfigRule(
     ruleName: string,
     topic: Topic<EffectConfig>
@@ -71,5 +64,4 @@ export default {
     defaultConfigs,
     effectFromString,
     registerEffectConfigRule,
-    configToEffectTopic,
 };
