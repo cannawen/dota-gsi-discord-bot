@@ -1,8 +1,8 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleDecoratorAtMinute from "../engine/rules/RuleDecoratorAtMinute";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -18,7 +18,7 @@ export default [2, 4].map(
     (time) =>
         new RuleDecoratorAtMinute(
             time,
-            new RuleDecoratorConfigurable(
+            configurable(
                 configTopic,
                 new Rule({
                     label: rules.assistant.runeWater,

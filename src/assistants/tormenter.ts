@@ -1,10 +1,10 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import RuleDecoratorAtMinute from "../engine/rules/RuleDecoratorAtMinute";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -85,4 +85,4 @@ export default [
     }),
 ]
     .map(inGame)
-    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));
+    .map((rule) => configurable(configTopic, rule));

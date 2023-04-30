@@ -1,3 +1,4 @@
+import configurable from "../engine/rules/configurable";
 import Event, { EventType } from "../gsi-data-classes/Event";
 import { DeepReadonly } from "ts-essentials";
 import { EffectConfig } from "../effectConfigManager";
@@ -5,7 +6,6 @@ import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -151,4 +151,4 @@ export default [
     }),
 ]
     .map(inGame)
-    .map((rule) => new RuleDecoratorConfigurable(configTopic, rule));
+    .map((rule) => configurable(configTopic, rule));

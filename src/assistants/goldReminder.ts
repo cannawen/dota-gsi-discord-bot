@@ -1,8 +1,8 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -131,7 +131,7 @@ export default [
         defaultValues: [new Fact(lastRemindedGoldTopic, 0)],
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: "if we have passed a warning threshold, warn user and update our gold topic",

@@ -1,9 +1,9 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import fs from "fs";
 import path from "path";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -39,7 +39,7 @@ function whatShouldIBuy(message: string) {
     return message.match(/^what (items? )?(do|should) I (buy|get)$/i) !== null;
 }
 
-export default new RuleDecoratorConfigurable(
+export default configurable(
     configTopic,
     new Rule({
         label: rules.assistant.glhf,

@@ -1,8 +1,8 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -21,7 +21,7 @@ export default new RuleDecoratorStartAndEndMinute(
     6,
     undefined,
     inGame(
-        new RuleDecoratorConfigurable(
+        configurable(
             configTopic,
             new Rule({
                 label: rules.assistant.runePower,

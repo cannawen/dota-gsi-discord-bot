@@ -1,7 +1,7 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import RuleDecoratorStartAndEndMinute from "../engine/rules/RuleDecoratorStartAndEndMinute";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -20,7 +20,7 @@ export const assistantDescription =
 export default new RuleDecoratorStartAndEndMinute(
     0,
     12,
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: rules.assistant.lotus,

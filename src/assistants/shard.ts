@@ -1,8 +1,8 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import RuleDecoratorAtMinute from "../engine/rules/RuleDecoratorAtMinute";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -16,7 +16,7 @@ export const assistantDescription =
 
 export default new RuleDecoratorAtMinute(
     15,
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: rules.assistant.shard,

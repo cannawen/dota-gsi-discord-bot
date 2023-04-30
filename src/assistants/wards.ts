@@ -1,9 +1,9 @@
+import configurable from "../engine/rules/configurable";
 import { EffectConfig } from "../effectConfigManager";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
-import RuleDecoratorConfigurable from "../engine/rules/RuleDecoratorConfigurable";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
@@ -34,7 +34,7 @@ const lastWardCountTopic =
  * The app may not know your ward count has increased.
  */
 export default inGame(
-    new RuleDecoratorConfigurable(
+    configurable(
         configTopic,
         new Rule({
             label: rules.assistant.wards,
