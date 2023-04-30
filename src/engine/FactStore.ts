@@ -11,7 +11,7 @@ export default class FactStore {
             // The fact's topic is used as a key
             return fact.value as T;
         } else {
-            return undefined;
+            return topic.defaultValue;
         }
     };
 

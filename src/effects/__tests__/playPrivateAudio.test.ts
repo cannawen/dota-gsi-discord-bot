@@ -65,11 +65,11 @@ describe("playPrivateAudio", () => {
         test("should ask tts to create audio and directly set on engine", () => {
             const results = getResults(rule, {
                 studentId: "studentId",
-                privateAudioQueue: [],
+                privateAudioQueue: ["foo"],
                 playPrivateAudio: "text to speech message",
             }) as Fact<string[]>[];
 
-            expect(results).toContainFact("privateAudioQueue", []);
+            expect(results).toContainFact("privateAudioQueue", ["foo"]);
             expect(tts.create).toHaveBeenCalledWith("text to speech message");
             const axiosPromise = (tts.create as jest.Mock).mock.results[0]
                 .value;

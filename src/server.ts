@@ -1,4 +1,5 @@
-import effectConfig, { EffectConfig } from "./effectConfigManager";
+import EffectConfig from "./effects/EffectConfig";
+import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";

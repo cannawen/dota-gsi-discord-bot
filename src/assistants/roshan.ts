@@ -1,7 +1,7 @@
-import configurable from "../engine/rules/configurable";
 import Event, { EventType } from "../gsi-data-classes/Event";
+import configurable from "../engine/rules/configurable";
 import { DeepReadonly } from "ts-essentials";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
@@ -11,9 +11,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.roshan
+    rules.assistant.roshan,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
 
@@ -24,6 +24,7 @@ const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 const roshanDeathTimesTopic = topicManager.createTopic<number[]>(
     "roshanDeathTimesTopic",
     {
+        defaultValue: [],
         persistAcrossRestarts: true,
     }
 );
@@ -102,7 +103,6 @@ export default [
         when: ([events]) => roshanWasKilled(events),
         then: (_, [time, deathTimes]) =>
             new Fact(roshanDeathTimesTopic, [...deathTimes, time]),
-        defaultValues: [new Fact(roshanDeathTimesTopic, [])],
     }),
     new Rule({
         label: "when time is 8 minutes after last roshan death, play reminder",

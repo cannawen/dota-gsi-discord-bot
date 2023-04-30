@@ -1,6 +1,6 @@
 /* eslint-disable max-statements */
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./assistantHelpers";
 import inGame from "../engine/rules/inGame";
@@ -11,15 +11,15 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.philosophersStone
+    rules.assistant.philosophersStone,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to use Philosopher's Stone while you are dead";
 
 const seenPhilosophersStoneTopic = topicManager.createTopic<boolean>(
     "seenPhilosophersStoneTopic",
-    { persistAcrossRestarts: true }
+    { defaultValue: false, persistAcrossRestarts: true }
 );
 const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
     "remindedAlreadyThisDeathCycleTopic"
@@ -42,7 +42,6 @@ export default [
         trigger: [topics.items],
         when: ([items]) => hasPhilosophersStone(items),
         then: () => new Fact(seenPhilosophersStoneTopic, true),
-        defaultValues: [new Fact(seenPhilosophersStoneTopic, false)],
     }),
     new Rule({
         label: "tell you to take the philosopher's stone while you are dead",

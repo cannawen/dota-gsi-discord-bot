@@ -60,15 +60,6 @@ function applyRules(
             .filter((rule) =>
                 rule.trigger.find((topic) => topic.label === changedTopic.label)
             )
-            // Set default values
-            .map((rule) => {
-                rule.defaultValues.forEach((fact) => {
-                    if (db.get(fact.topic) === undefined) {
-                        db.set(fact);
-                    }
-                });
-                return rule;
-            })
             // and there none of the givens are `undefined`
             .filter((rule) => topicsAllDefined(rule.trigger, db))
             .reduce((memo, rule) => {
@@ -89,11 +80,16 @@ class Engine {
 
     public set = (db: FactStore, newFact: Fact<unknown>) => {
         if (hasFactChanged(db, newFact)) {
+            // Need to set the db after checking if fact has changed
             db.set(newFact);
             const out = applyRules(db, this.rules, newFact.topic);
             out.forEach((fact) => {
                 this.set(db, fact);
             });
+        } else {
+            // If the facts have not changed, set the fact anyways just in case
+            // we are trying to set the fact to be the same as its default value
+            db.set(newFact);
         }
     };
 }

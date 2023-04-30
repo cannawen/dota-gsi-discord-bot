@@ -1,6 +1,6 @@
 import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
@@ -11,9 +11,9 @@ import topics from "../topics";
 const POWER_RUNE_SPAWN_INTERVAL = 2 * 60;
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.runePower
+    rules.assistant.runePower,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you of power rune spawn every 2:00 after 6:00";
 

@@ -4,14 +4,13 @@
 export default class Topic<Type> {
     public readonly label: string;
     // The following variable is not to be used, but is only here for type-checking reasons
-    private readonly _type: Type | undefined;
+    public readonly defaultValue: Type | undefined;
 
     /**
      * Create a topic
-     * @param label
-     * @param opts Optional params to mark if you want to persist data across restart or games (default is false)
      */
-    public constructor(label: string) {
+    public constructor(label: string, defaultValue?: Type) {
         this.label = label;
+        this.defaultValue = defaultValue;
     }
 }

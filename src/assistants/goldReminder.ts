@@ -1,6 +1,6 @@
 import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
@@ -9,9 +9,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.goldReminder
+    rules.assistant.goldReminder,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to spend gold if you have too much";
 
@@ -22,7 +22,8 @@ export const assistantDescription =
  * Set the lastReminderGoldTopic to the amount of gold that the interaction was at
  */
 const lastRemindedGoldTopic = topicManager.createTopic<number>(
-    "lastRemindedGoldTopic"
+    "lastRemindedGoldTopic",
+    { defaultValue: 0 }
 );
 /**
  * How often should we remind the user about their excess gold?
@@ -128,7 +129,6 @@ export default [
             multiplier(lastRemindedGold, increment) >
             multiplier(discretionaryGold, increment),
         then: ([gold]) => new Fact(lastRemindedGoldTopic, gold),
-        defaultValues: [new Fact(lastRemindedGoldTopic, 0)],
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     configurable(

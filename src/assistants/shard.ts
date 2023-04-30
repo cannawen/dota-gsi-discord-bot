@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -8,9 +8,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.shard
+    rules.assistant.shard,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you of shard availability at 15:00";
 

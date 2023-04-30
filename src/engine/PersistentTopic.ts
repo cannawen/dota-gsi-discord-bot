@@ -17,12 +17,13 @@ export default class PersistentTopic<Type> extends Topic<Type> {
     public constructor(
         label: string,
         options?: {
+            defaultValue?: Type;
             persistAcrossRestarts?: boolean;
             persistAcrossGames?: boolean;
             persistForever?: boolean;
         }
     ) {
-        super(label);
+        super(label, options?.defaultValue);
 
         this.persistAcrossRestarts =
             options?.persistAcrossRestarts || options?.persistForever || false;

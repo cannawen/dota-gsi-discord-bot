@@ -1,4 +1,4 @@
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import log from "../log";
 import PersistentTopic from "./PersistentTopic";
 import Topic from "./Topic";
@@ -10,6 +10,7 @@ class TopicManager {
     public createTopic<T>(
         label: string,
         options?: {
+            defaultValue?: T;
             persistAcrossRestarts?: boolean;
             persistAcrossGames?: boolean;
             persistForever?: boolean;
@@ -25,17 +26,22 @@ class TopicManager {
         }
 
         let topic;
-        if (options) {
+        if (
+            options?.persistAcrossGames ||
+            options?.persistAcrossRestarts ||
+            options?.persistForever
+        ) {
             topic = new PersistentTopic<T>(label, options);
         } else {
-            topic = new Topic<T>(label);
+            topic = new Topic<T>(label, options?.defaultValue);
         }
         this.registerTopic(topic);
         return topic;
     }
 
-    public createConfigTopic(label: string) {
+    public createConfigTopic(label: string, defaultConfig: EffectConfig) {
         const topic = this.createTopic<EffectConfig>(label, {
+            defaultValue: defaultConfig,
             persistForever: true,
         });
         this.configTopics.push(topic);

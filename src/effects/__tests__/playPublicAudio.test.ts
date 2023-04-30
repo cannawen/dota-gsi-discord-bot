@@ -70,11 +70,12 @@ describe("playAudio", () => {
             test("should ask tts to create audio and directly set on engine", () => {
                 const results = getResults(rule, {
                     discordAudioEnabled: true,
+                    publicAudioQueue: ["foo"],
                     studentId: "studentId",
                     playPublicAudio: "text to speech message",
                 }) as Fact<string[]>[];
 
-                expect(results).toContainFact("publicAudioQueue", []);
+                expect(results).toContainFact("publicAudioQueue", ["foo"]);
                 expect(tts.create).toHaveBeenCalledWith(
                     "text to speech message"
                 );
@@ -97,10 +98,11 @@ describe("playAudio", () => {
         test("should reset state", () => {
             const results = getResults(rule, {
                 playPublicAudio: "foo.mp3",
+                publicAudioQueue: ["foo"],
                 discordAudioEnabled: false,
             }) as Fact<string[]>[];
 
-            expect(results).toContainFact("publicAudioQueue", []);
+            expect(results).toContainFact("publicAudioQueue", ["foo"]);
             expect(results).not.toContainTopic("playPublicAudio");
         });
     });

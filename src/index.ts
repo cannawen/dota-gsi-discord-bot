@@ -1,4 +1,3 @@
-import effectConfig, { EffectConfig } from "./effectConfigManager";
 import {
     factsToPlainObject,
     plainObjectToFacts,
@@ -7,6 +6,8 @@ import topics, { registerAllTopics } from "./topics";
 import cron from "node-cron";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
+import EffectConfig from "./effects/EffectConfig";
+import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
 import Fact from "./engine/Fact";
 import fs from "fs";

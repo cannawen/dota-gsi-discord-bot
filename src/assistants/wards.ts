@@ -1,5 +1,5 @@
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
@@ -9,9 +9,9 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.wards
+    rules.assistant.wards,
+    EffectConfig.PRIVATE
 );
-export const defaultConfig = EffectConfig.PRIVATE;
 export const assistantDescription =
     "Reminds you to buy wards if you have not done so recently";
 
@@ -20,10 +20,13 @@ const MAX_WARDS_IN_STOCK = 4;
 const WARD_REMINDER_INTERVAL = WARD_RESTOCK_SECONDS * MAX_WARDS_IN_STOCK;
 
 const lastWardReminderTimeTopic = topicManager.createTopic<number>(
-    "lastWardReminderTimeTopic"
+    "lastWardReminderTimeTopic",
+    { defaultValue: 0 }
 );
-const lastWardCountTopic =
-    topicManager.createTopic<number>("lastWardCountTopic");
+const lastWardCountTopic = topicManager.createTopic<number>(
+    "lastWardCountTopic",
+    { defaultValue: 0 }
+);
 
 /**
  * NOTE: We do not actually know how many wards a player has
@@ -68,10 +71,6 @@ export default inGame(
                 }
                 return facts;
             },
-            defaultValues: [
-                new Fact(lastWardReminderTimeTopic, 0),
-                new Fact(lastWardCountTopic, 0),
-            ],
         })
     )
 );

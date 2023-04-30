@@ -5,7 +5,8 @@ jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
 jest.mock("../log");
 jest.mock("../gsiParser");
-import effectConfig, { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
+import effectConfig from "../effectConfigManager";
 import engine from "../customEngine";
 import Fact from "../engine/Fact";
 import gsiParser from "../gsiParser";
@@ -237,7 +238,10 @@ describe("server", () => {
                             expect(engine.setFact).toHaveBeenCalledWith(
                                 "studentId",
                                 new Fact(
-                                    new Topic<string[]>("privateAudioQueue"),
+                                    new Topic<string[]>(
+                                        "privateAudioQueue",
+                                        []
+                                    ),
                                     ["bar.mp3"]
                                 )
                             );
@@ -288,14 +292,14 @@ describe("server", () => {
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
-                            new Topic<string[]>("privateAudioQueue"),
+                            new Topic<string[]>("privateAudioQueue", []),
                             undefined
                         )
                     );
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
-                            new Topic<string[]>("publicAudioQueue"),
+                            new Topic<string[]>("publicAudioQueue", []),
                             undefined
                         )
                     );

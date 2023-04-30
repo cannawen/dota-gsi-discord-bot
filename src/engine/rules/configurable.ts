@@ -1,4 +1,5 @@
-import effectConfig, { EffectConfig } from "../../effectConfigManager";
+import EffectConfig from "../../effects/EffectConfig";
+import effectConfig from "../../effectConfigManager";
 import Fact from "../Fact";
 import Rule from "../Rule";
 import Topic from "../Topic";
@@ -38,6 +39,5 @@ export default function configurable(
                 });
             }
         },
-        defaultValues: rule.defaultValues,
     });
 }

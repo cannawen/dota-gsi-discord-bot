@@ -1,3 +1,4 @@
+import EffectConfig from "./effects/EffectConfig";
 import engine from "./customEngine";
 import Fact from "./engine/Fact";
 import fs from "fs";
@@ -6,13 +7,6 @@ import path from "path";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-
-export enum EffectConfig {
-    PUBLIC = "PUBLIC",
-    PUBLIC_INTERRUPTING = "PUBLIC_INTERRUPTING",
-    PRIVATE = "PRIVATE",
-    NONE = "NONE",
-}
 
 const configToEffectTopic = {
     [EffectConfig.PUBLIC]: topics.playPublicAudio,
@@ -67,8 +61,7 @@ function defaultConfigs(): Fact<EffectConfig>[] {
             .filter((module) => module.configTopic)
             .reduce((memo, module) => {
                 const topic = module.configTopic as Topic<EffectConfig>;
-                const effectConfig = module.defaultConfig as EffectConfig;
-                memo.push(new Fact(topic, effectConfig));
+                memo.push(new Fact(topic, undefined));
                 return memo;
             }, [])
     );

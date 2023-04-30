@@ -1,4 +1,4 @@
-import { EffectConfig } from "../../effectConfigManager";
+import EffectConfig from "../../effects/EffectConfig";
 import PersistentTopic from "../PersistentTopic";
 import Topic from "../Topic";
 

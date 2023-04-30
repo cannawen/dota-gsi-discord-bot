@@ -1,6 +1,6 @@
 import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
-import { EffectConfig } from "../effectConfigManager";
+import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -11,9 +11,9 @@ const LOTUS_SPAWN_INTERVAL = 3 * 60;
 const ADVANCED_WARNING = 15;
 
 export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.lotus
+    rules.assistant.lotus,
+    EffectConfig.PUBLIC
 );
-export const defaultConfig = EffectConfig.PUBLIC;
 export const assistantDescription =
     "Reminds you of lotus every 3:00 before 12:00";
 
