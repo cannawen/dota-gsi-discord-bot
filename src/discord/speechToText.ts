@@ -1,9 +1,8 @@
 /* eslint-disable sort-keys */
 import axios, { AxiosRequestConfig } from "axios";
-import { createWriteStream } from "node:fs";
 import fs from "fs";
-import { pipeline } from "node:stream";
 import prism from "prism-media";
+import stream from "stream";
 import Voice = require("@discordjs/voice");
 import path = require("path");
 
@@ -76,7 +75,7 @@ function transcribe(
     userId: string
 ): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
-        const stream = receiver.subscribe(userId, {
+        const source = receiver.subscribe(userId, {
             end: {
                 behavior: Voice.EndBehaviorType.AfterSilence,
                 duration: 300,
@@ -88,10 +87,10 @@ function transcribe(
             frameSize: 960,
             rate: 48000,
         });
-        const out = createWriteStream(sttPath(userId));
+        const destination = fs.createWriteStream(sttPath(userId));
 
         // https://github.com/discordjs/voice-examples/blob/main/recorder/src/createListeningStream.ts
-        pipeline(stream, decoder, out, (err) => {
+        stream.pipeline(source, decoder, destination, (err) => {
             if (err) {
                 reject(err);
             } else {
