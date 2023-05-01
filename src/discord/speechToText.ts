@@ -89,20 +89,16 @@ function transcribe(
         });
         const destination = fs.createWriteStream(sttPath(userId));
 
-        // https://github.com/discordjs/voice-examples/blob/main/recorder/src/createListeningStream.ts
-        stream.pipeline(source, decoder, destination, (err) => {
+        source.pipe(decoder);
+        decoder.pipe(destination).on("end", () => {
             destination.close();
-            if (err) {
-                reject(err);
-            } else {
-                resolve(
-                    transcribeNetworkCall(
-                        convertAudioFromStereoToMono(
-                            fs.readFileSync(sttPath(userId))
-                        )
+            resolve(
+                transcribeNetworkCall(
+                    convertAudioFromStereoToMono(
+                        fs.readFileSync(sttPath(userId))
                     )
-                );
-            }
+                )
+            );
         });
     });
 }
