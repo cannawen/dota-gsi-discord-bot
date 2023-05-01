@@ -20,6 +20,13 @@ describe("roshan", () => {
             });
             expect(results).not.toContainAudioEffect();
         });
+        test("bot should not respond to torment questions", () => {
+            const results = getResults(roshanRules, {
+                ...params,
+                lastDiscordUtterance: "what is torment status",
+            });
+            expect(results).not.toContainAudioEffect();
+        });
     });
 
     describe("asking about rosh", () => {

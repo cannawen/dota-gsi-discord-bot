@@ -21,6 +21,14 @@ const tormenterFallenTimeTopic = topicManager.createTopic<number>(
     { persistAcrossRestarts: true }
 );
 
+function isTormentStatusRequest(message: string) {
+    return (
+        (message.match(/^(what).{1,15}(status|timer?)$/i) !== null &&
+            message.match(/torment/) !== null) ||
+        message.match(/^torment status$/i) !== null
+    );
+}
+
 export default [
     atMinute(
         20,
@@ -62,7 +70,7 @@ export default [
         label: "tormenter status",
         trigger: [topics.lastDiscordUtterance],
         given: [topics.time, tormenterFallenTimeTopic],
-        when: ([utterance]) => utterance.match(/^torment status$/i),
+        when: ([utterance]) => isTormentStatusRequest(utterance),
         then: (_, [time, fallenTime]) => {
             let message: string;
             if (fallenTime) {

@@ -60,7 +60,10 @@ function roshanWasKilled(events: DeepReadonly<Event[]>) {
 }
 
 function isRoshStatusRequest(message: string) {
-    return message.match(/^(what).{1,15}(status|timer?)$/i) !== null;
+    return (
+        message.match(/^(what).{1,15}(status|timer?)$/i) !== null &&
+        message.match(/torment/) === null
+    );
 }
 
 function roshStatusResponse(
