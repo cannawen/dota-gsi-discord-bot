@@ -96,8 +96,6 @@ function roshStatusResponse(
     return response;
 }
 
-// This needs fixing
-// https://github.com/cannawen/dota-gsi-discord-bot/issues/63
 export default [
     new Rule({
         label: "when we get an event that says rosh is killed, add time to array",
@@ -106,6 +104,12 @@ export default [
         when: ([events]) => roshanWasKilled(events),
         then: (_, [time, deathTimes]) =>
             new Fact(roshanDeathTimesTopic, [...deathTimes, time]),
+    }),
+    new Rule({
+        label: "expose rosh death time to app",
+        trigger: [roshanDeathTimesTopic],
+        then: ([deathTimes]) =>
+            new Fact(topics.roshanDeathTime, deathTimes.at(-1)),
     }),
     new Rule({
         label: "when time is 8 minutes after last roshan death, play reminder",

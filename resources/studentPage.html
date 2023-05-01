@@ -4,7 +4,7 @@
         <script>
             let timeoutId;
 
-            function fetchAndPlay() {
+            function poll() {
                 return fetch("./poll")
                     .then((res) => res.json())
                     .then((res) => {
@@ -21,6 +21,11 @@
                             } else if (res.updateFrontend) {
                                 getConfig();
                                 resolve();
+                            } else if (res.roshStatus) {
+                                document.getElementById(
+                                    "rosh-status"
+                                ).innerHTML = res.roshStatus;
+                                resolve();
                             } else {
                                 resolve();
                             }
@@ -30,7 +35,7 @@
 
             function loop() {
                 try {
-                    fetchAndPlay().then(() => {
+                    poll().then(() => {
                         timeoutId = setTimeout(loop, 500);
                     });
                 } catch (error) {
@@ -142,7 +147,7 @@
     </head>
     <body onload="onLoad()">
         <div id="warning" style="display: none">
-            <div style="font-size: 3em; background-color: red">
+            <div style="font-size: 1.5em; background-color: red">
                 PUBLIC AUDIO DISABLED
             </div>
             <div>The bot was unable to make a connection with discord.</div>
@@ -160,7 +165,7 @@
         <button
             id="startCoaching"
             onClick="startCoaching()"
-            style="font-size: 5em; cursor: pointer"
+            style="font-size: 3em; cursor: pointer"
         >
             START COACHING
         </button>
@@ -168,6 +173,10 @@
             <div style="background-color: green; font-size: 5em">
                 Playing private audio...
             </div>
+        </div>
+        <div style="font-size: 3em">
+            Roshan status:
+            <span id="rosh-status">UNKNOWN</span>
         </div>
         <br />
         Volume:
@@ -188,7 +197,7 @@
         <br />
         <button
             onClick="stopCoaching()"
-            style="font-size: 5em; cursor: pointer"
+            style="font-size: 3em; cursor: pointer"
         >
             STOP COACHING
         </button>

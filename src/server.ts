@@ -185,6 +185,7 @@ function updateFrontend(studentId: string) {
 }
 
 router.get("/coach/:studentId/poll", (req, res) => {
+    // We can probably combine this map instead of doing one or the other
     const studentId = req.params.studentId;
     const nextAudio = getNextAudio(studentId);
     if (nextAudio) {
@@ -201,9 +202,31 @@ router.get("/coach/:studentId/poll", (req, res) => {
     } else if (updateFrontend(studentId)) {
         res.status(200).json({ updateFrontend: true });
     } else {
-        res.status(200).json(null);
+        res.status(200).json({ roshStatus: roshMessage(studentId) });
     }
 });
+
+function roshMessage(studentId: string) {
+    const inGame = engine.getFactValue(studentId, topics.inGame);
+    let message = "ALIVE";
+    if (inGame) {
+        const deathTime = engine.getFactValue(
+            studentId,
+            topics.roshanDeathTime
+        );
+        if (deathTime) {
+            const time = engine.getFactValue(studentId, topics.time)!;
+            if (time < deathTime + 8 * 60) {
+                message = "DEAD";
+            } else if (time < deathTime + 11 * 60) {
+                message = "MAYBE ALIVE";
+            }
+        }
+    } else {
+        message = "NOT IN A GAME";
+    }
+    return message;
+}
 
 router.post("/coach/:studentId/stop-audio", (req, res) => {
     engine.setFact(req.params.studentId, new Fact(topics.stopAudio, true));

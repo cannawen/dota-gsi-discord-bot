@@ -92,12 +92,19 @@ const discord = {
     lastDiscordUtterance: new Topic<string>("lastDiscordUtterance"),
 };
 
+const sharedGameState = {
+    roshanDeathTime: new PersistentTopic<number>("roshanDeathTime", {
+        persistAcrossRestarts: true,
+    }),
+};
+
 const allTopics = {
     studentId: new PersistentTopic<string>("studentId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
     updateFrontend: new Topic<boolean>("updateFrontend"),
+    ...sharedGameState,
     ...effect,
     ...gsi,
     ...discord,
