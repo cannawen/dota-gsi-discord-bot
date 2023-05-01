@@ -73,18 +73,6 @@ const discord = {
             persistAcrossRestarts: true,
         }
     ),
-    // number of people currently talking on student's channel
-    numberOfPeopleTalking: new PersistentTopic<number>(
-        "numberOfPeopleTalking",
-        {
-            defaultValue: 0,
-            persistAcrossGames: true,
-        }
-    ),
-    // if the audio player is ready to accept new audio or not
-    audioPlayerReady: new PersistentTopic<boolean>("audioPlayerReady", {
-        persistAcrossGames: true,
-    }),
     // playing audio
     discordReadyToPlayAudio: new PersistentTopic<boolean>(
         "discordReadyToPlayAudio",

@@ -63,7 +63,10 @@ function onConnectionStateChange(
 
     switch (newState.status) {
         case Voice.VoiceConnectionStatus.Ready:
-            engine.setFact(studentId, new Fact(topics.audioPlayerReady, true));
+            engine.setFact(
+                studentId,
+                new Fact(topics.discordReadyToPlayAudio, true)
+            );
             break;
         case Voice.VoiceConnectionStatus.Disconnected:
             return onConnectionDisconnected(studentId, connection);
@@ -86,7 +89,7 @@ function onPlayerStateChange(
     );
 
     const ready = newState.status === Voice.AudioPlayerStatus.Idle;
-    engine.setFact(studentId, new Fact(topics.audioPlayerReady, ready));
+    engine.setFact(studentId, new Fact(topics.discordReadyToPlayAudio, ready));
 }
 
 export default new Rule({
@@ -132,16 +135,6 @@ export default new Rule({
         });
 
         connection.receiver.speaking.on("start", (userId) => {
-            const numberOfPeopleTalking =
-                engine.getFactValue(studentId, topics.numberOfPeopleTalking) ||
-                0;
-            engine.setFact(
-                studentId,
-                new Fact(
-                    topics.numberOfPeopleTalking,
-                    numberOfPeopleTalking + 1
-                )
-            );
             stt.transcribe(connection.receiver, userId)
                 .then((utterance) => {
                     if (!utterance) return;
@@ -159,20 +152,6 @@ export default new Rule({
                         "tts",
                         "Problem with transcription, %s",
                         error.message
-                    );
-                })
-                .finally(() => {
-                    const numberOfPeopleTalking =
-                        engine.getFactValue(
-                            studentId,
-                            topics.numberOfPeopleTalking
-                        ) || 0;
-                    engine.setFact(
-                        studentId,
-                        new Fact(
-                            topics.numberOfPeopleTalking,
-                            numberOfPeopleTalking - 1
-                        )
                     );
                 });
         });
