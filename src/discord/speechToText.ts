@@ -1,10 +1,10 @@
 /* eslint-disable sort-keys */
 import axios, { AxiosRequestConfig } from "axios";
 import fs from "fs";
+import path from "path";
 import prism from "prism-media";
 import stream from "stream";
 import Voice = require("@discordjs/voice");
-import path = require("path");
 
 const STT_DIRECTORY = "resources/audio/stt-cache";
 if (!fs.existsSync(STT_DIRECTORY)) {
