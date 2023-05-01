@@ -3,15 +3,11 @@ jest.mock("../../log");
 jest.mock("../../customEngine");
 jest.mock("../discordHelpers");
 
-import CryptoJS from "crypto-js";
 import engine from "../../customEngine";
 import handle from "../handleSlashCommands";
 import helpers from "../discordHelpers";
 
-const STUDENT_ID = CryptoJS.HmacSHA256(
-    "userId",
-    "test_STUDENT_ID_HASH_PRIVATE_KEY"
-).toString();
+const STUDENT_ID = "MockStudentId";
 
 describe("handleSlashCommands", () => {
     let interaction: any;
@@ -19,6 +15,7 @@ describe("handleSlashCommands", () => {
 
     beforeEach(() => {
         mockReply = jest.fn();
+        (helpers.hashStudentId as jest.Mock).mockReturnValue(STUDENT_ID);
         interaction = {
             channelId: "channelId",
             guild: {

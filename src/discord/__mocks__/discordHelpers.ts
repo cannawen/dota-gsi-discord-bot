@@ -1,4 +1,5 @@
 const helper = {
+    hashStudentId: jest.fn(),
     numberOfPeopleConnected: jest.fn(),
 };
 

@@ -1,5 +1,4 @@
 import { CacheType, ChatInputCommandInteraction } from "discord.js";
-import CryptoJS from "crypto-js";
 import engine from "../customEngine";
 import fs from "fs";
 import helpers from "./discordHelpers";
@@ -7,18 +6,7 @@ import log from "../log";
 import path from "path";
 
 function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
-    const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
-    if (key) {
-        // eslint-disable-next-line new-cap
-        return CryptoJS.HmacSHA256(interaction.user.id, key).toString();
-    } else {
-        log.error(
-            "discord",
-            "Unable to find %s environment variable, so continuing without hashing. Check your .env file",
-            "STUDENT_ID_HASH_PRIVATE_KEY"
-        );
-        return interaction.user.id;
-    }
+    return helpers.hashStudentId(interaction.user.id);
 }
 
 function generateConfigFile(userId: string) {
