@@ -1,7 +1,20 @@
 /* eslint-disable sort-keys */
 import axios, { AxiosRequestConfig } from "axios";
+import { createWriteStream } from "node:fs";
+import fs from "fs";
+import { pipeline } from "node:stream";
 import prism from "prism-media";
 import Voice = require("@discordjs/voice");
+import path = require("path");
+
+const STT_DIRECTORY = "resources/audio/stt-cache";
+if (!fs.existsSync(STT_DIRECTORY)) {
+    fs.mkdirSync(STT_DIRECTORY);
+}
+
+function sttPath(userId: string) {
+    return path.join(STT_DIRECTORY, `${userId}.ogg`);
+}
 
 // This file is a mashup of:
 // https://github.com/ShadowLp174/discord-stt
@@ -62,7 +75,7 @@ function transcribe(
     receiver: Voice.VoiceReceiver,
     userId: string
 ): Promise<string | undefined> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
         const stream = receiver.subscribe(userId, {
             end: {
                 behavior: Voice.EndBehaviorType.AfterSilence,
@@ -75,18 +88,21 @@ function transcribe(
             frameSize: 960,
             rate: 48000,
         });
-        stream.pipe(decoder);
+        const out = createWriteStream(sttPath(userId));
 
-        const audioBufferArray: Buffer[] = [];
-        decoder.on("data", (data) => {
-            audioBufferArray.push(data);
-        });
-
-        decoder.on("end", async () => {
-            const audioBuffer = Buffer.concat(audioBufferArray);
-            resolve(
-                transcribeNetworkCall(convertAudioFromStereoToMono(audioBuffer))
-            );
+        // https://github.com/discordjs/voice-examples/blob/main/recorder/src/createListeningStream.ts
+        pipeline(stream, decoder, out, (err) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(
+                    transcribeNetworkCall(
+                        convertAudioFromStereoToMono(
+                            fs.readFileSync(sttPath(userId))
+                        )
+                    )
+                );
+            }
         });
     });
 }

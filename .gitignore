@@ -8,3 +8,4 @@ bot.code-workspace
 dump.rdb
 data/
 coverage
+resources/audio/stt-cache

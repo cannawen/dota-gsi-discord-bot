@@ -7,7 +7,7 @@
         "build": "npm run clean && tsc -p tsconfig.build.json",
         "start": "node build/index.js",
         "go": "npm run build && npm run start",
-        "clean": "rimraf ./build ./resources/audio/tts-cache ./data ./test_PERSISTENCE_DATA_PATH",
+        "clean": "rimraf ./build ./resources/audio/tts-cache ./resources/audio/stt-cache ./data ./test_PERSISTENCE_DATA_PATH",
         "test": "jest",
         "coverage": "npm test -- --coverage --collectCoverageFrom=\"./src/**\"",
         "discord": "npm run build && node build/discord/deployCommands.js",
