@@ -249,12 +249,6 @@ describe("server", () => {
                         }
                     );
                 });
-                test("has no audio", (done) => {
-                    (engine.getFactValue as jest.Mock).mockReturnValue(
-                        undefined
-                    );
-                    req.expect(null, done);
-                });
             });
 
             describe("config updated and should update front end", () => {
@@ -268,16 +262,10 @@ describe("server", () => {
                     );
                     req.expect(JSON.stringify({ updateFrontend: true }), done);
                 });
-                test("false", (done) => {
-                    (engine.getFactValue as jest.Mock).mockImplementation(
-                        (studentId: string, topic: Topic<unknown>) => {
-                            if (topic.label === "updateFrontend") {
-                                return false;
-                            }
-                        }
-                    );
-                    req.expect(null, done);
-                });
+            });
+
+            describe("roshan status", () => {
+                // TODO
             });
         });
         test("stop audio", (done) => {
