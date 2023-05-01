@@ -91,6 +91,7 @@ function transcribe(
 
         // https://github.com/discordjs/voice-examples/blob/main/recorder/src/createListeningStream.ts
         stream.pipeline(source, decoder, destination, (err) => {
+            destination.close();
             if (err) {
                 reject(err);
             } else {
