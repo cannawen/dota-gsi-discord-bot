@@ -14,7 +14,7 @@ export const configTopic = topicManager.createConfigTopic(
     EffectConfig.PUBLIC
 );
 export const assistantDescription =
-    'Reminds you of tormenter. Responds to "torment has fallen" and "torment status"';
+    'Reminds you of tormenter. Responds to "torment has fallen" and "what is torment timer/status"';
 
 const tormenterFallenTimeTopic = topicManager.createTopic<number>(
     "tormenterFallenTimeTopic",
