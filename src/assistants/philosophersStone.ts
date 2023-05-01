@@ -2,7 +2,7 @@
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./assistantHelpers";
+import helper from "./helpers/neutralItems";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
@@ -28,12 +28,12 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
 function hasPhilosophersStone(items: PlayerItems): boolean {
     const stone = [...items.backpack, ...items.stash, items.neutral]
         .filter((item) => item !== null)
-        .find((item) => item!.id === helper.neutral.item.philosophersStone);
+        .find((item) => item!.id === helper.philosophersStone);
     return stone !== undefined;
 }
 
 function holdingPhilosophersStone(items: PlayerItems): boolean {
-    return items.neutral?.id === helper.neutral.item.philosophersStone;
+    return items.neutral?.id === helper.philosophersStone;
 }
 
 export default [
@@ -77,7 +77,7 @@ export default [
         when: ([respawn], [items, time]) =>
             respawn === 5 &&
             holdingPhilosophersStone(items) &&
-            !helper.neutral.isItemAppropriateForTime(items.neutral.id, time),
+            !helper.isItemAppropriateForTime(items.neutral.id, time),
         then: () =>
             new Fact(
                 topics.configurableEffect,

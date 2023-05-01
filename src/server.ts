@@ -6,7 +6,7 @@ import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
 import fs from "fs";
 import gsiParser from "./gsiParser";
-import helper from "./assistants/assistantHelpers";
+import helper from "./assistants/helpers/timeFormatting";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";

@@ -2,7 +2,7 @@ import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./assistantHelpers";
+import helper from "./helpers/neutralItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
@@ -32,7 +32,7 @@ export default betweenMinutes(
             trigger: [topics.items, topics.time],
             given: [lastReminderTimeTopic],
             then: ([items, time], [lastReminderTime]) => {
-                const appropriateItem = helper.neutral.isItemAppropriateForTime(
+                const appropriateItem = helper.isItemAppropriateForTime(
                     items.neutral?.id,
                     time
                 );

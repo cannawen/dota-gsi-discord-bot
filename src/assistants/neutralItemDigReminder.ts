@@ -1,7 +1,7 @@
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./assistantHelpers";
+import helper from "./helpers/neutralItems";
 import inGame from "../engine/rules/inGame";
 import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
@@ -17,10 +17,7 @@ export const configTopic = topicManager.createConfigTopic(
 export const assistantDescription =
     "Reminds you to use your Trust Shovel or Pirate Hat";
 
-const VALID_NEUTRAL_ARRAY = [
-    helper.neutral.item.trustyShovel,
-    helper.neutral.item.pirateHat,
-];
+const VALID_NEUTRAL_ARRAY = [helper.trustyShovel, helper.pirateHat];
 const TIME_BETWEEN_REMINDERS = 15;
 
 const lastReminderTimeTopic = topicManager.createTopic<number>(

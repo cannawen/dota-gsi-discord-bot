@@ -12,12 +12,7 @@ describe("tormenter", () => {
         };
     });
     test("warn at 20 minutes", () => {
-        const result = getResults(
-            rule,
-            { ...params, time: 20 * 60 },
-            undefined,
-            true
-        );
+        const result = getResults(rule, { ...params, time: 20 * 60 });
         expect(result).toContainAudioEffect(
             "resources/audio/tormenters-up.mp3"
         );

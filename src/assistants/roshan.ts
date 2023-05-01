@@ -3,7 +3,7 @@ import configurable from "../engine/rules/configurable";
 import { DeepReadonly } from "ts-essentials";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./assistantHelpers";
+import helper from "./helpers/timeFormatting";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
