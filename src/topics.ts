@@ -5,9 +5,9 @@ import GsiData from "./gsi/GsiData";
 import manager from "./engine/topicManager";
 import PersistentTopic from "./engine/PersistentTopic";
 import PlayerItems from "./gsi-data-classes/PlayerItems";
+import { Status } from "./assistants/helpers/roshan";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
-import { Status } from "./assistants/helpers/roshan";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),

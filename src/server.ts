@@ -12,6 +12,7 @@ import path from "path";
 import persistence from "./persistence";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+import { Status } from "./assistants/helpers/roshan";
 
 const descriptions = assistantDescriptions();
 
@@ -207,24 +208,19 @@ router.get("/coach/:studentId/poll", (req, res) => {
 });
 
 function roshMessage(studentId: string) {
-    const inGame = engine.getFactValue(studentId, topics.inGame);
-    let message = "ALIVE";
-    if (inGame) {
-        const time = engine.getFactValue(studentId, topics.time)!;
-        const maybeAlive = engine.getFactValue(
-            studentId,
-            topics.roshanMaybeAliveTime
-        );
-        const alive = engine.getFactValue(studentId, topics.roshanAliveTime);
-        if (maybeAlive !== undefined && time < maybeAlive) {
-            message = "DEAD";
-        } else if (alive !== undefined && time < alive) {
-            message = "MAYBE ALIVE";
-        }
-    } else {
-        message = "NOT IN A GAME";
+    const status = engine.getFactValue(studentId, topics.roshanStatus);
+    switch (status) {
+        case Status.NOT_IN_A_GAME:
+            return "Not in a game";
+        case Status.ALIVE:
+            return "Alive";
+        case Status.MAYBE_ALIVE:
+            return "Might be alive";
+        case Status.DEAD:
+            return "Dead";
+        default:
+            return "Unknown";
     }
-    return message;
 }
 
 router.post("/coach/:studentId/stop-audio", (req, res) => {

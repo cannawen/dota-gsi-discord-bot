@@ -128,7 +128,7 @@ const statusMessageRules = [
 export default [
     ...statusMessageRules,
     new Rule({
-        label: "when we get an event that says rosh is killed, add time to array",
+        label: "when we get an event that says rosh is killed, add time to allRoshanDeathTimesTopic array",
         trigger: [topics.events],
         given: [topics.time, allRoshanDeathTimesTopic],
         when: ([events]) =>
@@ -140,8 +140,9 @@ export default [
         then: (_, [time, deathTimes]) =>
             new Fact(allRoshanDeathTimesTopic, [...deathTimes, time]),
     }),
+
     new Rule({
-        label: "last roshan death time",
+        label: "last roshan death time from array of all roshan death times",
         trigger: [allRoshanDeathTimesTopic],
         then: ([deathTimes]) =>
             new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
@@ -177,8 +178,9 @@ export default [
 
     new Rule({
         label: "when rosh may be up, play reminder",
-        trigger: [topics.time, topics.roshanMaybeAliveTime],
-        when: ([time, maybeAlivetime]) => time === maybeAlivetime,
+        trigger: [topics.time],
+        given: [topics.roshanMaybeAliveTime],
+        when: ([time], [maybeAlivetime]) => time === maybeAlivetime,
         then: () =>
             new Fact(
                 topics.configurableEffect,
@@ -187,8 +189,9 @@ export default [
     }),
     new Rule({
         label: "when rosh is guaranteed to be up, play reminder",
-        trigger: [topics.time, topics.roshanAliveTime],
-        when: ([time, aliveTime]) => time === aliveTime,
+        trigger: [topics.time],
+        given: [topics.roshanAliveTime],
+        when: ([time], [aliveTime]) => time === aliveTime,
         then: () =>
             new Fact(
                 topics.configurableEffect,
