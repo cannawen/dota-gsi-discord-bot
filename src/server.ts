@@ -215,9 +215,13 @@ function roshMessage(studentId: string) {
         case Status.ALIVE:
             return "Alive";
         case Status.MAYBE_ALIVE:
-            return "Might be alive";
+            return `Might be alive. Guaranteed respawn at ${helper.secondsToTimeString(
+                engine.getFactValue(studentId, topics.roshanAliveTime)!
+            )}`;
         case Status.DEAD:
-            return "Dead";
+            return `Dead. May respawn at ${helper.secondsToTimeString(
+                engine.getFactValue(studentId, topics.roshanMaybeAliveTime)!
+            )}`;
         default:
             return "Unknown";
     }
