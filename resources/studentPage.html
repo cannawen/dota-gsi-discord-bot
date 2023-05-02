@@ -9,23 +9,13 @@
                     .then((res) => res.json())
                     .then((res) => {
                         return new Promise((resolve) => {
-                            if (res === null) {
-                                resolve();
-                            } else if (res.nextAudio) {
+                            if (res.nextAudio) {
                                 const f = new Audio("/" + res.nextAudio);
                                 f.volume = parseFloat(
                                     document.getElementById("volume").value
                                 );
                                 f.addEventListener("ended", resolve);
                                 f.play();
-                            } else if (res.updateFrontend) {
-                                getConfig();
-                                resolve();
-                            } else if (res.roshStatus) {
-                                document.getElementById(
-                                    "roshan-status"
-                                ).innerHTML = res.roshStatus;
-                                resolve();
                             } else {
                                 resolve();
                             }
@@ -54,11 +44,11 @@
 
             function loop() {
                 try {
-                    pollAudio().then(() => {
-                        timeoutId = setTimeout(loop, 500);
-                    });
-                    pollConfig();
-                    pollRoshan();
+                    Promise.all([pollAudio(), pollConfig(), pollRoshan()]).then(
+                        () => {
+                            timeoutId = setTimeout(loop, 500);
+                        }
+                    );
                 } catch (error) {
                     loop();
                 }
