@@ -1,8 +1,27 @@
 export const enum Status {
-    INVALID = "INVALID",
+    NOT_IN_A_GAME = "NOT_IN_A_GAME",
     ALIVE = "ALIVE",
     MAYBE_ALIVE = "MAYBE_ALIVE",
     DEAD = "DEAD",
+}
+
+const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
+const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
+
+function minimuSpawnTime(deathTime: number) {
+    return deathTime + ROSHAN_MINIMUM_SPAWN_TIME;
+}
+function maximumSpawnTime(deathTime: number) {
+    return deathTime + ROSHAN_MAXIMUM_SPAWN_TIME;
+}
+function roshHasDiedBeforeStatus(currentTime: number, deathTime: number) {
+    if (currentTime < minimuSpawnTime(deathTime)) {
+        return Status.DEAD;
+    } else if (currentTime < maximumSpawnTime(deathTime)) {
+        return Status.MAYBE_ALIVE;
+    } else {
+        return Status.ALIVE;
+    }
 }
 
 function getStatus(
@@ -14,20 +33,15 @@ function getStatus(
         if (deathTime === undefined) {
             return Status.ALIVE;
         } else {
-            const timeElapsedSinceDeath = currentTime - deathTime;
-            if (timeElapsedSinceDeath < 8 * 60) {
-                return Status.DEAD;
-            } else if (timeElapsedSinceDeath < 11 * 60) {
-                return Status.MAYBE_ALIVE;
-            } else {
-                return Status.ALIVE;
-            }
+            return roshHasDiedBeforeStatus(currentTime, deathTime);
         }
     } else {
-        return Status.INVALID;
+        return Status.NOT_IN_A_GAME;
     }
 }
 
 export default {
     getStatus,
+    minimuSpawnTime,
+    maximumSpawnTime,
 };

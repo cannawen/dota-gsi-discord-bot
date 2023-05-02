@@ -2,7 +2,7 @@ import sut, { Status } from "../roshan";
 describe("roshan helper", () => {
     describe("state given death time and current time", () => {
         test("Not in a game", () => {
-            expect(sut.getStatus(false, 0, 0)).toBe(Status.INVALID);
+            expect(sut.getStatus(false, 0, 0)).toBe(Status.NOT_IN_A_GAME);
         });
         describe("in a game", () => {
             test("Never killed before returns", () => {

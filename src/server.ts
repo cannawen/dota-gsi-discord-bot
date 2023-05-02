@@ -213,12 +213,9 @@ function roshMessage(studentId: string) {
         const time = engine.getFactValue(studentId, topics.time)!;
         const maybeAlive = engine.getFactValue(
             studentId,
-            topics.roshanMaybeAliveTimeTopic
+            topics.roshanMaybeAliveTime
         );
-        const alive = engine.getFactValue(
-            studentId,
-            topics.roshanAliveTimeTopic
-        );
+        const alive = engine.getFactValue(studentId, topics.roshanAliveTime);
         if (maybeAlive !== undefined && time < maybeAlive) {
             message = "DEAD";
         } else if (alive !== undefined && time < alive) {

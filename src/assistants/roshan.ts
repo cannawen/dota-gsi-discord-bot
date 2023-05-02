@@ -1,11 +1,12 @@
 import Event, { EventType } from "../gsi-data-classes/Event";
+import roshHelper, { Status } from "./helpers/roshan";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/timeFormatting";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
+import timeHelper from "./helpers/timeFormatting";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
@@ -15,10 +16,6 @@ export const configTopic = topicManager.createConfigTopic(
 );
 export const assistantDescription =
     'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
-
-const AEGIS_DURATION = 5 * 60;
-const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
-const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
 
 /**
  * Keeps an array of all the times that roshan has fallen
@@ -35,16 +32,12 @@ const lastRoshDeathTimeTopic = topicManager.createTopic<number>(
     "lastRoshDeathTimeTopic"
 );
 
-const aegisExpiryTimeTopic = topicManager.createTopic<number>(
-    "aegisExpiryTimeTopic"
-);
-
 const roshanAliveMessageTopic = topicManager.createTopic<string>(
-    "roshanAliveMessageTopic",
-    { defaultValue: "Roshan has not been killed yet" }
+    "roshanAliveMessageTopic"
 );
 const roshanStatusMessageTopic = topicManager.createTopic<string>(
-    "roshanStatusMessageTopic"
+    "roshanStatusMessageTopic",
+    { defaultValue: "Roshan has not been killed yet" }
 );
 
 function isRoshStatusRequest(message: string) {
@@ -55,7 +48,7 @@ function isRoshStatusRequest(message: string) {
 }
 
 /**
- * Sets roshanAliveMessageTopic based on how many times we ahave killed Roshan
+ * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
  * Defaults to he has not been killed yet
  */
 const aliveMessageRules = [
@@ -97,62 +90,37 @@ const aliveMessageRules = [
 const statusMessageRules = [
     ...aliveMessageRules,
     new Rule({
-        label: "rosh is dead - aegis still up",
-        trigger: [topics.time, aegisExpiryTimeTopic],
-        when: ([time, aegisExpiryTime]) => time < aegisExpiryTime,
-        then: ([_, aegisExpiryTime]) =>
-            new Fact(
-                roshanStatusMessageTopic,
-                `Roshan is dead. Aegis expires at ${helper.secondsToTtsTimeString(
-                    aegisExpiryTime
-                )}`
-            ),
-    }),
-    new Rule({
         label: "rosh is dead",
-        trigger: [
-            topics.time,
-            aegisExpiryTimeTopic,
-            topics.roshanMaybeAliveTimeTopic,
-        ],
-        when: ([time, aegisExpiryTime, maybeAliveTime]) =>
-            time >= aegisExpiryTime && time < maybeAliveTime,
-        then: ([_time, _aegis, maybeAliveTime]) =>
+        trigger: [topics.roshanStatus],
+        given: [topics.roshanMaybeAliveTime],
+        when: ([status]) => status === Status.DEAD,
+        then: (_, [maybeAliveTime]) =>
             new Fact(
                 roshanStatusMessageTopic,
-                `Roshan is dead. May respawn at ${helper.secondsToTtsTimeString(
+                `Roshan is dead. May respawn at ${timeHelper.secondsToTtsTimeString(
                     maybeAliveTime
                 )}`
             ),
     }),
     new Rule({
         label: "rosh may be alive",
-        trigger: [
-            topics.time,
-            topics.roshanMaybeAliveTimeTopic,
-            topics.roshanAliveTimeTopic,
-        ],
-        when: ([time, maybeAliveTime, aliveTime]) =>
-            time >= maybeAliveTime && time < aliveTime,
-        then: ([_time, _maybe, aliveTime]) =>
+        trigger: [topics.roshanStatus],
+        given: [topics.roshanAliveTime],
+        when: ([status]) => status === Status.MAYBE_ALIVE,
+        then: (_, [aliveTime]) =>
             new Fact(
                 roshanStatusMessageTopic,
-                `Roshan may be alive. Guaranteed respawn at ${helper.secondsToTtsTimeString(
+                `Roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
                     aliveTime
                 )}`
             ),
     }),
     new Rule({
-        label: "roshan is alive - we have never killed him, or when we are 11 minutes after last death time",
-        trigger: [topics.time],
-        given: [
-            lastRoshDeathTimeTopic,
-            topics.roshanAliveTimeTopic,
-            roshanAliveMessageTopic,
-        ],
-        when: ([time], [deathTime, aliveTime]) =>
-            deathTime === undefined || time >= aliveTime,
-        then: (_time, [_deathTime, _aliveTime, aliveMessage]) =>
+        label: "roshan is alive",
+        trigger: [topics.roshanStatus],
+        given: [roshanAliveMessageTopic],
+        when: ([status]) => status === Status.ALIVE,
+        then: (_, [aliveMessage]) =>
             new Fact(roshanStatusMessageTopic, aliveMessage),
     }),
 ];
@@ -179,18 +147,12 @@ export default [
             new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
     }),
     new Rule({
-        label: "set aegis expiry time",
-        trigger: [lastRoshDeathTimeTopic],
-        then: ([deathTime]) =>
-            new Fact(aegisExpiryTimeTopic, deathTime + AEGIS_DURATION),
-    }),
-    new Rule({
         label: "set time minimum rosh respawn",
         trigger: [lastRoshDeathTimeTopic],
         then: ([deathTime]) =>
             new Fact(
-                topics.roshanMaybeAliveTimeTopic,
-                deathTime + ROSHAN_MINIMUM_SPAWN_TIME
+                topics.roshanMaybeAliveTime,
+                roshHelper.minimuSpawnTime(deathTime)
             ),
     }),
     new Rule({
@@ -198,14 +160,24 @@ export default [
         trigger: [lastRoshDeathTimeTopic],
         then: ([deathTime]) =>
             new Fact(
-                topics.roshanAliveTimeTopic,
-                deathTime + ROSHAN_MAXIMUM_SPAWN_TIME
+                topics.roshanAliveTime,
+                roshHelper.maximumSpawnTime(deathTime)
+            ),
+    }),
+
+    new Rule({
+        label: "current roshan status",
+        trigger: [topics.inGame, topics.time, lastRoshDeathTimeTopic],
+        then: ([inGame, time, deathTime]) =>
+            new Fact(
+                topics.roshanStatus,
+                roshHelper.getStatus(inGame, time, deathTime)
             ),
     }),
 
     new Rule({
         label: "when rosh may be up, play reminder",
-        trigger: [topics.time, topics.roshanMaybeAliveTimeTopic],
+        trigger: [topics.time, topics.roshanMaybeAliveTime],
         when: ([time, maybeAlivetime]) => time === maybeAlivetime,
         then: () =>
             new Fact(
@@ -215,7 +187,7 @@ export default [
     }),
     new Rule({
         label: "when rosh is guaranteed to be up, play reminder",
-        trigger: [topics.time, topics.roshanAliveTimeTopic],
+        trigger: [topics.time, topics.roshanAliveTime],
         when: ([time, aliveTime]) => time === aliveTime,
         then: () =>
             new Fact(

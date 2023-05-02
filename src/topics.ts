@@ -7,6 +7,7 @@ import PersistentTopic from "./engine/PersistentTopic";
 import PlayerItems from "./gsi-data-classes/PlayerItems";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
+import { Status } from "./assistants/helpers/roshan";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
@@ -94,8 +95,9 @@ const discord = {
 };
 
 const sharedGameState = {
-    roshanMaybeAliveTimeTopic: new Topic<number>("roshanMaybeAliveTimeTopic"),
-    roshanAliveTimeTopic: new Topic<number>("roshanAliveTimeTopic"),
+    roshanStatus: new Topic<Status>("roshanStatus", Status.NOT_IN_A_GAME),
+    roshanMaybeAliveTime: new Topic<number>("roshanMaybeAliveTime"),
+    roshanAliveTime: new Topic<number>("roshanAliveTime"),
 };
 
 const allTopics = {

@@ -49,21 +49,6 @@ describe("roshan", () => {
                 });
             });
 
-            test("voice should say rosh is dead & aegis reminder until 5:00 after killed event", () => {
-                const results = getResults(
-                    roshanRules,
-                    {
-                        ...params,
-                        lastDiscordUtterance: "what time",
-                        time: 100 + 4 * 60,
-                    },
-                    roshKilledState
-                );
-                expect(results).toContainAudioEffect(
-                    expect.stringContaining("Roshan is dead. Aegis expires at")
-                );
-            });
-
             test("voice should say rosh is dead & respawn reminder until 8:00 after killed event", () => {
                 const results = getResults(
                     roshanRules,
