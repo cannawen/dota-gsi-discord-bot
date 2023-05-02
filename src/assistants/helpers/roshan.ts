@@ -5,15 +5,21 @@ export const enum Status {
     DEAD = "DEAD",
 }
 
-const ROSHAN_MINIMUM_SPAWN_TIME = 8 * 60;
-const ROSHAN_MAXIMUM_SPAWN_TIME = 11 * 60;
+const AEGIS_EXPIRY_TIME = 5 * 60;
+const MINIMUM_SPAWN_TIME = 8 * 60;
+const MAXIMUM_SPAWN_TIME = 11 * 60;
+
+function aegisExpiryTime(deathTime: number) {
+    return deathTime + AEGIS_EXPIRY_TIME;
+}
 
 function minimuSpawnTime(deathTime: number) {
-    return deathTime + ROSHAN_MINIMUM_SPAWN_TIME;
+    return deathTime + MINIMUM_SPAWN_TIME;
 }
 function maximumSpawnTime(deathTime: number) {
-    return deathTime + ROSHAN_MAXIMUM_SPAWN_TIME;
+    return deathTime + MAXIMUM_SPAWN_TIME;
 }
+
 function roshHasDiedBeforeStatus(currentTime: number, deathTime: number) {
     if (currentTime < minimuSpawnTime(deathTime)) {
         return Status.DEAD;
@@ -42,6 +48,7 @@ function getStatus(
 
 export default {
     getStatus,
+    aegisExpiryTime,
     minimuSpawnTime,
     maximumSpawnTime,
 };

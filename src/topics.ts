@@ -96,6 +96,7 @@ const discord = {
 
 const sharedGameState = {
     roshanStatus: new Topic<Status>("roshanStatus", Status.NOT_IN_A_GAME),
+    roshanAegisExpiryTime: new Topic<number>("roshanAegisExpiryTime"),
     roshanMaybeAliveTime: new Topic<number>("roshanMaybeAliveTime"),
     roshanAliveTime: new Topic<number>("roshanAliveTime"),
 };

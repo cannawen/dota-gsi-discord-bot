@@ -207,6 +207,17 @@ router.get("/coach/:studentId/poll", (req, res) => {
     }
 });
 
+function roshNumbers(studentId: string) {
+    return [
+        topics.roshanAegisExpiryTime,
+        topics.roshanMaybeAliveTime,
+        topics.roshanAliveTime,
+    ]
+        .map((topic) => engine.getFactValue(studentId, topic))
+        .map((time) => helper.secondsToTimeString(time!))
+        .join(" - ");
+}
+
 function roshMessage(studentId: string) {
     const status = engine.getFactValue(studentId, topics.roshanStatus);
     switch (status) {
@@ -215,13 +226,9 @@ function roshMessage(studentId: string) {
         case Status.ALIVE:
             return "Alive";
         case Status.MAYBE_ALIVE:
-            return `Might be alive. Guaranteed respawn at ${helper.secondsToTimeString(
-                engine.getFactValue(studentId, topics.roshanAliveTime)!
-            )}`;
+            return `Maybe alive ${roshNumbers(studentId)}`;
         case Status.DEAD:
-            return `Dead. May respawn at ${helper.secondsToTimeString(
-                engine.getFactValue(studentId, topics.roshanMaybeAliveTime)!
-            )}`;
+            return `Dead ${roshNumbers(studentId)}`;
         default:
             return "Unknown";
     }

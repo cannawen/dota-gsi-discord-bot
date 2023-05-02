@@ -148,6 +148,15 @@ export default [
             new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
     }),
     new Rule({
+        label: "set the aegis expiry time",
+        trigger: [lastRoshDeathTimeTopic],
+        then: ([deathTime]) =>
+            new Fact(
+                topics.roshanAegisExpiryTime,
+                roshHelper.aegisExpiryTime(deathTime)
+            ),
+    }),
+    new Rule({
         label: "set time minimum rosh respawn",
         trigger: [lastRoshDeathTimeTopic],
         then: ([deathTime]) =>
