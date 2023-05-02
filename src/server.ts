@@ -210,17 +210,19 @@ function roshMessage(studentId: string) {
     const inGame = engine.getFactValue(studentId, topics.inGame);
     let message = "ALIVE";
     if (inGame) {
-        const deathTime = engine.getFactValue(
+        const time = engine.getFactValue(studentId, topics.time)!;
+        const maybeAlive = engine.getFactValue(
             studentId,
-            topics.roshanDeathTime
+            topics.roshanMaybeAliveTimeTopic
         );
-        if (deathTime) {
-            const time = engine.getFactValue(studentId, topics.time)!;
-            if (time < deathTime + 8 * 60) {
-                message = "DEAD";
-            } else if (time < deathTime + 11 * 60) {
-                message = "MAYBE ALIVE";
-            }
+        const alive = engine.getFactValue(
+            studentId,
+            topics.roshanAliveTimeTopic
+        );
+        if (maybeAlive !== undefined && time < maybeAlive) {
+            message = "DEAD";
+        } else if (alive !== undefined && time < alive) {
+            message = "MAYBE ALIVE";
         }
     } else {
         message = "NOT IN A GAME";

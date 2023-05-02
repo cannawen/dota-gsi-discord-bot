@@ -11,6 +11,7 @@ import Voice from "@discordjs/voice";
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
 
+    // TODO refactor events to pass events singly through the engine instead of in an array
     // events
     events: new Topic<DeepReadonly<Event[]>>("events", []),
     // hero
@@ -21,7 +22,7 @@ const gsi = {
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     // map
-    dayTime: new Topic<boolean>("dayTime"),
+    daytime: new Topic<boolean>("daytime"),
     inGame: new PersistentTopic<boolean>("inGame", {
         persistAcrossGames: true,
     }),
@@ -93,9 +94,8 @@ const discord = {
 };
 
 const sharedGameState = {
-    roshanDeathTime: new PersistentTopic<number>("roshanDeathTime", {
-        persistAcrossRestarts: true,
-    }),
+    roshanMaybeAliveTimeTopic: new Topic<number>("roshanMaybeAliveTimeTopic"),
+    roshanAliveTimeTopic: new Topic<number>("roshanAliveTimeTopic"),
 };
 
 const allTopics = {

@@ -45,7 +45,7 @@ export default new Rule({
         if (map) {
             return [
                 ...getTimeFacts(time, map.clockTime),
-                new Fact(topics.dayTime, map.dayTime),
+                new Fact(topics.daytime, map.dayTime),
                 new Fact(topics.inGame, inGame(map.gameState)),
                 new Fact(topics.paused, map.paused),
             ];

@@ -6,7 +6,7 @@ const params = {
     Roshan: "PUBLIC",
     inGame: true,
     time: 100,
-    dayTime: true,
+    daytime: true,
     events: [],
     lastDiscordUtterance: "",
 };
