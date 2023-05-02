@@ -4,8 +4,8 @@
         <script>
             let timeoutId;
 
-            function poll() {
-                return fetch("./poll")
+            function pollAudio() {
+                return fetch("./poll/audio")
                     .then((res) => res.json())
                     .then((res) => {
                         return new Promise((resolve) => {
@@ -23,7 +23,7 @@
                                 resolve();
                             } else if (res.roshStatus) {
                                 document.getElementById(
-                                    "rosh-status"
+                                    "roshan-status"
                                 ).innerHTML = res.roshStatus;
                                 resolve();
                             } else {
@@ -32,12 +32,33 @@
                         });
                     });
             }
+            function pollConfig() {
+                return fetch("./poll/config")
+                    .then((res) => res.json())
+                    .then((res) => {
+                        if (res.updateFrontend) {
+                            getConfig();
+                        }
+                    });
+            }
+            function pollRoshan() {
+                return fetch("./poll/roshan")
+                    .then((res) => res.json())
+                    .then((res) => {
+                        if (res.roshanStatus) {
+                            document.getElementById("roshan-status").innerHTML =
+                                res.roshanStatus;
+                        }
+                    });
+            }
 
             function loop() {
                 try {
-                    poll().then(() => {
+                    pollAudio().then(() => {
                         timeoutId = setTimeout(loop, 500);
                     });
+                    pollConfig();
+                    pollRoshan();
                 } catch (error) {
                     loop();
                 }
@@ -171,12 +192,12 @@
         </button>
         <div id="coaching" style="display: none">
             <div style="background-color: green; font-size: 5em">
-                Playing private audio...
+                Coaching...
             </div>
         </div>
         <div style="font-size: 3em">
             Roshan status:
-            <span id="rosh-status">UNKNOWN</span>
+            <span id="roshan-status">UNKNOWN (click START COACHING)</span>
         </div>
         <br />
         Volume:

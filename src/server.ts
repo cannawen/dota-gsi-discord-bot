@@ -177,16 +177,7 @@ function getNextAudio(studentId: string) {
     }
 }
 
-function updateFrontend(studentId: string) {
-    const updated = engine.getFactValue(studentId, topics.updateFrontend);
-    if (updated) {
-        engine.setFact(studentId, new Fact(topics.updateFrontend, undefined));
-    }
-    return updated;
-}
-
-router.get("/coach/:studentId/poll", (req, res) => {
-    // We can probably combine this map instead of doing one or the other
+router.get("/coach/:studentId/poll/audio", (req, res) => {
     const studentId = req.params.studentId;
     const nextAudio = getNextAudio(studentId);
     if (nextAudio) {
@@ -199,12 +190,22 @@ router.get("/coach/:studentId/poll", (req, res) => {
             nextAudio.magenta,
             studentId.substring(0, 10)
         );
-        res.status(200).json({ nextAudio: nextAudio });
-    } else if (updateFrontend(studentId)) {
-        res.status(200).json({ updateFrontend: true });
-    } else {
-        res.status(200).json({ roshStatus: roshMessage(studentId) });
     }
+    res.status(200).json({ nextAudio: nextAudio });
+});
+
+// TODO rename to updatedConfig
+function updateFrontend(studentId: string) {
+    const updated = engine.getFactValue(studentId, topics.updateFrontend);
+    if (updated) {
+        engine.setFact(studentId, new Fact(topics.updateFrontend, undefined));
+    }
+    return updated;
+}
+
+router.get("/coach/:studentId/poll/config", (req, res) => {
+    const studentId = req.params.studentId;
+    res.status(200).json({ updateFrontend: updateFrontend(studentId) });
 });
 
 function roshNumbers(studentId: string) {
@@ -218,7 +219,7 @@ function roshNumbers(studentId: string) {
         .join(" - ");
 }
 
-function roshMessage(studentId: string) {
+function roshanMessage(studentId: string) {
     const status = engine.getFactValue(studentId, topics.roshanStatus);
     switch (status) {
         case Status.NOT_IN_A_GAME:
@@ -226,13 +227,20 @@ function roshMessage(studentId: string) {
         case Status.ALIVE:
             return "Alive";
         case Status.MAYBE_ALIVE:
-            return `Maybe alive ${roshNumbers(studentId)}`;
+            return `Maybe alive     ${roshNumbers(studentId)}`;
         case Status.DEAD:
-            return `Dead ${roshNumbers(studentId)}`;
+            return `Dead     ${roshNumbers(studentId)}`;
         default:
             return "Unknown";
     }
 }
+
+router.get("/coach/:studentId/poll/roshan", (req, res) => {
+    const studentId = req.params.studentId;
+    res.status(200).json({
+        roshanStatus: roshanMessage(studentId),
+    });
+});
 
 router.post("/coach/:studentId/stop-audio", (req, res) => {
     engine.setFact(req.params.studentId, new Fact(topics.stopAudio, true));
