@@ -215,44 +215,41 @@ describe("server", () => {
                     });
             });
         });
+
         describe("polling", () => {
-            let req: any;
-            beforeEach(() => {
-                req = request(sut)
-                    .get("/coach/studentId/poll")
+            test("has audio", (done) => {
+                const req = request(sut)
+                    .get("/coach/studentId/poll/audio")
                     .expect("Content-Type", /json/)
                     .expect(200);
-            });
-            describe("playing private audio", () => {
-                test("has audio", (done) => {
-                    (engine.getFactValue as jest.Mock).mockImplementation(
-                        (studentId: string, topic: Topic<unknown>) => {
-                            if (topic.label === "privateAudioQueue") {
-                                return ["foo.mp3", "bar.mp3"];
-                            }
+                (engine.getFactValue as jest.Mock).mockImplementation(
+                    (studentId: string, topic: Topic<unknown>) => {
+                        if (topic.label === "privateAudioQueue") {
+                            return ["foo.mp3", "bar.mp3"];
                         }
-                    );
-                    req.expect(JSON.stringify({ nextAudio: "foo.mp3" })).end(
-                        (error: any) => {
-                            if (error) return done(error);
-                            expect(engine.setFact).toHaveBeenCalledWith(
-                                "studentId",
-                                new Fact(
-                                    new Topic<string[]>(
-                                        "privateAudioQueue",
-                                        []
-                                    ),
-                                    ["bar.mp3"]
-                                )
-                            );
-                            return done();
-                        }
-                    );
-                });
+                    }
+                );
+                req.expect(JSON.stringify({ nextAudio: "foo.mp3" })).end(
+                    (error: any) => {
+                        if (error) return done(error);
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            new Fact(
+                                new Topic<string[]>("privateAudioQueue", []),
+                                ["bar.mp3"]
+                            )
+                        );
+                        return done();
+                    }
+                );
             });
 
             describe("config updated and should update front end", () => {
                 test("true", (done) => {
+                    const req = request(sut)
+                        .get("/coach/studentId/poll/config")
+                        .expect("Content-Type", /json/)
+                        .expect(200);
                     (engine.getFactValue as jest.Mock).mockImplementation(
                         (studentId: string, topic: Topic<unknown>) => {
                             if (topic.label === "updateFrontend") {
