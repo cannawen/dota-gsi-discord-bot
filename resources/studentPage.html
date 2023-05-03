@@ -3,6 +3,7 @@
         <title>Private Coaching</title>
         <script>
             let timeoutId;
+            let audioElement;
 
             function pollAudio() {
                 return fetch("./poll/audio")
@@ -10,12 +11,13 @@
                     .then((res) => {
                         return new Promise((resolve) => {
                             if (res.nextAudio) {
-                                const f = new Audio("/" + res.nextAudio);
-                                f.volume = parseFloat(
+                                audioElement = new Audio("/" + res.nextAudio);
+                                audioElement.volume = parseFloat(
                                     document.getElementById("volume").value
                                 );
-                                f.addEventListener("ended", resolve);
-                                f.play();
+                                audioElement.addEventListener("ended", resolve);
+                                audioElement.addEventListener("pause", resolve);
+                                audioElement.play();
                             } else {
                                 resolve();
                             }
@@ -132,6 +134,7 @@
             }
 
             function stopAudio() {
+                audioElement.pause();
                 fetch("./stop-audio", { method: "POST" });
             }
 
