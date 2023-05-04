@@ -81,6 +81,7 @@ function transcribe(
                 duration: 300,
             },
         });
+        source.setMaxListeners(20);
 
         const decoder = new prism.opus.Decoder({
             channels: 2,
