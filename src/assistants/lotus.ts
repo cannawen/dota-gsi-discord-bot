@@ -28,10 +28,7 @@ export default betweenMinutes(
             when: ([time]) =>
                 (time + ADVANCED_WARNING) % LOTUS_SPAWN_INTERVAL === 0,
             then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/lotus-soon.mp3"
-                ),
+                new Fact(topics.configurableEffect, "healing lotus soon"),
         })
     )
 );

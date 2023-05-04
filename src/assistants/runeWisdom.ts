@@ -22,11 +22,7 @@ export default inGame(
             label: rules.assistant.runeWisdom,
             trigger: [topics.time],
             when: ([time]) => (time + ADVANCED_WARNING) % (7 * 60) === 0,
-            then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/wisdom-rune-soon.mp3"
-                ),
+            then: () => new Fact(topics.configurableEffect, "wisdom rune soon"),
         })
     )
 );

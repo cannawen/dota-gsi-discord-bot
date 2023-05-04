@@ -35,10 +35,7 @@ export default [
         new Rule({
             label: rules.assistant.tormenter,
             then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/tormenters-up.mp3"
-                ),
+                new Fact(topics.configurableEffect, "tormenter has spawned"),
         })
     ),
     new Rule({
@@ -47,10 +44,7 @@ export default [
         then: ([time, fallenTime]) => {
             if (time === fallenTime + 60 * 10) {
                 return [
-                    new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/tormenters-up.mp3"
-                    ),
+                    new Fact(topics.configurableEffect, "tormenter's up"),
                     new Fact(tormenterFallenTimeTopic, undefined),
                 ];
             }
@@ -78,10 +72,7 @@ export default [
                     fallenTime + 10 * 60
                 )}`;
             } else if (time >= 20 * 60) {
-                return new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/tormenters-up.mp3"
-                );
+                return new Fact(topics.configurableEffect, "tormenter's up");
             } else {
                 return new Fact(
                     topics.configurableEffect,

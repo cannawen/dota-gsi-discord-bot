@@ -23,10 +23,7 @@ export default helper.tierTimeInfo.map((time) =>
             new Rule({
                 label: rules.assistant.newNeutralTokens,
                 then: () =>
-                    new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/new-neutral-tokens.mp3"
-                    ),
+                    new Fact(topics.configurableEffect, "new neutral tokens"),
             })
         )
     )
