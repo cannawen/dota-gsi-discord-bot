@@ -221,6 +221,17 @@ describe("gold reminder", () => {
                     );
                 });
             });
+            describe("3500+ gold over", () => {
+                test("insane intensity", () => {
+                    const results = getResults(rule, {
+                        ...params,
+                        gold: 3501,
+                    });
+                    expect(results).toContainAudioEffect(
+                        "you have an insane amount of gold. please stop what you are doing and spend it now"
+                    );
+                });
+            });
         });
     });
 });

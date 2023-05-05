@@ -115,10 +115,20 @@ export default [
         then: () => new Fact(audioToPlayTopic, "you have a lot of gold"),
     }),
     new Rule({
-        label: "when you have over 2500 gold, use aggresive tts reminder",
+        label: "when you have over 2500-3500 gold, use aggresive tts reminder",
         trigger: [discretionaryGoldTopic],
-        when: ([gold]) => gold > 2500,
+        when: ([gold]) => gold > 2500 && gold <= 3500,
         then: () => new Fact(audioToPlayTopic, "you really have a lot of gold"),
+    }),
+    new Rule({
+        label: "when you have over 3500 gold, use super aggresive tts reminder",
+        trigger: [discretionaryGoldTopic],
+        when: ([gold]) => gold > 3500,
+        then: () =>
+            new Fact(
+                audioToPlayTopic,
+                "you have an insane amount of gold. please stop what you are doing and spend it now"
+            ),
     }),
     // After we spend gold past a multiplier threshold, save the new gold amount as our new baseline to check against
     new Rule({
