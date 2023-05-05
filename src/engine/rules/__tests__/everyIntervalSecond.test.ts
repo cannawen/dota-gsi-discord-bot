@@ -1,7 +1,6 @@
 import everyInterval from "../everyIntervalSeconds";
 import Fact from "../../Fact";
 import Rule from "../../Rule";
-import Topic from "../../Topic";
 import topics from "../../../topics";
 
 const params = { inGame: true, time: 0 };
@@ -12,7 +11,6 @@ describe("everyIntervalSeconds", () => {
     beforeEach(() => {
         rule = everyInterval(
             3,
-            "reminderTimeTopic",
             new Rule({
                 label: "test",
                 then: () => new Fact(topics.playPrivateAudio, "audio"),

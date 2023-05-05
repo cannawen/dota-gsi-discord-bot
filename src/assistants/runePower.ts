@@ -31,11 +31,5 @@ export default [
 ]
     .map((rule) => betweenMinutes(6, undefined, rule))
     .map((rule) => configurable(configTopic, rule))
-    .map((rule) =>
-        everyIntervalSeconds(
-            POWER_RUNE_SPAWN_INTERVAL,
-            rules.assistant.runePower,
-            rule
-        )
-    )
+    .map((rule) => everyIntervalSeconds(POWER_RUNE_SPAWN_INTERVAL, rule))
     .map(inGame);

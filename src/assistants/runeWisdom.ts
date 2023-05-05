@@ -26,11 +26,5 @@ export default [
 ]
     .map((rule) => betweenMinutes(6.5, undefined, rule))
     .map((rule) => configurable(configTopic, rule))
-    .map((rule) =>
-        everyIntervalSeconds(
-            WISDOM_RUNE_SAPWN_INTERVAL,
-            rules.assistant.runeWisdom,
-            rule
-        )
-    )
+    .map((rule) => everyIntervalSeconds(WISDOM_RUNE_SAPWN_INTERVAL, rule))
     .map(inGame);

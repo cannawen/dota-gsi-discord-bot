@@ -30,11 +30,5 @@ export default [
 ]
     .map((rule) => betweenMinutes(3, undefined, rule))
     .map((rule) => configurable(configTopic, rule))
-    .map((rule) =>
-        everyIntervalSeconds(
-            BOUNTY_RUNE_SPAWN_INTERVAL,
-            rules.assistant.runeBounty,
-            rule
-        )
-    )
+    .map((rule) => everyIntervalSeconds(BOUNTY_RUNE_SPAWN_INTERVAL, rule))
     .map(inGame);

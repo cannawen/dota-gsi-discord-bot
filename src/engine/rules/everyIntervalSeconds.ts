@@ -6,13 +6,9 @@ import topics from "../../topics";
 /**
  * This rule will happen every `interval` seconds when we are in a game
  */
-export default function everyIntervalSeconds(
-    interval: number,
-    reminderTopicString: string,
-    rule: Rule
-) {
+export default function everyIntervalSeconds(interval: number, rule: Rule) {
     const reminderTopic = topicManager.createTopic<number>(
-        `${reminderTopicString}ReminderTopic`
+        `${rule.label}ReminderTopic`
     );
     return new Rule({
         label: rule.label,
