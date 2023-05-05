@@ -1,6 +1,6 @@
 import Fact from "../Fact";
 import Rule from "../Rule";
-import Topic from "../Topic";
+import topicManager from "../topicManager";
 import topics from "../../topics";
 
 /**
@@ -8,13 +8,16 @@ import topics from "../../topics";
  */
 export default function everyIntervalSeconds(
     interval: number,
-    reminderTimeTopic: Topic<number>,
+    reminderTopicString: string,
     rule: Rule
 ) {
+    const reminderTopic = topicManager.createTopic<number>(
+        `${reminderTopicString}ReminderTopic`
+    );
     return new Rule({
         label: rule.label,
         trigger: [topics.time, topics.inGame, ...rule.trigger],
-        given: [reminderTimeTopic, ...rule.given],
+        given: [reminderTopic, ...rule.given],
         when: (trigger, given) => {
             const time = trigger.shift();
             const inGame = trigger.shift();
@@ -29,7 +32,7 @@ export default function everyIntervalSeconds(
             given.shift();
             return [
                 ...rule.thenArray(trigger, given),
-                new Fact(reminderTimeTopic, time),
+                new Fact(reminderTopic, time),
             ];
         },
     });

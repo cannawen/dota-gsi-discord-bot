@@ -1,5 +1,7 @@
+import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
+import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
@@ -16,20 +18,23 @@ export const configTopic = topicManager.createConfigTopic(
 export const assistantDescription =
     "Reminds you of bounty rune spawn every 3:00";
 
-export default inGame(
-    configurable(
-        configTopic,
-        new Rule({
-            label: rules.assistant.runeBounty,
-            trigger: [topics.time],
-            then: ([time]) => {
-                if (time > 0 && time % BOUNTY_RUNE_SPAWN_INTERVAL === 0) {
-                    return new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rune-bounty.wav"
-                    );
-                }
-            },
-        })
+export default [
+    new Rule({
+        label: rules.assistant.runeBounty,
+        then: () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rune-bounty.wav"
+            ),
+    }),
+]
+    .map((rule) => betweenMinutes(3, undefined, rule))
+    .map((rule) => configurable(configTopic, rule))
+    .map((rule) =>
+        everyIntervalSeconds(
+            BOUNTY_RUNE_SPAWN_INTERVAL,
+            rules.assistant.runeBounty,
+            rule
+        )
     )
-);
+    .map(inGame);

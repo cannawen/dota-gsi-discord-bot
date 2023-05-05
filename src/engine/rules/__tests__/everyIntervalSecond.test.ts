@@ -8,13 +8,11 @@ const params = { inGame: true, time: 0 };
 
 describe("everyIntervalSeconds", () => {
     let rule: Rule;
-    let reminderTimeTopic: Topic<number>;
 
     beforeEach(() => {
-        reminderTimeTopic = new Topic<number>("reminderTimeTopic");
         rule = everyInterval(
             3,
-            reminderTimeTopic,
+            "reminderTimeTopic",
             new Rule({
                 label: "test",
                 then: () => new Fact(topics.playPrivateAudio, "audio"),

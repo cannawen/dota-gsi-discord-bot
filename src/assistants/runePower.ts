@@ -1,6 +1,7 @@
 import betweenMinutes from "../engine/rules/betweenMinutes";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
+import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
@@ -17,24 +18,24 @@ export const configTopic = topicManager.createConfigTopic(
 export const assistantDescription =
     "Reminds you of power rune spawn every 2:00 after 6:00";
 
-export default betweenMinutes(
-    6,
-    undefined,
-    inGame(
-        configurable(
-            configTopic,
-            new Rule({
-                label: rules.assistant.runePower,
-                trigger: [topics.time],
-                then: ([time]) => {
-                    if (time % POWER_RUNE_SPAWN_INTERVAL === 0) {
-                        return new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/rune-power.wav"
-                        );
-                    }
-                },
-            })
+export default [
+    new Rule({
+        label: rules.assistant.runePower,
+        trigger: [topics.time],
+        then: () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rune-power.wav"
+            ),
+    }),
+]
+    .map((rule) => betweenMinutes(6, undefined, rule))
+    .map((rule) => configurable(configTopic, rule))
+    .map((rule) =>
+        everyIntervalSeconds(
+            POWER_RUNE_SPAWN_INTERVAL,
+            rules.assistant.runePower,
+            rule
         )
     )
-);
+    .map(inGame);
