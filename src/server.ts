@@ -10,9 +10,9 @@ import helper from "./assistants/helpers/timeFormatting";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";
+import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
-import { Status } from "./assistants/helpers/roshan";
 
 const descriptions = assistantDescriptions();
 
@@ -251,6 +251,17 @@ router.post("/coach/:studentId/stop-audio", (req, res) => {
     engine.setFact(
         req.params.studentId,
         new Fact(topics.publicAudioQueue, undefined)
+    );
+    res.status(200).send();
+});
+
+router.post("/coach/:studentId/skywrath", (req, res) => {
+    engine.setFact(
+        req.params.studentId,
+        new Fact(
+            topics.playInterruptingAudioFile,
+            "../resources/audio/skywrath.mpeg"
+        )
     );
     res.status(200).send();
 });

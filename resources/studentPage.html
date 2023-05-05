@@ -146,6 +146,10 @@
                 fetch("./config/PRIVATE", { method: "POST" });
             }
 
+            function skywrath() {
+                fetch("./skywrath", { method: "POST" });
+            }
+
             function debug_saveState() {
                 fetch("/debug_save-state", { method: "POST" });
             }
@@ -204,6 +208,7 @@
         />
         <br />
         <br />
+        <div><button onClick="skywrath()">Skywrath</button></div>
         <div id="config"></div>
         <br />
         <button onClick="resetConfig()">Reset to default config</button>
