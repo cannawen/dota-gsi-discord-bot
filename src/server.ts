@@ -260,7 +260,7 @@ router.post("/coach/:studentId/skywrath", (req, res) => {
         req.params.studentId,
         new Fact(
             topics.playInterruptingAudioFile,
-            "../resources/audio/skywrath.mpeg"
+            "resources/audio/skywrath.mpeg"
         )
     );
     res.status(200).send();
