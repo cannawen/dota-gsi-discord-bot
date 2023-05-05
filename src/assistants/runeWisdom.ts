@@ -21,7 +21,11 @@ export default [
     new Rule({
         label: rules.assistant.runeWisdom,
         trigger: [topics.time],
-        then: () => new Fact(topics.configurableEffect, "wisdom rune soon"),
+        then: () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/wisdom-rune-soon.mp3"
+            ),
     }),
 ]
     .map((rule) => betweenMinutes(6.5, undefined, rule))

@@ -21,7 +21,11 @@ export const assistantDescription =
     new Rule({
         label: rules.assistant.lotus,
         trigger: [topics.time],
-        then: () => new Fact(topics.configurableEffect, "healing lotus soon"),
+        then: () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/lotus-soon.mp3"
+            ),
     }),
 ]
     .map((rule) => betweenMinutes(2.75, 12, rule))

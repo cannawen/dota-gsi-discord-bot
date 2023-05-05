@@ -20,7 +20,11 @@ export default atMinute(
         configTopic,
         new Rule({
             label: rules.assistant.shard,
-            then: () => new Fact(topics.configurableEffect, "shard available"),
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/shard-available.mp3"
+                ),
         })
     )
 );

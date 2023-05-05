@@ -191,14 +191,21 @@ export default [
         given: [topics.roshanMaybeAliveTime],
         when: ([time], [maybeAlivetime]) => time === maybeAlivetime,
         then: () =>
-            new Fact(topics.configurableEffect, "roshan might be alive"),
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rosh-maybe.mp3"
+            ),
     }),
     new Rule({
         label: "when rosh is guaranteed to be up, play reminder",
         trigger: [topics.time],
         given: [topics.roshanAliveTime],
         when: ([time], [aliveTime]) => time === aliveTime,
-        then: () => new Fact(topics.configurableEffect, "roshan is alive"),
+        then: () =>
+            new Fact(
+                topics.configurableEffect,
+                "resources/audio/rosh-alive.mp3"
+            ),
     }),
     new Rule({
         label: "when asked what roshan status is, respond with status",
