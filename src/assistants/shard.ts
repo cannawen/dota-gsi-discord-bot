@@ -9,7 +9,7 @@ import topics from "../topics";
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.shard,
-    EffectConfig.PUBLIC
+    EffectConfig.NONE
 );
 export const assistantDescription =
     "Reminds you of shard availability at 15:00";
