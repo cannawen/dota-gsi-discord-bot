@@ -82,6 +82,11 @@ function transcribe(
             },
         });
         source.setMaxListeners(20);
+        setTimeout(() => {
+            source.destroy(
+                new Error(`${userId.substring(0, 10)} talking for too long`)
+            );
+        }, 5000);
 
         const decoder = new prism.opus.Decoder({
             channels: 2,
