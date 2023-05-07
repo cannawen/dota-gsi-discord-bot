@@ -1,4 +1,4 @@
-import betweenMinutes from "../engine/rules/betweenMinutes";
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -16,14 +16,14 @@ export const assistantDescription =
     "Reminds you to pick up a neutral item (after 12:00)";
 
 const TIME_BETWEEN_REMINDERS = 120;
-const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10;
+const NEUTRAL_ITEM_REMINDER_START_TIME = 10 * 60;
 
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastNeutralItemReminderTimeTopic"
 );
 
-export default betweenMinutes(
-    NEUTRAL_ITEM_REMINDER_START_MINUTE,
+export default betweenSeconds(
+    NEUTRAL_ITEM_REMINDER_START_TIME,
     undefined,
     configurable(
         configTopic,

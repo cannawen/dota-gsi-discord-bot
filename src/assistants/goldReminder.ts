@@ -1,4 +1,4 @@
-import betweenMinutes from "../engine/rules/betweenMinutes";
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -50,16 +50,16 @@ function multiplier(gold: number, increment: number) {
 
 export default [
     // Store reminder increment
-    betweenMinutes(
+    betweenSeconds(
         0,
-        10,
+        10 * 60,
         new Rule({
             label: "when time is before 10:00, set reminder increment to 500 gold",
             then: () => new Fact(remindGoldIncrementTopic, 500),
         })
     ),
-    betweenMinutes(
-        10,
+    betweenSeconds(
+        10 * 60,
         undefined,
         new Rule({
             label: "when time is after 10:00, set reminder increment to 1000 gold",
@@ -67,17 +67,17 @@ export default [
         })
     ),
     // Store excess gold
-    betweenMinutes(
+    betweenSeconds(
         0,
-        30,
+        30 * 60,
         new Rule({
             label: "when time is before 30:00, you can spend all your gold",
             trigger: [topics.gold],
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    betweenMinutes(
-        30,
+    betweenSeconds(
+        30 * 60,
         undefined,
         new Rule({
             label: "when time is after 30:00, and you do not have buyback, you can spend all your gold",
@@ -86,8 +86,8 @@ export default [
             then: ([gold]) => new Fact(discretionaryGoldTopic, gold),
         })
     ),
-    betweenMinutes(
-        30,
+    betweenSeconds(
+        30 * 60,
         undefined,
         new Rule({
             label: "when time is after 30:00, and you have buyback cooldown available, you can spend your gold above buyback",

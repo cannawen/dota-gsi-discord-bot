@@ -1,4 +1,4 @@
-import betweenMinutes from "../engine/rules/betweenMinutes";
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
@@ -28,6 +28,6 @@ export const assistantDescription =
             ),
     }),
 ]
-    .map((rule) => betweenMinutes(2.75, 12, rule))
+    .map((rule) => betweenSeconds(2 * 60 + 45, 12 * 60, rule))
     .map((rule) => configurable(configTopic, rule))
     .map((rule) => everyIntervalSeconds(LOTUS_SPAWN_INTERVAL, rule));

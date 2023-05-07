@@ -1,4 +1,4 @@
-import betweenMinutes from "../engine/rules/betweenMinutes";
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
@@ -28,7 +28,7 @@ export default [
             ),
     }),
 ]
-    .map((rule) => betweenMinutes(6.5, undefined, rule))
+    .map((rule) => betweenSeconds(6 * 60 + 30, undefined, rule))
     .map((rule) => configurable(configTopic, rule))
     .map((rule) => everyIntervalSeconds(WISDOM_RUNE_SAPWN_INTERVAL, rule))
     .map(inGame);

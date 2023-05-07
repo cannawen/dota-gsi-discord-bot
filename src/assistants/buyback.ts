@@ -1,4 +1,4 @@
-import betweenMinutes from "../engine/rules/betweenMinutes";
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -20,8 +20,8 @@ const hasGoldForBuybackTopic = topicManager.createTopic<boolean>(
 );
 
 export default [
-    betweenMinutes(
-        30,
+    betweenSeconds(
+        30 * 60,
         undefined,
         new Rule({
             label: "check to see if you have gold for buyback",

@@ -1,4 +1,4 @@
-import betweenMinutes from "../betweenMinutes";
+import betweenSeconds from "../betweenSeconds";
 import Fact from "../../Fact";
 import Rule from "../../Rule";
 import Topic from "../../Topic";
@@ -11,9 +11,9 @@ describe("RuleDecoratorStartAndEndMinute", () => {
     describe("handling start time 0", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = betweenMinutes(
+            rule = betweenSeconds(
                 0,
-                4,
+                4 * 60,
                 new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });
@@ -32,9 +32,9 @@ describe("RuleDecoratorStartAndEndMinute", () => {
     describe("handling starting time > 0", () => {
         beforeEach(() => {
             topic = new Topic<boolean>("hasTriggeredClosure");
-            rule = betweenMinutes(
-                2,
-                4,
+            rule = betweenSeconds(
+                2 * 60,
+                4 * 60,
                 new Rule({ label: "test", then: () => new Fact(topic, true) })
             );
         });

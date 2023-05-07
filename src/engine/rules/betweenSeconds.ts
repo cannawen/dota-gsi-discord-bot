@@ -6,7 +6,7 @@ import topics from "../../topics";
  * This rule will only trigger between start and end time (inclusive)
  * Will not trigger if we are not in a game, or if time is 0
  */
-export default function betweenMinutes(
+export default function betweenSeconds(
     min: number | undefined,
     max: number | undefined,
     rule: Rule
@@ -18,10 +18,10 @@ export default function betweenMinutes(
         given: inGameRule.given,
         when: (trigger, given) => {
             const time = trigger.shift();
-            if (min && time < min * 60) {
+            if (min && time < min) {
                 return false;
             }
-            if (max && time > max * 60) {
+            if (max && time > max) {
                 return false;
             }
             return inGameRule.when(trigger, given);
