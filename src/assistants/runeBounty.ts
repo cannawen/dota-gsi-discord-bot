@@ -1,4 +1,5 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
@@ -10,6 +11,13 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.runeBounty,
+    "Bounty rune",
+    "Reminds you of bounty rune spawn every 3:00",
+    EffectConfig.NONE
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeBounty,

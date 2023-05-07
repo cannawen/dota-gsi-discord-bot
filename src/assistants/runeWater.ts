@@ -1,4 +1,5 @@
 import atMinute from "../engine/rules/atMinute";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -6,6 +7,13 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.runeWater,
+    "Water rune",
+    "Reminds you of water rune spawn at 2:00 and 4:00",
+    EffectConfig.NONE
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeWater,

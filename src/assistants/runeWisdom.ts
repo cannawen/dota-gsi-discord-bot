@@ -1,4 +1,5 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
@@ -8,6 +9,13 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.runeWisdom,
+    "Wisdom rune",
+    "Reminds you of wisdom rune every 7:00",
+    EffectConfig.PUBLIC
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.runeWisdom,

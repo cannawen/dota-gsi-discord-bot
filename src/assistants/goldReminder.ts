@@ -1,4 +1,5 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -7,6 +8,13 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.goldReminder,
+    "Gold reminder",
+    "Reminds you to spend gold if you have too much",
+    EffectConfig.PRIVATE
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.goldReminder,

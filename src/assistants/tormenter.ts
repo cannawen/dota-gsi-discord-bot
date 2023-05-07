@@ -1,4 +1,5 @@
 import atMinute from "../engine/rules/atMinute";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
@@ -8,6 +9,13 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.tormenter,
+    "Tormenter",
+    'Reminds you of tormenter. Responds to "torment has fallen" and "what is torment timer/status"',
+    EffectConfig.PUBLIC
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.tormenter,

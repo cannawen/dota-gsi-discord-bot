@@ -1,4 +1,5 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
+import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
@@ -9,6 +10,13 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const LOTUS_SPAWN_INTERVAL = 3 * 60;
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.lotus,
+    "Healing lotus",
+    "Reminds you of lotus every 3:00 before 12:00",
+    EffectConfig.PUBLIC
+);
 
 export const configTopic = topicManager.createConfigTopic(
     rules.assistant.lotus,
