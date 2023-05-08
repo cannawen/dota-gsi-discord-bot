@@ -6,7 +6,7 @@ import sut from "../effectConfigManager";
 
 describe("effectConfigManager", () => {
     test("defaultConfigs", () => {
-        const configs = sut.defaultConfigs();
+        const configs = sut.defaultConfigFacts();
         expect(configs).toContainEqual(
             new Fact(
                 new PersistentTopic<EffectConfig>(rules.assistant.buyback, {

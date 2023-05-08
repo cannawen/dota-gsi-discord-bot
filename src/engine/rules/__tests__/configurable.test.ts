@@ -6,26 +6,22 @@ import Rule from "../../Rule";
 import topicManager from "../../topicManager";
 import topics from "../../../topics";
 
-let rule: Rule;
+const rule = configurable(
+    new ConfigInfo(
+        "ruleId",
+        "Rule Name",
+        "Rule description",
+        EffectConfig.NONE
+    ),
+    new Rule({
+        label: "test",
+        trigger: [topicManager.createConfigTopic("ruleId")],
+        then: () => new Fact(topics.configurableEffect, "foo.mp3"),
+    })
+);
 
 describe("configurable", () => {
-    beforeEach(() => {
-        const configInfo = new ConfigInfo(
-            "ruleId",
-            "Rule Name",
-            "Rule description",
-            EffectConfig.NONE
-        );
-        const ruleId = topicManager.createConfigTopic("ruleId");
-        rule = configurable(
-            configInfo,
-            new Rule({
-                label: "test",
-                trigger: [ruleId],
-                then: () => new Fact(topics.configurableEffect, "foo.mp3"),
-            })
-        );
-    });
+    beforeEach(() => {});
     test("PRIVATE", () => {
         const results = getResults(rule, { ruleId: EffectConfig.PRIVATE });
         expect(results).toContainFact("playPrivateAudio", "foo.mp3");

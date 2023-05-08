@@ -85,7 +85,7 @@ export class CustomEngine extends Engine {
         const data = getSavedDataOrDeleteDataIfInvalid(studentId);
 
         // Set default config and overwrite any with saved configs
-        effectConfig.defaultConfigs().map((fact) => this.set(db, fact));
+        effectConfig.defaultConfigFacts().map((fact) => this.set(db, fact));
         if (data) {
             data.map((fact) => this.set(db, fact));
         }

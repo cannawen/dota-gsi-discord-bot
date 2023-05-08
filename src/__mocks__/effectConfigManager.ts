@@ -1,7 +1,7 @@
 import EffectConfig from "../effects/EffectConfig";
 
 const effectConfig = {
-    defaultConfigs: jest.fn().mockReturnValue([]),
+    defaultConfigFacts: jest.fn().mockReturnValue([]),
     defaultConfigInfo: [],
     effectFromString: (input: string): EffectConfig => input as EffectConfig,
 };

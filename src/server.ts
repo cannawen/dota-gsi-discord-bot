@@ -134,7 +134,7 @@ router.post("/coach/:studentId/config/:topic/:effect", (req, res) => {
 
 router.post("/coach/:studentId/config/reset", (req, res) => {
     effectConfig
-        .defaultConfigs()
+        .defaultConfigFacts()
         .map((fact) => engine.setFact(req.params.studentId, fact));
     res.status(200).send();
 });

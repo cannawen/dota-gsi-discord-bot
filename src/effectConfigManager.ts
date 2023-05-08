@@ -45,9 +45,8 @@ function effectFromString(effect: string) {
     }
 }
 
-// TODO rename to defaultConfigFacts
-function defaultConfigs(): Fact<EffectConfig | undefined>[] {
-    return defaultConfigInfo.reduce((memo, configInfo) => {
+function defaultConfigFacts(): Fact<EffectConfig | undefined>[] {
+    return defaultConfigInfo.map((configInfo) => {
         const topic = topicManager.findTopic<EffectConfig>(
             configInfo.ruleIndentifier
         );
@@ -59,13 +58,12 @@ function defaultConfigs(): Fact<EffectConfig | undefined>[] {
             })
         );
         topic.defaultValue = configInfo.defaultConfig;
-        memo.push(new Fact(topic, undefined));
-        return memo;
-    }, [] as Fact<EffectConfig | undefined>[]);
+        return new Fact(topic, undefined);
+    });
 }
 
 export default {
+    defaultConfigFacts,
     defaultConfigInfo,
-    defaultConfigs,
     effectFromString,
 };

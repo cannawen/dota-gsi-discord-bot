@@ -141,7 +141,7 @@ describe("server", () => {
                     EffectConfig.PUBLIC_INTERRUPTING
                 );
                 const factFour = new Fact(configTopicFour, EffectConfig.NONE);
-                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
+                (effectConfig.defaultConfigFacts as jest.Mock).mockReturnValue([
                     factOne,
                     factTwo,
                     factThree,

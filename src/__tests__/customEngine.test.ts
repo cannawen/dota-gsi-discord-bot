@@ -60,7 +60,7 @@ describe("customEngine", () => {
                 topicOne = new Topic<EffectConfig>("configTopicOne");
                 topicTwo = new Topic<EffectConfig>("configTopicTwo");
 
-                (effectConfig.defaultConfigs as jest.Mock).mockReturnValue([
+                (effectConfig.defaultConfigFacts as jest.Mock).mockReturnValue([
                     new Fact(topicOne, EffectConfig.PRIVATE),
                     new Fact(topicTwo, EffectConfig.PUBLIC),
                 ]);
@@ -119,7 +119,7 @@ describe("customEngine", () => {
                             persistence.deleteStudentData
                         ).toHaveBeenCalledWith("studentId");
                         expect(
-                            effectConfig.defaultConfigs
+                            effectConfig.defaultConfigFacts
                         ).toHaveBeenCalledTimes(1);
                     });
                 });
