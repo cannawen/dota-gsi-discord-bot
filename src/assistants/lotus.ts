@@ -17,7 +17,7 @@ export const configTopic = topicManager.createConfigTopic(
 export const assistantDescription =
     "Reminds you of lotus every 3:00 before 12:00";
 
-[
+export default [
     new Rule({
         label: rules.assistant.lotus,
         trigger: [topics.time],
@@ -28,6 +28,6 @@ export const assistantDescription =
             ),
     }),
 ]
-    .map((rule) => betweenSeconds(2 * 60 + 45, 12 * 60, rule))
+    .map((rule) => betweenSeconds(3 * 60 - 15, 12 * 60, rule))
     .map((rule) => configurable(configTopic, rule))
     .map((rule) => everyIntervalSeconds(LOTUS_SPAWN_INTERVAL, rule));

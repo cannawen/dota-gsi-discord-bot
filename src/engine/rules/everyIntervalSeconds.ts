@@ -18,6 +18,10 @@ export default function everyIntervalSeconds(interval: number, rule: Rule) {
             const time = trigger.shift();
             const inGame = trigger.shift();
             const reminder = given.shift();
+            // This line is a bit fragile, especially for testing.
+            // time - reminder must be EXACTLY equal to interval, and if it is over, it all breaks.
+            // Is this preferable to >= interval; and having the time slowly drift away?
+            // Should we refactor this so there is a properly defined start and end time with interval?
             const isReminderTime =
                 reminder === undefined || time - reminder === interval;
             return inGame && isReminderTime && rule.when(trigger, given);

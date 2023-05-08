@@ -8,7 +8,7 @@ const params = {
 describe("water runes, in game", () => {
     describe("time 2:00", () => {
         test("play rune sound", () => {
-            const results = getResults(rule[0], {
+            const results = getResults(rule, {
                 ...params,
                 time: 2 * 60,
             });
@@ -19,7 +19,7 @@ describe("water runes, in game", () => {
     });
     describe("time 4:00", () => {
         test("play rune sound", () => {
-            const results = getResults(rule[1], {
+            const results = getResults(rule, {
                 ...params,
                 time: 4 * 60,
             });
@@ -30,7 +30,7 @@ describe("water runes, in game", () => {
     });
     describe("time 6:00", () => {
         test("do not play rune sound", () => {
-            const results = getResults(rule[1], {
+            const results = getResults(rule, {
                 ...params,
                 time: 6 * 60,
             });
