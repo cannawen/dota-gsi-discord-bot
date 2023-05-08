@@ -17,13 +17,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.tormenter,
-    EffectConfig.PUBLIC
-);
-export const assistantDescription =
-    'Reminds you of tormenter. Responds to "torment has fallen" and "what is torment timer/status"';
-
 const tormenterFallenTimeTopic = topicManager.createTopic<number>(
     "tormenterFallenTimeTopic",
     { persistAcrossRestarts: true }
@@ -101,4 +94,4 @@ export default [
     }),
 ]
     .map(inGame)
-    .map((rule) => configurable(configTopic, rule));
+    .map((rule) => configurable(configInfo, rule));

@@ -16,13 +16,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.goldReminder,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription =
-    "Reminds you to spend gold if you have too much";
-
 /**
  * When the user interacts with gold by
  * 1) Spending it, or
@@ -150,7 +143,7 @@ export default [
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     configurable(
-        configTopic,
+        configInfo,
         new Rule({
             label: "if we have passed a warning threshold, warn user and update our gold topic",
             trigger: [discretionaryGoldTopic, audioToPlayTopic],

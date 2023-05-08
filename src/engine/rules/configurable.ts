@@ -1,7 +1,8 @@
+import ConfigInfo from "../../ConfigInfo";
 import EffectConfig from "../../effects/EffectConfig";
 import Fact from "../Fact";
 import Rule from "../Rule";
-import Topic from "../Topic";
+import topicManager from "../topicManager";
 import topics from "../../topics";
 
 const configToEffectTopic = {
@@ -16,10 +17,8 @@ const configToEffectTopic = {
  *
  * On returning facts, replaces `topics.configurableEffect` fact with effect specified by `configTopic`
  */
-export default function configurable(
-    configTopic: Topic<EffectConfig>,
-    rule: Rule
-) {
+export default function configurable(configInfo: ConfigInfo, rule: Rule) {
+    const configTopic = topicManager.findTopic(configInfo.ruleIndentifier);
     return new Rule({
         label: rule.label,
         trigger: rule.trigger,

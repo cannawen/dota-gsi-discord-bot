@@ -7,7 +7,6 @@ import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -16,12 +15,6 @@ export const configInfo = new ConfigInfo(
     "Reminds you of wisdom rune every 7:00",
     EffectConfig.PUBLIC
 );
-
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.runeWisdom,
-    EffectConfig.PUBLIC
-);
-export const assistantDescription = "Reminds you of wisdom rune every 7:00";
 
 const WISDOM_RUNE_SAPWN_INTERVAL = 7 * 60;
 
@@ -37,6 +30,6 @@ export default [
     }),
 ]
     .map((rule) => betweenSeconds(6 * 60 + 30, undefined, rule))
-    .map((rule) => configurable(configTopic, rule))
+    .map((rule) => configurable(configInfo, rule))
     .map((rule) => everyIntervalSeconds(WISDOM_RUNE_SAPWN_INTERVAL, rule))
     .map(inGame);

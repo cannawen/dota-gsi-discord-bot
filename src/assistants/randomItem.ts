@@ -6,7 +6,6 @@ import fs from "fs";
 import path from "path";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -15,13 +14,6 @@ export const configInfo = new ConfigInfo(
     'Responds to discord command "What should I buy with x gold" or "What should I buy',
     EffectConfig.PUBLIC
 );
-
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.randomItem,
-    EffectConfig.PUBLIC
-);
-export const assistantDescription =
-    'Responds to discord command "What should I buy with x gold"';
 
 // [["Observer Ward", 0], ["Sentry Ward", 50], ...]
 const itemCosts: Array<[string, number]> = Object.entries(
@@ -48,7 +40,7 @@ function whatShouldIBuy(message: string) {
 }
 
 export default configurable(
-    configTopic,
+    configInfo,
     new Rule({
         label: rules.assistant.glhf,
         trigger: [topics.lastDiscordUtterance],

@@ -16,13 +16,14 @@ class TopicManager {
             persistForever?: boolean;
         }
     ) {
-        if (this.topics.get(label)) {
-            log.error(
+        const existingTopic = this.topics.get(label);
+        if (existingTopic) {
+            log.warn(
                 "app",
                 "Cannot create topic. One already exists with label %s",
                 label
             );
-            throw new Error(`Cannot create topic ${label}`);
+            return existingTopic as Topic<T>;
         }
 
         let topic;
@@ -39,9 +40,8 @@ class TopicManager {
         return topic;
     }
 
-    public createConfigTopic(label: string, defaultConfig: EffectConfig) {
+    public createConfigTopic(label: string) {
         const topic = this.createTopic<EffectConfig>(label, {
-            defaultValue: defaultConfig,
             persistForever: true,
         });
         this.configTopics.push(topic);

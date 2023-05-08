@@ -18,13 +18,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.roshan,
-    EffectConfig.PUBLIC
-);
-export const assistantDescription =
-    'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer"';
-
 /**
  * Keeps an array of all the times that roshan has fallen
  */
@@ -224,4 +217,4 @@ export default [
     }),
 ]
     .map(inGame)
-    .map((rule) => configurable(configTopic, rule));
+    .map((rule) => configurable(configInfo, rule));

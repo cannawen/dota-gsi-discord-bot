@@ -17,12 +17,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.midas,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription = "Reminds you to use your midas";
-
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastMidasReminderTimeTopic"
 );
@@ -78,5 +72,5 @@ export default [
         ],
     }),
 ]
-    .map((rule) => configurable(configTopic, rule))
+    .map((rule) => configurable(configInfo, rule))
     .map(inGame);

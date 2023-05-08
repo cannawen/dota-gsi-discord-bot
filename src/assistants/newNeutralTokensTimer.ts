@@ -6,7 +6,6 @@ import Fact from "../engine/Fact";
 import helper from "./helpers/neutralItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -16,18 +15,11 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.newNeutralTokens,
-    EffectConfig.PUBLIC
-);
-export const assistantDescription =
-    "Reminds you when new neutral tokens are spawning";
-
 export default helper.tierTimeInfo.map((time) =>
     atMinute(
         time,
         configurable(
-            configTopic,
+            configInfo,
             new Rule({
                 label: rules.assistant.newNeutralTokens,
                 then: () =>

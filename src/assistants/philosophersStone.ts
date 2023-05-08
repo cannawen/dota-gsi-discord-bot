@@ -18,13 +18,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.philosophersStone,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription =
-    "Reminds you to use Philosopher's Stone while you are dead";
-
 const seenPhilosophersStoneTopic = topicManager.createTopic<boolean>(
     "seenPhilosophersStoneTopic",
     { defaultValue: false, persistAcrossRestarts: true }
@@ -93,5 +86,5 @@ export default [
             ),
     }),
 ]
-    .map((rule) => configurable(configTopic, rule))
+    .map((rule) => configurable(configInfo, rule))
     .map(inGame);

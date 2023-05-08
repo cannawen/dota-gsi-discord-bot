@@ -16,13 +16,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.wards,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription =
-    "Reminds you to buy wards if you have not done so recently";
-
 const WARD_RESTOCK_SECONDS = 135;
 const MAX_WARDS_IN_STOCK = 4;
 const WARD_REMINDER_INTERVAL = WARD_RESTOCK_SECONDS * MAX_WARDS_IN_STOCK;
@@ -46,7 +39,7 @@ const lastWardCountTopic = topicManager.createTopic<number>(
  */
 export default inGame(
     configurable(
-        configTopic,
+        configInfo,
         new Rule({
             label: rules.assistant.wards,
             trigger: [topics.time, topics.items],

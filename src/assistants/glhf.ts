@@ -4,7 +4,6 @@ import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -14,15 +13,8 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.glhf,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription =
-    "Wishes you good fortune at the start of the game";
-
 export default configurable(
-    configTopic,
+    configInfo,
     new Rule({
         label: rules.assistant.glhf,
         trigger: [topics.inGame],

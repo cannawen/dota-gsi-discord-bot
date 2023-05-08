@@ -16,13 +16,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.buyback,
-    EffectConfig.PRIVATE
-);
-export const assistantDescription =
-    "Reminds you when you do not have enough gold for buyback (after 30:00)";
-
 const hasGoldForBuybackTopic = topicManager.createTopic<boolean>(
     "hasGoldForBuybackTopic"
 );
@@ -39,7 +32,7 @@ export default [
         })
     ),
     configurable(
-        configTopic,
+        configInfo,
         new Rule({
             label: "warn if you have buyback cooldown available but do not have buyback due to gold",
             trigger: [hasGoldForBuybackTopic, topics.buybackCooldown],

@@ -8,6 +8,9 @@ import PlayerItems from "./gsi-data-classes/PlayerItems";
 import { Status } from "./assistants/helpers/roshan";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
+import rules from "./rules";
+import EffectConfig from "./effects/EffectConfig";
+import topicManager from "./engine/topicManager";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
@@ -101,12 +104,22 @@ const sharedGameState = {
     roshanAliveTime: new Topic<number>("roshanAliveTime"),
 };
 
+function configTopics() {
+    return Object.fromEntries(
+        Object.entries(rules.assistant).map(([name, id]) => [
+            name,
+            topicManager.createConfigTopic(id),
+        ])
+    );
+}
+
 const allTopics = {
     studentId: new PersistentTopic<string>("studentId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,
     }),
     updateFrontend: new Topic<boolean>("updateFrontend"),
+    ...configTopics(),
     ...sharedGameState,
     ...effect,
     ...gsi,

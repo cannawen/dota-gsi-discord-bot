@@ -3,8 +3,7 @@
  */
 export default class Topic<Type> {
     public readonly label: string;
-    // The following variable is not to be used, but is only here for type-checking reasons
-    public readonly defaultValue: Type | undefined;
+    public defaultValue: Type | undefined;
 
     /**
      * Create a topic

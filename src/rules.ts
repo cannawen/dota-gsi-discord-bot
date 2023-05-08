@@ -1,5 +1,6 @@
 /* eslint-disable sort-keys */
 
+// TODO fix this now we have ConfigInfo
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 const assistant = {

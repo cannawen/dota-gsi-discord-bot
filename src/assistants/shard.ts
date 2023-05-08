@@ -5,7 +5,6 @@ import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -15,17 +14,10 @@ export const configInfo = new ConfigInfo(
     EffectConfig.NONE
 );
 
-export const configTopic = topicManager.createConfigTopic(
-    rules.assistant.shard,
-    EffectConfig.NONE
-);
-export const assistantDescription =
-    "Reminds you of shard availability at 15:00";
-
 export default atMinute(
     15,
     configurable(
-        configTopic,
+        configInfo,
         new Rule({
             label: rules.assistant.shard,
             then: () =>

@@ -7,6 +7,8 @@ import path from "path";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import topicManager from "./engine/topicManager";
+import ConfigInfo from "./ConfigInfo";
 
 function registerEffectConfigRule(
     ruleName: string,
@@ -41,6 +43,7 @@ function effectFromString(effect: string) {
     }
 }
 
+// TODO rename to defaultConfigFacts
 function defaultConfigs(): Fact<EffectConfig>[] {
     const dirPath = path.join(__dirname, "assistants");
 
@@ -51,9 +54,12 @@ function defaultConfigs(): Fact<EffectConfig>[] {
             .map((file) => path.join(dirPath, file))
             // eslint-disable-next-line global-require
             .map((filePath) => require(filePath))
-            .filter((module) => module.configTopic)
+            .filter((module) => module.configInfo)
             .reduce((memo, module) => {
-                const topic = module.configTopic as Topic<EffectConfig>;
+                const topic = topicManager.findTopic(
+                    module.configInfo.ruleIndentifier
+                );
+                topic.defaultValue = module.configInfo.defaultConfig;
                 memo.push(new Fact(topic, undefined));
                 return memo;
             }, [])
