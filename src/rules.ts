@@ -1,28 +1,27 @@
 /* eslint-disable sort-keys */
 
-// TODO fix this now we have ConfigInfo
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 const assistant = {
-    buyback: "Buyback",
-    glhf: "Good luck and have fun",
-    goldReminder: "Gold",
-    lotus: "Lotus",
-    midas: "Midas",
-    neutralItemDigReminder: "Neutral item dig",
-    neutralItemReminder: "Neutral item",
-    newNeutralTokens: "New neutral tokens",
-    pause: "Pause",
-    philosophersStone: "Philosopher's stone",
-    randomItem: "Random item suggestion",
-    roshan: "Roshan",
-    runeBounty: "Bounty rune",
-    runePower: "Power rune",
-    runeWater: "Water rune",
-    runeWisdom: "Wisdom rune",
-    shard: "Shard",
-    tormenter: "Tormenter",
-    wards: "Wards",
+    buyback: "assistant-buyback",
+    glhf: "assistant-glhf",
+    goldReminder: "assistant-gold",
+    lotus: "assistant-lotus",
+    midas: "assistant-midas",
+    neutralItemDigReminder: "assistant-neutral_item-dig",
+    neutralItemReminder: "assistant-neutral_item",
+    newNeutralTokens: "assistant-new_neutral_tokens",
+    pause: "assistant-pause",
+    philosophersStone: "assistant-neutral_item-philosophers_stone_when_dead",
+    randomItem: "assistant-random_item_suggestion",
+    roshan: "assistant-roshan",
+    runeBounty: "assistant-rune-bounty",
+    runePower: "assistant-rune-power",
+    runeWater: "assistant-rune-water",
+    runeWisdom: "assistant-rune-wisdom",
+    shard: "assistant-shard",
+    tormenter: "assistant-tormenter",
+    wards: "assistant-wards",
 };
 
 const discord = {

@@ -4,7 +4,6 @@ import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
-import fs from "fs";
 import gsiParser from "./gsiParser";
 import helper from "./assistants/helpers/timeFormatting";
 import log from "./log";
@@ -14,24 +13,12 @@ import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
-const descriptions = assistantDescriptions();
-
-function assistantDescriptions() {
-    const dirPath = path.join(__dirname, "assistants");
-    return (
-        fs
-            .readdirSync(dirPath)
-            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-            .map((file) => path.join(dirPath, file))
-            // eslint-disable-next-line global-require
-            .map((filePath) => require(filePath))
-            .filter((module) => module.configTopic)
-            .reduce((memo: { [key: string]: string }, module) => {
-                memo[module.configTopic.label] = module.assistantDescription;
-                return memo;
-            }, {})
-    );
-}
+const defaultConfigInfo = Object.fromEntries(
+    effectConfig.defaultConfigInfo.map((configInfo) => [
+        configInfo.ruleIndentifier,
+        configInfo,
+    ])
+);
 
 const app = express();
 
@@ -126,9 +113,10 @@ router.get("/coach/:studentId/config/get", (req, res) => {
         topicManager
             .getConfigTopics()
             .map((topic) => [
-                topic.label,
+                defaultConfigInfo[topic.label].ruleIndentifier,
+                defaultConfigInfo[topic.label].ruleName,
                 engine.getFactValue(req.params.studentId, topic),
-                descriptions[topic.label],
+                defaultConfigInfo[topic.label].description,
             ])
     );
 });

@@ -47,34 +47,18 @@ function registerRulesInDirectory(directory: string) {
         });
 }
 
-function registerAssistantConfig() {
-    const dirPath = path.join(__dirname, "assistants");
-    fs.readdirSync(dirPath)
-        .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-        .map((file) => path.join(dirPath, file))
-        // eslint-disable-next-line global-require
-        .map((filePath) => require(filePath))
-        .filter((module) => module.configTopic)
-        .map((module) => module.configTopic as Topic<EffectConfig>)
-        .forEach((topic) =>
-            effectConfig.registerEffectConfigRule(topic.label, topic)
-        );
-}
-
 export function registerEverything() {
     registerRulesInDirectory("assistants");
     registerRulesInDirectory("discord/rules");
     registerRulesInDirectory("effects");
     registerRulesInDirectory("gsi");
 
-    registerAssistantConfig();
-
     registerAllTopics();
 }
 
 registerEverything();
 
-// GSI CODE
+// GSI CODE - TODO move this to server.ts
 
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     // Check to see if we care about this auth token before sending info to the engine

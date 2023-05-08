@@ -1,3 +1,4 @@
+import ConfigInfo from "./ConfigInfo";
 import EffectConfig from "./effects/EffectConfig";
 import engine from "./customEngine";
 import Fact from "./engine/Fact";
@@ -6,22 +7,24 @@ import log from "./log";
 import path from "path";
 import Rule from "./engine/Rule";
 import Topic from "./engine/Topic";
-import topics from "./topics";
 import topicManager from "./engine/topicManager";
-import ConfigInfo from "./ConfigInfo";
+import topics from "./topics";
 
-function registerEffectConfigRule(
-    ruleName: string,
-    topic: Topic<EffectConfig>
-) {
-    engine.register(
-        new Rule({
-            label: `${ruleName}_effect_config`,
-            trigger: [topic],
-            then: () => new Fact(topics.updateFrontend, true),
-        })
+function getDefaultConfigInfo(): ConfigInfo[] {
+    const dirPath = path.join(__dirname, "assistants");
+    return (
+        fs
+            .readdirSync(dirPath)
+            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+            .map((file) => path.join(dirPath, file))
+            // eslint-disable-next-line global-require
+            .map((filePath) => require(filePath))
+            .filter((module) => module.configInfo)
+            .map((module) => module.configInfo)
     );
 }
+
+const defaultConfigInfo = getDefaultConfigInfo();
 
 function effectFromString(effect: string) {
     switch (effect) {
@@ -44,30 +47,26 @@ function effectFromString(effect: string) {
 }
 
 // TODO rename to defaultConfigFacts
-function defaultConfigs(): Fact<EffectConfig>[] {
-    const dirPath = path.join(__dirname, "assistants");
-
-    return (
-        fs
-            .readdirSync(dirPath)
-            .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-            .map((file) => path.join(dirPath, file))
-            // eslint-disable-next-line global-require
-            .map((filePath) => require(filePath))
-            .filter((module) => module.configInfo)
-            .reduce((memo, module) => {
-                const topic = topicManager.findTopic(
-                    module.configInfo.ruleIndentifier
-                );
-                topic.defaultValue = module.configInfo.defaultConfig;
-                memo.push(new Fact(topic, undefined));
-                return memo;
-            }, [])
-    );
+function defaultConfigs(): Fact<EffectConfig | undefined>[] {
+    return defaultConfigInfo.reduce((memo, configInfo) => {
+        const topic = topicManager.findTopic<EffectConfig>(
+            configInfo.ruleIndentifier
+        );
+        engine.register(
+            new Rule({
+                label: `update frontend when ${configInfo.ruleIndentifier} config is changed`,
+                trigger: [topic],
+                then: () => new Fact(topics.updateFrontend, true),
+            })
+        );
+        topic.defaultValue = configInfo.defaultConfig;
+        memo.push(new Fact(topic, undefined));
+        return memo;
+    }, [] as Fact<EffectConfig | undefined>[]);
 }
 
 export default {
+    defaultConfigInfo,
     defaultConfigs,
     effectFromString,
-    registerEffectConfigRule,
 };

@@ -5,12 +5,10 @@ import GsiData from "./gsi/GsiData";
 import manager from "./engine/topicManager";
 import PersistentTopic from "./engine/PersistentTopic";
 import PlayerItems from "./gsi-data-classes/PlayerItems";
+import rules from "./rules";
 import { Status } from "./assistants/helpers/roshan";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
-import rules from "./rules";
-import EffectConfig from "./effects/EffectConfig";
-import topicManager from "./engine/topicManager";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
@@ -108,7 +106,7 @@ function configTopics() {
     return Object.fromEntries(
         Object.entries(rules.assistant).map(([name, id]) => [
             name,
-            topicManager.createConfigTopic(id),
+            manager.createConfigTopic(id),
         ])
     );
 }
