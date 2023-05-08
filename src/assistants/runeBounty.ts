@@ -1,4 +1,3 @@
-import betweenSeconds from "../engine/rules/betweenSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
@@ -28,7 +27,13 @@ export default [
             ),
     }),
 ]
-    .map((rule) => betweenSeconds(3 * 60, undefined, rule))
     .map((rule) => configurable(configInfo, rule))
-    .map((rule) => everyIntervalSeconds(BOUNTY_RUNE_SPAWN_INTERVAL, rule))
+    .map((rule) =>
+        everyIntervalSeconds(
+            3 * 60,
+            undefined,
+            BOUNTY_RUNE_SPAWN_INTERVAL,
+            rule
+        )
+    )
     .map(inGame);

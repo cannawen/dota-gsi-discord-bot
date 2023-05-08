@@ -1,4 +1,3 @@
-import betweenSeconds from "../engine/rules/betweenSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
@@ -28,6 +27,7 @@ export default [
             ),
     }),
 ]
-    .map((rule) => betweenSeconds(3 * 60 - 15, 12 * 60, rule))
     .map((rule) => configurable(configInfo, rule))
-    .map((rule) => everyIntervalSeconds(LOTUS_SPAWN_INTERVAL, rule));
+    .map((rule) =>
+        everyIntervalSeconds(3 * 60 - 15, 12 * 60, LOTUS_SPAWN_INTERVAL, rule)
+    );

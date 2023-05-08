@@ -11,6 +11,8 @@ describe("everyIntervalSeconds", () => {
     beforeEach(() => {
         rule = everyInterval(
             3,
+            6,
+            3,
             new Rule({
                 label: "test",
                 then: () => new Fact(topics.playPrivateAudio, "audio"),
@@ -24,7 +26,7 @@ describe("everyIntervalSeconds", () => {
         expect(initial).not.toContainAudioEffect();
 
         const zero = getResults(rule, params, initial);
-        expect(zero).toContainAudioEffect();
+        expect(zero).not.toContainAudioEffect();
 
         const one = getResults(rule, { ...params, time: 1 }, zero);
         expect(one).not.toContainAudioEffect();
@@ -43,5 +45,8 @@ describe("everyIntervalSeconds", () => {
 
         const six = getResults(rule, { ...params, time: 6 }, five);
         expect(six).toContainAudioEffect();
+
+        const nine = getResults(rule, { ...params, time: 9 }, six);
+        expect(nine).not.toContainAudioEffect();
     });
 });
