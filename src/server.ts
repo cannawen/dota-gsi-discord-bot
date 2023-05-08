@@ -4,6 +4,8 @@ import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
+import gsi from "node-gsi";
+import GsiData from "./gsi/GsiData";
 import gsiParser from "./gsiParser";
 import helper from "./assistants/helpers/timeFormatting";
 import log from "./log";
@@ -262,6 +264,51 @@ router.post("/gsi", (req, res) => {
     gsiParser.feedState(req.body);
     res.status(200).send();
 });
+
+// GSI CODE
+
+gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
+    // Check to see if we care about this auth token before sending info to the engine
+    // See if it matches topic.discordCoachMe and is not undefined
+    engine.setFact(
+        data.auth,
+        new Fact(
+            topics.allData,
+            new GsiData({
+                events: data.state.events,
+                hero: data.state.hero,
+                items: data.state.items,
+                map: data.state.map,
+                player: data.state.player,
+                provider: data.state.provider,
+            })
+        )
+    );
+});
+
+// If we are looking at a replay or as an observer,
+// run all logic on the items of one of the players only (from 0-9)
+// needs to be 6 for mitmproxy die-respawn-dig_canna to run properly
+const playerId = 6;
+gsiParser.events.on(
+    gsi.Dota2Event.Dota2ObserverState,
+    (data: gsi.IDota2ObserverStateEvent) => {
+        engine.setFact(
+            data.auth,
+            new Fact(
+                topics.allData,
+                new GsiData({
+                    events: data.state.events,
+                    hero: data.state.hero?.at(playerId) || null,
+                    items: data.state.items?.at(playerId) || null,
+                    map: data.state.map,
+                    player: data.state.player?.at(playerId) || null,
+                    provider: data.state.provider,
+                })
+            )
+        );
+    }
+);
 
 app.use("/", router);
 

@@ -2,25 +2,18 @@ import {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
-import topics, { registerAllTopics } from "./topics";
 import cron from "node-cron";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
-import EffectConfig from "./effects/EffectConfig";
-import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
-import Fact from "./engine/Fact";
 import fs from "fs";
-import gsi = require("node-gsi");
-import GsiData from "./gsi/GsiData";
-import gsiParser from "./gsiParser";
 import http from "http";
 import log from "./log";
 import path = require("path");
 import persistence from "./persistence";
+import { registerAllTopics } from "./topics";
 import Rule from "./engine/Rule";
 import server from "./server";
-import Topic from "./engine/Topic";
 
 dotenv.config();
 
@@ -57,51 +50,6 @@ export function registerEverything() {
 }
 
 registerEverything();
-
-// GSI CODE - TODO move this to server.ts
-
-gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
-    // Check to see if we care about this auth token before sending info to the engine
-    // See if it matches topic.discordCoachMe and is not undefined
-    engine.setFact(
-        data.auth,
-        new Fact(
-            topics.allData,
-            new GsiData({
-                events: data.state.events,
-                hero: data.state.hero,
-                items: data.state.items,
-                map: data.state.map,
-                player: data.state.player,
-                provider: data.state.provider,
-            })
-        )
-    );
-});
-
-// If we are looking at a replay or as an observer,
-// run all logic on the items of one of the players only (from 0-9)
-// needs to be 6 for mitmproxy die-respawn-dig_canna to run properly
-const playerId = 6;
-gsiParser.events.on(
-    gsi.Dota2Event.Dota2ObserverState,
-    (data: gsi.IDota2ObserverStateEvent) => {
-        engine.setFact(
-            data.auth,
-            new Fact(
-                topics.allData,
-                new GsiData({
-                    events: data.state.events,
-                    hero: data.state.hero?.at(playerId) || null,
-                    items: data.state.items?.at(playerId) || null,
-                    map: data.state.map,
-                    player: data.state.player?.at(playerId) || null,
-                    provider: data.state.provider,
-                })
-            )
-        );
-    }
-);
 
 // SERVER CODE
 
