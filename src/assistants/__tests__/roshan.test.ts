@@ -1,9 +1,10 @@
 import Event, { EventType } from "../../gsi-data-classes/Event";
 import Fact from "../../engine/Fact";
 import roshanRules from "../roshan";
+import rules from "../../rules";
 
 const params = {
-    Roshan: "PUBLIC",
+    [rules.assistant.roshan]: "PUBLIC",
     inGame: true,
     time: 100,
     daytime: true,

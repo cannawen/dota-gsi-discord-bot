@@ -6,7 +6,6 @@ import fs from "fs";
 import log from "./log";
 import path from "path";
 import Rule from "./engine/Rule";
-import Topic from "./engine/Topic";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
 
