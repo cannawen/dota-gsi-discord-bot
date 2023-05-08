@@ -1,0 +1,42 @@
+import ConfigInfo from "../ConfigInfo";
+import configurable from "../engine/rules/configurable";
+import EffectConfig from "../effects/EffectConfig";
+import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
+import PlayerItems from "../gsi-data-classes/PlayerItems";
+import Rule from "../engine/Rule";
+import rules from "../rules";
+import topicManager from "../engine/topicManager";
+import topics from "../topics";
+
+export const configInfo = new ConfigInfo(
+    rules.assistant.tp,
+    "TP Scroll",
+    "Reminds to buy a TP if you are missing one",
+    EffectConfig.NONE
+);
+
+const shouldBuyTeleportTopic = topicManager.createTopic<boolean>(
+    "shouldBuyTeleportTopic"
+);
+
+export default [
+    new Rule({
+        label: "should buy teleport",
+        trigger: [topics.items, topics.gold],
+        then: ([items, gold]) =>
+            new Fact(
+                shouldBuyTeleportTopic,
+                (items as PlayerItems).teleport === null && gold >= 100
+            ),
+    }),
+    configurable(
+        configInfo,
+        new Rule({
+            label: "remind you to buy a teleport scroll",
+            trigger: [shouldBuyTeleportTopic],
+            when: ([shouldBuy]) => shouldBuy,
+            then: () => new Fact(topics.configurableEffect, "Buy a T P"),
+        })
+    ),
+].map(inGame);

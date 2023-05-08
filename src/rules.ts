@@ -21,6 +21,7 @@ const assistant = {
     runeWisdom: "assistant-rune-wisdom",
     shard: "assistant-shard",
     tormenter: "assistant-tormenter",
+    tp: "assistant-tp",
     wards: "assistant-wards",
 };
 
