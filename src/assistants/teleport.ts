@@ -13,7 +13,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.tp,
     "TP Scroll",
     "Reminds to buy a TP if you are missing one",
-    EffectConfig.NONE
+    EffectConfig.PRIVATE
 );
 
 const shouldBuyTeleportTopic = topicManager.createTopic<boolean>(
@@ -22,7 +22,7 @@ const shouldBuyTeleportTopic = topicManager.createTopic<boolean>(
 
 export default [
     new Rule({
-        label: "should buy teleport",
+        label: "should buy teleport when you don't have one but you have enough gold",
         trigger: [topics.items, topics.gold],
         then: ([items, gold]) =>
             new Fact(
@@ -36,7 +36,7 @@ export default [
             label: "remind you to buy a teleport scroll",
             trigger: [shouldBuyTeleportTopic],
             when: ([shouldBuy]) => shouldBuy,
-            then: () => new Fact(topics.configurableEffect, "Buy a T P"),
+            then: () => new Fact(topics.configurableEffect, "Buy a TP"),
         })
     ),
 ].map(inGame);
