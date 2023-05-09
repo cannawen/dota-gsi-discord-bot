@@ -2,7 +2,7 @@
 
 -   Deployed daily at 7am UTC via Github Action
 
-## Good fly commands
+## Useful fly commands
 
 -   `fly deploy`
 -   `fly apps restart dota-coach`
