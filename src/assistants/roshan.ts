@@ -149,37 +149,29 @@ export default [
             new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
     }),
     new Rule({
-        label: "set the aegis expiry time",
+        label: "set aegis expiry, minimum, and maximum rosh respawn times",
         trigger: [lastRoshDeathTimeTopic],
-        then: ([deathTime]) =>
-            new Fact(
-                topics.roshanAegisExpiryTime,
-                roshHelper.aegisExpiryTime(deathTime)
-            ),
-    }),
-    new Rule({
-        label: "set time minimum rosh respawn",
-        trigger: [lastRoshDeathTimeTopic],
-        then: ([deathTime]) =>
+        then: ([deathTime]) => [
             new Fact(
                 topics.roshanMaybeAliveTime,
                 roshHelper.minimuSpawnTime(deathTime)
             ),
-    }),
-    new Rule({
-        label: "set time minimum rosh respawn",
-        trigger: [lastRoshDeathTimeTopic],
-        then: ([deathTime]) =>
+            new Fact(
+                topics.roshanAegisExpiryTime,
+                roshHelper.aegisExpiryTime(deathTime)
+            ),
             new Fact(
                 topics.roshanAliveTime,
                 roshHelper.maximumSpawnTime(deathTime)
             ),
+        ],
     }),
 
     new Rule({
         label: "current roshan status",
-        trigger: [topics.inGame, topics.time, lastRoshDeathTimeTopic],
-        then: ([inGame, time, deathTime]) =>
+        trigger: [topics.inGame, topics.time],
+        given: [lastRoshDeathTimeTopic],
+        then: ([inGame, time], [deathTime]) =>
             new Fact(
                 topics.roshanStatus,
                 roshHelper.getStatus(inGame, time, deathTime)
