@@ -81,7 +81,6 @@ function transcribe(
                 duration: 300,
             },
         });
-        source.setMaxListeners(20);
         setTimeout(() => {
             source.destroy(
                 new Error(`${userId.substring(0, 10)} talking for too long`)
