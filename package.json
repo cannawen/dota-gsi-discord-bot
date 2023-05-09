@@ -1,7 +1,7 @@
 {
     "name": "dota-discord-bot",
-    "version": "1.0.0",
-    "description": "",
+    "version": "0.1.0",
+    "description": "A Dota Coaching bot that uses Dota's Gamestate Integration and Discord to help improve your gameplay",
     "main": "index.js",
     "scripts": {
         "build": "npm run clean && tsc -p tsconfig.build.json",
@@ -24,8 +24,8 @@
         "rune-wrath": "mitmdump -nC mitmproxy-flows/water-rune_wrath",
         "rune-wrath-remote": "mitmdump -M \"|~all|http://localhost:9001/gsi|http://dota-coach.fly.dev/gsi\" -nC mitmproxy-flows/water-rune_wrath"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "Canna Wen",
+    "license": "MIT",
     "dependencies": {
         "@colors/colors": "^1.5.0",
         "@discordjs/opus": "^0.9.0",
