@@ -20,7 +20,7 @@ function maximumSpawnTime(deathTime: number) {
     return deathTime + MAXIMUM_SPAWN_TIME;
 }
 
-function roshHasDiedBeforeStatus(currentTime: number, deathTime: number) {
+function roshanStatusGivenTime(currentTime: number, deathTime: number) {
     if (currentTime < minimuSpawnTime(deathTime)) {
         return Status.DEAD;
     } else if (currentTime < maximumSpawnTime(deathTime)) {
@@ -39,7 +39,7 @@ function getStatus(
         if (deathTime === undefined) {
             return Status.ALIVE;
         } else {
-            return roshHasDiedBeforeStatus(currentTime, deathTime);
+            return roshanStatusGivenTime(currentTime, deathTime);
         }
     } else {
         return Status.NOT_IN_A_GAME;

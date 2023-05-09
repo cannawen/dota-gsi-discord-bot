@@ -86,7 +86,7 @@ const aliveMessageRules = [
 ];
 
 /**
- * Sets roshanStatusMessageTopic based on if rosh is dead or alive (
+ * Sets roshanStatus based on if rosh is dead or alive (
  */
 const statusMessageRules = [
     ...aliveMessageRules,
