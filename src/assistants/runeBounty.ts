@@ -23,7 +23,7 @@ export default [
         then: () =>
             new Fact(
                 topics.configurableEffect,
-                "resources/audio/rune-bounty.wav"
+                "resources/audio/rune-bounty.mp3"
             ),
     }),
 ]

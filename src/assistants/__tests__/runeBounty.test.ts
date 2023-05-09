@@ -41,7 +41,7 @@ describe("bounty runes, in game", () => {
                 initial
             );
             expect(results).toContainAudioEffect(
-                "resources/audio/rune-bounty.wav"
+                "resources/audio/rune-bounty.mp3"
             );
         });
         test("60 min", () => {
@@ -54,7 +54,7 @@ describe("bounty runes, in game", () => {
                 initial
             );
             expect(results).toContainAudioEffect(
-                "resources/audio/rune-bounty.wav"
+                "resources/audio/rune-bounty.mp3"
             );
         });
     });

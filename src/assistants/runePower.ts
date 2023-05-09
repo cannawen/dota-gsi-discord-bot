@@ -24,7 +24,7 @@ export default [
         then: () =>
             new Fact(
                 topics.configurableEffect,
-                "resources/audio/rune-power.wav"
+                "resources/audio/rune-power.mp3"
             ),
     }),
 ]

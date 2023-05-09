@@ -22,7 +22,7 @@ describe("power runes, in game", () => {
                 time: 6 * 60,
             });
             expect(results).toContainAudioEffect(
-                "resources/audio/rune-power.wav"
+                "resources/audio/rune-power.mp3"
             );
         });
     });
@@ -33,7 +33,7 @@ describe("power runes, in game", () => {
                 time: 60 * 60,
             });
             expect(results).toContainAudioEffect(
-                "resources/audio/rune-power.wav"
+                "resources/audio/rune-power.mp3"
             );
         });
     });
