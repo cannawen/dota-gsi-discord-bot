@@ -17,8 +17,8 @@ const configToEffectTopic = {
  *
  * On returning facts, replaces `topics.configurableEffect` fact with effect specified by `configTopic`
  */
-export default function configurable(configInfo: ConfigInfo, rule: Rule) {
-    const configTopic = topicManager.findTopic(configInfo.ruleIndentifier);
+export default function configurable(configTopicString: string, rule: Rule) {
+    const configTopic = topicManager.findTopic(configTopicString);
     return new Rule({
         label: rule.label,
         trigger: rule.trigger,

@@ -40,7 +40,7 @@ function whatShouldIBuy(message: string) {
 }
 
 export default configurable(
-    configInfo,
+    configInfo.ruleIndentifier,
     new Rule({
         label: rules.assistant.glhf,
         trigger: [topics.lastDiscordUtterance],

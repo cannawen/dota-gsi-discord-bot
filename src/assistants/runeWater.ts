@@ -18,7 +18,7 @@ export default [2, 4].map((time) =>
     atMinute(
         time,
         configurable(
-            configInfo,
+            configInfo.ruleIndentifier,
             new Rule({
                 label: rules.assistant.runeWater,
                 then: () =>

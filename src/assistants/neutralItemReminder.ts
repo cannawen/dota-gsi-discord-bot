@@ -27,7 +27,7 @@ export default betweenSeconds(
     NEUTRAL_ITEM_REMINDER_START_TIME,
     undefined,
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: rules.assistant.neutralItemReminder,
             trigger: [topics.items, topics.time],

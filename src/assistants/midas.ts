@@ -72,5 +72,5 @@ export default [
         ],
     }),
 ]
-    .map((rule) => configurable(configInfo, rule))
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map(inGame);

@@ -39,7 +39,7 @@ const lastWardCountTopic = topicManager.createTopic<number>(
  */
 export default inGame(
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: rules.assistant.wards,
             trigger: [topics.time, topics.items],

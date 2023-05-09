@@ -28,7 +28,7 @@ export default [
             ),
     }),
 ]
-    .map((rule) => configurable(configInfo, rule))
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
         everyIntervalSeconds(6 * 60, undefined, POWER_RUNE_SPAWN_INTERVAL, rule)
     )

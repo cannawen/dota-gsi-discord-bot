@@ -77,4 +77,4 @@ export default [
     }),
 ]
     .map(inGame)
-    .map((rule) => configurable(configInfo, rule));
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));

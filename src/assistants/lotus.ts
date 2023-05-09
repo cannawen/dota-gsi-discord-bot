@@ -27,7 +27,7 @@ export default [
             ),
     }),
 ]
-    .map((rule) => configurable(configInfo, rule))
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
         everyIntervalSeconds(3 * 60 - 15, 12 * 60, LOTUS_SPAWN_INTERVAL, rule)
     );

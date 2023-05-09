@@ -32,7 +32,7 @@ export default [
         })
     ),
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: "warn if you have buyback cooldown available but do not have buyback due to gold",
             trigger: [hasGoldForBuybackTopic, topics.buybackCooldown],

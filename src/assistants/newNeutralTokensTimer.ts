@@ -19,7 +19,7 @@ export default helper.tierTimeInfo.map((time) =>
     atMinute(
         time,
         configurable(
-            configInfo,
+            configInfo.ruleIndentifier,
             new Rule({
                 label: rules.assistant.newNeutralTokens,
                 then: () =>

@@ -1,4 +1,3 @@
-import ConfigInfo from "../../../ConfigInfo";
 import configurable from "../configurable";
 import EffectConfig from "../../../effects/EffectConfig";
 import Fact from "../../Fact";
@@ -7,12 +6,7 @@ import topicManager from "../../topicManager";
 import topics from "../../../topics";
 
 const rule = configurable(
-    new ConfigInfo(
-        "ruleId",
-        "Rule Name",
-        "Rule description",
-        EffectConfig.NONE
-    ),
+    "ruleId",
     new Rule({
         label: "test",
         trigger: [topicManager.createConfigTopic("ruleId")],

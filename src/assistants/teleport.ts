@@ -31,7 +31,7 @@ export default [
             ),
     }),
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: "remind you to buy a teleport scroll",
             trigger: [shouldBuyTeleportTopic],

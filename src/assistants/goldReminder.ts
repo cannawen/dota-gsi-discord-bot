@@ -143,7 +143,7 @@ export default [
     }),
     // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: "if we have passed a warning threshold, warn user and update our gold topic",
             trigger: [discretionaryGoldTopic, audioToPlayTopic],

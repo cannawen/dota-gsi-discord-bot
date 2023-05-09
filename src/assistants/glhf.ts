@@ -14,7 +14,7 @@ export const configInfo = new ConfigInfo(
 );
 
 export default configurable(
-    configInfo,
+    configInfo.ruleIndentifier,
     new Rule({
         label: rules.assistant.glhf,
         trigger: [topics.inGame],

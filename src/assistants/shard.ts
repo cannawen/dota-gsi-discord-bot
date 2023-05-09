@@ -17,7 +17,7 @@ export const configInfo = new ConfigInfo(
 export default atMinute(
     15,
     configurable(
-        configInfo,
+        configInfo.ruleIndentifier,
         new Rule({
             label: rules.assistant.shard,
             then: () =>
