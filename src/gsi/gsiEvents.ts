@@ -24,6 +24,7 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
         false
     );
 
+// TODO refactor topics.events to be single instead of array
 export default new Rule({
     label: rules.gsi.events.new,
     trigger: [topics.allData],

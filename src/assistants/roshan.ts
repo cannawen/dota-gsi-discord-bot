@@ -50,7 +50,7 @@ function isRoshStatusRequest(message: string) {
 
 /**
  * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
- * Defaults to he has not been killed yet
+ * Defaults to he has is alive
  */
 const aliveMessageRules = [
     new Rule({
