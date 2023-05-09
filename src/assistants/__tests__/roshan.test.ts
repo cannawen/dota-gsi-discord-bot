@@ -36,9 +36,7 @@ describe("roshan", () => {
                 ...params,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainAudioEffect(
-                "Roshan has not been killed yet"
-            );
+            expect(results).toContainAudioEffect("Roshan is alive");
         });
         describe("roshan killed", () => {
             let roshKilledState: Fact<unknown>[];

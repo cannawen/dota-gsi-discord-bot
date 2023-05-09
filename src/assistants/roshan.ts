@@ -38,7 +38,7 @@ const roshanAliveMessageTopic = topicManager.createTopic<string>(
 );
 const roshanStatusMessageTopic = topicManager.createTopic<string>(
     "roshanStatusMessageTopic",
-    { defaultValue: "Roshan has not been killed yet" }
+    { defaultValue: "Roshan is alive" }
 );
 
 function isRoshStatusRequest(message: string) {
