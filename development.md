@@ -61,7 +61,6 @@ Goal: to develop the app without having dota open
 -   add new gsi configuration to point to mitmproxy at "http://localhost:8080/gsi" (instead of port 9001)
 -   run mitmproxy (instructions below)
 -   mitmproxy will capture all network calls from gsi and pass it through to our app, and we can save the network calls to replay in the future.
--   You may need to change the token stored in the files to have it send to your discord user
 
 ### run proxy behind the scenes
 
@@ -79,7 +78,8 @@ Goal: to develop the app without having dota open
 ### replay some file
 
 `mitmdump -nC flow_file`  
-see `mitmproxy-flows` folders for currently saved flows
+see [mitmproxy-flows](/mitmproxy-flows) for currently saved flows. You will need to change the auth token stored in the flow files to have associated with your discord user
+
 
 ### replay some file and redirect to a different host
 
