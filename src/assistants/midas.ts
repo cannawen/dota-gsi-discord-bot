@@ -17,13 +17,13 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
+const REMINDER_INTERVAL = 15;
+
 const lastReminderTimeTopic = topicManager.createTopic<number>(
     "lastMidasReminderTimeTopic"
 );
 const canCastMidasTopic =
     topicManager.createTopic<boolean>("canCastMidasTopic");
-
-const REMINDER_INTERVAL = 15;
 
 function getMidas(items: PlayerItems): Item | undefined {
     return [...items.inventory, ...items.backpack]

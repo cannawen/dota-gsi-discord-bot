@@ -7,14 +7,16 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-const LOTUS_SPAWN_INTERVAL = 3 * 60;
-
 export const configInfo = new ConfigInfo(
     rules.assistant.lotus,
     "Healing lotus",
     "Reminds you of lotus every 3:00 before 12:00",
     EffectConfig.PUBLIC
 );
+
+const LOTUS_SPAWN_INTERVAL = 3 * 60;
+const LOTUS_START_WARNING_TIME = 3 * 60 - 15;
+const LOTUS_STOP_WARNING_TIME = 12 * 60;
 
 export default [
     new Rule({
@@ -29,5 +31,10 @@ export default [
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
-        everyIntervalSeconds(3 * 60 - 15, 12 * 60, LOTUS_SPAWN_INTERVAL, rule)
+        everyIntervalSeconds(
+            LOTUS_START_WARNING_TIME,
+            LOTUS_STOP_WARNING_TIME,
+            LOTUS_SPAWN_INTERVAL,
+            rule
+        )
     );

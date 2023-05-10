@@ -15,7 +15,8 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-const WISDOM_RUNE_SAPWN_INTERVAL = 7 * 60;
+const WISDOM_RUNE_SPAWN_INTERVAL = 7 * 60;
+const WISDOM_RUNE_START_WARNING_TIME = WISDOM_RUNE_SPAWN_INTERVAL - 30;
 
 export default [
     new Rule({
@@ -31,9 +32,9 @@ export default [
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
         everyIntervalSeconds(
-            6 * 60 + 30,
+            WISDOM_RUNE_START_WARNING_TIME,
             undefined,
-            WISDOM_RUNE_SAPWN_INTERVAL,
+            WISDOM_RUNE_SPAWN_INTERVAL,
             rule
         )
     )

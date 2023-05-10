@@ -14,8 +14,10 @@ export const configInfo = new ConfigInfo(
     EffectConfig.NONE
 );
 
+const SHARD_SPAWN_MINUTE = 15;
+
 export default atMinute(
-    15,
+    SHARD_SPAWN_MINUTE,
     configurable(
         configInfo.ruleIndentifier,
         new Rule({

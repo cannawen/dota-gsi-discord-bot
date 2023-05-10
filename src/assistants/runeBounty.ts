@@ -8,14 +8,15 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
-
 export const configInfo = new ConfigInfo(
     rules.assistant.runeBounty,
     "Bounty rune",
     "Reminds you of bounty rune spawn every 3:00",
     EffectConfig.NONE
 );
+
+const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
+const BOUNTY_RUNE_START_REMINDING_TIME = BOUNTY_RUNE_SPAWN_INTERVAL;
 
 export default [
     new Rule({
@@ -30,7 +31,7 @@ export default [
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
         everyIntervalSeconds(
-            3 * 60,
+            BOUNTY_RUNE_START_REMINDING_TIME,
             undefined,
             BOUNTY_RUNE_SPAWN_INTERVAL,
             rule

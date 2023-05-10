@@ -16,6 +16,9 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
+const GOLD_REMINDER_INCREMENT_CHANGE_TIME = 10 * 60;
+const GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME = 30 * 60;
+
 /**
  * When the user interacts with gold by
  * 1) Spending it, or
@@ -34,8 +37,8 @@ const remindGoldIncrementTopic = topicManager.createTopic<number>(
     "remindGoldIncrementTopic"
 );
 /**
- * How much discretionary gold does is the user holding onto?
- * (Buyback cost is non-discretionary after 30:00)
+ * How much discretionary gold is the user holding onto?
+ * (Buyback cost is considered non-discretionary after 30:00)
  */
 const discretionaryGoldTopic = topicManager.createTopic<number>(
     "discretionaryGoldTopic"
@@ -53,14 +56,14 @@ export default [
     // Store reminder increment
     betweenSeconds(
         0,
-        10 * 60,
+        GOLD_REMINDER_INCREMENT_CHANGE_TIME,
         new Rule({
             label: "when time is before 10:00, set reminder increment to 500 gold",
             then: () => new Fact(remindGoldIncrementTopic, 500),
         })
     ),
     betweenSeconds(
-        10 * 60,
+        GOLD_REMINDER_INCREMENT_CHANGE_TIME,
         undefined,
         new Rule({
             label: "when time is after 10:00, set reminder increment to 1000 gold",
@@ -70,7 +73,7 @@ export default [
     // Store excess gold
     betweenSeconds(
         0,
-        30 * 60,
+        GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME,
         new Rule({
             label: "when time is before 30:00, you can spend all your gold",
             trigger: [topics.gold],
@@ -78,7 +81,7 @@ export default [
         })
     ),
     betweenSeconds(
-        30 * 60,
+        GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME,
         undefined,
         new Rule({
             label: "when time is after 30:00, and you do not have buyback, you can spend all your gold",
@@ -88,7 +91,7 @@ export default [
         })
     ),
     betweenSeconds(
-        30 * 60,
+        GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME,
         undefined,
         new Rule({
             label: "when time is after 30:00, and you have buyback cooldown available, you can spend your gold above buyback",
@@ -131,9 +134,8 @@ export default [
                 "you have an insane amount of gold. please stop what you are doing and spend it now"
             ),
     }),
-    // After we spend gold past a multiplier threshold, save the new gold amount as our new baseline to check against
     new Rule({
-        label: "if we have spent gold, update our gold topic",
+        label: "after we spend gold past a multiplier threshold, save the new gold amount as our new baseline to check against",
         trigger: [discretionaryGoldTopic],
         given: [lastRemindedGoldTopic, remindGoldIncrementTopic],
         when: ([discretionaryGold], [lastRemindedGold, increment]) =>
@@ -141,11 +143,10 @@ export default [
             multiplier(discretionaryGold, increment),
         then: ([gold]) => new Fact(lastRemindedGoldTopic, gold),
     }),
-    // If we increase gold past a multiplier threshold, save the gold amount and warn the user
     configurable(
         configInfo.ruleIndentifier,
         new Rule({
-            label: "if we have passed a warning threshold, warn user and update our gold topic",
+            label: "If we increase gold past a multiplier threshold, save the gold amount and warn the user",
             trigger: [discretionaryGoldTopic, audioToPlayTopic],
             given: [lastRemindedGoldTopic, remindGoldIncrementTopic],
             when: ([discretionaryGold], [lastRemindedGold, increment]) =>

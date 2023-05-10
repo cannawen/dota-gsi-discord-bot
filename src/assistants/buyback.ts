@@ -16,13 +16,15 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
+const BUYBACK_RULE_START_TIME = 30 * 60;
+
 const hasGoldForBuybackTopic = topicManager.createTopic<boolean>(
     "hasGoldForBuybackTopic"
 );
 
 export default [
     betweenSeconds(
-        30 * 60,
+        BUYBACK_RULE_START_TIME,
         undefined,
         new Rule({
             label: "check to see if you have gold for buyback",

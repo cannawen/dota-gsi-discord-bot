@@ -8,14 +8,15 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-const POWER_RUNE_SPAWN_INTERVAL = 2 * 60;
-
 export const configInfo = new ConfigInfo(
     rules.assistant.runePower,
     "Power rune",
     "Reminds you of power rune spawn every 2:00 after 6:00",
     EffectConfig.NONE
 );
+
+const POWER_RUNE_SPAWN_INTERVAL = 2 * 60;
+const POWER_RUNE_START_REMINDER_TIME = 6 * 60;
 
 export default [
     new Rule({
@@ -30,6 +31,11 @@ export default [
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map((rule) =>
-        everyIntervalSeconds(6 * 60, undefined, POWER_RUNE_SPAWN_INTERVAL, rule)
+        everyIntervalSeconds(
+            POWER_RUNE_START_REMINDER_TIME,
+            undefined,
+            POWER_RUNE_SPAWN_INTERVAL,
+            rule
+        )
     )
     .map(inGame);
