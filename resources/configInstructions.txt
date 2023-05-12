@@ -12,14 +12,19 @@ See SERVER_URL/instructions for how to set up the bot, using the configuration f
     {
         "abilities" "1"
         "buildings" "1"
-        "draft" "1"
+        "couriers" "0"
+        "draft" "0"
         "events" "1"
         "hero" "1"
         "items" "1"
+        "league" "0"
         "map" "1"
+        "minimap" "0"
+        "neutralitems" "0"
         "player" "1"
         "provider" "1"
-        "wearables" "1"
+        "roshan" "0"
+        "wearables" "0"
     }
     "auth"
     {
