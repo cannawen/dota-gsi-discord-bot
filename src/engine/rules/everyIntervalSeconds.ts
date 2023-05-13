@@ -16,7 +16,8 @@ export default function everyIntervalSeconds(
     rule: Rule
 ) {
     const reminderTopic = topicManager.createTopic<number>(
-        `${rule.label}ReminderTopic`
+        `${rule.label}ReminderTopic`,
+        { defaultValue: 0 }
     );
     return betweenSeconds(
         startTime,
@@ -28,22 +29,23 @@ export default function everyIntervalSeconds(
             when: (trigger, given) => {
                 const time = trigger.shift();
                 const inGame = trigger.shift();
-                const reminder = given.shift();
-                // This line is a bit fragile, especially for testing.
-                // time - reminder must be EXACTLY equal to interval, and if it is over, it all breaks.
-                // Is this preferable to >= interval; and having the time slowly drift away?
-                // Should we refactor this so there is a properly defined start and end time with interval?
-                const isReminderTime =
-                    reminder === undefined || time - reminder === interval;
+                const numberOfTimesReminded = given.shift();
+
+                // If we somehow skip time, this rule will now "catch up" to speak all the missed events
+                // Would be annoying if you jump around in a replay, but that's not really supported
+                const lastRemindedTime =
+                    interval * numberOfTimesReminded + (startTime || 0);
+                const isReminderTime = time >= lastRemindedTime;
+
                 return inGame && isReminderTime && rule.when(trigger, given);
             },
             then: (trigger, given) => {
-                const time = trigger.shift();
                 trigger.shift();
-                given.shift();
+                trigger.shift();
+                const numberOfTimesReminded = given.shift();
                 return [
                     ...rule.thenArray(trigger, given),
-                    new Fact(reminderTopic, time),
+                    new Fact(reminderTopic, numberOfTimesReminded + 1),
                 ];
             },
         })
