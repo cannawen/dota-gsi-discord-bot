@@ -15,8 +15,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install 
-RUN npm update
+RUN npm ci 
 RUN npm run build
 
 FROM debian:bullseye-slim
