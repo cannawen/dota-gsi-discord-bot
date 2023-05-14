@@ -28,9 +28,7 @@ const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
 const allCommands = [
     new SlashCommandBuilder()
         .setName(SlashCommandName.config)
-        .setDescription(
-            "Replies with your Dota 2 Game State Integration configuration file"
-        ),
+        .setDescription("Configuration instructions"),
     new SlashCommandBuilder()
         .setName(SlashCommandName.coachme)
         .setDescription("Start coaching me"),
@@ -39,7 +37,7 @@ const allCommands = [
         .setDescription("Stop coaching me"),
     new SlashCommandBuilder()
         .setName(SlashCommandName.help)
-        .setDescription("Help!"),
+        .setDescription("Bot version and link to user support community"),
 ];
 
 // and deploy your commands!
