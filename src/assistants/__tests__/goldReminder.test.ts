@@ -194,9 +194,7 @@ describe("gold reminder", () => {
                         ...params,
                         gold: 1500,
                     });
-                    expect(results).toContainAudioEffect(
-                        "resources/audio/gold.mp3"
-                    );
+                    expect(results).toContainAudioEffect("spend gold");
                 });
             });
             describe("2500 gold over", () => {

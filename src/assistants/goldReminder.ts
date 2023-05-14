@@ -110,7 +110,7 @@ export default [
         label: "when you have 1500 gold or less, use mild reminder",
         trigger: [discretionaryGoldTopic],
         when: ([gold]) => gold <= 1500,
-        then: () => new Fact(audioToPlayTopic, "resources/audio/gold.mp3"),
+        then: () => new Fact(audioToPlayTopic, "spend gold"),
     }),
     new Rule({
         label: "when you have 1501-2500 gold, use tts reminder",
