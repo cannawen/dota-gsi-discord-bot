@@ -10,6 +10,7 @@ import rules from "../rules";
 import timeHelper from "./helpers/timeFormatting";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
+import log from "../log";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.roshan,
@@ -42,10 +43,13 @@ const roshanStatusMessageTopic = topicManager.createTopic<string>(
 );
 
 function isRoshStatusRequest(message: string) {
-    return (
+    const isAskingAboutRoshan =
         message.match(/^(what).{1,15}(status|timer?)$/i) !== null &&
-        message.match(/torment/) === null
-    );
+        message.match(/torment/) === null;
+    if (isAskingAboutRoshan) {
+        log.info("app", "Rosh message: %s", message);
+    }
+    return isAskingAboutRoshan;
 }
 
 /**
