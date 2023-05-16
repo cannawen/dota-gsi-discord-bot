@@ -17,10 +17,6 @@ import server from "./server";
 
 dotenv.config();
 
-// DEBUGGING MaxListenersExceededWarning
-
-process.on("warning", (e) => console.warn(e.stack));
-
 // RULE REGISTRATION CODE
 
 function registerRulesInDirectory(directory: string) {
