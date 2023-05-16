@@ -25,6 +25,7 @@ describe("handleSlashCommands", () => {
             channel: {
                 isVoiceBased: () => true,
             },
+            member: { voice: { channelId: "channelId" } },
             guildId: "guildId",
             user: { id: "userId" },
             reply: mockReply,
@@ -102,10 +103,10 @@ describe("handleSlashCommands", () => {
                 (engine.getSession as jest.Mock).mockReturnValue(jest.fn());
                 handle.coachMe(interaction);
             });
-            test("replies with error ephemerally", () => {
+            test("replies with warning ephemerally", () => {
                 expect(mockReply).toHaveBeenCalledWith({
                     content: expect.stringContaining(
-                        "You already have a coaching session"
+                        "WARNING: You will not be receiving public discord announcements"
                     ),
                     ephemeral: true,
                 });

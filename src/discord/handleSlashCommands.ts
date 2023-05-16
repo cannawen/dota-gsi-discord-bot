@@ -1,4 +1,8 @@
-import { CacheType, ChatInputCommandInteraction } from "discord.js";
+import {
+    CacheType,
+    ChatInputCommandInteraction,
+    GuildMember,
+} from "discord.js";
 import engine from "../customEngine";
 import fs from "fs";
 import helpers from "./discordHelpers";
@@ -37,33 +41,23 @@ function config(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
+    const guildId = interaction.guildId;
+    const channelId = (interaction.member as GuildMember | null)?.voice
+        .channelId;
+
     const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
         interaction
     )}/`;
-    if (engine.getSession(studentId(interaction))) {
-        interaction.reply({
-            content: `You already have a coaching session at ${privateUrl}. Use /stop to end your current session before starting a new one`,
-            ephemeral: true,
-        });
-        return;
-    }
     let message = `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`;
     if (
-        interaction.channel?.isVoiceBased() &&
-        interaction.guildId &&
-        helpers.numberOfPeopleConnected(
-            interaction.guildId,
-            interaction.channelId
-        ) === 0
+        guildId &&
+        channelId &&
+        helpers.numberOfPeopleConnected(guildId, channelId) === 0
     ) {
-        engine.startCoachingSession(
-            studentId(interaction),
-            interaction.guildId,
-            interaction.channelId
-        );
+        engine.startCoachingSession(studentId(interaction), guildId, channelId);
     } else {
         engine.startCoachingSession(studentId(interaction));
-        message = `${message}\n\nWARNING: You will not be receiving public discord announcements because you did not start the coaching session in a voice based guild channel. Please type /coachme in a voice channel chat if you wish to recieve public discord announcements`;
+        message = `${message}\n\nWARNING: You will not be receiving public discord announcements`;
     }
     interaction.reply({
         content: message,
