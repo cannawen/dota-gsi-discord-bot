@@ -24,11 +24,10 @@ export default function everyIntervalSeconds(
         endTime,
         new Rule({
             label: rule.label,
-            trigger: [topics.time, topics.inGame, ...rule.trigger],
+            trigger: [topics.time, ...rule.trigger],
             given: [reminderTopic, ...rule.given],
             when: (trigger, given) => {
                 const time = trigger.shift();
-                const inGame = trigger.shift();
                 const numberOfTimesReminded = given.shift();
 
                 // If we somehow skip time, this rule will now "catch up" to speak all the missed events
@@ -37,10 +36,9 @@ export default function everyIntervalSeconds(
                     interval * numberOfTimesReminded + (startTime || 0);
                 const isReminderTime = time >= lastRemindedTime;
 
-                return inGame && isReminderTime && rule.when(trigger, given);
+                return isReminderTime && rule.when(trigger, given);
             },
             then: (trigger, given) => {
-                trigger.shift();
                 trigger.shift();
                 const numberOfTimesReminded = given.shift();
                 return [
