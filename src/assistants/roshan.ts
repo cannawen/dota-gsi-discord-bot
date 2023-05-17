@@ -160,12 +160,12 @@ export default [
         trigger: [lastRoshDeathTimeTopic],
         then: ([deathTime]) => [
             new Fact(
-                topics.roshanMaybeAliveTime,
-                roshHelper.minimuSpawnTime(deathTime)
-            ),
-            new Fact(
                 topics.roshanAegisExpiryTime,
                 roshHelper.aegisExpiryTime(deathTime)
+            ),
+            new Fact(
+                topics.roshanMaybeAliveTime,
+                roshHelper.minimuSpawnTime(deathTime)
             ),
             new Fact(
                 topics.roshanAliveTime,
