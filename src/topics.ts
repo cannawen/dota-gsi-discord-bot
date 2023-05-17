@@ -13,9 +13,8 @@ import Voice from "@discordjs/voice";
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
 
-    // TODO refactor events to pass events singly through the engine instead of in an array
     // events
-    events: new Topic<DeepReadonly<Event[]>>("events", []),
+    event: new Topic<DeepReadonly<Event>>("event"),
     // hero
     alive: new Topic<boolean>("alive"),
     buybackCost: new Topic<number>("buybackCost"),

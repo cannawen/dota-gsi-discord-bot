@@ -137,14 +137,9 @@ export default [
     ...statusMessageRules,
     new Rule({
         label: "when we get an event that says rosh is killed, add time to allRoshanDeathTimesTopic array",
-        trigger: [topics.events],
+        trigger: [topics.event],
         given: [topics.time, allRoshanDeathTimesTopic],
-        when: ([events]) =>
-            events.reduce(
-                (memo: boolean, event: Event) =>
-                    event.type === EventType.RoshanKilled || memo,
-                false
-            ),
+        when: ([event]) => event.type === EventType.RoshanKilled,
         then: (_, [time, deathTimes]) =>
             new Fact(allRoshanDeathTimesTopic, [...deathTimes, time]),
     }),

@@ -8,7 +8,7 @@ const params = {
     inGame: true,
     time: 100,
     daytime: true,
-    events: [],
+    event: undefined,
     lastDiscordUtterance: "",
 };
 
@@ -44,7 +44,7 @@ describe("roshan", () => {
             beforeEach(() => {
                 roshKilledState = getResults(roshanRules, {
                     ...params,
-                    events: [new Event(EventType.RoshanKilled, 200)],
+                    event: new Event(EventType.RoshanKilled, 200),
                 });
             });
 

@@ -250,7 +250,7 @@ function getResults(
 function removeEphemeralState(facts: Fact<unknown>[]): Fact<unknown>[] {
     return facts
         .filter((fact) => !isAudioEffect(fact.topic.label))
-        .filter((fact) => fact.topic.label !== "events");
+        .filter((fact) => fact.topic.label !== "event");
 }
 
 global.getResults = getResults;

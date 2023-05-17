@@ -24,7 +24,6 @@ const neverSeenBefore = (allEvents: Event[], newEvent: Event): boolean =>
         false
     );
 
-// TODO refactor topics.events to be single instead of array
 export default new Rule({
     label: rules.gsi.events.new,
     trigger: [topics.allData],
@@ -43,13 +42,16 @@ export default new Rule({
             // If there is a new event we have not seen before
             if (newEvents.length > 0) {
                 // Add it to allEventsTopic and return it as a new topics.event
+                const events = newEvents.map(
+                    (event) => new Fact(topics.event, event)
+                );
                 return [
                     new Fact(allEventsTopic, allEvents.concat(newEvents)),
-                    new Fact(topics.events, newEvents),
+                    ...events,
                 ];
             } else {
                 // Reset topics.event
-                return new Fact(topics.events, undefined);
+                return new Fact(topics.event, undefined);
             }
         }
     },
