@@ -5,12 +5,12 @@ import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
+import log from "../log";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import timeHelper from "./helpers/timeFormatting";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
-import log from "../log";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.roshan,
@@ -110,12 +110,15 @@ const statusMessageRules = [
     new Rule({
         label: "rosh may be alive",
         trigger: [topics.roshanStatus],
-        given: [topics.roshanAliveTime],
+        given: [topics.roshanAliveTime, topics.time],
         when: ([status]) => status === Status.MAYBE_ALIVE,
-        then: (_, [aliveTime]) =>
+        then: (_, [aliveTime, time]) =>
             new Fact(
                 roshanStatusMessageTopic,
-                `Roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
+                `${roshHelper.percentChanceRoshanIsAlive(
+                    time,
+                    aliveTime
+                )} percent chance roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
                     aliveTime
                 )}`
             ),

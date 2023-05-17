@@ -30,6 +30,19 @@ function roshanStatusGivenTime(currentTime: number, deathTime: number) {
     }
 }
 
+function percentChanceRoshanIsAlive(currentTime: number, deathTime: number) {
+    if (currentTime < minimuSpawnTime(deathTime)) {
+        return 0;
+    }
+    if (currentTime > maximumSpawnTime(deathTime)) {
+        return 100;
+    }
+    return Math.round(
+        (100 * (currentTime - deathTime)) /
+            (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
+    );
+}
+
 function getStatus(
     inGame: boolean,
     currentTime: number,
@@ -48,6 +61,7 @@ function getStatus(
 
 export default {
     getStatus,
+    percentChanceRoshanIsAlive,
     aegisExpiryTime,
     minimuSpawnTime,
     maximumSpawnTime,
