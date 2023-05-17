@@ -1,3 +1,4 @@
+import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
@@ -8,7 +9,6 @@ import Item from "../gsi-data-classes/Item";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -20,10 +20,6 @@ export const configInfo = new ConfigInfo(
 
 const VALID_NEUTRAL_ARRAY = [helper.trustyShovel, helper.pirateHat];
 const TIME_BETWEEN_REMINDERS = 15;
-
-const lastReminderTimeTopic = topicManager.createTopic<number>(
-    "lastNeutralItemDigReminderTimeTopic"
-);
 
 function validNeutralItem(item: Item | null): boolean {
     if (!item) {
@@ -49,32 +45,21 @@ function hasValidItem(items: PlayerItems) {
             .filter(canCast).length > 0
     );
 }
-
 export default [
     new Rule({
-        label: "reset reminder time",
+        label: rules.assistant.neutralItemDigReminder,
         trigger: [topics.alive, topics.items],
-        when: ([alive, items]) => !alive || !hasValidItem(items),
-        then: () => new Fact(lastReminderTimeTopic, undefined),
-    }),
-    new Rule({
-        label: "give user some grace time if we have never reminded before",
-        trigger: [topics.alive, topics.items, topics.time],
-        given: [lastReminderTimeTopic],
-        when: ([alive, items, _], [lastReminderTime]) =>
-            alive && hasValidItem(items) && lastReminderTime === undefined,
-        then: ([_alive, _items, time]) => new Fact(lastReminderTimeTopic, time),
-    }),
-    new Rule({
-        label: "remind user to dig and update last reminder time",
-        trigger: [topics.time, lastReminderTimeTopic],
-        when: ([time, lastReminderTime]) =>
-            time >= lastReminderTime + TIME_BETWEEN_REMINDERS,
-        then: ([time]) => [
-            new Fact(topics.configurableEffect, "dig"),
-            new Fact(lastReminderTimeTopic, time),
-        ],
+        then: () => new Fact(topics.configurableEffect, "dig"),
     }),
 ]
+    .map((rule) =>
+        conditionalEveryIntervalSeconds(
+            undefined,
+            undefined,
+            ([alive, items]) => hasValidItem(items) && alive,
+            TIME_BETWEEN_REMINDERS,
+            rule
+        )
+    )
     .map(inGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
