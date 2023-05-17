@@ -59,16 +59,33 @@ describe("gold reminder", () => {
                         expect(results).not.toContainAudioEffect();
                     });
                     describe("has more than 1000 gold", () => {
-                        test("should remind player to spend gold", () => {
-                            const results = getResults(
-                                rule,
-                                {
-                                    ...params,
-                                    gold: 1000,
-                                },
-                                result500Gold
-                            );
-                            expect(results).toContainAudioEffect();
+                        describe("< 60 seconds after", () => {
+                            test("should remind player to spend gold", () => {
+                                const results = getResults(
+                                    rule,
+                                    {
+                                        ...params,
+                                        time: 10 * 60 - 1,
+                                        gold: 1000,
+                                    },
+                                    result500Gold
+                                );
+                                expect(results).not.toContainAudioEffect();
+                            });
+                        });
+                        describe("> 60 seconds", () => {
+                            test("should remind player to spend gold", () => {
+                                const results = getResults(
+                                    rule,
+                                    {
+                                        ...params,
+                                        time: 10 * 60 + 1,
+                                        gold: 1000,
+                                    },
+                                    result500Gold
+                                );
+                                expect(results).toContainAudioEffect();
+                            });
                         });
                     });
                 });

@@ -18,6 +18,7 @@ export const configInfo = new ConfigInfo(
 
 const GOLD_REMINDER_INCREMENT_CHANGE_TIME = 10 * 60;
 const GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME = 30 * 60;
+const MINIMUM_TIME_BETWEEN_REMINDERS = 60;
 
 /**
  * When the user interacts with gold by
@@ -27,6 +28,13 @@ const GOLD_REMINDER_CARE_ABOUT_BUYBACK_TIME = 30 * 60;
  */
 const lastRemindedGoldTopic = topicManager.createTopic<number>(
     "lastRemindedGoldTopic",
+    { defaultValue: 0 }
+);
+/**
+ * The time we last played audio
+ */
+const lastRemindedTimeTopic = topicManager.createTopic<number>(
+    "lastRemindedTimeTopic",
     { defaultValue: 0 }
 );
 /**
@@ -148,13 +156,23 @@ export default [
         new Rule({
             label: "If we increase gold past a multiplier threshold, save the gold amount and warn the user",
             trigger: [discretionaryGoldTopic, audioToPlayTopic],
-            given: [lastRemindedGoldTopic, remindGoldIncrementTopic],
-            when: ([discretionaryGold], [lastRemindedGold, increment]) =>
+            given: [
+                lastRemindedGoldTopic,
+                remindGoldIncrementTopic,
+                topics.time,
+                lastRemindedTimeTopic,
+            ],
+            when: (
+                [discretionaryGold],
+                [lastRemindedGold, increment, time, lastRemindedTime]
+            ) =>
                 multiplier(discretionaryGold, increment) >
-                multiplier(lastRemindedGold, increment),
-            then: ([gold, audioToPlay]) => [
+                    multiplier(lastRemindedGold, increment) &&
+                lastRemindedTime + MINIMUM_TIME_BETWEEN_REMINDERS < time,
+            then: ([gold, audioToPlay], [_lastGold, _lastIncrement, time]) => [
                 new Fact(topics.configurableEffect, audioToPlay),
                 new Fact(lastRemindedGoldTopic, gold),
+                new Fact(lastRemindedTimeTopic, time),
             ],
         })
     ),
