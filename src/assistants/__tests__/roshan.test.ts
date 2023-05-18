@@ -89,7 +89,7 @@ describe("roshan", () => {
                 );
                 expect(results).toContainAudioEffect(
                     expect.stringContaining(
-                        "percent chance roshan may be alive. Guaranteed respawn at"
+                        "67 percent chance roshan may be alive. Guaranteed respawn at"
                     )
                 );
             });

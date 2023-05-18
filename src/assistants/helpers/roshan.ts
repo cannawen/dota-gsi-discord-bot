@@ -54,7 +54,7 @@ function percentChanceRoshanIsAlive(currentTime: number, deathTime: number) {
         return 100;
     }
     return Math.round(
-        (100 * (currentTime - deathTime)) /
+        (100 * (currentTime - minimuSpawnTime(deathTime))) /
             (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
     );
 }
