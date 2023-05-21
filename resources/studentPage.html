@@ -170,9 +170,10 @@
             </div>
             <div>The bot was unable to make a connection with discord.</div>
             <div>
-                Did you start /coachme from a non-voice channel, or is there
-                another student in the same voice channel you are in? Currently,
-                only your private coaching audio will work
+                Did you start /coachme when you were not in a voice channel, or
+                is there another student using the bot in the same voice channel
+                you are in? Currently, only your private coaching audio will
+                work
             </div>
             <button onClick="makeAllEnabledPrivate()">
                 Make all enabled assistants play private audio
@@ -208,11 +209,11 @@
         />
         <br />
         <br />
-        <div><button onClick="skywrath()">Skywrath</button></div>
         <div id="config"></div>
         <br />
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
+        <div><button onClick="skywrath()">Skywrath</button></div>
         <br />
         <button
             onClick="stopCoaching()"
