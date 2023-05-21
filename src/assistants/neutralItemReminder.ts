@@ -11,12 +11,12 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.neutralItemReminder,
     "Neutral item reminder",
-    "Reminds you to pick up a neutral item (after 12:00)",
+    "Reminds you to pick up a neutral item (after 12:30) or to upgrade your neutral item if your current item is 2 tiers out of date",
     EffectConfig.PRIVATE
 );
 
 const TIME_BETWEEN_REMINDERS = 120;
-const NEUTRAL_ITEM_REMINDER_START_TIME = 10 * 60;
+const NEUTRAL_ITEM_REMINDER_START_TIME = 10 * 60 + 30;
 
 export default [
     new Rule({
