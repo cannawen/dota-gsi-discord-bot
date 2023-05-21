@@ -4,7 +4,7 @@ import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rule from "../neutralItemReminder";
 import rules from "../../rules";
 
-const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10;
+const NEUTRAL_ITEM_REMINDER_START_MINUTE = 10.5;
 
 const NO_ITEMS = new PlayerItems(
     [],
@@ -31,7 +31,7 @@ const params = {
 
 describe("neutralItemReminder", () => {
     describe("does not have neutral item", () => {
-        test("do not warn before 10 minutes", () => {
+        test("do not warn before 10:30", () => {
             const result = getResults(rule, {
                 ...params,
                 time: (NEUTRAL_ITEM_REMINDER_START_MINUTE - 1) * 60,
