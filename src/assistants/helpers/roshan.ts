@@ -1,3 +1,6 @@
+import log from "../../log";
+import timeFormatting from "./timeFormatting";
+
 export const enum Status {
     NOT_IN_A_GAME = "NOT_IN_A_GAME",
     ALIVE = "ALIVE",
@@ -47,6 +50,20 @@ function getStatus(
 }
 
 function percentChanceRoshanIsAlive(currentTime: number, deathTime: number) {
+    log.info(
+        "rosh",
+        "currentTime: %s, deathTime: %s, min: %s, max: %s, percent: %s",
+        timeFormatting.secondsToTimeString(currentTime),
+        timeFormatting.secondsToTimeString(deathTime),
+        timeFormatting.secondsToTimeString(minimuSpawnTime(deathTime)),
+        timeFormatting.secondsToTimeString(maximumSpawnTime(deathTime)),
+        timeFormatting.secondsToTimeString(
+            Math.round(
+                (100 * (currentTime - minimuSpawnTime(deathTime))) /
+                    (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
+            )
+        )
+    );
     if (currentTime < minimuSpawnTime(deathTime)) {
         return 0;
     }
