@@ -112,16 +112,15 @@ const statusMessageRules = [
         trigger: [topics.roshanStatus],
         given: [lastRoshDeathTimeTopic, topics.roshanAliveTime, topics.time],
         when: ([status]) => status === Status.MAYBE_ALIVE,
-        then: (_, [deathTime, aliveTime, time]) =>
-            new Fact(
+        then: (_, [deathTime, aliveTime, time]) => {
+            console.log(roshHelper.percentChanceRoshanIsAlive(time, deathTime));
+            return new Fact(
                 roshanStatusMessageTopic,
-                `${roshHelper.percentChanceRoshanIsAlive(
-                    time,
-                    deathTime
-                )} percent chance roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
+                `roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
                     aliveTime
                 )}`
-            ),
+            );
+        },
     }),
     new Rule({
         label: "roshan is alive",
