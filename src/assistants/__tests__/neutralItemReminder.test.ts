@@ -40,7 +40,7 @@ describe("neutralItemReminder", () => {
         });
 
         test("warn after 2 minutes grace", () => {
-            const state = getResults(rule, params, undefined, true);
+            const state = getResults(rule, params, undefined);
             const result = getResults(
                 rule,
                 {
