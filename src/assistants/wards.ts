@@ -13,7 +13,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.wards,
     "Wards",
     "Reminds you to buy wards if you have not done so recently",
-    EffectConfig.PRIVATE
+    EffectConfig.NONE
 );
 
 const WARD_RESTOCK_SECONDS = 135;
