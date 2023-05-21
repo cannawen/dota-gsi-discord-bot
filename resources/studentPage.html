@@ -110,10 +110,10 @@
                             return (
                                 memo +
                                 `<tr>
-                                    <td>${configInput[1]}</td>
+                                    <td style="white-space: nowrap">${configInput[1]}</td>
                                     <td>${configInput[2]}</td>
-                                    <td><button id="${configInput[0]}" onClick="makePublic(event)">Make public</button></td>
-                                    <td><button id="${configInput[0]}" onClick="makePrivate(event)">Make private</button></td>
+                                    <td><button id="${configInput[0]}" style="white-space: nowrap" onClick="makePublic(event)">Make public</button></td>
+                                    <td><button id="${configInput[0]}" style="white-space: nowrap" onClick="makePrivate(event)">Make private</button></td>
                                     <td><button id="${configInput[0]}" onClick="disable(event)">Disable</button></td>
                                     <td>${configInput[3]}</td>
                                 </tr>`
@@ -213,7 +213,7 @@
         <br />
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
-        <div><button onClick="skywrath()">Skywrath</button></div>
+        <button onClick="skywrath()">Skywrath</button>
         <br />
         <button
             onClick="stopCoaching()"
