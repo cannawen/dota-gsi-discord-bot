@@ -47,7 +47,9 @@ describe("handleSlashCommands", () => {
                     });
                     test("replies affirmation ephemerally", () => {
                         expect(mockReply).toHaveBeenCalledWith({
-                            content: expect.stringContaining("Starting..."),
+                            content: expect.stringContaining(
+                                "private coaching tips"
+                            ),
                             ephemeral: true,
                         });
                     });

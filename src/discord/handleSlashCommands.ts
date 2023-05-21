@@ -48,7 +48,7 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
         interaction
     )}/`;
-    let message = `Starting...\n\nGo to ${privateUrl} to hear your private coaching tips\n\nMake sure you have already gone through the setup instructions in /config`;
+    let message = `To hear your private coaching tips, go to ${privateUrl}\n\nIf you need help or have any feedback, join our discord community: https://discord.gg/wQkkMJf7Aj`;
     if (
         guildId &&
         channelId &&
