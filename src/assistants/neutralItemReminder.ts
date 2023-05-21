@@ -26,7 +26,6 @@ export default [
             const audio = items.neutral
                 ? "you should upgrade your neutral item"
                 : "you do not have a neutral item";
-            // Remind them and update reminder time
             return [new Fact(topics.configurableEffect, audio)];
         },
     }),
