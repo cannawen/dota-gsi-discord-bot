@@ -25,7 +25,7 @@ export default [
         then: () =>
             new Fact(
                 topics.configurableEffect,
-                "resources/audio/wisdom-rune-soon.mp3"
+                "resources/audio/rune-wisdom-soon.mp3"
             ),
     }),
 ]
