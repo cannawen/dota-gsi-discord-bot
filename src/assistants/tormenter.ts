@@ -12,7 +12,7 @@ import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.tormenter,
-    "Tormenter",
+    "Tormenter (beta feature)",
     'Reminds you of tormenter at 20:00. Responds to "torment has fallen" and "what is torment timer/status". Valve does not give the app an event when a tormenter dies, so you must tell the bot "torment has fallen" for it to track tormenter respawn times. (The speech to text is terrible at recognizing the word tormenter, so just call it a torment and at least then there\'s a 50% chance it will recognize it xd). Also currently only tracking one tormenter',
     EffectConfig.PUBLIC
 );

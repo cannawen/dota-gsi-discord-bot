@@ -11,7 +11,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.randomItem,
     "Random item suggestions",
-    'Responds to discord command "What should I buy with x gold" or "What should I buy',
+    'Responds to discord command "What should I buy with x gold" or "What should I buy" (patch 7.32)',
     EffectConfig.PUBLIC
 );
 
