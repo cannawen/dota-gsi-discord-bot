@@ -38,6 +38,15 @@ const allCommands = [
     new SlashCommandBuilder()
         .setName(SlashCommandName.help)
         .setDescription("Bot version and link to user support community"),
+    new SlashCommandBuilder()
+        .setName(SlashCommandName.feedback)
+        .addStringOption((option) =>
+            option
+                .setName("thoughts")
+                .setDescription("Let us know what you think of the bot!")
+                .setRequired(true)
+        )
+        .setDescription("Provide anonymous feedback on the bot"),
 ];
 
 // and deploy your commands!

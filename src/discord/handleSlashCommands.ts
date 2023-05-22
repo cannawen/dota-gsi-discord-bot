@@ -3,6 +3,7 @@ import {
     ChatInputCommandInteraction,
     GuildMember,
 } from "discord.js";
+import discordClient from "./discordClient";
 import engine from "../customEngine";
 import fs from "fs";
 import helpers from "./discordHelpers";
@@ -48,7 +49,7 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
         interaction
     )}/`;
-    let message = `To hear your private coaching tips, go to ${privateUrl}\n\nIf you need help or have any feedback, join our discord community: https://discord.gg/wQkkMJf7Aj`;
+    let message = `To hear your private coaching tips, go to ${privateUrl}\n\nUse the command /feedback to let us know how to improve, or join our discord community if you need any help! https://discord.gg/wQkkMJf7Aj`;
     if (
         guildId &&
         channelId &&
@@ -69,7 +70,7 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
     if (engine.getSession(studentId(interaction))) {
         engine.deleteSession(studentId(interaction));
         interaction.reply({
-            content: `Ending your coaching session...`,
+            content: `Goodbye! Let us know how to improve with /feedback`,
             ephemeral: true,
         });
     } else {
@@ -82,7 +83,16 @@ function stop(interaction: ChatInputCommandInteraction<CacheType>) {
 
 function help(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: `See ${process.env.SERVER_URL}/instructions for setup instructions and links to the source code and Discord community\n\nCurrently running version ${process.env.GIT_REVISION}.`,
+        content: `See ${process.env.SERVER_URL}/instructions for setup instructions and links to the source code and Discord community. Use /feedback to let us know how we can improve!\n\nCurrently running version ${process.env.GIT_REVISION}.`,
+        ephemeral: true,
+    });
+}
+
+function feedback(interaction: ChatInputCommandInteraction<CacheType>) {
+    const userFeedback = interaction.options.getString("thoughts");
+    discordClient.sendFeedback(`Anonymous user: ${userFeedback}`);
+    interaction.reply({
+        content: `Anonymous feedback has been sent. Join the conversation to see a response! https://discord.gg/wQkkMJf7Aj`,
         ephemeral: true,
     });
 }
@@ -93,6 +103,7 @@ function help(interaction: ChatInputCommandInteraction<CacheType>) {
 export default {
     coachMe,
     config,
+    feedback,
     help,
     stop,
 };

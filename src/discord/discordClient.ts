@@ -93,6 +93,9 @@ export class DiscordClient {
                 case SlashCommandName.help:
                     handle.help(interaction);
                     break;
+                case SlashCommandName.feedback:
+                    handle.feedback(interaction);
+                    break;
                 default:
                     log.error(
                         "discord",
@@ -106,6 +109,22 @@ export class DiscordClient {
                     break;
             }
         });
+    }
+
+    public sendFeedback(feedback: string) {
+        // Production
+        const channel = this.findChannel(
+            "1105523616084394066",
+            "1105533026710065284"
+        );
+        // Development
+        // const channel = this.findChannel(
+        //     "1076737468948304012",
+        //     "1076737468948304015"
+        // );
+        if (channel?.isTextBased()) {
+            channel?.send(feedback);
+        }
     }
 }
 
