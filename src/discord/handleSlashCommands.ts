@@ -50,6 +50,9 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         interaction
     )}/`;
     let message = `To hear your private coaching tips, go to ${privateUrl}\n\nUse the command /feedback to let us know how to improve, or join our discord community if you need any help! https://discord.gg/wQkkMJf7Aj`;
+    if (!guildId || !channelId) {
+        message = `${message}\n\nWARNING: The bot could not find a voice channel to join (but your private coaching tips will still work). Please join a voice channel and try /coachme again`;
+    }
     if (
         guildId &&
         channelId &&
@@ -58,7 +61,6 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         engine.startCoachingSession(studentId(interaction), guildId, channelId);
     } else {
         engine.startCoachingSession(studentId(interaction));
-        message = `${message}\n\nWARNING: You will not be receiving public discord announcements`;
     }
     interaction.reply({
         content: message,
