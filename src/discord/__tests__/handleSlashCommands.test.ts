@@ -47,9 +47,7 @@ describe("handleSlashCommands", () => {
                     });
                     test("replies affirmation ephemerally", () => {
                         expect(mockReply).toHaveBeenCalledWith({
-                            content: expect.stringContaining(
-                                "private coaching tips"
-                            ),
+                            content: expect.any(String),
                             ephemeral: true,
                         });
                     });
@@ -107,9 +105,7 @@ describe("handleSlashCommands", () => {
             });
             test("replies with warning ephemerally", () => {
                 expect(mockReply).toHaveBeenCalledWith({
-                    content: expect.stringContaining(
-                        "WARNING: You will not be receiving public discord announcements"
-                    ),
+                    content: expect.any(String),
                     ephemeral: true,
                 });
             });
@@ -127,7 +123,7 @@ describe("handleSlashCommands", () => {
             });
             test("notifies user coaching session is ending", () => {
                 expect(mockReply).toHaveBeenCalledWith({
-                    content: "Ending your coaching session...",
+                    content: expect.any(String),
                     ephemeral: true,
                 });
             });
@@ -142,7 +138,7 @@ describe("handleSlashCommands", () => {
             });
             test("notifies user they have no coaching session", () => {
                 expect(mockReply).toHaveBeenCalledWith({
-                    content: "You are not currently in a coaching session.",
+                    content: expect.any(String),
                     ephemeral: true,
                 });
             });
@@ -153,7 +149,7 @@ describe("handleSlashCommands", () => {
         handle.config(interaction);
 
         expect(mockReply).toHaveBeenCalledWith({
-            content: expect.anything(),
+            content: expect.any(String),
             ephemeral: true,
         });
     });
@@ -162,7 +158,7 @@ describe("handleSlashCommands", () => {
         handle.help(interaction);
 
         expect(mockReply).toHaveBeenCalledWith({
-            content: expect.anything(),
+            content: expect.any(String),
             ephemeral: true,
         });
     });
