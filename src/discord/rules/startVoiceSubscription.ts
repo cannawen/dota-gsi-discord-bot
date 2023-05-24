@@ -148,7 +148,7 @@ export default new Rule({
                     );
                 })
                 .catch((error) => {
-                    log.error(
+                    log.verbose(
                         "tts",
                         "Problem with transcription, %s",
                         error.message
