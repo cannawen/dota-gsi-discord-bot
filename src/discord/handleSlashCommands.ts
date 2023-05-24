@@ -10,10 +10,6 @@ import helpers from "./discordHelpers";
 import log from "../log";
 import path from "path";
 
-function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
-    return helpers.hashStudentId(interaction.user.id);
-}
-
 function generateConfigFile(userId: string) {
     const serverUrl = process.env.SERVER_URL;
     if (serverUrl) {
@@ -36,7 +32,7 @@ function generateConfigFile(userId: string) {
 
 function config(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: generateConfigFile(studentId(interaction)),
+        content: generateConfigFile(helpers.studentId(interaction)),
         ephemeral: true,
     });
 }
@@ -46,7 +42,7 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
     const channelId = (interaction.member as GuildMember | null)?.voice
         .channelId;
 
-    const privateUrl = `${process.env.SERVER_URL}/coach/${studentId(
+    const privateUrl = `${process.env.SERVER_URL}/coach/${helpers.studentId(
         interaction
     )}/`;
     let message = `To hear your private coaching tips, go to ${privateUrl}\n\nUse the command /feedback to let us know how to improve, or join our discord community if you need any help! https://discord.gg/wQkkMJf7Aj`;
@@ -58,9 +54,13 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
         channelId &&
         helpers.numberOfPeopleConnected(guildId, channelId) === 0
     ) {
-        engine.startCoachingSession(studentId(interaction), guildId, channelId);
+        engine.startCoachingSession(
+            helpers.studentId(interaction),
+            guildId,
+            channelId
+        );
     } else {
-        engine.startCoachingSession(studentId(interaction));
+        engine.startCoachingSession(helpers.studentId(interaction));
     }
     interaction.reply({
         content: message,
@@ -69,8 +69,8 @@ function coachMe(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function stop(interaction: ChatInputCommandInteraction<CacheType>) {
-    if (engine.getSession(studentId(interaction))) {
-        engine.deleteSession(studentId(interaction));
+    if (engine.getSession(helpers.studentId(interaction))) {
+        engine.deleteSession(helpers.studentId(interaction));
         interaction.reply({
             content: `Goodbye! Let us know how to improve with /feedback`,
             ephemeral: true,

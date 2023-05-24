@@ -15,7 +15,7 @@ describe("handleSlashCommands", () => {
 
     beforeEach(() => {
         mockReply = jest.fn();
-        (helpers.hashStudentId as jest.Mock).mockReturnValue(STUDENT_ID);
+        (helpers.hashUserId as jest.Mock).mockReturnValue(STUDENT_ID);
         interaction = {
             channelId: "channelId",
             guild: {

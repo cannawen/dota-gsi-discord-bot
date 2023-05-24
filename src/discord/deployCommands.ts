@@ -1,7 +1,8 @@
 /* istanbul ignore file */
-import { REST, Routes, SlashCommandBuilder } from "discord.js";
+import { REST, Routes } from "discord.js";
 import dotenv = require("dotenv");
-import SlashCommandName from "./SlashCommandName";
+import fs from "fs";
+import path = require("path");
 dotenv.config();
 
 // This file should be run every time the definitions of the slash commands change
@@ -21,33 +22,26 @@ if (deployProd) {
     BOT_TOKEN = process.env.DISCORD_BOT_TOKEN_PROD!;
     APPLICATION_ID = "1089945324757454950";
 }
+const commandsPath = path.join(__dirname, "commands");
+const commandsJson: any[] = [];
+
+fs.readdirSync(commandsPath)
+    .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
+    .forEach((file) => {
+        const filePath = path.join(commandsPath, file);
+        // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+        const command = require(filePath).default;
+        if (command.data && command.execute) {
+            commandsJson.push(command.data.toJSON());
+        } else {
+            console.log(
+                `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+            );
+        }
+    });
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
-
-const allCommands = [
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.config)
-        .setDescription("Configuration instructions"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.coachme)
-        .setDescription("Start coaching me"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.stop)
-        .setDescription("Stop coaching me"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.help)
-        .setDescription("Bot version and link to user support community"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.feedback)
-        .addStringOption((option) =>
-            option
-                .setName("thoughts")
-                .setDescription("Let us know what you think of the bot!")
-                .setRequired(true)
-        )
-        .setDescription("Provide anonymous feedback on the bot"),
-];
 
 // and deploy your commands!
 (async () => {
@@ -58,7 +52,7 @@ const allCommands = [
         const data = await rest.put(
             Routes.applicationCommands(APPLICATION_ID!),
             {
-                body: allCommands.map((cmd) => cmd.toJSON()),
+                body: commandsJson,
             }
         );
 
