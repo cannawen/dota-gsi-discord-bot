@@ -1,8 +1,8 @@
 /* istanbul ignore file */
 import { REST, Routes } from "discord.js";
+import commands from "./commands";
 import dotenv = require("dotenv");
-import fs from "fs";
-import path = require("path");
+
 dotenv.config();
 
 // This file should be run every time the definitions of the slash commands change
@@ -22,23 +22,6 @@ if (deployProd) {
     BOT_TOKEN = process.env.DISCORD_BOT_TOKEN_PROD!;
     APPLICATION_ID = "1089945324757454950";
 }
-const commandsPath = path.join(__dirname, "commands");
-const commandsJson: any[] = [];
-
-fs.readdirSync(commandsPath)
-    .filter((file) => file.endsWith(".js") || file.endsWith(".ts"))
-    .forEach((file) => {
-        const filePath = path.join(commandsPath, file);
-        // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-        const command = require(filePath).default;
-        if (command.data && command.execute) {
-            commandsJson.push(command.data.toJSON());
-        } else {
-            console.log(
-                `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-            );
-        }
-    });
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
@@ -52,7 +35,7 @@ const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
         const data = await rest.put(
             Routes.applicationCommands(APPLICATION_ID!),
             {
-                body: commandsJson,
+                body: commands.map((command) => command.data.toJSON()),
             }
         );
 
