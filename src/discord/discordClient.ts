@@ -1,7 +1,6 @@
 import Discord, { Events } from "discord.js";
-import handle from "./handleSlashCommands";
+import commands from "./commands";
 import log from "../log";
-import SlashCommandName from "./SlashCommandName";
 
 export class DiscordClient {
     private client = new Discord.Client({
@@ -80,33 +79,20 @@ export class DiscordClient {
                 "Handling slash command interaction %s",
                 commandName
             );
-            switch (commandName) {
-                case SlashCommandName.config:
-                    handle.config(interaction);
-                    break;
-                case SlashCommandName.coachme:
-                    handle.coachMe(interaction);
-                    break;
-                case SlashCommandName.stop:
-                    handle.stop(interaction);
-                    break;
-                case SlashCommandName.help:
-                    handle.help(interaction);
-                    break;
-                case SlashCommandName.feedback:
-                    handle.feedback(interaction);
-                    break;
-                default:
-                    log.error(
-                        "discord",
-                        "Unable to handle interaction %s",
-                        commandName
-                    );
-                    interaction.reply({
-                        content: `Unable to handle command ${commandName}. Please try again later`,
-                        ephemeral: true,
-                    });
-                    break;
+
+            const slashCommand = commands[commandName];
+            if (slashCommand) {
+                slashCommand.execute(interaction);
+            } else {
+                log.error(
+                    "discord",
+                    "Unable to handle interaction %s",
+                    commandName
+                );
+                interaction.reply({
+                    content: `Unable to handle command ${commandName}. Please let us know you encountered this error with /feedback`,
+                    ephemeral: true,
+                });
             }
         });
     }

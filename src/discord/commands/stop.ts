@@ -5,6 +5,7 @@ import {
 } from "discord.js";
 import engine from "../../customEngine";
 import helpers from "../discordHelpers";
+import { SlashCommand } from "../SlashCommand";
 
 const data = new SlashCommandBuilder()
     .setName("stop")
@@ -25,7 +26,4 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     }
 }
 
-export default {
-    data,
-    execute,
-};
+export default new SlashCommand(data, execute);

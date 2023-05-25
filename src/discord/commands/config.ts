@@ -7,6 +7,7 @@ import fs from "fs";
 import helpers from "../discordHelpers";
 import log from "../../log";
 import path from "path";
+import { SlashCommand } from "../SlashCommand";
 
 const data = new SlashCommandBuilder()
     .setName("config")
@@ -17,7 +18,10 @@ function generateConfigFile(userId: string) {
     if (serverUrl) {
         return fs
             .readFileSync(
-                path.join(__dirname, "../../resources/configInstructions.txt"),
+                path.join(
+                    __dirname,
+                    "../../../resources/configInstructions.txt"
+                ),
                 "utf8"
             )
             .replace(/SERVER_URL/g, serverUrl)
@@ -39,7 +43,4 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     });
 }
 
-export default {
-    data,
-    execute,
-};
+export default new SlashCommand(data, execute);

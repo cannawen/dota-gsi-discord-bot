@@ -3,6 +3,7 @@ import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
+import { SlashCommand } from "../SlashCommand";
 
 const data = new SlashCommandBuilder()
     .setName("help")
@@ -15,7 +16,4 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     });
 }
 
-export default {
-    data,
-    execute,
-};
+export default new SlashCommand(data, execute);

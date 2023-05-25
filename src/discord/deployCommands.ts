@@ -35,7 +35,9 @@ const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
         const data = await rest.put(
             Routes.applicationCommands(APPLICATION_ID!),
             {
-                body: commands.map((command) => command.data.toJSON()),
+                body: Object.values(commands).map((command) =>
+                    command.data.toJSON()
+                ),
             }
         );
 

@@ -4,6 +4,7 @@ import {
     SlashCommandBuilder,
 } from "discord.js";
 import discordClient from "../discordClient";
+import { SlashCommand } from "../SlashCommand";
 
 const data = new SlashCommandBuilder()
     .setName("feedback")
@@ -24,7 +25,4 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     });
 }
 
-export default {
-    data,
-    execute,
-};
+export default new SlashCommand(data, execute);
