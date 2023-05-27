@@ -1,6 +1,7 @@
 jest.mock("@discordjs/voice");
 jest.mock("../../../customEngine");
 jest.mock("../../../log");
+jest.mock("fs");
 
 import engine from "../../../customEngine";
 import Fact from "../../../engine/Fact";
