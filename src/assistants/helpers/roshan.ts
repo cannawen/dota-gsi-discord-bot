@@ -57,11 +57,9 @@ function percentChanceRoshanIsAlive(currentTime: number, deathTime: number) {
         timeFormatting.secondsToTimeString(deathTime),
         timeFormatting.secondsToTimeString(minimuSpawnTime(deathTime)),
         timeFormatting.secondsToTimeString(maximumSpawnTime(deathTime)),
-        timeFormatting.secondsToTimeString(
-            Math.round(
-                (100 * (currentTime - minimuSpawnTime(deathTime))) /
-                    (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
-            )
+        Math.round(
+            (100 * (currentTime - minimuSpawnTime(deathTime))) /
+                (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
         )
     );
     if (currentTime < minimuSpawnTime(deathTime)) {

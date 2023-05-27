@@ -1,8 +1,8 @@
-import Event, { EventType } from "../gsi-data-classes/Event";
 import roshHelper, { Status } from "./helpers/roshan";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
+import { EventType } from "../gsi-data-classes/Event";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
 import log from "../log";
@@ -52,6 +52,10 @@ function isRoshStatusRequest(message: string) {
     return isAskingAboutRoshan;
 }
 
+function roshLocation(daytime: boolean) {
+    return daytime ? "bottom" : "top";
+}
+
 /**
  * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
  * Defaults to Roshan is alive
@@ -59,32 +63,38 @@ function isRoshStatusRequest(message: string) {
 const aliveMessageRules = [
     new Rule({
         label: "killed once before",
-        trigger: [allRoshanDeathTimesTopic],
+        trigger: [allRoshanDeathTimesTopic, topics.daytime],
         when: ([deathTimes]) => deathTimes.length === 1,
-        then: () =>
+        then: ([_, daytime]) =>
             new Fact(
                 roshanAliveMessageTopic,
-                "Roshan is alive. Will drop aegis and cheese"
+                `Roshan is alive ${roshLocation(
+                    daytime
+                )}. Will drop aegis and cheese`
             ),
     }),
     new Rule({
         label: "killed twice or more, day time",
         trigger: [allRoshanDeathTimesTopic, topics.daytime],
         when: ([deathTimes, daytime]) => deathTimes.length > 1 && daytime,
-        then: () =>
+        then: ([_, daytime]) =>
             new Fact(
                 roshanAliveMessageTopic,
-                "Roshan is alive. Will drop aegis, cheese, and aghanim's blessing"
+                `Roshan is alive ${roshLocation(
+                    daytime
+                )}. Will drop aegis, cheese, and aghanim's blessing`
             ),
     }),
     new Rule({
         label: "killed twice or more, night time",
         trigger: [allRoshanDeathTimesTopic, topics.daytime],
         when: ([deathTimes, daytime]) => deathTimes.length > 1 && !daytime,
-        then: () =>
+        then: ([_, daytime]) =>
             new Fact(
                 roshanAliveMessageTopic,
-                "Roshan is alive. Will drop aegis, cheese, and refresher shard"
+                `Roshan is alive ${roshLocation(
+                    daytime
+                )}. Will drop aegis, cheese, and refresher shard`
             ),
     }),
 ];
@@ -109,14 +119,17 @@ const statusMessageRules = [
     }),
     new Rule({
         label: "rosh may be alive",
-        trigger: [topics.roshanStatus],
-        given: [lastRoshDeathTimeTopic, topics.roshanAliveTime, topics.time],
+        trigger: [topics.roshanStatus, topics.time],
+        given: [lastRoshDeathTimeTopic, topics.roshanAliveTime],
         when: ([status]) => status === Status.MAYBE_ALIVE,
-        then: (_, [deathTime, aliveTime, time]) => {
-            console.log(roshHelper.percentChanceRoshanIsAlive(time, deathTime));
+        then: ([_, time], [deathTime, aliveTime]) => {
+            const chance = roshHelper.percentChanceRoshanIsAlive(
+                time,
+                deathTime
+            );
             return new Fact(
                 roshanStatusMessageTopic,
-                `roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
+                `${chance} percent chance roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
                     aliveTime
                 )}`
             );
@@ -183,7 +196,7 @@ export default [
         label: "when rosh may be up, play reminder",
         trigger: [topics.time],
         given: [topics.roshanMaybeAliveTime],
-        when: ([time], [maybeAlivetime]) => time === maybeAlivetime,
+        when: ([time], [maybeAliveTime]) => time === maybeAliveTime,
         then: () =>
             new Fact(
                 topics.configurableEffect,
