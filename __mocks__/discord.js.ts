@@ -32,6 +32,9 @@ const discordjs = {
         Error: "Error",
         InteractionCreate: "InteractionCreate",
     },
+    // Pretty unhappy with how we are mocking this builder
+    // The addStringOption function doesn't even return a SlashCommandBuilder which is pretty sketch of the library
+    // Is there a way to get jest.fn() to return another jest.fn() instead of undefined by default?
     SlashCommandBuilder: jest.fn().mockReturnValue({
         setName: jest.fn().mockReturnValue({
             addStringOption: jest
