@@ -1,10 +1,9 @@
 jest.mock("../../log");
-jest.mock("../handleSlashCommands");
 jest.mock("discord.js");
+jest.mock("fs");
 
 import Discord from "discord.js";
 import { DiscordClient } from "../discordClient";
-import handleSlashCommands from "../handleSlashCommands";
 
 describe("client", () => {
     let sut: DiscordClient;
@@ -44,42 +43,7 @@ describe("client", () => {
                 expect.anything()
             );
         });
-        test("config command is handled", () => {
-            const spy = jest.spyOn(handleSlashCommands, "config");
-            const interaction = {
-                isChatInputCommand: () => true,
-                commandName: "config",
-            };
-            handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledWith(interaction);
-        });
-        test("coachme command is handled", () => {
-            const spy = jest.spyOn(handleSlashCommands, "coachMe");
-            const interaction = {
-                isChatInputCommand: () => true,
-                commandName: "coachme",
-            };
-            handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledWith(interaction);
-        });
-        test("stop command is handled", () => {
-            const spy = jest.spyOn(handleSlashCommands, "stop");
-            const interaction = {
-                isChatInputCommand: () => true,
-                commandName: "stop",
-            };
-            handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledWith(interaction);
-        });
-        test("help command is handled", () => {
-            const spy = jest.spyOn(handleSlashCommands, "help");
-            const interaction = {
-                isChatInputCommand: () => true,
-                commandName: "help",
-            };
-            handleInteraction(interaction);
-            expect(spy).toHaveBeenCalledWith(interaction);
-        });
+
         test("unknown command sends ephemeral reply back to user", () => {
             const mockReply = jest.fn();
             const interaction = {
@@ -89,8 +53,9 @@ describe("client", () => {
             };
             handleInteraction(interaction);
             expect(mockReply).toHaveBeenCalledWith({
-                content:
-                    "Unable to handle command unknown. Please try again later",
+                content: expect.stringContaining(
+                    "Unable to handle command unknown."
+                ),
                 ephemeral: true,
             });
         });

@@ -1,3 +1,4 @@
+import { CacheType, ChatInputCommandInteraction } from "discord.js";
 import CryptoJS from "crypto-js";
 import Engine from "../engine/Engine";
 import engine from "../customEngine";
@@ -12,7 +13,7 @@ function numberOfPeopleConnected(guildId: string, channelId: string): number {
     ).length;
 }
 
-function hashStudentId(userId: string): string {
+function hashUserId(userId: string): string {
     const key = process.env.STUDENT_ID_HASH_PRIVATE_KEY;
     if (key) {
         // eslint-disable-next-line new-cap
@@ -27,7 +28,11 @@ function hashStudentId(userId: string): string {
     }
 }
 
+function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
+    return hashUserId(interaction.user.id);
+}
+
 export default {
-    hashStudentId,
     numberOfPeopleConnected,
+    studentId,
 };

@@ -1,7 +1,8 @@
 /* istanbul ignore file */
-import { REST, Routes, SlashCommandBuilder } from "discord.js";
+import { REST, Routes } from "discord.js";
+import commands from "./commands";
 import dotenv = require("dotenv");
-import SlashCommandName from "./SlashCommandName";
+
 dotenv.config();
 
 // This file should be run every time the definitions of the slash commands change
@@ -25,30 +26,6 @@ if (deployProd) {
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);
 
-const allCommands = [
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.config)
-        .setDescription("Configuration instructions"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.coachme)
-        .setDescription("Start coaching me"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.stop)
-        .setDescription("Stop coaching me"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.help)
-        .setDescription("Bot version and link to user support community"),
-    new SlashCommandBuilder()
-        .setName(SlashCommandName.feedback)
-        .addStringOption((option) =>
-            option
-                .setName("thoughts")
-                .setDescription("Let us know what you think of the bot!")
-                .setRequired(true)
-        )
-        .setDescription("Provide anonymous feedback on the bot"),
-];
-
 // and deploy your commands!
 (async () => {
     try {
@@ -58,7 +35,9 @@ const allCommands = [
         const data = await rest.put(
             Routes.applicationCommands(APPLICATION_ID!),
             {
-                body: allCommands.map((cmd) => cmd.toJSON()),
+                body: Object.values(commands).map((command) =>
+                    command.data.toJSON()
+                ),
             }
         );
 

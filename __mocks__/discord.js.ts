@@ -32,6 +32,14 @@ const discordjs = {
         Error: "Error",
         InteractionCreate: "InteractionCreate",
     },
+    SlashCommandBuilder: jest.fn().mockReturnValue({
+        setName: jest.fn().mockReturnValue({
+            addStringOption: jest
+                .fn()
+                .mockReturnValue({ setDescription: jest.fn() }),
+            setDescription: jest.fn(),
+        }),
+    }),
 };
 
 module.exports = discordjs;
