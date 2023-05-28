@@ -18,8 +18,8 @@ describe("time helpers", () => {
             expect(sut.secondsToTtsTimeString(10 * 60)).toBe("10 minutes");
         });
 
-        test("ignores hour", () => {
-            expect(sut.secondsToTtsTimeString(70 * 60)).toBe("10 minutes");
+        test("turns hour into 60 minutes", () => {
+            expect(sut.secondsToTtsTimeString(70 * 60 + 30)).toBe("70 30");
         });
     });
 });
