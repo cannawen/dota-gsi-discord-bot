@@ -11,7 +11,7 @@ const data = new SlashCommandBuilder()
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
-        content: `See ${process.env.SERVER_URL}/instructions for setup instructions and links to the source code and Discord community. Use /feedback to let us know how we can improve!\n\nCurrently running version ${process.env.GIT_REVISION}.`,
+        content: `See ${process.env.SERVER_URL}/instructions for setup instructions and links to the source code and Discord community if you have any questions. Use /feedback to let us know how we can improve!\n\nCurrently running version ${process.env.GIT_REVISION}.`,
         ephemeral: true,
     });
 }
