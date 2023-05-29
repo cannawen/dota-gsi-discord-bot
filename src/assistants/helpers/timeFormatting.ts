@@ -8,10 +8,6 @@ function secondsToTimeString(seconds: number) {
     return hourString.replace(/^0/, "").replace(/^0:/, "");
 }
 
-/**
- * NOTE: This function only returns minutes and seconds
- * If the game lasts for over an hour, it will drop the "1 hour" portion of the time
- */
 function secondsToTtsTimeString(seconds: number): string {
     const timeString = isoTimeString(seconds);
     const hourString = timeString.slice(0, 2);
