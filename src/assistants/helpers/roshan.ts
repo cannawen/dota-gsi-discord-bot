@@ -50,18 +50,6 @@ function getStatus(
 }
 
 function percentChanceRoshanIsAlive(currentTime: number, deathTime: number) {
-    log.info(
-        "rosh",
-        "currentTime: %s, deathTime: %s, min: %s, max: %s, percent: %s",
-        timeFormatting.secondsToTimeString(currentTime),
-        timeFormatting.secondsToTimeString(deathTime),
-        timeFormatting.secondsToTimeString(minimuSpawnTime(deathTime)),
-        timeFormatting.secondsToTimeString(maximumSpawnTime(deathTime)),
-        Math.round(
-            (100 * (currentTime - minimuSpawnTime(deathTime))) /
-                (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
-        )
-    );
     if (currentTime < minimuSpawnTime(deathTime)) {
         return 0;
     }
