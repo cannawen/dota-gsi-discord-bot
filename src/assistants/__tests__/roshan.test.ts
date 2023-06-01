@@ -31,12 +31,21 @@ describe("roshan", () => {
     });
 
     describe("asking about rosh", () => {
-        test("bot should respond roshan has never been killed", () => {
+        test("bot should respond roshan is alive bottom during daytime", () => {
             const results = getResults(roshanRules, {
                 ...params,
+                daytime: true,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainAudioEffect("Roshan is alive");
+            expect(results).toContainAudioEffect("Roshan is alive bottom");
+        });
+        test("bot should respond roshan is alive top during nightime", () => {
+            const results = getResults(roshanRules, {
+                ...params,
+                daytime: false,
+                lastDiscordUtterance: "What's roshan timer",
+            });
+            expect(results).toContainAudioEffect("Roshan is alive top");
         });
         describe("roshan killed", () => {
             let roshKilledState: Fact<unknown>[];

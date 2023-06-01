@@ -5,7 +5,6 @@ import EffectConfig from "../effects/EffectConfig";
 import { EventType } from "../gsi-data-classes/Event";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
-import log from "../log";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import timeHelper from "./helpers/time";
@@ -39,17 +38,14 @@ const roshanAliveMessageTopic = topicManager.createTopic<string>(
 );
 const roshanStatusMessageTopic = topicManager.createTopic<string>(
     "roshanStatusMessageTopic",
-    { defaultValue: "Roshan is alive" }
+    { defaultValue: "Roshan status is unknown" }
 );
 
 function isRoshStatusRequest(message: string) {
-    const isAskingAboutRoshan =
+    return (
         message.match(/^(what).{1,15}(status|timer?)$/i) !== null &&
-        message.match(/torment/) === null;
-    if (isAskingAboutRoshan) {
-        log.info("app", "Rosh message: %s", message);
-    }
-    return isAskingAboutRoshan;
+        message.match(/torment/) === null
+    );
 }
 
 function roshLocation(daytime: boolean) {
@@ -61,6 +57,16 @@ function roshLocation(daytime: boolean) {
  * Defaults to Roshan is alive
  */
 const aliveMessageRules = [
+    new Rule({
+        label: "never killed before",
+        trigger: [allRoshanDeathTimesTopic, topics.daytime],
+        when: ([deathTimes]) => deathTimes.length === 0,
+        then: ([_, daytime]) =>
+            new Fact(
+                roshanAliveMessageTopic,
+                `Roshan is alive ${roshLocation(daytime)}`
+            ),
+    }),
     new Rule({
         label: "killed once before",
         trigger: [allRoshanDeathTimesTopic, topics.daytime],
@@ -135,10 +141,9 @@ const statusMessageRules = [
     }),
     new Rule({
         label: "roshan is alive",
-        trigger: [topics.roshanStatus],
-        given: [roshanAliveMessageTopic],
+        trigger: [topics.roshanStatus, roshanAliveMessageTopic],
         when: ([status]) => status === Status.ALIVE,
-        then: (_, [aliveMessage]) =>
+        then: ([_, aliveMessage]) =>
             new Fact(roshanStatusMessageTopic, aliveMessage),
     }),
 ];
