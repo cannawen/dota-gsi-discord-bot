@@ -15,7 +15,7 @@ const data = new SlashCommandBuilder()
         option
             .setName("allow")
             .setDescription(
-                "Allow or disallow the bot to send your discord speech to Google speech-to-text API"
+                "Allow or disallow the bot to send your voice to Google speech-to-text API for voice commands feature"
             )
             .setRequired(true)
     )

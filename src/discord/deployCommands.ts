@@ -5,23 +5,10 @@ import dotenv = require("dotenv");
 
 dotenv.config();
 
-// This file should be run every time the definitions of the slash commands change
-// `npm run discord`
+// https://discordjs.guide/creating-your-bot/command-deployment.html#where-to-deploy
 
-const deployDev = false;
-const deployProd = false;
-
-let BOT_TOKEN: string;
-let APPLICATION_ID: string;
-
-if (deployDev) {
-    BOT_TOKEN = process.env.DISCORD_BOT_TOKEN!;
-    APPLICATION_ID = "761897641591701524";
-}
-if (deployProd) {
-    BOT_TOKEN = process.env.DISCORD_BOT_TOKEN_PROD!;
-    APPLICATION_ID = "1089945324757454950";
-}
+const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN!;
+const APPLICATION_ID = process.env.DISCORD_APPLICATION_ID!;
 
 // Construct and prepare an instance of the REST module
 const rest = new REST({ version: "10" }).setToken(BOT_TOKEN!);

@@ -7,3 +7,4 @@
 -   `fly deploy`
 -   `fly apps restart dota-coach`
 -   `fly ssh console`
+-   `fly secrets set SECRET=value`

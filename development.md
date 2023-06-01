@@ -1,5 +1,6 @@
 # Development
 
+-   Set up your Discord bot dependencies (see Discord section below for details)
 -   `npm install`
 -   `npm run build`
 -   `npm start`
@@ -16,19 +17,21 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 ## Dependencies
 
-### node-gsi
-
--   When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version, use `npm update`
-
 ### Discord
 
 -   Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
 -   Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
 -   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs
--   Create a `.env` file by copying `sample.env` and add your bot secret key to `DISCORD_BOT_TOKEN`
--   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY`
+-   Create a `.env` file by copying `sample.env`
+    -   Change `DISCORD_BOT_TOKEN` to your OAuth2 -> Client Secret
+    -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> Client ID
+    -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
 -   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
 -   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
+
+### node-gsi
+
+-   When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version, use `npm update`
 
 ## Logging
 
@@ -79,7 +82,6 @@ Goal: to develop the app without having dota open
 
 `mitmdump -nC flow_file`  
 see [mitmproxy-flows](/mitmproxy-flows) for currently saved flows. You will need to change the auth token stored in the flow files to have associated with your discord user
-
 
 ### replay some file and redirect to a different host
 
