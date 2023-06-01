@@ -9,6 +9,7 @@ import Fact from "./engine/Fact";
 import log from "./log";
 import persistence from "./persistence";
 import Rule from "./engine/Rule";
+import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
 
@@ -75,7 +76,7 @@ export class CustomEngine extends Engine {
         // Create new db for student
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
-        this.set(db, new Fact(topics.timestamp, Math.floor(Date.now() / 1000))); // TODO test
+        this.set(db, new Fact(topics.timestamp, time.nowUnix())); // TODO test
 
         // Check to see if we have saved data
         // If we cannot get saved data due to an error,

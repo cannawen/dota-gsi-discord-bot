@@ -28,8 +28,14 @@ function hashUserId(userId: string): string {
     }
 }
 
-function studentId(interaction: ChatInputCommandInteraction<CacheType>) {
-    return hashUserId(interaction.user.id);
+function studentId(
+    interaction: ChatInputCommandInteraction<CacheType> | string
+) {
+    if (typeof interaction === "string") {
+        return hashUserId(interaction);
+    } else {
+        return hashUserId(interaction.user.id);
+    }
 }
 
 export default {

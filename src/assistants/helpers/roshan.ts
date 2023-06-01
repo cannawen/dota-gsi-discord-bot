@@ -1,6 +1,3 @@
-import log from "../../log";
-import timeFormatting from "./timeFormatting";
-
 export const enum Status {
     NOT_IN_A_GAME = "NOT_IN_A_GAME",
     ALIVE = "ALIVE",

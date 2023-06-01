@@ -1,4 +1,4 @@
-import sut from "../timeFormatting";
+import sut from "../time";
 
 describe("time helpers", () => {
     describe("seconds to time string", () => {

@@ -7,7 +7,7 @@ import { factsToPlainObject } from "./engine/PersistentFactStore";
 import gsi from "node-gsi";
 import GsiData from "./gsi/GsiData";
 import gsiParser from "./gsiParser";
-import helper from "./assistants/helpers/timeFormatting";
+import helper from "./assistants/helpers/time";
 import log from "./log";
 import path from "path";
 import persistence from "./persistence";

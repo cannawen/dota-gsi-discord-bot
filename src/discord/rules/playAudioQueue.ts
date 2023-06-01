@@ -1,6 +1,6 @@
 import colors from "@colors/colors";
 import Fact from "../../engine/Fact";
-import helper from "../../assistants/helpers/timeFormatting";
+import helper from "../../assistants/helpers/time";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";

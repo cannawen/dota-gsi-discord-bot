@@ -8,7 +8,7 @@ import inGame from "../engine/rules/inGame";
 import log from "../log";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import timeHelper from "./helpers/timeFormatting";
+import timeHelper from "./helpers/time";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
@@ -126,8 +126,8 @@ const statusMessageRules = [
             new Fact(
                 roshanStatusMessageTopic,
                 `${roshHelper.percentChanceRoshanIsAlive(
-                time,
-                deathTime
+                    time,
+                    deathTime
                 )} percent chance roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
                     aliveTime
                 )}`

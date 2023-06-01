@@ -19,7 +19,12 @@ function secondsToTtsTimeString(seconds: number): string {
     return `${minutes} ${secondsString}`;
 }
 
+function nowUnix(): number {
+    return Math.floor(Date.now() / 1000);
+}
+
 export default {
+    nowUnix,
     secondsToTimeString,
     secondsToTtsTimeString,
 };

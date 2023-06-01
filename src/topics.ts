@@ -92,6 +92,14 @@ const discord = {
         persistAcrossGames: true,
     }),
     lastDiscordUtterance: new Topic<string>("lastDiscordUtterance"),
+
+    discordVoiceRecognitionPermissionGranted: new PersistentTopic<boolean>(
+        "discordVoiceRecognitionPermissionGranted",
+        {
+            persistForever: true,
+            defaultValue: false,
+        }
+    ),
 };
 
 const sharedGameState = {
