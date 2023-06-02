@@ -5,9 +5,13 @@ import path = require("path");
 import log from "./log";
 dotenv.config();
 
-if (!fs.existsSync(process.env.PERSISTENCE_DATA_PATH || "")) {
-    fs.mkdirSync(process.env.PERSISTENCE_DATA_PATH || "", { recursive: true });
-}
+try {
+    if (!fs.existsSync(process.env.PERSISTENCE_DATA_PATH || "")) {
+        fs.mkdirSync(process.env.PERSISTENCE_DATA_PATH || "", {
+            recursive: true,
+        });
+    }
+} catch (_) {}
 
 // eslint-disable-next-line camelcase
 function debug_saveAllState(state: string) {
