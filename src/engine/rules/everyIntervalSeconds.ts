@@ -15,36 +15,24 @@ export default function everyIntervalSeconds(
     interval: number,
     rule: Rule
 ) {
-    const reminderTopic = topicManager.createTopic<number>(
-        `${rule.label}ReminderTopic`,
-        { defaultValue: 0 }
-    );
     return betweenSeconds(
         startTime,
         endTime,
         new Rule({
             label: rule.label,
             trigger: [topics.time, ...rule.trigger],
-            given: [reminderTopic, ...rule.given],
+            given: rule.given,
             when: (trigger, given) => {
                 const time = trigger.shift();
-                const numberOfTimesReminded = given.shift();
-
-                // If we somehow skip time, this rule will now "catch up" to speak all the missed events
-                // Would be annoying if you jump around in a replay, but that's not really supported
-                const lastRemindedTime =
-                    interval * numberOfTimesReminded + (startTime || 0);
-                const isReminderTime = time >= lastRemindedTime;
-
-                return isReminderTime && rule.when(trigger, given);
+                return (
+                    // If time is a multiple of interval
+                    (time - (startTime || 0)) % interval === 0 &&
+                    rule.when(trigger, given)
+                );
             },
             then: (trigger, given) => {
                 trigger.shift();
-                const numberOfTimesReminded = given.shift();
-                return [
-                    ...rule.thenArray(trigger, given),
-                    new Fact(reminderTopic, numberOfTimesReminded + 1),
-                ];
+                return rule.thenArray(trigger, given);
             },
         })
     );
