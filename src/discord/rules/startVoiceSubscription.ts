@@ -143,6 +143,7 @@ export default new Rule({
                 topics.discordVoiceRecognitionPermissionGranted
             );
             if (sttEnabled) {
+                console.log("STT", sttEnabled, studentId);
                 stt.transcribe(connection.receiver, userId)
                     .then((utterance) => {
                         if (!utterance) return;
