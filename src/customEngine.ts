@@ -116,15 +116,16 @@ export class CustomEngine extends Engine {
                 )?.connection.destroy();
             } catch (error) {}
             const facts = factsToPlainObject(db.getPersistentForeverFacts());
+            if (Object.keys(facts).length > 0) {
+                log.debug(
+                    "app",
+                    "Saving forever facts %s for student %s",
+                    facts,
+                    studentId.substring(0, 10)
+                );
 
-            log.debug(
-                "app",
-                "Saving forever facts %s for student %s",
-                facts,
-                studentId.substring(0, 10)
-            );
-
-            persistence.saveStudentData(studentId, JSON.stringify(facts));
+                persistence.saveStudentData(studentId, JSON.stringify(facts));
+            }
             this.sessions.delete(studentId);
         }
     }
