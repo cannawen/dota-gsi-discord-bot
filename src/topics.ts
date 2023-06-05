@@ -97,7 +97,6 @@ const discord = {
         "discordVoiceRecognitionPermissionGranted",
         {
             persistForever: true,
-            defaultValue: false,
         }
     ),
 };
