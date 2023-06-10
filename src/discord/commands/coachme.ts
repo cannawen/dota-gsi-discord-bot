@@ -14,8 +14,11 @@ const data = new SlashCommandBuilder()
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     const guildId = interaction.guildId;
-    const channelId = (interaction.member as GuildMember | null)?.voice
-        .channelId;
+    const channelId =
+        (interaction.member as GuildMember | null)?.voice.channelId ||
+        (interaction.channel?.isVoiceBased()
+            ? interaction.channelId
+            : undefined);
 
     const privateUrl = `${process.env.SERVER_URL}/coach/${helpers.studentId(
         interaction
