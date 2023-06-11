@@ -54,14 +54,14 @@ function roshLocation(daytime: boolean) {
 
 /**
  * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
- * Defaults to Roshan is alive
  */
 const aliveMessageRules = [
     new Rule({
         label: "never killed before",
-        trigger: [allRoshanDeathTimesTopic, topics.daytime],
-        when: ([deathTimes]) => deathTimes.length === 0,
-        then: ([_, daytime]) =>
+        trigger: [topics.daytime],
+        given: [allRoshanDeathTimesTopic],
+        when: (_, [deathTimes]) => deathTimes.length === 0,
+        then: ([daytime]) =>
             new Fact(
                 roshanAliveMessageTopic,
                 `Roshan is alive ${roshLocation(daytime)}`

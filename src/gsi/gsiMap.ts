@@ -44,9 +44,9 @@ export default new Rule({
         const map = data.map;
         if (map) {
             return [
+                new Fact(topics.inGame, inGame(map.gameState)),
                 ...getTimeFacts(time, map.clockTime),
                 new Fact(topics.daytime, map.dayTime),
-                new Fact(topics.inGame, inGame(map.gameState)),
                 new Fact(topics.paused, map.paused),
             ];
         }
