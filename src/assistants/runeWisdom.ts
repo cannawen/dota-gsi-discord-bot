@@ -11,31 +11,44 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.runeWisdom,
     "Wisdom rune",
-    "Reminds you of wisdom rune every 7:00",
+    'Reminds you of wisdom rune every 7:00 starting at 6:30. Responds to voice command "next wisdom rune"',
     EffectConfig.PUBLIC
 );
 
-const WISDOM_RUNE_SPAWN_INTERVAL = 7 * 60;
-const WISDOM_RUNE_START_WARNING_TIME = WISDOM_RUNE_SPAWN_INTERVAL - 30;
+const WISDOM_RUNE_SAPWN_MINUTES = 7;
+const WISDOM_RUNE_SPAWN_SECONDS = WISDOM_RUNE_SAPWN_MINUTES * 60;
+const WISDOM_RUNE_START_WARNING_TIME = WISDOM_RUNE_SPAWN_SECONDS - 30;
 
 export default [
+    everyIntervalSeconds(
+        WISDOM_RUNE_START_WARNING_TIME,
+        undefined,
+        WISDOM_RUNE_SPAWN_SECONDS,
+        new Rule({
+            label: rules.assistant.runeWisdom,
+            trigger: [topics.time],
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/rune-wisdom-soon.mp3"
+                ),
+        })
+    ),
     new Rule({
-        label: rules.assistant.runeWisdom,
-        trigger: [topics.time],
-        then: () =>
+        label: "wisdom rune voice command",
+        trigger: [topics.lastDiscordUtterance],
+        given: [topics.time],
+        when: ([utterance]) =>
+            utterance.match(/^.ext wisdom.{0,15}$/i) !== null,
+        then: (_, [time]) =>
             new Fact(
                 topics.configurableEffect,
-                "resources/audio/rune-wisdom-soon.mp3"
+                `${
+                    Math.ceil(time / WISDOM_RUNE_SPAWN_SECONDS) *
+                    WISDOM_RUNE_SAPWN_MINUTES
+                } minutes`
             ),
     }),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map((rule) =>
-        everyIntervalSeconds(
-            WISDOM_RUNE_START_WARNING_TIME,
-            undefined,
-            WISDOM_RUNE_SPAWN_INTERVAL,
-            rule
-        )
-    )
     .map(inGame);
