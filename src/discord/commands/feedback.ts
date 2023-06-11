@@ -18,7 +18,9 @@ const data = new SlashCommandBuilder()
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     const userFeedback = interaction.options.getString("thoughts");
-    discordClient.sendFeedback(`Anonymous user: ${userFeedback}`);
+    discordClient.sendFeedback(
+        `Anonymous user: ${userFeedback}\nBot version: ${process.env.GIT_REVISION}`
+    );
     interaction.reply({
         content: `Anonymous feedback has been sent. Join the conversation to see a response! https://discord.gg/wQkkMJf7Aj`,
         ephemeral: true,
