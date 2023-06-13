@@ -68,7 +68,7 @@ export default [
             canCastMidas && time === lastReminderTime + REMINDER_INTERVAL,
         then: ([time]) => [
             new Fact(lastReminderTimeTopic, time),
-            new Fact(topics.configurableEffect, "resources/audio/midas.mpeg"),
+            new Fact(topics.configurableEffect, "resources/audio/midas.mp3"),
         ],
     }),
 ]
