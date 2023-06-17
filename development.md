@@ -1,6 +1,6 @@
 # Development
 
--   Set up your Discord bot dependencies (see Discord section below for details)
+-   Set up your Discord bot dependencies and .env file (see Discord section below for details)
 -   `npm install`
 -   `npm run build`
 -   `npm start`
