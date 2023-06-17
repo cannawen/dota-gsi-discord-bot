@@ -26,8 +26,7 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
     -   Change `DISCORD_BOT_TOKEN` to your OAuth2 -> Client Secret
     -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> Client ID
     -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
--   Discord / commands are to to be registered separately. Run `npm run discord` to update commands
--   [See here for details](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
+-   [Reference discord.js tutorial](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
 
 ### node-gsi
 
@@ -45,9 +44,9 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 -   In general, there are three main sections of the app
     -   GSI that takes data form Valve's Game State integration and parses it to a form we can use (Time, Items)
     -   Assistants (Roshan, Runes) that use that take that data and returns an effect (Audio file, Text to speech)
-    -   An Effect that knows how to execute the desired effect (playing audio on discord)
+    -   An Effect that knows how to execute the desired effect (playing audio on discord, playing audio on website)
 -   These three sections communicate via a key-value database `FactStore` (one per student) where a `Topic<T>.label` points to a `Fact<T>`
--   A `PersistentTopic<T>` has 3 forms of persistences that will be remembered forever, across games, or across restarts.
+-   A `PersistentTopic<T>` is a subclass of `Topic<T>` has 3 forms of persistences that will be remembered forever, across games, or across restarts.
 -   A `Topic<T>` is the concept of a type of data (i.e. `Time is a number` or `AudioFile is a string`)
 -   A `Fact<T>` is the combination of a Topic and a concrete value (i.e. `Time is the number 5` or `AudioFile is the string foo.mp3`)
 -   A module may register a `Rule` with the `Engine` by telling it what topics it is interested in, and what code to execute when the values of those topics change. If any interested topics' values are `undefined`, the rule will not be executed.
