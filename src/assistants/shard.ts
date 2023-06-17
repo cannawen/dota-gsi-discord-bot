@@ -21,7 +21,7 @@ export default atMinute(
     configurable(
         configInfo.ruleIndentifier,
         new Rule({
-            label: rules.assistant.shard,
+            label: "shard reminder at 15:00",
             then: () =>
                 new Fact(
                     topics.configurableEffect,

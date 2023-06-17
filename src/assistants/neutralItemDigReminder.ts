@@ -47,7 +47,7 @@ function hasValidItem(items: PlayerItems) {
 }
 export default [
     new Rule({
-        label: rules.assistant.neutralItemDigReminder,
+        label: "reminder to dig trusty shovel or pirate hat",
         trigger: [topics.alive, topics.items],
         then: () => new Fact(topics.configurableEffect, "dig"),
     }),

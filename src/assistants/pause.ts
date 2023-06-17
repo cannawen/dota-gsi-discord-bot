@@ -18,7 +18,7 @@ export default configurable(
     configInfo.ruleIndentifier,
     inGame(
         new Rule({
-            label: rules.assistant.pause,
+            label: "play jepoardy when paused",
             trigger: [topics.paused],
             then: ([paused]) => {
                 if (paused) {

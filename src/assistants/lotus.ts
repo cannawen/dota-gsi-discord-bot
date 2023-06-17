@@ -15,12 +15,12 @@ export const configInfo = new ConfigInfo(
 );
 
 const LOTUS_SPAWN_INTERVAL = 3 * 60;
-const LOTUS_START_WARNING_TIME = 3 * 60 - 15;
-const LOTUS_STOP_WARNING_TIME = 12 * 60;
+const LOTUS_START_WARNING_TIME = LOTUS_SPAWN_INTERVAL - 15;
+const LOTUS_STOP_WARNING_TIME = 4 * LOTUS_SPAWN_INTERVAL;
 
 export default [
     new Rule({
-        label: rules.assistant.lotus,
+        label: "lotus reminder from 3:00-12:00",
         trigger: [topics.time],
         then: () =>
             new Fact(

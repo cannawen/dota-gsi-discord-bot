@@ -22,7 +22,7 @@ const shouldBuyTeleportTopic = topicManager.createTopic<boolean>(
 
 export default [
     new Rule({
-        label: "should buy teleport when you don't have one but you have enough gold",
+        label: "set state that you should buy teleport when you don't have one but you have enough gold",
         trigger: [topics.items, topics.gold],
         then: ([items, gold]) =>
             new Fact(
@@ -33,7 +33,7 @@ export default [
     configurable(
         configInfo.ruleIndentifier,
         new Rule({
-            label: "remind you to buy a teleport scroll",
+            label: "remind you to buy a teleport scroll when should buy state set to true",
             trigger: [shouldBuyTeleportTopic],
             when: ([shouldBuy]) => shouldBuy,
             then: () => new Fact(topics.configurableEffect, "Buy a TP"),

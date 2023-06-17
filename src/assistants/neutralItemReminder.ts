@@ -20,7 +20,7 @@ const NEUTRAL_ITEM_REMINDER_START_TIME = 10 * 60 + 30;
 
 export default [
     new Rule({
-        label: rules.assistant.neutralItemReminder,
+        label: "reminder to take or upgrade neutral item",
         trigger: [topics.items, topics.time],
         then: ([items]) => {
             const audio = items.neutral

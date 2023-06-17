@@ -47,13 +47,13 @@ export default [
         },
     }),
     new Rule({
-        label: "when we cannot cast our midas, clear last reminder time topic",
+        label: "when midas cannot be cast, clear last reminder time topic",
         trigger: [canCastMidasTopic],
         when: ([canCast]) => canCast === false,
         then: () => [new Fact(lastReminderTimeTopic, undefined)],
     }),
     new Rule({
-        label: "if we see a castable midas, but we have never warned before, do not warn but set the reminder time",
+        label: "if midas is castable but we have never warned before, do not warn but set the reminder time (to give user some grace time)",
         trigger: [topics.time, canCastMidasTopic],
         given: [lastReminderTimeTopic],
         when: ([_, canCastMidas], [lastReminderTime]) =>
@@ -61,7 +61,7 @@ export default [
         then: ([time]) => new Fact(lastReminderTimeTopic, time),
     }),
     new Rule({
-        label: "if we can cast midas and it has been 15 seconds after our last reminder time, warn user about midas",
+        label: "if midas is castable and it has been 15 seconds after our last reminder time, warn user about midas",
         trigger: [topics.time, canCastMidasTopic],
         given: [lastReminderTimeTopic],
         when: ([time, canCastMidas], [lastReminderTime]) =>

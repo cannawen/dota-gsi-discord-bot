@@ -42,7 +42,7 @@ function whatShouldIBuy(message: string) {
 export default configurable(
     configInfo.ruleIndentifier,
     new Rule({
-        label: rules.assistant.glhf,
+        label: "random item suggestion",
         trigger: [topics.lastDiscordUtterance],
         then: ([message]) => {
             if (whatShouldIBuy(message)) {

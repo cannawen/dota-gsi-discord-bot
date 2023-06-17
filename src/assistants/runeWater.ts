@@ -20,7 +20,7 @@ export default [2, 4].map((time) =>
         configurable(
             configInfo.ruleIndentifier,
             new Rule({
-                label: rules.assistant.runeWater,
+                label: "water rune reminder at 2:00 and 4:00",
                 then: () =>
                     new Fact(
                         topics.configurableEffect,

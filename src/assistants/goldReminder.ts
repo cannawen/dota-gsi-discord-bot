@@ -121,19 +121,19 @@ export default [
         then: () => new Fact(audioToPlayTopic, "spend gold"),
     }),
     new Rule({
-        label: "when you have 1501-2500 gold, use tts reminder",
+        label: "when you have 1501-2500 gold, use medium reminder",
         trigger: [discretionaryGoldTopic],
         when: ([gold]) => gold > 1500 && gold <= 2500,
         then: () => new Fact(audioToPlayTopic, "you have a lot of gold"),
     }),
     new Rule({
-        label: "when you have over 2500-3500 gold, use aggresive tts reminder",
+        label: "when you have 2500-3500 gold, use aggresive reminder",
         trigger: [discretionaryGoldTopic],
         when: ([gold]) => gold > 2500 && gold <= 3500,
         then: () => new Fact(audioToPlayTopic, "you really have a lot of gold"),
     }),
     new Rule({
-        label: "when you have over 3500 gold, use super aggresive tts reminder",
+        label: "when you have over 3500 gold, use super aggresive reminder",
         trigger: [discretionaryGoldTopic],
         when: ([gold]) => gold > 3500,
         then: () =>
@@ -154,7 +154,7 @@ export default [
     configurable(
         configInfo.ruleIndentifier,
         new Rule({
-            label: "If we increase gold past a multiplier threshold, save the gold amount and warn the user",
+            label: "If we increase gold past a multiplier threshold, save the gold amount and warn the user if it has been over a minute since our last reminder",
             trigger: [discretionaryGoldTopic, audioToPlayTopic],
             given: [
                 lastRemindedGoldTopic,

@@ -20,7 +20,7 @@ const POWER_RUNE_START_REMINDER_TIME = 6 * 60;
 
 export default [
     new Rule({
-        label: rules.assistant.runePower,
+        label: "power rune reminder every 2 minutes",
         trigger: [topics.time],
         then: () =>
             new Fact(

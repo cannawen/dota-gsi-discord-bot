@@ -21,7 +21,7 @@ export default helper.tierTimeInfo.map((time) =>
         configurable(
             configInfo.ruleIndentifier,
             new Rule({
-                label: rules.assistant.newNeutralTokens,
+                label: "reminder that new neutral tokens are out",
                 then: () =>
                     new Fact(
                         topics.configurableEffect,

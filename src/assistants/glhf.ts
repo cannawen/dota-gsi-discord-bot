@@ -16,7 +16,7 @@ export const configInfo = new ConfigInfo(
 export default configurable(
     configInfo.ruleIndentifier,
     new Rule({
-        label: rules.assistant.glhf,
+        label: "says gl hf when game starts",
         trigger: [topics.inGame],
         given: [topics.time],
         when: ([inGame], [time]) => inGame && time === 0,

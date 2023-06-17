@@ -41,7 +41,7 @@ export default inGame(
     configurable(
         configInfo.ruleIndentifier,
         new Rule({
-            label: rules.assistant.wards,
+            label: "reminder to buy wards if you have not done so recently",
             trigger: [topics.time, topics.items],
             given: [lastWardReminderTimeTopic, lastWardCountTopic],
             then: ([time, items], [lastWardReminderTime, lastWardCount]) => {

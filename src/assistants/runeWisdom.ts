@@ -25,7 +25,7 @@ export default [
         undefined,
         WISDOM_RUNE_SPAWN_SECONDS,
         new Rule({
-            label: rules.assistant.runeWisdom,
+            label: "wisdom rune reminder every 7:00",
             trigger: [topics.time],
             then: () =>
                 new Fact(
@@ -35,7 +35,7 @@ export default [
         })
     ),
     new Rule({
-        label: "wisdom rune voice command",
+        label: "next wisdom rune voice command",
         trigger: [topics.lastDiscordUtterance],
         given: [topics.time],
         when: ([utterance]) =>
