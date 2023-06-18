@@ -17,6 +17,9 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 ## Dependencies
 
+## @discord/opus
+You may run into [issues](https://discordjs.guide/voice/#extra-dependencies) with `@discord/opus`; if this is the case, then simply remove it from your `package.json` file, then manuall install `opusscript` in lieu using `npm install opusscript`.
+
 ### Discord
 
 -   Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
