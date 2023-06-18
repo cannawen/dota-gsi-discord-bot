@@ -217,7 +217,10 @@ function roshanMessage(studentId: string) {
         case Status.ALIVE:
             return "Alive";
         case Status.MAYBE_ALIVE:
-            return `Maybe alive     ${roshNumbers(studentId)}`;
+            return `${engine.getFactValue(
+                studentId,
+                topics.roshanPercentChanceAlive
+            )}% alive     ${roshNumbers(studentId)}`;
         case Status.DEAD:
             return `Dead     ${roshNumbers(studentId)}`;
         default:
