@@ -68,7 +68,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    expect.stringContaining("Roshan is dead. May respawn at")
+                    expect.stringContaining("minimum 9 40")
                 );
             });
 
@@ -97,9 +97,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    expect.stringContaining(
-                        "67 percent chance roshan may be alive. Guaranteed respawn at"
-                    )
+                    expect.stringContaining("67 percent bottom. maximum 12 40")
                 );
             });
 

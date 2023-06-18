@@ -106,6 +106,7 @@ const sharedGameState = {
     roshanAegisExpiryTime: new Topic<number>("roshanAegisExpiryTime"),
     roshanMaybeAliveTime: new Topic<number>("roshanMaybeAliveTime"),
     roshanAliveTime: new Topic<number>("roshanAliveTime"),
+    roshanPercentChanceAlive: new Topic<number>("roshanPercentAlive"),
 };
 
 function configTopics() {

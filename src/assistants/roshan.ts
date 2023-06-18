@@ -118,25 +118,24 @@ const statusMessageRules = [
         then: (_, [maybeAliveTime]) =>
             new Fact(
                 roshanStatusMessageTopic,
-                `Roshan is dead. May respawn at ${timeHelper.secondsToTtsTimeString(
-                    maybeAliveTime
-                )}`
+                `minimum ${timeHelper.secondsToTtsTimeString(maybeAliveTime)}`
             ),
     }),
     new Rule({
         label: "rosh may be alive",
-        trigger: [topics.roshanStatus, topics.time],
-        given: [lastRoshDeathTimeTopic, topics.roshanAliveTime],
+        trigger: [
+            topics.roshanStatus,
+            topics.roshanPercentChanceAlive,
+            topics.daytime,
+        ],
+        given: [topics.roshanAliveTime],
         when: ([status]) => status === Status.MAYBE_ALIVE,
-        then: ([_, time], [deathTime, aliveTime]) =>
+        then: ([_, percentChance, daytime], [aliveTime]) =>
             new Fact(
                 roshanStatusMessageTopic,
-                `${roshHelper.percentChanceRoshanIsAlive(
-                    time,
-                    deathTime
-                )} percent chance roshan may be alive. Guaranteed respawn at ${timeHelper.secondsToTtsTimeString(
-                    aliveTime
-                )}`
+                `${percentChance} percent ${roshLocation(
+                    daytime
+                )}. maximum ${timeHelper.secondsToTtsTimeString(aliveTime)}`
             ),
     }),
     new Rule({
@@ -149,6 +148,16 @@ const statusMessageRules = [
 ];
 
 export default [
+    new Rule({
+        label: "percent chance roshan is alive",
+        trigger: [topics.time, topics.roshanStatus, lastRoshDeathTimeTopic],
+        when: ([_, status]) => status === Status.MAYBE_ALIVE,
+        then: ([time, _, deathTime]) =>
+            new Fact(
+                topics.roshanPercentChanceAlive,
+                roshHelper.percentChanceRoshanIsAlive(time, deathTime)
+            ),
+    }),
     ...statusMessageRules,
     new Rule({
         label: "when we get an event that says rosh is killed, add time to allRoshanDeathTimesTopic array",
