@@ -16,6 +16,7 @@
         <a href="https://github.com/cannawen/dota-gsi-discord-bot"
             >Open source code</a
         >
+        <br />
         <a href="https://discord.gg/wQkkMJf7Aj">Discord community</a>
         <br />
         <h1>How to install Dota Coach</h1>
@@ -31,19 +32,19 @@
             <li>Go to any channel and type /config</li>
             <li>
                 Open a text editor and save the config file as
-                gamestate_integration_dota2-coach.cfg on your desktop (make sure
-                the extension is .cfg and not .txt or .rtf)
+                <b>gamestate_integration_dota2-coach.cfg</b> on your desktop
+                (make sure the extension is .cfg and not .txt or .rtf)
             </li>
             <li>Open your Steam library</li>
             <li>Right click Dota 2, click "Properties"</li>
             <li>Make sure you are on "General" on the left sidebar</li>
-            <li>Add -gamestateintegration to the launch options</li>
-            <li>Click on "Local Files" on the left sidebar</li>
+            <li>Add <b>-gamestateintegration</b> to the launch options</li>
+            <li>Click on "Installed Files" on the left sidebar</li>
             <li>Click "Browse..."</li>
-            <li>Open game/dota/cfg</li>
+            <li>Open <b>game/dota/cfg</b></li>
             <li>
                 If it does not already exist, create a new folder called
-                gamestate_integration
+                <b>gamestate_integration</b>
             </li>
             <li>Drag and drop the file from step 3 into this new folder</li>
             <li>Restart Steam</li>
@@ -52,8 +53,8 @@
         <b>Optional - enable voice commands</b>
         <ul>
             <li>
-                Go to any discord channel the bot is in and type /voice and
-                select the True option
+                Go to any discord channel the bot is in and type
+                <b>/voice</b> and select the <b>True</b> option
             </li>
             <li>
                 This permits the bot to send your voice to Google's Speech
@@ -62,8 +63,8 @@
             </li>
             <li>
                 This feature is disabled by default and requires you to opt-in.
-                You can disable this feature at any time with the command /voice
-                False
+                You can disable this feature at any time with the command
+                <b>/voice False</b>
             </li>
         </ul>
         <h1>How to start Dota Coach</h1>
@@ -71,22 +72,21 @@
         <ol>
             <li>Join a voice channel (that the bot has permissions for)</li>
             <li>
-                Type /coachme at the bot (from the same discord server your
-                voice channel is in)
+                Type <b>/coachme</b> in any text channel on the discord server
             </li>
             <li>
                 Click the private coaching link provided by the bot (do not
                 share this link with anyone)
             </li>
-            <li>Click "Start coaching" button on the website</li>
+            <li>Click the "Start coaching" button on the website</li>
             <br />
             <b>You are now ready to play a game!</b>
             <br />
             <br />
             <li>
-                When you are done playing, you can type /stop to have the bot
-                leave the voice channel (the bot also auto-disconnects after 1
-                hour of inactivity)
+                When you are done playing, you can type <b>/stop</b> to have the
+                bot leave the voice channel (the bot also auto-disconnects after
+                1 hour of inactivity)
             </li>
         </ol>
         <ul>
@@ -129,8 +129,9 @@
             </li>
             <li>
                 If two people use the /coachme command in the same voice
-                channel, only one person will be allowed to play audio through
-                discord.
+                channel, only the first person will be allowed to play audio
+                through discord. The second person's private coaching link will
+                still work, but their "public" announcements will be disabled
             </li>
             <li>
                 Turbo mode, custom games, or spectating a game will lead to
