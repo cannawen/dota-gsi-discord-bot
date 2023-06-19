@@ -1,7 +1,7 @@
 # Development
 
 -   Set up your Discord bot dependencies and .env file (see Discord section below for details)
--   `npm install` (see @discord/opus section below if you run into install problems with opus)
+-   `npm install`
 -   `npm run build`
 -   `npm start`
 
@@ -30,10 +30,6 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
     -   Click `URL Generator` with the same settings as above. Copy the generated URL and use it to add your bot to your discord server
 -   Click `Bot` in sidebar, and enable all `Privileged Gateway Intents`
 -   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs (optional)
-
-## @discord/opus
-
-You may run into [issues](https://github.com/cannawen/dota-gsi-discord-bot/issues/102) with `@discord/opus`; if this is the case, then simply remove it from your `package.json` file, then manuall install `opusscript` in lieu using `npm install opusscript`.
 
 ### node-gsi
 
