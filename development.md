@@ -1,7 +1,7 @@
 # Development
 
 -   Set up your Discord bot dependencies and .env file (see Discord section below for details)
--   `npm install`
+-   `npm install` (see @discord/opus section below if you run into install problems with opus)
 -   `npm run build`
 -   `npm start`
 
@@ -17,19 +17,23 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 ## Dependencies
 
-## @discord/opus
-You may run into [issues](https://discordjs.guide/voice/#extra-dependencies) with `@discord/opus`; if this is the case, then simply remove it from your `package.json` file, then manuall install `opusscript` in lieu using `npm install opusscript`.
-
 ### Discord
 
--   Create and add a discord bot to your server. [(src, Step 1)](https://www.digitalocean.com/community/tutorials/how-to-build-a-discord-bot-with-node-js)
--   Scope: bot. Bot Permissions: Read Messages/View Channels, Read Message History, Connect, Speak, Use Voice Activity
--   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs
--   Create a `.env` file by copying `sample.env`
-    -   Change `DISCORD_BOT_TOKEN` to your OAuth2 -> Client Secret
-    -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> Client ID
-    -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
--   [Reference discord.js tutorial](https://discordjs.guide/creating-your-bot/command-deployment.html#command-registration)
+-   Go to the [Discord developers applications page](https://discord.com/developers/applications/) and click `New Application`
+-   Click `OAuth2` in sidebar.
+    -   Create a `.env` file by copying `sample.env`
+        -   Change `DISCORD_BOT_TOKEN` to your OAuth2 -> `Client Secret`
+        -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> `Client ID`
+        -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
+    -   Under `Default Authorization Link` choose `Authorization Method` as `In-app Authorization`
+        -   Scope: bot. Bot Permissions: Read Messages/View Channels, Send Messages, Connect, Speak, Use Voice Activity
+    -   Click `URL Generator` with the same settings as above. Copy the generated URL and use it to add your bot to your discord server
+-   Click `Bot` in sidebar, and enable all `Privileged Gateway Intents`
+-   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs (optional)
+
+## @discord/opus
+
+You may run into [issues](https://github.com/cannawen/dota-gsi-discord-bot/issues/102) with `@discord/opus`; if this is the case, then simply remove it from your `package.json` file, then manuall install `opusscript` in lieu using `npm install opusscript`.
 
 ### node-gsi
 
