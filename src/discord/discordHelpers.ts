@@ -28,13 +28,11 @@ function hashUserId(userId: string): string {
     }
 }
 
-function studentId(
-    interaction: ChatInputCommandInteraction<CacheType> | string
-) {
-    if (typeof interaction === "string") {
-        return hashUserId(interaction);
+function studentId(input: ChatInputCommandInteraction<CacheType> | string) {
+    if (typeof input === "string") {
+        return hashUserId(input);
     } else {
-        return hashUserId(interaction.user.id);
+        return hashUserId(input.user.id);
     }
 }
 
