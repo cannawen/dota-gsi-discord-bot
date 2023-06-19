@@ -4,6 +4,7 @@ import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
 import { factsToPlainObject } from "./engine/PersistentFactStore";
+import fs from "fs";
 import gsi from "node-gsi";
 import GsiData from "./gsi/GsiData";
 import gsiParser from "./gsiParser";
@@ -73,8 +74,16 @@ router.post("/coach/:studentId/debug_playPrivateAudio", (req, res) => {
 });
 
 router.get("/instructions", (req, res) => {
-    res.status(200).sendFile(
-        path.join(__dirname, "../resources/instructions.html")
+    res.status(200).send(
+        fs
+            .readFileSync(
+                path.join(__dirname, "../resources/instructions.html"),
+                "utf8"
+            )
+            .replace(
+                /DISCORD_APPLICATION_ID/g,
+                process.env.DISCORD_APPLICATION_ID || ""
+            )
     );
 });
 
