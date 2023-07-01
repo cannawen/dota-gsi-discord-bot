@@ -2,6 +2,7 @@ import {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import analytics from "./analytics/analytics";
 import cron from "node-cron";
 import discordClient from "./discord/discordClient";
 import dotenv = require("dotenv");
@@ -16,6 +17,8 @@ import Rule from "./engine/Rule";
 import server from "./server";
 
 dotenv.config();
+
+analytics.track("app started");
 
 // RULE REGISTRATION CODE
 
