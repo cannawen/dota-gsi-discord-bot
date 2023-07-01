@@ -18,7 +18,7 @@ import server from "./server";
 
 dotenv.config();
 
-analytics.track("app started");
+analytics.startApp();
 
 // RULE REGISTRATION CODE
 

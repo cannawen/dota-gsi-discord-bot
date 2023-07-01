@@ -3,7 +3,6 @@ import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
-import analytics from "../../analytics/analytics";
 import fs from "fs";
 import helpers from "../discordHelpers";
 import log from "../../log";
@@ -38,19 +37,8 @@ function generateConfigFile(userId: string) {
 }
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
-    const userId = interaction.user.id;
-    const studentId = helpers.studentId(userId);
-
-    analytics.track("/config", {
-        distinct_id: interaction.user.id,
-    });
-    analytics.people.set(userId, {
-        $first_name: interaction.user.username,
-        studentId: studentId,
-    });
-
     interaction.reply({
-        content: generateConfigFile(studentId),
+        content: generateConfigFile(helpers.studentId(interaction)),
         ephemeral: true,
     });
 }

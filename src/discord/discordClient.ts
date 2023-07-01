@@ -1,4 +1,5 @@
 import Discord, { Events } from "discord.js";
+import analytics from "../analytics/analytics";
 import commands from "./commands";
 import log from "../log";
 
@@ -82,6 +83,7 @@ export class DiscordClient {
 
             const slashCommand = commands[commandName];
             if (slashCommand) {
+                analytics.trackInteraction(interaction);
                 slashCommand.execute(interaction);
             } else {
                 log.error(
