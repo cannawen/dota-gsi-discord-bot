@@ -25,7 +25,7 @@ export default [
         undefined,
         WISDOM_RUNE_SPAWN_SECONDS,
         new Rule({
-            label: "wisdom rune reminder every 7:00",
+            label: "wisdom rune soon reminder every 7:00",
             trigger: [topics.time],
             then: () =>
                 new Fact(
