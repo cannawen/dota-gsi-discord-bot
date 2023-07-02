@@ -23,7 +23,7 @@ function trackInteraction(interaction: ChatInputCommandInteraction<CacheType>) {
 }
 
 function trackStartApp() {
-    mixpanel.track("app started");
+    mixpanel.track("app started", { version: process.env.GIT_REVISION });
 }
 
 function trackAudio(
