@@ -42,10 +42,7 @@ const roshanStatusMessageTopic = topicManager.createTopic<string>(
 );
 
 function isRoshStatusRequest(message: string) {
-    return (
-        message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null &&
-        message.match(/torment/) === null
-    );
+    return message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null;
 }
 
 function roshLocation(daytime: boolean) {
