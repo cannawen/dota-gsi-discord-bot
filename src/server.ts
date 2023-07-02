@@ -15,6 +15,7 @@ import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+import analytics from "./analytics/analytics";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [
@@ -180,15 +181,15 @@ router.get("/coach/:studentId/poll/audio", (req, res) => {
     const studentId = req.params.studentId;
     const nextAudio = getNextAudio(studentId);
     if (nextAudio) {
+        const time = engine.getFactValue(studentId, topics.time) || 0;
         log.info(
             "effect",
             "%s - Playing private audio %s for %s",
-            helper.secondsToTimeString(
-                engine.getFactValue(studentId, topics.time) || 0
-            ),
+            helper.secondsToTimeString(time),
             nextAudio.magenta,
             studentId.substring(0, 10)
         );
+        analytics.trackAudio(studentId, time, nextAudio, false);
     }
     res.status(200).json({ nextAudio: nextAudio });
 });
