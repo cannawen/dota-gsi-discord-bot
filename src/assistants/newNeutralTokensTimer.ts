@@ -12,7 +12,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.newNeutralTokens,
     "New neutral tokens",
     "Reminds you when new neutral tokens are spawning",
-    EffectConfig.PUBLIC
+    EffectConfig.NONE
 );
 
 export default helper.tierTimeInfo.map((time) =>
