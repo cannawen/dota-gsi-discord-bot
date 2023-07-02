@@ -14,7 +14,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.roshan,
     "Roshan timer",
-    'Tracks roshan respawn time. Responds to discord voice command "What is rosh/roshan status/timer" (must have /voice enabled)',
+    'Tracks roshan respawn time. Responds to voice command "What is rosh status/time/timer"',
     EffectConfig.PUBLIC
 );
 
