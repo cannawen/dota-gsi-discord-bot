@@ -11,6 +11,7 @@ import rules from "../../rules";
 import stt from "../speechToText";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
+import analytics from "../../analytics/analytics";
 
 const emColor = colors.cyan;
 
@@ -116,6 +117,7 @@ export default new Rule({
             );
             return;
         }
+        analytics.trackDiscordConnectionInfo(studentId, channel);
 
         const connection = Voice.joinVoiceChannel({
             adapterCreator: channel.guild.voiceAdapterCreator,

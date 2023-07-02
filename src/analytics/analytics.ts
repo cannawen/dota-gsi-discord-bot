@@ -1,7 +1,11 @@
-import { CacheType, ChatInputCommandInteraction } from "discord.js";
+import {
+    CacheType,
+    ChatInputCommandInteraction,
+    GuildBasedChannel,
+} from "discord.js";
 import discordHelper from "../discord/discordHelpers";
-import timeHelper from "../assistants/helpers/time";
 import Mixpanel from "mixpanel";
+import timeHelper from "../assistants/helpers/time";
 
 const mixpanel = Mixpanel.init(process.env.MIXPANEL_PROJECT_TOKEN || "");
 
@@ -36,8 +40,28 @@ function trackAudio(
     });
 }
 
+function trackDiscordConnectionInfo(
+    studentId: string,
+    channel: GuildBasedChannel
+) {
+    mixpanel.people.union(studentId, {
+        // guild id is guaranteed to be unique, but less human-readable than guild name
+        guildName: channel.guild.name,
+    });
+    mixpanel.track("join voice channel", {
+        distinct_id: studentId,
+        guildName: channel.guild.name,
+        channelName: channel.name,
+    });
+    mixpanel.track("guild", {
+        distinct_id: channel.guild.id,
+        guildName: channel.guild.name,
+    });
+}
+
 export default {
     trackAudio,
+    trackDiscordConnectionInfo,
     trackInteraction,
     trackStartApp,
 };
