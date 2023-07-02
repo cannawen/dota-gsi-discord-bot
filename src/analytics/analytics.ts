@@ -73,6 +73,10 @@ function trackEndGame(studentId: string) {
     });
 }
 
+function trackVoiceEnabled(studentId: string, enabled: boolean) {
+    mixpanel.people.set(studentId, { voice: enabled });
+}
+
 export default {
     trackAudio,
     trackDiscordConnectionInfo,
@@ -80,4 +84,5 @@ export default {
     trackStartApp,
     trackStartGame,
     trackEndGame,
+    trackVoiceEnabled,
 };

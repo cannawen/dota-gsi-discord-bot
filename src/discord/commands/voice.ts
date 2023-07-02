@@ -8,6 +8,7 @@ import Fact from "../../engine/Fact";
 import helpers from "../discordHelpers";
 import { SlashCommand } from "../SlashCommand";
 import topics from "../../topics";
+import analytics from "../../analytics/analytics";
 
 const data = new SlashCommandBuilder()
     .setName("voice")
@@ -22,7 +23,7 @@ const data = new SlashCommandBuilder()
     .setDescription("Enable or disable voice commands");
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
-    const allowed = interaction.options.getBoolean("allow");
+    const allowed = interaction.options.getBoolean("allow") || false;
     const studentId = helpers.studentId(interaction);
     if (!engine.getSession(studentId)) {
         engine.startCoachingSession(studentId);
@@ -31,6 +32,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
         studentId,
         new Fact(topics.discordVoiceRecognitionPermissionGranted, allowed)
     );
+    analytics.trackVoiceEnabled(studentId, allowed);
     interaction.reply({
         content: allowed ? "Voice commands enabled" : "Voice commands disabled",
         ephemeral: true,
