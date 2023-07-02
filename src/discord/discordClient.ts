@@ -2,6 +2,9 @@ import Discord, { Events } from "discord.js";
 import analytics from "../analytics/analytics";
 import commands from "./commands";
 import log from "../log";
+import dotenv = require("dotenv");
+
+dotenv.config();
 
 export class DiscordClient {
     private client = new Discord.Client({

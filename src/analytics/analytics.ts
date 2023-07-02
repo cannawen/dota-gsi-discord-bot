@@ -7,6 +7,7 @@ import discordHelper from "../discord/discordHelpers";
 import Mixpanel from "mixpanel";
 import timeHelper from "../assistants/helpers/time";
 
+// App will crash if mixpanel env variable is not set
 const mixpanel = Mixpanel.init(process.env.MIXPANEL_PROJECT_TOKEN || "");
 
 function trackInteraction(interaction: ChatInputCommandInteraction<CacheType>) {
