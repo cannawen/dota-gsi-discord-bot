@@ -60,9 +60,24 @@ function trackDiscordConnectionInfo(
     });
 }
 
+function trackStartGame(studentId: string) {
+    mixpanel.track("start game", {
+        distinct_id: studentId,
+    });
+    mixpanel.people.increment(studentId, "gamesCoached");
+}
+
+function trackEndGame(studentId: string) {
+    mixpanel.track("end game", {
+        distinct_id: studentId,
+    });
+}
+
 export default {
     trackAudio,
     trackDiscordConnectionInfo,
     trackInteraction,
     trackStartApp,
+    trackStartGame,
+    trackEndGame,
 };

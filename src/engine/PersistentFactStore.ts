@@ -39,7 +39,7 @@ export default class PersistentFactStore extends FactStore {
     public debug_getAllFacts() {
         return Array.from(this.facts.values());
     }
-    public updatePersistentFactsAcrossGames() {
+    public clearFactsToPrepareForNewGame() {
         this.facts = filter(this.facts, "persistAcrossGames").reduce(
             (memo: Map<string, Fact<unknown>>, fact) => {
                 memo.set(fact.topic.label, fact);

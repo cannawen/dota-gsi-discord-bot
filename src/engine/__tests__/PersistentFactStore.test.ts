@@ -34,8 +34,8 @@ describe("PersistentFactStore", () => {
         sut = new PersistentFactStore();
         facts.map(sut.set);
     });
-    test("updatePersistentFactsAcrossGames", () => {
-        sut.updatePersistentFactsAcrossGames();
+    test("clearFactsToPrepareForNewGame", () => {
+        sut.clearFactsToPrepareForNewGame();
 
         expect(sut.get(regularTopic)).toBeUndefined();
         expect(sut.get(persistAcrossGamesTopic)).toBe(1);

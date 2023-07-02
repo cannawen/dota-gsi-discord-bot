@@ -12,6 +12,7 @@ import Rule from "./engine/Rule";
 import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import analytics from "./analytics/analytics";
 
 function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
@@ -146,16 +147,24 @@ export class CustomEngine extends Engine {
 
 const engine = new CustomEngine();
 
-// TODO test
 engine.register(
     new Rule({
         label: "engine/reset_state_across_game",
         trigger: [topics.inGame, topics.studentId],
-        then: ([inGame, studentId]) => {
+        given: [topics.gsiEventsFromLiveGame],
+        then: ([inGame, studentId], [live]) => {
             if (!inGame) {
-                engine
-                    .getSession(studentId)
-                    ?.updatePersistentFactsAcrossGames();
+                engine.getSession(studentId)?.clearFactsToPrepareForNewGame();
+            }
+
+            if (live) {
+                if (inGame) {
+                    analytics.trackStartGame(studentId);
+                } else {
+                    // This is a bit sketchy because we start the coaching session with inGame being false
+                    // During the drafting phase or pre 0 second horn so this isn't exactly tracking the end of game
+                    analytics.trackEndGame(studentId);
+                }
             }
         },
     })

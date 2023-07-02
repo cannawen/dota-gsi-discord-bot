@@ -127,6 +127,7 @@ const allTopics = {
     ...configTopics(),
     ...sharedGameState,
     ...effect,
+    gsiEventsFromLiveGame: new Topic<boolean>("gsiEventsFromLiveGame"),
     ...gsi,
     ...discord,
 };
