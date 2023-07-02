@@ -9,11 +9,11 @@ function trackInteraction(interaction: ChatInputCommandInteraction<CacheType>) {
     const studentId = helpers.studentId(userId);
 
     mixpanel.track(`/${interaction.commandName}`, {
-        distinct_id: interaction.user.id,
+        distinct_id: studentId,
     });
-    mixpanel.people.set(userId, {
+    mixpanel.people.set(studentId, {
         $first_name: interaction.user.username,
-        studentId: studentId,
+        userId: userId,
     });
 }
 
