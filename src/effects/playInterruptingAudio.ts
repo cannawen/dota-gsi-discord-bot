@@ -4,6 +4,7 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 import Voice = require("@discordjs/voice");
+import analytics from "../analytics/analytics";
 
 export default new Rule({
     label: rules.effect.playInterruptingAudio,
@@ -12,8 +13,8 @@ export default new Rule({
         topics.discordSubscriptionTopic,
         topics.playInterruptingAudioFile,
     ],
-    given: [topics.studentId],
-    then: ([audioEnabled, subscription, file], [studentId]) => {
+    given: [topics.studentId, topics.time],
+    then: ([audioEnabled, subscription, file], [studentId, time]) => {
         if (audioEnabled) {
             log.info(
                 "discord",
@@ -21,7 +22,7 @@ export default new Rule({
                 file.magenta,
                 studentId?.substring(0, 10)
             );
-
+            analytics.trackAudio(studentId, time, file, true);
             subscription.player.play(Voice.createAudioResource(file));
         }
         return new Fact(topics.playInterruptingAudioFile, undefined);

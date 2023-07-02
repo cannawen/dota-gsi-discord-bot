@@ -15,7 +15,7 @@ const data = new SlashCommandBuilder()
             .setRequired(true)
     )
     .setDescription(
-        "Provide anonymous feedback (posted publicly to the bot's discord channel)"
+        "Provide feedback about the bot (posted to the bot's discord channel)"
     );
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
@@ -24,7 +24,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
         `Anonymous user: ${userFeedback}\nBot version: ${process.env.GIT_REVISION}`
     );
     interaction.reply({
-        content: `Anonymous feedback has been sent. Check the discord to see a response! https://discord.gg/wQkkMJf7Aj`,
+        content: `Feedback has been sent. Check the discord to see a response! https://discord.gg/wQkkMJf7Aj`,
         ephemeral: true,
     });
 }

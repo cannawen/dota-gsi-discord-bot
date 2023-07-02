@@ -11,6 +11,7 @@ describe("playInterruptingAudio", () => {
         beforeEach(() => {
             results = getResults(rule, {
                 playInterruptingAudioFile: "foo.mp3",
+                time: 0,
                 discordAudioEnabled: true,
                 discordSubscriptionTopic: {
                     player: {

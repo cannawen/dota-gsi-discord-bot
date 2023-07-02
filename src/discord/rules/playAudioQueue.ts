@@ -6,6 +6,7 @@ import Rule from "../../engine/Rule";
 import rules from "../../rules";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
+import analytics from "../../analytics/analytics";
 
 const emColor = colors.cyan;
 
@@ -29,6 +30,7 @@ export default new Rule({
                 emColor(filePath),
                 studentId?.substring(0, 10)
             );
+            analytics.trackAudio(studentId, time, filePath, true);
             const resource = Voice.createAudioResource(filePath);
             subscription.player.play(resource);
             return new Fact(topics.publicAudioQueue, audioQueue);
