@@ -10,6 +10,7 @@ describe("playAudioQueue", () => {
     beforeEach(() => {
         result = getResults(rule, {
             discordReadyToPlayAudio: true,
+            time: 0,
             publicAudioQueue: ["foo.mp3", "bar.mp3"],
             discordSubscriptionTopic: {
                 player: {
