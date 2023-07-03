@@ -50,6 +50,7 @@ describe("client", () => {
                 isChatInputCommand: () => true,
                 commandName: "unknown",
                 reply: mockReply,
+                user: { id: "userId" },
             };
             handleInteraction(interaction);
             expect(mockReply).toHaveBeenCalledWith({
