@@ -1,7 +1,5 @@
 import betweenSeconds from "./betweenSeconds";
-import Fact from "../Fact";
 import Rule from "../Rule";
-import topicManager from "../topicManager";
 import topics from "../../topics";
 
 /**
