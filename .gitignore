@@ -9,3 +9,4 @@ dump.rdb
 data/
 coverage
 resources/audio/stt-cache
+resources/gamestate_integration_dota2-coach.cfg

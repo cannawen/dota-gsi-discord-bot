@@ -1,4 +1,5 @@
 import {
+    AttachmentBuilder,
     CacheType,
     ChatInputCommandInteraction,
     SlashCommandBuilder,
@@ -13,19 +14,19 @@ const data = new SlashCommandBuilder()
     .setName("config")
     .setDescription("How to set up the bot");
 
-function generateConfigFile(userId: string) {
+function generateConfigFileString(studentId: string) {
     const serverUrl = process.env.SERVER_URL;
     if (serverUrl) {
         return fs
             .readFileSync(
                 path.join(
                     __dirname,
-                    "../../../resources/configInstructions.txt"
+                    "../../../resources/configGsiTemplate.cfg"
                 ),
                 "utf8"
             )
             .replace(/SERVER_URL/g, serverUrl)
-            .replace(/STUDENT_ID/, userId);
+            .replace(/STUDENT_ID/, studentId);
     } else {
         log.error(
             "discord",
@@ -37,8 +38,17 @@ function generateConfigFile(userId: string) {
 }
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
+    const configPath = path.join(
+        __dirname,
+        "../../../resources/gamestate_integration_dota2-coach.cfg"
+    );
+    fs.writeFileSync(
+        configPath,
+        generateConfigFileString(helpers.studentId(interaction))
+    );
     interaction.reply({
-        content: generateConfigFile(helpers.studentId(interaction)),
+        files: [new AttachmentBuilder(configPath)],
+        content: `See ${process.env.SERVER_URL}/instructions for how to set up the bot, using the configuration file below`,
         ephemeral: true,
     });
 }
