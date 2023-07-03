@@ -46,17 +46,12 @@ function trackDiscordConnectionInfo(
     channel: GuildBasedChannel
 ) {
     mixpanel.people.union(studentId, {
-        // guild id is guaranteed to be unique, but less human-readable than guild name
-        guildName: channel.guild.name,
+        guildName: `${channel.guild.name}/${channel.guild.id}`,
     });
     mixpanel.track("join voice channel", {
         distinct_id: studentId,
         guildName: channel.guild.name,
         channelName: channel.name,
-    });
-    mixpanel.track("guild", {
-        distinct_id: channel.guild.id,
-        guildName: channel.guild.name,
     });
 }
 
