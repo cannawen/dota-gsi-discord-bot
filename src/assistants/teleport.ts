@@ -1,3 +1,4 @@
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
@@ -35,8 +36,6 @@ export default [
             ),
     }),
     conditionalEveryIntervalSeconds(
-        TIME_TO_START_WARNING_ABOUT_TP,
-        undefined,
         ([shouldBuy]) => shouldBuy,
         WARN_ABOUT_TP_INTERVAL,
         configurable(
@@ -48,4 +47,8 @@ export default [
             })
         )
     ),
-].map(inGame);
+]
+    .map((rule) =>
+        betweenSeconds(TIME_TO_START_WARNING_ABOUT_TP, undefined, rule)
+    )
+    .map(inGame);

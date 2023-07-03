@@ -17,8 +17,6 @@ describe("conditionalEveryIntervalSeconds", () => {
         givenTopic = topicManager.createTopic<boolean>("givenTopic");
 
         rule = everyInterval(
-            3,
-            undefined,
             ([trigger], [given]) => trigger && given,
             3,
             new Rule({
@@ -45,7 +43,7 @@ describe("conditionalEveryIntervalSeconds", () => {
         expect(two).not.toContainAudioEffect();
 
         const three = getResults(rule, { ...params, time: 3 }, two);
-        expect(three).not.toContainAudioEffect();
+        expect(three).toContainAudioEffect();
 
         const four = getResults(rule, { ...params, time: 4 }, three);
         expect(four).not.toContainAudioEffect();

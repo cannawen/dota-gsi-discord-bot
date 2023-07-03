@@ -1,3 +1,4 @@
+import betweenSeconds from "../engine/rules/betweenSeconds";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
@@ -32,12 +33,13 @@ export default [
 ]
     .map((rule) =>
         conditionalEveryIntervalSeconds(
-            NEUTRAL_ITEM_REMINDER_START_TIME,
-            undefined,
             ([items, time]) =>
                 !helper.isItemAppropriateForTime(items.neutral?.id, time),
             TIME_BETWEEN_REMINDERS,
             rule
         )
+    )
+    .map((rule) =>
+        betweenSeconds(NEUTRAL_ITEM_REMINDER_START_TIME, undefined, rule)
     )
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));

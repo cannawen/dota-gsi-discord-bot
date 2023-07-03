@@ -54,8 +54,6 @@ export default [
 ]
     .map((rule) =>
         conditionalEveryIntervalSeconds(
-            undefined,
-            undefined,
             ([alive, items]) => hasValidItem(items) && alive,
             TIME_BETWEEN_REMINDERS,
             rule

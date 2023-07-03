@@ -38,8 +38,6 @@ export default [
 ]
     .map((rule) =>
         conditionalEveryIntervalSeconds(
-            undefined,
-            undefined,
             ([items]) => canMoveItemFromBackpackToInventory(items),
             TIME_BETWEEN_REMINDERS,
             rule
