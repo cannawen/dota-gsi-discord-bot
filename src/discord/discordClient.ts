@@ -1,11 +1,11 @@
 import Discord, { Events } from "discord.js";
 import analytics from "../analytics/analytics";
 import commands from "./commands";
-import log from "../log";
-import dotenv = require("dotenv");
 import discordHelpers from "./discordHelpers";
-import Fact from "../engine/Fact";
+import dotenv = require("dotenv");
 import engine from "../customEngine";
+import Fact from "../engine/Fact";
+import log from "../log";
 import topics from "../topics";
 
 dotenv.config();
