@@ -3,6 +3,10 @@ import analytics from "../analytics/analytics";
 import commands from "./commands";
 import log from "../log";
 import dotenv = require("dotenv");
+import discordHelpers from "./discordHelpers";
+import Fact from "../engine/Fact";
+import engine from "../customEngine";
+import topics from "../topics";
 
 dotenv.config();
 
@@ -75,6 +79,11 @@ export class DiscordClient {
     private setupInteractions() {
         this.client.on(Events.InteractionCreate, (interaction) => {
             if (!interaction.isChatInputCommand()) return;
+
+            const userId = interaction.user.id;
+            const studentId = discordHelpers.studentId(userId);
+            engine.startCoachingSession(studentId);
+            engine.setFact(studentId, new Fact(topics.discordUserId, userId));
 
             const commandName = interaction.commandName;
 

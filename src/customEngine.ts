@@ -2,6 +2,7 @@ import PersistentFactStore, {
     factsToPlainObject,
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
+import analytics from "./analytics/analytics";
 import { DeepReadonly } from "ts-essentials";
 import effectConfig from "./effectConfigManager";
 import Engine from "./engine/Engine";
@@ -12,7 +13,6 @@ import Rule from "./engine/Rule";
 import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import analytics from "./analytics/analytics";
 
 function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
@@ -77,13 +77,8 @@ export class CustomEngine extends Engine {
         // Create new db for student
         const db = new PersistentFactStore();
         this.set(db, new Fact(topics.studentId, studentId));
-        this.set(db, new Fact(topics.timestamp, time.nowUnix())); // TODO test
+        this.set(db, new Fact(topics.timestamp, time.nowUnix()));
 
-        // Check to see if we have saved data
-        // If we cannot get saved data due to an error,
-        // Assume our preference topics have been updated
-        // And nuke entire save file
-        // TODO there is probably a more graceful way to handle this
         const data = getSavedDataOrDeleteDataIfInvalid(studentId);
 
         // Set default config and overwrite any with saved configs
@@ -95,11 +90,21 @@ export class CustomEngine extends Engine {
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
 
-        // Set guild or channel id
-        // or null if not provided so we explicitly propogate the null information downstream
-        // to set the discordEnabled state
-        this.set(db, new Fact(topics.discordGuildId, guildId || null));
-        this.set(db, new Fact(topics.discordGuildChannelId, channelId || null));
+        // explicitly set null to propogate to discordAudioEnabled state downstream
+        this.set(
+            db,
+            new Fact(
+                topics.discordGuildId,
+                guildId || db.get(topics.discordGuildId) || null
+            )
+        );
+        this.set(
+            db,
+            new Fact(
+                topics.discordGuildChannelId,
+                channelId || db.get(topics.discordGuildChannelId) || null
+            )
+        );
     }
 
     public deleteSession(studentId: string) {

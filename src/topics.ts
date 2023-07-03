@@ -64,6 +64,9 @@ const effect = {
 };
 
 const discord = {
+    discordUserId: new PersistentTopic<string>("discordUserId", {
+        persistForever: true,
+    }),
     discordGuildId: new PersistentTopic<string | null>("discordGuildId", {
         persistAcrossGames: true,
         persistAcrossRestarts: true,

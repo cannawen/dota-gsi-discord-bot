@@ -1,6 +1,6 @@
 import rule from "../discordEnabled";
 
-describe("discordEnabled", () => {
+describe("discordAudioEnabled", () => {
     test("we do not have a guildId, disable audio", () => {
         const result = getResults(rule[0], {
             discordGuildId: null,
