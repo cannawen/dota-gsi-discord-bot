@@ -144,6 +144,9 @@ const allTopics = {
     ...sharedGameState,
     ...effect,
     gsiEventsFromLiveGame: new Topic<boolean>("gsiEventsFromLiveGame"),
+    gsiVersion: new PersistentTopic<string>("gsiVersion", {
+        persistForever: true,
+    }),
     ...gsi,
     ...discord,
 };

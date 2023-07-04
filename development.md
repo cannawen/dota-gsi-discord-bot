@@ -35,6 +35,10 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 -   When a change is pushed to `cannawen/node-gsi#master` on github and you want the newest version, use `npm update`
 
+### Mixpanel (optional)
+
+-   You can create a mixpanel project to track analytics for the project. Set your project token in the .env file
+
 ## Logging
 
 -   Use winston loggers from `log.ts`. New "labels" are created for loggers on the fly

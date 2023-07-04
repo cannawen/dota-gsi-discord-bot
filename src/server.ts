@@ -280,11 +280,23 @@ router.post("/gsi", (req, res) => {
 
 // GSI CODE
 
+function parseStudentIdFromAuth(auth: string) {
+    return auth.substring(0, 64);
+}
+function parseGsiFileVersionFromAuth(auth: string) {
+    if (auth.length === 64) {
+        return undefined;
+    } else {
+        return auth.substring(65, undefined);
+    }
+}
+
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
-    // Check to see if we care about this auth token before sending info to the engine
-    // See if it matches topic.discordCoachMe and is not undefined
+    if (!data.auth) return;
+
+    const studentId = parseStudentIdFromAuth(data.auth);
     engine.setFact(
-        data.auth,
+        studentId,
         new Fact(
             topics.allData,
             new GsiData({
@@ -297,7 +309,11 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
             })
         )
     );
-    engine.setFact(data.auth, new Fact(topics.gsiEventsFromLiveGame, true));
+    engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, true));
+    engine.setFact(
+        studentId,
+        new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
+    );
 });
 
 // If we are looking at a replay or as an observer,
@@ -307,8 +323,12 @@ const playerId = 6;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
+        if (!data.auth) return;
+
+        const studentId = parseStudentIdFromAuth(data.auth);
+
         engine.setFact(
-            data.auth,
+            studentId,
             new Fact(
                 topics.allData,
                 new GsiData({
@@ -322,8 +342,12 @@ gsiParser.events.on(
             )
         );
         engine.setFact(
-            data.auth,
+            studentId,
             new Fact(topics.gsiEventsFromLiveGame, false)
+        );
+        engine.setFact(
+            studentId,
+            new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
         );
     }
 );
