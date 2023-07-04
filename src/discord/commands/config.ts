@@ -40,7 +40,7 @@ function generateConfigFileString(studentId: string) {
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     const configPath = path.join(
         __dirname,
-        "../../../resources/gamestate_integration_dota2-coach.cfg"
+        "../../../resources/gamestate_integration_dota2-coach_v1.cfg"
     );
     fs.writeFileSync(
         configPath,
