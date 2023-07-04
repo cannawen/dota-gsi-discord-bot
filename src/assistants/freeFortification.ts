@@ -15,7 +15,7 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC_INTERRUPTING
 );
 
-const TOWER_HEALTH_WARN_THRESHOLD = 500;
+const TOWER_HEALTH_WARN_THRESHOLD = 700;
 
 const t1FreeFortWarnedAlready = new Topic<boolean>("t1FreeFortWarnedAlready");
 const t2FreeFortWarnedAlready = new Topic<boolean>("t2FreeFortWarnedAlready");
