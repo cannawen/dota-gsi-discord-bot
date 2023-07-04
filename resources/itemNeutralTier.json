@@ -74,5 +74,12 @@
         "item_pirate_hat",
         "item_seer_stone",
         "item_desolator_2"
+    ],
+    "tokens": [
+        "item_tier1_token",
+        "item_tier2_token",
+        "item_tier3_token",
+        "item_tier4_token",
+        "item_tier5_token"
     ]
 }

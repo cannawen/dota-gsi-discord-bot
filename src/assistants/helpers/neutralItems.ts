@@ -8,6 +8,7 @@ export const enum Tier {
     THREE = 3,
     FOUR = 4,
     FIVE = 5,
+    UNUSED_TOKEN = 6,
 }
 
 const tierTimeInfo = [7, 17, 27, 37, 60];
@@ -28,7 +29,7 @@ const nameToTierObject = Object.fromEntries(
 function timeToTier(time: number): Tier {
     const index = tierTimeInfo
         .map((minute) => minute * 60)
-        .map((s) => time < s)
+        .map((seconds) => time < seconds)
         .findIndex((value) => value === true);
     if (index === -1) {
         return Tier.FIVE;
@@ -47,14 +48,17 @@ function isItemAppropriateForTime(id: string | undefined, time: number) {
         return false;
     }
     const itemTier = nameToTier(id);
-    // Having an unclassified neutral item is always appropriate
-    // This is probably a data issue on our end
-    if (itemTier === Tier.UNKNOWN) {
-        return true;
+    // Having an unused or unknown token is never appropriate
+    if (itemTier === Tier.UNUSED_TOKEN || itemTier === Tier.UNKNOWN) {
+        return false;
     }
     // Appropriate item when matching time tier or 1 below
     const timeTier = timeToTier(time);
     return itemTier >= timeTier - 1;
+}
+
+function isNeutralItem(name: string) {
+    return nameToTier(name) !== Tier.UNKNOWN;
 }
 
 export default {
@@ -65,4 +69,5 @@ export default {
     nameToTier,
     timeToTier,
     isItemAppropriateForTime,
+    isNeutralItem,
 };

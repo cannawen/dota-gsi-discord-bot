@@ -4,6 +4,7 @@ import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
+import neutralHelpers from "./helpers/neutralItems";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -20,7 +21,7 @@ const TIME_BETWEEN_REMINDERS = 15;
 
 function canMoveItemFromBackpackToInventory(items: PlayerItems): boolean {
     const itemsInBackpack = items.backpack.filter(
-        (item) => item !== null
+        (item) => item !== null && !neutralHelpers.isNeutralItem(item.id)
     ).length;
     const inventorySlots = items.inventory.filter(
         (item) => item === null
