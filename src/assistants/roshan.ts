@@ -30,15 +30,24 @@ const allRoshanDeathTimesTopic = topicManager.createTopic<number[]>(
 );
 
 const lastRoshDeathTimeTopic = topicManager.createTopic<number>(
-    "lastRoshDeathTimeTopic"
+    "lastRoshDeathTimeTopic",
+    {
+        persistAcrossRestarts: true,
+    }
 );
 
 const roshanAliveMessageTopic = topicManager.createTopic<string>(
-    "roshanAliveMessageTopic"
+    "roshanAliveMessageTopic",
+    {
+        persistAcrossRestarts: true,
+    }
 );
 const roshanStatusMessageTopic = topicManager.createTopic<string>(
     "roshanStatusMessageTopic",
-    { defaultValue: "Roshan status is unknown" }
+    {
+        defaultValue: "Roshan status is unknown",
+        persistAcrossRestarts: true,
+    }
 );
 
 function isRoshStatusRequest(message: string) {

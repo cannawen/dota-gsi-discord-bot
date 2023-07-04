@@ -105,11 +105,24 @@ const discord = {
 };
 
 const sharedGameState = {
-    roshanStatus: new Topic<Status>("roshanStatus", Status.NOT_IN_A_GAME),
-    roshanAegisExpiryTime: new Topic<number>("roshanAegisExpiryTime"),
-    roshanMaybeAliveTime: new Topic<number>("roshanMaybeAliveTime"),
-    roshanAliveTime: new Topic<number>("roshanAliveTime"),
-    roshanPercentChanceAlive: new Topic<number>("roshanPercentAlive"),
+    roshanStatus: new PersistentTopic<Status>("roshanStatus", {
+        defaultValue: Status.NOT_IN_A_GAME,
+        persistAcrossRestarts: true,
+    }),
+    roshanAegisExpiryTime: new PersistentTopic<number>(
+        "roshanAegisExpiryTime",
+        { persistAcrossRestarts: true }
+    ),
+    roshanMaybeAliveTime: new PersistentTopic<number>("roshanMaybeAliveTime", {
+        persistAcrossRestarts: true,
+    }),
+    roshanAliveTime: new PersistentTopic<number>("roshanAliveTime", {
+        persistAcrossRestarts: true,
+    }),
+    roshanPercentChanceAlive: new PersistentTopic<number>(
+        "roshanPercentAlive",
+        { persistAcrossRestarts: true }
+    ),
 };
 
 function configTopics() {
