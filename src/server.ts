@@ -314,6 +314,10 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
         studentId,
         new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
     );
+    analytics.trackGsiVersion(
+        studentId,
+        parseGsiFileVersionFromAuth(data.auth)
+    );
 });
 
 // If we are looking at a replay or as an observer,
@@ -348,6 +352,10 @@ gsiParser.events.on(
         engine.setFact(
             studentId,
             new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
+        );
+        analytics.trackGsiVersion(
+            studentId,
+            parseGsiFileVersionFromAuth(data.auth)
         );
     }
 );

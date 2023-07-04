@@ -77,9 +77,14 @@ function trackVoiceEnabled(studentId: string, enabled: boolean) {
     mixpanel?.people.set(studentId, { voice: enabled });
 }
 
+function trackGsiVersion(studentId: string, version: string | undefined) {
+    mixpanel?.people.set(studentId, { gsiVersion: version });
+}
+
 export default {
     trackAudio,
     trackDiscordConnectionInfo,
+    trackGsiVersion,
     trackInteraction,
     trackStartApp,
     trackStartGame,
