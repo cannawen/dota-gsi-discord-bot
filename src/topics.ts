@@ -12,6 +12,19 @@ import Voice from "@discordjs/voice";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
+    // building
+    t1Top: new Topic<number>("t1Top"),
+    t2Top: new Topic<number>("t2Top"),
+    t3Top: new Topic<number>("t3Top"),
+    t4Top: new Topic<number>("t4Top"),
+    t1Mid: new Topic<number>("t1Mid"),
+    t2Mid: new Topic<number>("t2Mid"),
+    t3Mid: new Topic<number>("t3Mid"),
+    t1Bot: new Topic<number>("t1Bot"),
+    t2Bot: new Topic<number>("t2Bot"),
+    t3Bot: new Topic<number>("t3Bot"),
+    t4Bot: new Topic<number>("t4Bot"),
+    ancient: new Topic<number>("ancient"),
 
     // events
     event: new Topic<DeepReadonly<Event>>("event"),
@@ -31,6 +44,7 @@ const gsi = {
     paused: new Topic<boolean>("paused"),
     // player
     gold: new Topic<number>("gold"),
+    team: new Topic<string>("team"),
     // provider
     // Also set when we create a new coaching session
     timestamp: new PersistentTopic<number>("timestamp", {
