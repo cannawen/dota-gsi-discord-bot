@@ -40,6 +40,7 @@ const effect = {
 };
 
 const gsi = {
+    buildings: "gsi/buildings",
     events: {
         new: "gsi/events/new",
         reset: "gsi/events/reset_all",

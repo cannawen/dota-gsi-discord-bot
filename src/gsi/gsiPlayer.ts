@@ -9,7 +9,10 @@ export default new Rule({
     then: ([data]) => {
         const player = data.player;
         if (player) {
-            return new Fact(topics.gold, player.gold);
+            return [
+                new Fact(topics.gold, player.gold),
+                new Fact(topics.team, player.team),
+            ];
         }
     },
 });

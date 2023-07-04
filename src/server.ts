@@ -300,6 +300,7 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
         new Fact(
             topics.allData,
             new GsiData({
+                buildings: data.state.buildings,
                 events: data.state.events,
                 hero: data.state.hero,
                 items: data.state.items,
@@ -336,6 +337,7 @@ gsiParser.events.on(
             new Fact(
                 topics.allData,
                 new GsiData({
+                    buildings: data.state.buildings,
                     events: data.state.events,
                     hero: data.state.hero?.at(playerId) || null,
                     items: data.state.items?.at(playerId) || null,
