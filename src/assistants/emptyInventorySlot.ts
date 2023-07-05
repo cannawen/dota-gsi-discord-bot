@@ -21,7 +21,10 @@ const TIME_BETWEEN_REMINDERS = 15;
 
 function canMoveItemFromBackpackToInventory(items: PlayerItems): boolean {
     const itemsInBackpack = items.backpack.filter(
-        (item) => item !== null && !neutralHelpers.isNeutralItem(item.id)
+        (item) =>
+            item !== null &&
+            !neutralHelpers.isNeutralItem(item.id) &&
+            item.id.match(/recipe/) === null
     ).length;
     const inventorySlots = items.inventory.filter(
         (item) => item === null
