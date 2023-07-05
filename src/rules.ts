@@ -2,6 +2,9 @@
 
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
+// NOTE: IF YOU CHANGE THESE STRINGS WITHOUT MIGRATION
+// ALL THE USER'S SAVED PREFERENCES WILL BE RESET
+// SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
 const assistant = {
     buyback: "assistant-buyback",
     freeFortification: "assistant-free_fortification",
