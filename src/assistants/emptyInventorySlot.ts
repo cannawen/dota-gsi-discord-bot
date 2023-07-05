@@ -17,7 +17,7 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-const TIME_BETWEEN_REMINDERS = 15;
+const TIME_BETWEEN_REMINDERS = 30;
 
 function canMoveItemFromBackpackToInventory(items: PlayerItems): boolean {
     const itemsInBackpack = items.backpack.filter(
