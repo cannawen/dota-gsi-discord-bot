@@ -7,6 +7,7 @@
 // SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
 const assistant = {
     buyback: "assistant-buyback",
+    emptyInventory: "assistant-empty_inventory",
     freeFortification: "assistant-free_fortification",
     glhf: "assistant-glhf",
     goldReminder: "assistant-gold",

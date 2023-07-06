@@ -11,7 +11,7 @@ import rules from "../rules";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
-    rules.assistant.midas,
+    rules.assistant.emptyInventory,
     "Empty inventory slot",
     "Reminds you to put items from your backpack into inventory if there is an empty slot",
     EffectConfig.PRIVATE
