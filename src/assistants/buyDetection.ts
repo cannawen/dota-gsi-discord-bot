@@ -52,6 +52,7 @@ function hasInvisEnemy(enemies: Set<string>): boolean {
         "npc_dota_hero_riki",
         "npc_dota_hero_sand_king",
         "npc_dota_hero_weaver",
+        "npc_dota_hero_templar_assassin",
     ].reduce((memo, hero) => memo || enemies.has(hero), false);
 }
 
