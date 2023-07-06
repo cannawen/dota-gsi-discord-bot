@@ -48,6 +48,7 @@ export function registerEverything() {
     registerRulesInDirectory("discord/rules");
     registerRulesInDirectory("effects");
     registerRulesInDirectory("gsi");
+    registerRulesInDirectory("analytics/rules");
 
     registerAllTopics();
 }

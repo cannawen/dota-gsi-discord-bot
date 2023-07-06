@@ -12,10 +12,6 @@ const allHeroesOnMinimapTopic = topicManager.createTopic<
     DeepReadonly<Set<string>>
 >("allHeroesOnMinimapTopic");
 
-const allHeroesInGameTopic = topicManager.createTopic<
-    DeepReadonly<Set<string>>
->("allHeroesInGameTopic");
-
 const friendlyCaptureTimeTopic = topicManager.createTopic<boolean>(
     "friendlyCaptureTimeTopic"
 );

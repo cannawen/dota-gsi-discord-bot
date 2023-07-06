@@ -82,6 +82,7 @@ function trackGsiVersion(studentId: string, version: string | undefined) {
 }
 
 export default {
+    mixpanel,
     trackAudio,
     trackDiscordConnectionInfo,
     trackGsiVersion,
