@@ -49,7 +49,7 @@ const gsi = {
     allEnemyHeroes: new Topic<DeepReadonly<Set<string>>>("allEnemyHeroes"),
     // player
     gold: new Topic<number>("gold"),
-    team: new Topic<string>("team"),
+    team: new Topic<string>("team", "radiant"), // if we are an observer, default to pretending to be on radiant side
     // provider
     // Also set when we create a new coaching session
     timestamp: new PersistentTopic<number>("timestamp", {

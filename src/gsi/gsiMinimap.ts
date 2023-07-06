@@ -1,22 +1,23 @@
 import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import GsiData from "./GsiData";
+import MinimapElement from "../gsi-data-classes/MinimapElement";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const minimapUnitsTopic =
-    topicManager.createTopic<DeepReadonly<Set<string>>>("minimapUnitsTopic");
+    topicManager.createTopic<DeepReadonly<Set<MinimapElement>>>(
+        "minimapUnitsTopic"
+    );
+
 const allHeroesOnMinimapTopic = topicManager.createTopic<
     DeepReadonly<Set<string>>
 >("allHeroesOnMinimapTopic");
 
-const friendlyCaptureTimeTopic = topicManager.createTopic<boolean>(
-    "friendlyCaptureTimeTopic"
-);
-const enemyCaptureTimeTopic = topicManager.createTopic<boolean>(
-    "enemyCaptureTimeTopic"
+const allTenHeroesOnMapForTheFirstTimeTopic = topicManager.createTopic<boolean>(
+    "allTenHeroesOnMapForTheFirstTimeTopic"
 );
 
 export default [
@@ -29,53 +30,45 @@ export default [
                 return [
                     new Fact(
                         minimapUnitsTopic,
-                        new Set(minimap.map((e) => e.unitname))
+                        new Set(minimap.map((e) => MinimapElement.create(e)))
                     ),
                 ];
             }
         },
     }),
     new Rule({
-        label: "all heroes from minimap",
+        label: "all current heroes from minimap",
         trigger: [minimapUnitsTopic],
-        then: ([units]) => {
-            const heroes = [...units].filter((name) =>
-                (name as string)?.match(/^npc_dota_hero/)
+        then: ([elements]) => {
+            const heroes = [...elements].filter((element) =>
+                (element.unitName as string)?.match(/^npc_dota_hero/)
             );
             return new Fact(allHeroesOnMinimapTopic, new Set(heroes));
         },
     }),
 
     new Rule({
-        label: "first five heroes on map",
-        trigger: [allHeroesOnMinimapTopic],
-        when: ([heroes]) => heroes.size === 5,
-        then: () => new Fact(friendlyCaptureTimeTopic, true),
-    }),
-    new Rule({
-        label: "first ten heroes on map",
+        label: "set state when we see ten heroes on map for the first time",
         trigger: [allHeroesOnMinimapTopic],
         when: ([heroes]) => heroes.size === 10,
-        then: () => new Fact(enemyCaptureTimeTopic, true),
+        then: () => new Fact(allTenHeroesOnMapForTheFirstTimeTopic, true),
     }),
 
     new Rule({
-        label: "all friendly heroes",
-        trigger: [friendlyCaptureTimeTopic],
-        given: [allHeroesOnMinimapTopic],
-        when: ([friendlyCapture]) => friendlyCapture,
-        then: (_, [heroes]) => new Fact(topics.allFriendlyHeroes, heroes),
-    }),
-    new Rule({
-        label: "all enemy heroes",
-        trigger: [enemyCaptureTimeTopic],
-        given: [allHeroesOnMinimapTopic, topics.allFriendlyHeroes],
-        when: ([enemyCapture]) => enemyCapture,
-        then: (_, [all, friendly]) =>
+        label: "parse enemy and friendly heroes",
+        trigger: [allTenHeroesOnMapForTheFirstTimeTopic],
+        given: [allHeroesOnMinimapTopic, topics.team],
+        when: ([allHeroesOnMap]) => allHeroesOnMap,
+        then: (_, [heroes, myTeam]) => [
+            new Fact(
+                topics.allFriendlyHeroes,
+                new Set([...heroes].filter((hero) => hero.team === myTeam))
+            ),
             new Fact(
                 topics.allEnemyHeroes,
-                new Set([...all].filter((hero) => !friendly?.has(hero)))
+                new Set([...heroes].filter((hero) => hero.team !== myTeam))
             ),
+        ],
     }),
 
     new Rule({
