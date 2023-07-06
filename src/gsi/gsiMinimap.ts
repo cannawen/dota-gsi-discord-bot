@@ -74,7 +74,7 @@ export default [
         then: (_, [all, friendly]) =>
             new Fact(
                 topics.allEnemyHeroes,
-                new Set([...all].filter((hero) => !friendly.has(hero)))
+                new Set([...all].filter((hero) => !friendly?.has(hero)))
             ),
     }),
 
