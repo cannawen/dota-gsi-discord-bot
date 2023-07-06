@@ -1,3 +1,4 @@
+import analytics from "./analytics/analytics";
 import EffectConfig from "./effects/EffectConfig";
 import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
@@ -15,7 +16,6 @@ import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
-import analytics from "./analytics/analytics";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [
@@ -31,7 +31,7 @@ app.set("x-powered-by", false);
 
 const router = express.Router({ strict: true });
 
-router.use(express.json());
+router.use(express.json({ limit: "50mb" }));
 
 router.use(
     "/resources/audio",
@@ -305,6 +305,7 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
                 hero: data.state.hero,
                 items: data.state.items,
                 map: data.state.map,
+                minimap: data.state.minimap,
                 player: data.state.player,
                 provider: data.state.provider,
             })
@@ -342,6 +343,7 @@ gsiParser.events.on(
                     hero: data.state.hero?.at(playerId) || null,
                     items: data.state.items?.at(playerId) || null,
                     map: data.state.map,
+                    minimap: data.state.minimap,
                     player: data.state.player?.at(playerId) || null,
                     provider: data.state.provider,
                 })

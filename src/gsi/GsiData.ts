@@ -10,6 +10,7 @@ class GsiData {
     hero?: gsi.IHero;
     items?: gsi.IItemContainer;
     map?: gsi.IMap;
+    minimap?: gsi.IMinimapElement[] | null;
     player?: gsi.IPlayer;
     provider?: gsi.IProvider;
 
@@ -19,6 +20,7 @@ class GsiData {
         hero?: gsi.IHero | null;
         items?: gsi.IItemContainer | null;
         map?: gsi.IMap | null;
+        minimap?: gsi.IMinimapElement[] | null;
         player?: gsi.IPlayer | null;
         provider?: gsi.IProvider | null;
     }) {
@@ -27,6 +29,7 @@ class GsiData {
         this.hero = options.hero ? options.hero : undefined;
         this.items = options.items ? options.items : undefined;
         this.map = options.map ? options.map : undefined;
+        this.minimap = options.minimap ? options.minimap : undefined;
         this.player = options.player ? options.player : undefined;
         this.provider = options.provider ? options.provider : undefined;
     }

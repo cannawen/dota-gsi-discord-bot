@@ -42,6 +42,11 @@ const gsi = {
     }),
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),
+    // map + minimap
+    allFriendlyHeroes: new Topic<DeepReadonly<Set<string>>>(
+        "allFriendlyHeroes"
+    ),
+    allEnemyHeroes: new Topic<DeepReadonly<Set<string>>>("allEnemyHeroes"),
     // player
     gold: new Topic<number>("gold"),
     team: new Topic<string>("team"),
