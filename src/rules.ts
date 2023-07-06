@@ -52,6 +52,7 @@ const gsi = {
     hero: "gsi/hero",
     playerItems: "gsi/items->PlayerItems",
     map: "gsi/map",
+    minimap: "gsi/minimap",
     player: "gsi/player",
     provider: "gsi/provider",
 };
