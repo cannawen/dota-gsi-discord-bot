@@ -45,7 +45,7 @@ const roshanAliveMessageTopic = topicManager.createTopic<string>(
 const roshanStatusMessageTopic = topicManager.createTopic<string>(
     "roshanStatusMessageTopic",
     {
-        defaultValue: "Roshan status is unknown",
+        defaultValue: "Roshan is alive",
         persistAcrossRestarts: true,
     }
 );
