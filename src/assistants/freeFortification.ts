@@ -8,14 +8,14 @@ import rules from "../rules";
 import Topic from "../engine/Topic";
 import topics from "../topics";
 
+const TOWER_HEALTH_WARN_THRESHOLD = 700;
+
 export const configInfo = new ConfigInfo(
     rules.assistant.freeFortification,
     "Free fortification",
-    "Lets you know if it is a free fort when your tower is low (does not know if you actually have a fort available). Note: requires v2 of GSI .cfg file to work, use /config to download your new GSI file",
+    `Reminds you to use your free fort when your tower is below ${TOWER_HEALTH_WARN_THRESHOLD}hp (does not know if you actually have a fort available). Requires v2+ of the GSI config file`,
     EffectConfig.PUBLIC_INTERRUPTING
 );
-
-const TOWER_HEALTH_WARN_THRESHOLD = 700;
 
 const t1FreeFortWarnedAlready = new Topic<boolean>("t1FreeFortWarnedAlready");
 const t2FreeFortWarnedAlready = new Topic<boolean>("t2FreeFortWarnedAlready");

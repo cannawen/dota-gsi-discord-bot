@@ -14,7 +14,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.buyDetection,
     "Buy detection",
-    'Reminds you to buy detection mid-game if are against invis heroes and you have available slots (requires v3 of GSI config). Responds to "invisible enemny" voice command to let the bot know if the enemy has a glimmer cape, etc.',
+    'Reminds you to buy detection mid-game if are against invis heroes and you have available slots (requires v3 of GSI config for auto-detecting invis units). Responds to "invisible enemny" voice command to let the bot know if the enemy has a glimmer cape, etc.',
     EffectConfig.PRIVATE
 );
 
