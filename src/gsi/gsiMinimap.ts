@@ -74,25 +74,4 @@ export default [
             ),
         ],
     }),
-
-    new Rule({
-        label: "test minimap friendly",
-        trigger: [topics.allFriendlyHeroes],
-        then: ([heroes]) => {
-            console.log("friendly heroes");
-            console.log(
-                ([...heroes] as MinimapElement[]).map((hero) => hero.unitName)
-            );
-        },
-    }),
-    new Rule({
-        label: "test minimap enemy",
-        trigger: [topics.allEnemyHeroes],
-        then: ([heroes]) => {
-            console.log("enemy heroes");
-            console.log(
-                ([...heroes] as MinimapElement[]).map((hero) => hero.unitName)
-            );
-        },
-    }),
 ];
