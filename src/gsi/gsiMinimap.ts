@@ -48,9 +48,13 @@ export default [
     }),
 
     new Rule({
-        label: "set state when we see ten heroes on map for the first time",
+        label: "set state when we see ten heroes on map for the first time and 5 of them are dire",
         trigger: [allHeroesOnMinimapTopic],
-        when: ([heroes]) => heroes.size === 10,
+        when: ([heroes]) =>
+            heroes.size === 10 &&
+            ([...heroes] as MinimapElement[]).filter(
+                (hero) => hero.team === "dire"
+            ).length === 5,
         then: () => new Fact(allTenHeroesOnMapForTheFirstTimeTopic, true),
     }),
 
@@ -76,7 +80,9 @@ export default [
         trigger: [topics.allFriendlyHeroes],
         then: ([heroes]) => {
             console.log("friendly heroes");
-            console.log(heroes);
+            console.log(
+                ([...heroes] as MinimapElement[]).map((hero) => hero.unitName)
+            );
         },
     }),
     new Rule({
@@ -84,7 +90,9 @@ export default [
         trigger: [topics.allEnemyHeroes],
         then: ([heroes]) => {
             console.log("enemy heroes");
-            console.log(heroes);
+            console.log(
+                ([...heroes] as MinimapElement[]).map((hero) => hero.unitName)
+            );
         },
     }),
 ];
