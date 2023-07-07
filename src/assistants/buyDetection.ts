@@ -14,7 +14,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.buyDetection,
     "Buy detection",
-    "Reminds you to buy detection mid-game if are against invis heroes and you have available slots",
+    'Reminds you to buy detection mid-game if are against invis heroes and you have available slots (requires v3 of GSI config). Responds to "invisible enemny" voice command to let the bot know if the enemy has a glimmer cape, etc.',
     EffectConfig.PRIVATE
 );
 
@@ -42,7 +42,7 @@ function hasDetection(items: PlayerItems): boolean {
     );
 }
 
-function hasInvisEnemy(enemies: Set<string>): boolean {
+function hasInvisHero(heroes: Set<string>): boolean {
     return [
         "npc_dota_hero_bounty_hunter",
         "npc_dota_hero_clinkz",
@@ -51,30 +51,53 @@ function hasInvisEnemy(enemies: Set<string>): boolean {
         "npc_dota_hero_nyx_assassin",
         "npc_dota_hero_riki",
         "npc_dota_hero_sand_king",
-        "npc_dota_hero_weaver",
         "npc_dota_hero_templar_assassin",
-    ].reduce((memo, hero) => memo || enemies.has(hero), false);
+        "npc_dota_hero_weaver",
+    ].reduce((memo, hero) => memo || heroes.has(hero), false);
+}
+
+function isInvisNotificationUtterance(utterance: string): boolean {
+    return utterance.match(/^invisible enemy$/) !== null;
 }
 
 export default [
     new Rule({
-        label: "set state if there is an invis enemy",
-        trigger: [topics.allEnemyHeroes],
-        when: ([heroes]) => hasInvisEnemy(heroes),
+        label: "voice command to let the bot know there is an invis enemy",
+        trigger: [topics.lastDiscordUtterance],
+        when: ([utterance]) => isInvisNotificationUtterance(utterance),
         then: () => new Fact(hasInvisEnemyTopic, true),
     }),
-    conditionalEveryIntervalSeconds(
-        ([items], [invisEnemy]) =>
-            invisEnemy && hasOpenSlot(items) && !hasDetection(items),
-        TIME_BETWEEN_REMINDERS,
-        new Rule({
-            label: "reminder to buy detection",
-            trigger: [topics.items],
-            given: [hasInvisEnemyTopic],
-            then: () => new Fact(topics.configurableEffect, "buy detection"),
-        })
-    ),
 ]
-    .map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
+    .concat(
+        [
+            new Rule({
+                label: "set state if there is an invis enemy mid-game",
+                trigger: [topics.allEnemyHeroes],
+                when: ([heroes]) => hasInvisHero(heroes),
+                then: () => [
+                    new Fact(hasInvisEnemyTopic, true),
+                    new Fact(topics.configurableEffect, "OK"),
+                ],
+            }),
+        ].map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
+    )
+    .concat(
+        [
+            new Rule({
+                label: "reminder to buy detection",
+                trigger: [topics.items],
+                given: [hasInvisEnemyTopic],
+                then: () =>
+                    new Fact(topics.configurableEffect, "buy detection"),
+            }),
+        ].map((rule) =>
+            conditionalEveryIntervalSeconds(
+                ([items], [invisEnemy]) =>
+                    invisEnemy && hasOpenSlot(items) && !hasDetection(items),
+                TIME_BETWEEN_REMINDERS,
+                rule
+            )
+        )
+    )
     .map(inGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
