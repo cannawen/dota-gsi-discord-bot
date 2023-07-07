@@ -59,20 +59,36 @@ export class CustomEngine extends Engine {
         }
     }
 
+    // eslint-disable-next-line max-statements
     public startCoachingSession(
         studentId: string,
-        guildId?: string,
-        channelId?: string
+        guildIdIn?: string,
+        channelIdIn?: string
     ) {
+        let guildId = guildIdIn;
+        let channelId = channelIdIn;
+
+        // TODO there may be something better than straight up deleting and re-creating the entire session
+        const oldDb = this.sessions.get(studentId);
+        if (oldDb) {
+            log.info(
+                "app",
+                "Deleting old coaching session for student %s",
+                studentId.substring(0, 10)
+            );
+            guildId = guildId || oldDb.get(topics.discordGuildId) || undefined;
+            channelId =
+                channelId ||
+                oldDb.get(topics.discordGuildChannelId) ||
+                undefined;
+            this.deleteSession(studentId);
+        }
+
         log.info(
             "app",
             "Start coaching student %s",
             studentId.substring(0, 10)
         );
-        // TODO there may be something better than straight up deleting and re-creating the entire session
-        if (this.sessions.get(studentId)) {
-            this.deleteSession(studentId);
-        }
 
         // Create new db for student
         const db = new PersistentFactStore();
@@ -91,20 +107,8 @@ export class CustomEngine extends Engine {
         this.sessions.set(studentId, db);
 
         // explicitly set null to propogate to discordAudioEnabled state downstream
-        this.set(
-            db,
-            new Fact(
-                topics.discordGuildId,
-                guildId || db.get(topics.discordGuildId) || null
-            )
-        );
-        this.set(
-            db,
-            new Fact(
-                topics.discordGuildChannelId,
-                channelId || db.get(topics.discordGuildChannelId) || null
-            )
-        );
+        this.set(db, new Fact(topics.discordGuildId, guildId || null));
+        this.set(db, new Fact(topics.discordGuildChannelId, channelId || null));
     }
 
     public deleteSession(studentId: string) {

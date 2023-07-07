@@ -82,7 +82,9 @@ export class DiscordClient {
 
             const userId = interaction.user.id;
             const studentId = discordHelpers.studentId(userId);
-            engine.startCoachingSession(studentId);
+            if (!engine.getSession(studentId)) {
+                engine.startCoachingSession(studentId);
+            }
             engine.setFact(studentId, new Fact(topics.discordUserId, userId));
 
             const commandName = interaction.commandName;
