@@ -9,7 +9,6 @@ import topics from "../../topics";
  * to give the user one `interval` time of grace before we start reminding them
  */
 export default function conditionalEveryIntervalSeconds(
-    condition: (trigger: any[], given: any[]) => boolean,
     interval: number,
     rule: Rule
 ) {
@@ -30,14 +29,14 @@ export default function conditionalEveryIntervalSeconds(
                 // Would be annoying if you jump around in a replay, but that's not really supported
                 const isReminderTime = time >= lastRemindedTime + interval;
 
-                return isReminderTime && rule.when(trigger, given);
+                return isReminderTime;
             }
         },
         then: (trigger, given) => {
             const time = trigger.shift();
             const lastRemindedTime = given.shift();
 
-            if (condition(trigger, given)) {
+            if (rule.when(trigger, given)) {
                 if (lastRemindedTime === undefined) {
                     return new Fact(reminderTopic, time);
                 } else {

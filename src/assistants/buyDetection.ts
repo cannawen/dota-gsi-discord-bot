@@ -87,16 +87,13 @@ export default [
                 label: "reminder to buy detection",
                 trigger: [topics.items],
                 given: [hasInvisEnemyTopic],
+                when: ([items], [invisEnemy]) =>
+                    invisEnemy && hasOpenSlot(items) && !hasDetection(items),
                 then: () =>
                     new Fact(topics.configurableEffect, "buy detection"),
             }),
         ].map((rule) =>
-            conditionalEveryIntervalSeconds(
-                ([items], [invisEnemy]) =>
-                    invisEnemy && hasOpenSlot(items) && !hasDetection(items),
-                TIME_BETWEEN_REMINDERS,
-                rule
-            )
+            conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
         )
     )
     .map(inGame)

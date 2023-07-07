@@ -17,12 +17,12 @@ describe("conditionalEveryIntervalSeconds", () => {
         givenTopic = topicManager.createTopic<boolean>("givenTopic");
 
         rule = everyInterval(
-            ([trigger], [given]) => trigger && given,
             3,
             new Rule({
                 label: "test",
                 trigger: [triggerTopic],
                 given: [givenTopic],
+                when: ([trigger], [given]) => trigger && given,
                 then: () => new Fact(topics.playPrivateAudio, "audio"),
             })
         );

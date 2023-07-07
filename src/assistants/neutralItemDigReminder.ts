@@ -49,15 +49,12 @@ export default [
     new Rule({
         label: "reminder to dig trusty shovel or pirate hat",
         trigger: [topics.alive, topics.items],
+        when: ([alive, items]) => hasValidItem(items) && alive,
         then: () => new Fact(topics.configurableEffect, "dig"),
     }),
 ]
     .map((rule) =>
-        conditionalEveryIntervalSeconds(
-            ([alive, items]) => hasValidItem(items) && alive,
-            TIME_BETWEEN_REMINDERS,
-            rule
-        )
+        conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
     .map(inGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));

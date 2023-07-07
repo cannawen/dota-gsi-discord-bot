@@ -31,16 +31,11 @@ export default [
     new Rule({
         label: "reminder to use midas",
         trigger: [topics.alive, topics.items],
+        when: ([alive, items]) => midasIsCastable(items) && alive,
         then: () =>
             new Fact(topics.configurableEffect, "resources/audio/midas.mp3"),
     }),
 ]
-    .map((rule) =>
-        conditionalEveryIntervalSeconds(
-            ([alive, items]) => midasIsCastable(items) && alive,
-            REMINDER_INTERVAL,
-            rule
-        )
-    )
+    .map((rule) => conditionalEveryIntervalSeconds(REMINDER_INTERVAL, rule))
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map(inGame);

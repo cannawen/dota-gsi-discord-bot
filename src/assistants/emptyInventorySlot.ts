@@ -36,16 +36,13 @@ export default [
     new Rule({
         label: "reminder to move item from backpack to inventory",
         trigger: [topics.items],
+        when: ([items]) => canMoveItemFromBackpackToInventory(items),
         then: () =>
             new Fact(topics.configurableEffect, "move item to inventory"),
     }),
 ]
     .map((rule) =>
-        conditionalEveryIntervalSeconds(
-            ([items]) => canMoveItemFromBackpackToInventory(items),
-            TIME_BETWEEN_REMINDERS,
-            rule
-        )
+        conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
     .map(inGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));

@@ -23,6 +23,8 @@ export default [
     new Rule({
         label: "reminder to take or upgrade neutral item",
         trigger: [topics.items, topics.time],
+        when: ([items, time]) =>
+            !helper.isItemAppropriateForTime(items.neutral?.id, time),
         then: ([items]) => {
             const audio = items.neutral
                 ? "you should upgrade your neutral item"
@@ -32,12 +34,7 @@ export default [
     }),
 ]
     .map((rule) =>
-        conditionalEveryIntervalSeconds(
-            ([items, time]) =>
-                !helper.isItemAppropriateForTime(items.neutral?.id, time),
-            TIME_BETWEEN_REMINDERS,
-            rule
-        )
+        conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
     .map((rule) =>
         betweenSeconds(NEUTRAL_ITEM_REMINDER_START_TIME, undefined, rule)
