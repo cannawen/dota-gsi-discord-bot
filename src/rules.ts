@@ -6,6 +6,7 @@
 // ALL THE USER'S SAVED PREFERENCES WILL BE RESET
 // SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
 const assistant = {
+    bloodGrenade: "assistant-blood_grenade",
     buyback: "assistant-buyback",
     buyDetection: "assistant-buy_detection",
     emptyInventory: "assistant-empty_inventory",
