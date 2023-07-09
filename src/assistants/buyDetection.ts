@@ -76,7 +76,7 @@ export default [
                 when: ([heroes]) => hasInvisHero(heroes),
                 then: () => [
                     new Fact(hasInvisEnemyTopic, true),
-                    new Fact(topics.configurableEffect, "OK"),
+                    new Fact(topics.playInterruptingAudioFile, "OK"),
                 ],
             }),
         ].map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
