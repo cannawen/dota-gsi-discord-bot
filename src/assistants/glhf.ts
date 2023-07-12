@@ -10,7 +10,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.glhf,
     "Good luck and have fun",
     "Wishes you good fortune at the start of the game",
-    EffectConfig.PRIVATE
+    EffectConfig.PUBLIC
 );
 
 export default configurable(

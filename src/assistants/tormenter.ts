@@ -3,11 +3,9 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/time";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
