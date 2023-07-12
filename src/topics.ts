@@ -118,7 +118,6 @@ const discord = {
     discordVoiceRecognitionPermissionGranted: new PersistentTopic<boolean>(
         "discordVoiceRecognitionPermissionGranted",
         {
-            defaultValue: true,
             persistForever: true,
         }
     ),

@@ -4,7 +4,6 @@ import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
-import helpers from "../discordHelpers";
 import log from "../../log";
 import Rule from "../../engine/Rule";
 import rules from "../../rules";
@@ -138,12 +137,8 @@ export default new Rule({
         });
 
         connection.receiver.speaking.on("start", (userId) => {
-            const speakerId = helpers.studentId(userId);
-            if (!engine.getSession(speakerId)) {
-                engine.startCoachingSession(speakerId);
-            }
             const sttEnabled = engine.getFactValue(
-                speakerId,
+                studentId,
                 topics.discordVoiceRecognitionPermissionGranted
             );
             if (sttEnabled) {
