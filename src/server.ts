@@ -283,6 +283,7 @@ router.post("/gsi", (req, res) => {
 function parseStudentIdFromAuth(auth: string) {
     return auth.substring(0, 64);
 }
+
 function parseGsiFileVersionFromAuth(auth: string) {
     if (auth.length === 64) {
         return undefined;
@@ -291,34 +292,49 @@ function parseGsiFileVersionFromAuth(auth: string) {
     }
 }
 
+function attemptDiscordAutoconnect(studentId: string) {
+    engine.startCoachingSession(
+        studentId,
+        "1076737468948304012",
+        "1083521037465042995"
+    );
+}
+
+function handleOnGsi(
+    studentId: string,
+    auth: string,
+    gsiData: GsiData,
+    live: boolean
+) {
+    if (engine.isCoaching(studentId)) {
+        const gsiVersion = parseGsiFileVersionFromAuth(auth);
+        engine.setFact(studentId, new Fact(topics.allData, gsiData));
+        engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, live));
+        engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
+        analytics.trackGsiVersion(studentId, gsiVersion);
+    } else {
+        attemptDiscordAutoconnect(studentId);
+    }
+}
+
 gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
     if (!data.auth) return;
 
     const studentId = parseStudentIdFromAuth(data.auth);
-    engine.setFact(
+    handleOnGsi(
         studentId,
-        new Fact(
-            topics.allData,
-            new GsiData({
-                buildings: data.state.buildings,
-                events: data.state.events,
-                hero: data.state.hero,
-                items: data.state.items,
-                map: data.state.map,
-                minimap: data.state.minimap,
-                player: data.state.player,
-                provider: data.state.provider,
-            })
-        )
-    );
-    engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, true));
-    engine.setFact(
-        studentId,
-        new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
-    );
-    analytics.trackGsiVersion(
-        studentId,
-        parseGsiFileVersionFromAuth(data.auth)
+        data.auth,
+        new GsiData({
+            buildings: data.state.buildings,
+            events: data.state.events,
+            hero: data.state.hero,
+            items: data.state.items,
+            map: data.state.map,
+            minimap: data.state.minimap,
+            player: data.state.player,
+            provider: data.state.provider,
+        }),
+        true
     );
 });
 
@@ -332,34 +348,20 @@ gsiParser.events.on(
         if (!data.auth) return;
 
         const studentId = parseStudentIdFromAuth(data.auth);
-
-        engine.setFact(
+        handleOnGsi(
             studentId,
-            new Fact(
-                topics.allData,
-                new GsiData({
-                    buildings: data.state.buildings,
-                    events: data.state.events,
-                    hero: data.state.hero?.at(playerId) || null,
-                    items: data.state.items?.at(playerId) || null,
-                    map: data.state.map,
-                    minimap: data.state.minimap,
-                    player: data.state.player?.at(playerId) || null,
-                    provider: data.state.provider,
-                })
-            )
-        );
-        engine.setFact(
-            studentId,
-            new Fact(topics.gsiEventsFromLiveGame, false)
-        );
-        engine.setFact(
-            studentId,
-            new Fact(topics.gsiVersion, parseGsiFileVersionFromAuth(data.auth))
-        );
-        analytics.trackGsiVersion(
-            studentId,
-            parseGsiFileVersionFromAuth(data.auth)
+            data.auth,
+            new GsiData({
+                buildings: data.state.buildings,
+                events: data.state.events,
+                hero: data.state.hero?.at(playerId) || null,
+                items: data.state.items?.at(playerId) || null,
+                map: data.state.map,
+                minimap: data.state.minimap,
+                player: data.state.player?.at(playerId) || null,
+                provider: data.state.provider,
+            }),
+            false
         );
     }
 );

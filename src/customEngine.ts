@@ -28,6 +28,10 @@ function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
+    public isCoaching(studentId: string) {
+        return this.sessions.get(studentId) !== undefined;
+    }
+
     public getSessions() {
         return this.sessions as Map<string, PersistentFactStore>;
     }
