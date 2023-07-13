@@ -118,15 +118,11 @@ export default new Rule({
         }
         analytics.trackDiscordConnectionInfo(studentId, channel);
 
-        const sttEnabled = engine.getFactValue(
-            studentId,
-            topics.discordVoiceRecognitionPermissionGranted
-        );
         const connection = Voice.joinVoiceChannel({
             adapterCreator: channel.guild.voiceAdapterCreator,
             channelId: channelId,
             guildId: guildId,
-            selfDeaf: !sttEnabled,
+            selfDeaf: false,
             selfMute: false,
         });
         connection.on("stateChange", (oldState, newState) => {
@@ -141,25 +137,31 @@ export default new Rule({
         });
 
         connection.receiver.speaking.on("start", (userId) => {
-            stt.transcribe(connection.receiver, userId)
-                .then((utterance) => {
-                    if (!utterance) return;
-                    // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
-                    if (userId === "169619011238232073") {
-                        log.info("tts", utterance);
-                    }
-                    engine.setFact(
-                        studentId,
-                        new Fact(topics.lastDiscordUtterance, utterance)
-                    );
-                })
-                .catch((error) => {
-                    log.verbose(
-                        "tts",
-                        "Problem with transcription, %s",
-                        error.message
-                    );
-                });
+            const sttEnabled = engine.getFactValue(
+                studentId,
+                topics.discordVoiceRecognitionPermissionGranted
+            );
+            if (sttEnabled) {
+                stt.transcribe(connection.receiver, userId)
+                    .then((utterance) => {
+                        if (!utterance) return;
+                        // If I am speaking, log content. If anyone else is, do not log. Because this is creepy.
+                        if (userId === "169619011238232073") {
+                            log.info("tts", utterance);
+                        }
+                        engine.setFact(
+                            studentId,
+                            new Fact(topics.lastDiscordUtterance, utterance)
+                        );
+                    })
+                    .catch((error) => {
+                        log.verbose(
+                            "tts",
+                            "Problem with transcription, %s",
+                            error.message
+                        );
+                    });
+            }
         });
 
         const player = Voice.createAudioPlayer();
