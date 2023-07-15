@@ -83,6 +83,7 @@ const effect = {
 };
 
 const discord = {
+    //basic information
     discordUserId: new PersistentTopic<string>("discordUserId", {
         persistForever: true,
     }),
@@ -114,9 +115,16 @@ const discord = {
         persistAcrossGames: true,
     }),
     lastDiscordUtterance: new Topic<string>("lastDiscordUtterance"),
-
+    // voice recognition
     discordVoiceRecognitionPermissionGranted: new PersistentTopic<boolean>(
         "discordVoiceRecognitionPermissionGranted",
+        {
+            persistForever: true,
+        }
+    ),
+    // autoconnect
+    discordAutoconnectGuild: new PersistentTopic<string>(
+        "discordAutoconnectGuild",
         {
             persistForever: true,
         }

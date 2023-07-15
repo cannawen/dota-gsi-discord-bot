@@ -292,14 +292,6 @@ function parseGsiFileVersionFromAuth(auth: string) {
     }
 }
 
-function attemptDiscordAutoconnect(studentId: string) {
-    engine.startCoachingSession(
-        studentId,
-        "1076737468948304012",
-        "1083521037465042995"
-    );
-}
-
 function handleOnGsi(
     studentId: string,
     auth: string,
@@ -313,7 +305,7 @@ function handleOnGsi(
         engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
         analytics.trackGsiVersion(studentId, gsiVersion);
     } else {
-        attemptDiscordAutoconnect(studentId);
+        engine.startCoachingSession(studentId);
     }
 }
 
