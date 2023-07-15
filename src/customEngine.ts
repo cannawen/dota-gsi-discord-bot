@@ -13,7 +13,6 @@ import Rule from "./engine/Rule";
 import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import discordClient from "./discord/discordClient";
 
 function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
@@ -70,8 +69,8 @@ export class CustomEngine extends Engine {
         guildIdIn?: string,
         channelIdIn?: string
     ) {
-        let guildId: string | undefined | null = guildIdIn;
-        let channelId: string | undefined | null = channelIdIn;
+        let guildId = guildIdIn;
+        let channelId = channelIdIn;
 
         // TODO there may be something better than straight up deleting and re-creating the entire session
         const oldDb = this.sessions.get(studentId);
@@ -110,17 +109,6 @@ export class CustomEngine extends Engine {
 
         // Add to engine's active sessions
         this.sessions.set(studentId, db);
-
-        // Try autoconnect
-        const userId = engine.getFactValue(studentId, topics.discordUserId);
-        const savedGuildId = engine.getFactValue(
-            studentId,
-            topics.discordAutoconnectGuild
-        );
-        if (savedGuildId && userId && !guildId && !channelId) {
-            guildId = savedGuildId;
-            channelId = discordClient.findChannelUserIsIn(savedGuildId, userId);
-        }
 
         // explicitly set null to propogate to discordAudioEnabled state downstream
         this.set(db, new Fact(topics.discordGuildId, guildId || null));

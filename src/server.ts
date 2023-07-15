@@ -1,10 +1,13 @@
+import {
+    factsToPlainObject,
+    plainObjectToFacts,
+} from "./engine/PersistentFactStore";
 import analytics from "./analytics/analytics";
 import EffectConfig from "./effects/EffectConfig";
 import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
 import express from "express";
 import Fact from "./engine/Fact";
-import { factsToPlainObject } from "./engine/PersistentFactStore";
 import fs from "fs";
 import gsi from "node-gsi";
 import GsiData from "./gsi/GsiData";
@@ -16,6 +19,7 @@ import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+import discordClient from "./discord/discordClient";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [
@@ -305,7 +309,40 @@ function handleOnGsi(
         engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
         analytics.trackGsiVersion(studentId, gsiVersion);
     } else {
-        engine.startCoachingSession(studentId);
+        try {
+            const savedDb = persistence.readStudentData(studentId);
+            if (savedDb) {
+                const facts = plainObjectToFacts(JSON.parse(savedDb));
+
+                const userId = facts.find(
+                    (f) => f.topic.label === topics.discordUserId.label
+                )?.value as string | undefined;
+                const autoconnectGuildId = facts.find(
+                    (f) =>
+                        f.topic.label === topics.discordAutoconnectGuild.label
+                )?.value as string | undefined;
+                const autoconnectEnabled =
+                    facts.find(
+                        (f) =>
+                            f.topic.label ===
+                            topics.discordAutoconnectEnabled.label
+                    )?.value ||
+                    (topics.discordAutoconnectEnabled.defaultValue as boolean);
+                if (autoconnectGuildId && userId && autoconnectEnabled) {
+                    const channelId = discordClient.findChannelUserIsIn(
+                        autoconnectGuildId,
+                        userId
+                    );
+                    if (channelId) {
+                        engine.startCoachingSession(
+                            studentId,
+                            autoconnectGuildId,
+                            channelId
+                        );
+                    }
+                }
+            }
+        } catch (e) {}
     }
 }
 

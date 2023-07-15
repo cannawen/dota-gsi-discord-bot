@@ -119,10 +119,18 @@ const discord = {
     discordVoiceRecognitionPermissionGranted: new PersistentTopic<boolean>(
         "discordVoiceRecognitionPermissionGranted",
         {
+            defaultValue: false,
             persistForever: true,
         }
     ),
     // autoconnect
+    discordAutoconnectEnabled: new PersistentTopic<boolean>(
+        "discordAutoconnectEnabled",
+        {
+            defaultValue: true,
+            persistForever: true,
+        }
+    ),
     discordAutoconnectGuild: new PersistentTopic<string>(
         "discordAutoconnectGuild",
         {
