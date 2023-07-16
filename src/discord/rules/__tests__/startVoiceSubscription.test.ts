@@ -34,7 +34,7 @@ describe("startVoiceSubscription", () => {
                     adapterCreator: "voiceAdapterCreator",
                     channelId: "channelId",
                     guildId: "guildId",
-                    selfDeaf: true,
+                    selfDeaf: false,
                     selfMute: false,
                 });
                 expect(voiceConnection).not.toBeUndefined();
