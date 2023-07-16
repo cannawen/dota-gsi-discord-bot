@@ -321,14 +321,13 @@ function handleOnGsi(
                     (f) =>
                         f.topic.label === topics.discordAutoconnectGuild.label
                 )?.value as string | undefined;
-                const autoconnectEnabled =
+                const autoconnectDisabled =
                     facts.find(
                         (f) =>
                             f.topic.label ===
                             topics.discordAutoconnectEnabled.label
-                    )?.value ||
-                    (topics.discordAutoconnectEnabled.defaultValue as boolean);
-                if (autoconnectGuildId && userId && autoconnectEnabled) {
+                    )?.value === false;
+                if (autoconnectGuildId && userId && !autoconnectDisabled) {
                     const channelId = discordClient.findChannelUserIsIn(
                         autoconnectGuildId,
                         userId
