@@ -40,6 +40,9 @@ const discordjs = {
             addStringOption: jest
                 .fn()
                 .mockReturnValue({ setDescription: jest.fn() }),
+            addBooleanOption: jest
+                .fn()
+                .mockReturnValue({ setDescription: jest.fn() }),
             setDescription: jest.fn(),
         }),
     }),
