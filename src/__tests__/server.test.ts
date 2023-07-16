@@ -1,6 +1,7 @@
 /* eslint-disable jest/no-done-callback */
 /* eslint-disable jest/expect-expect */
 jest.mock("../customEngine");
+jest.mock("../discord/discordClient");
 jest.mock("../effectConfigManager");
 jest.mock("../engine/topicManager");
 jest.mock("../log");

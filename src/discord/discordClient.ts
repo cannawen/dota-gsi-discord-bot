@@ -51,6 +51,17 @@ export class DiscordClient {
         return channel;
     }
 
+    public findChannelUserIsIn(guildId: string, userId: string) {
+        const guild = this.client.guilds.cache.find((g) => g.id === guildId);
+        if (!guild) {
+            log.error("discord", "Unable to find guild with id %s.", guildId);
+            return;
+        }
+
+        return guild.members.cache.filter((u) => u.id === userId).last()?.voice
+            .channelId;
+    }
+
     private setup() {
         return this.client
             .login(process.env.DISCORD_BOT_TOKEN)

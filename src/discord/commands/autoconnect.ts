@@ -3,7 +3,6 @@ import {
     ChatInputCommandInteraction,
     SlashCommandBuilder,
 } from "discord.js";
-import analytics from "../../analytics/analytics";
 import engine from "../../customEngine";
 import Fact from "../../engine/Fact";
 import helpers from "../discordHelpers";
@@ -11,30 +10,29 @@ import { SlashCommand } from "../SlashCommand";
 import topics from "../../topics";
 
 const data = new SlashCommandBuilder()
-    .setName("voice")
+    .setName("autoconnect")
     .addBooleanOption((option) =>
         option
-            .setName("allow")
-            .setDescription(
-                "Allow or disallow the bot to send your voice to Google speech-to-text API for voice commands feature"
-            )
+            .setName("enabled")
+            .setDescription("Enable or disable this feature")
             .setRequired(true)
     )
-    .setDescription("Enable or disable voice commands");
+    .setDescription(
+        "Have Dota Coach automatically connect to your last joined guild when you start a game"
+    );
 
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
-    const allowed = interaction.options.getBoolean("allow") || false;
+    const enabled = interaction.options.getBoolean("enabled") || false;
     const studentId = helpers.studentId(interaction);
     if (!engine.getSession(studentId)) {
         engine.startCoachingSession(studentId);
     }
     engine.setFact(
         studentId,
-        new Fact(topics.discordVoiceRecognitionPermissionGranted, allowed)
+        new Fact(topics.discordAutoconnectEnabled, enabled)
     );
-    analytics.trackVoiceEnabled(studentId, allowed);
     interaction.reply({
-        content: allowed ? "Voice commands enabled" : "Voice commands disabled",
+        content: enabled ? "Autoconnect enabled" : "Autoconnect disabled",
         ephemeral: true,
     });
 }
