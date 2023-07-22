@@ -21,13 +21,13 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 -   Go to the [Discord developers applications page](https://discord.com/developers/applications/) and click `New Application`
 -   Click `OAuth2` in sidebar.
-    -   Create a `.env` file by copying `sample.env`
-        -   Change `DISCORD_BOT_TOKEN` to your OAuth2 -> `Client Secret`
-        -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> `Client ID`
-        -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
     -   Under `Default Authorization Link` choose `Authorization Method` as `In-app Authorization`
         -   Scope: bot. Bot Permissions: Read Messages/View Channels, Send Messages, Connect, Speak, Use Voice Activity
     -   Click `URL Generator` with the same settings as above. Copy the generated URL and use it to add your bot to your discord server
+    -   Create a `.env` file by copying `sample.env`
+        -   Change `DISCORD_APPLICATION_ID` to your Oauth2 -> `Client ID`
+        -   Change `DISCORD_BOT_TOKEN` to Bot -> Build-A-Bot -> Token -> Reset Token
+        -   Choose a random key for `STUDENT_ID_HASH_PRIVATE_KEY` (Discord user IDs are public information; we hash the Discord ID using this key so one user cannot pretend to be another)
 -   Click `Bot` in sidebar, and enable all `Privileged Gateway Intents`
 -   [Enable developer mode](https://support.discord.com/hc/en-us/articles/206346498) so you can easily see user/guild/channel IDs (optional)
 
