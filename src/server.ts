@@ -296,7 +296,21 @@ function parseGsiFileVersionFromAuth(auth: string) {
     }
 }
 
-function tryAutoconnect(studentId: string) {
+function tryAutoconnect(
+    studentId: string,
+    guildId: string | undefined,
+    userId: string | undefined,
+    autoconnectDisabled: boolean
+) {
+    if (guildId && userId && !autoconnectDisabled) {
+        const channelId = discordClient.findChannelUserIsIn(guildId, userId);
+        if (channelId) {
+            engine.startCoachingSession(studentId, guildId, channelId);
+        }
+    }
+}
+
+function handleNotCoaching(studentId: string) {
     try {
         const savedDb = persistence.readStudentData(studentId);
         if (savedDb) {
@@ -313,19 +327,12 @@ function tryAutoconnect(studentId: string) {
                     (f) =>
                         f.topic.label === topics.discordAutoconnectEnabled.label
                 )?.value === false;
-            if (autoconnectGuildId && userId && !autoconnectDisabled) {
-                const channelId = discordClient.findChannelUserIsIn(
-                    autoconnectGuildId,
-                    userId
-                );
-                if (channelId) {
-                    engine.startCoachingSession(
-                        studentId,
-                        autoconnectGuildId,
-                        channelId
-                    );
-                }
-            }
+            tryAutoconnect(
+                studentId,
+                autoconnectGuildId,
+                userId,
+                autoconnectDisabled
+            );
         }
     } catch (e) {}
 }
@@ -343,7 +350,7 @@ function handleOnGsi(
         engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
         analytics.trackGsiVersion(studentId, gsiVersion);
     } else {
-        tryAutoconnect(studentId);
+        handleNotCoaching(studentId);
     }
 }
 
