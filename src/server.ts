@@ -296,6 +296,40 @@ function parseGsiFileVersionFromAuth(auth: string) {
     }
 }
 
+function tryAutoconnect(studentId: string) {
+    try {
+        const savedDb = persistence.readStudentData(studentId);
+        if (savedDb) {
+            const facts = plainObjectToFacts(JSON.parse(savedDb));
+
+            const userId = facts.find(
+                (f) => f.topic.label === topics.discordUserId.label
+            )?.value as string | undefined;
+            const autoconnectGuildId = facts.find(
+                (f) => f.topic.label === topics.discordAutoconnectGuild.label
+            )?.value as string | undefined;
+            const autoconnectDisabled =
+                facts.find(
+                    (f) =>
+                        f.topic.label === topics.discordAutoconnectEnabled.label
+                )?.value === false;
+            if (autoconnectGuildId && userId && !autoconnectDisabled) {
+                const channelId = discordClient.findChannelUserIsIn(
+                    autoconnectGuildId,
+                    userId
+                );
+                if (channelId) {
+                    engine.startCoachingSession(
+                        studentId,
+                        autoconnectGuildId,
+                        channelId
+                    );
+                }
+            }
+        }
+    } catch (e) {}
+}
+
 function handleOnGsi(
     studentId: string,
     auth: string,
@@ -309,39 +343,7 @@ function handleOnGsi(
         engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
         analytics.trackGsiVersion(studentId, gsiVersion);
     } else {
-        try {
-            const savedDb = persistence.readStudentData(studentId);
-            if (savedDb) {
-                const facts = plainObjectToFacts(JSON.parse(savedDb));
-
-                const userId = facts.find(
-                    (f) => f.topic.label === topics.discordUserId.label
-                )?.value as string | undefined;
-                const autoconnectGuildId = facts.find(
-                    (f) =>
-                        f.topic.label === topics.discordAutoconnectGuild.label
-                )?.value as string | undefined;
-                const autoconnectDisabled =
-                    facts.find(
-                        (f) =>
-                            f.topic.label ===
-                            topics.discordAutoconnectEnabled.label
-                    )?.value === false;
-                if (autoconnectGuildId && userId && !autoconnectDisabled) {
-                    const channelId = discordClient.findChannelUserIsIn(
-                        autoconnectGuildId,
-                        userId
-                    );
-                    if (channelId) {
-                        engine.startCoachingSession(
-                            studentId,
-                            autoconnectGuildId,
-                            channelId
-                        );
-                    }
-                }
-            }
-        } catch (e) {}
+        tryAutoconnect(studentId);
     }
 }
 
