@@ -300,9 +300,9 @@ function tryAutoconnect(
     studentId: string,
     guildId: string | undefined,
     userId: string | undefined,
-    autoconnectDisabled: boolean
+    autoconnectEnabled: boolean
 ) {
-    if (guildId && userId && !autoconnectDisabled) {
+    if (guildId && userId && autoconnectEnabled) {
         const channelId = discordClient.findChannelUserIsIn(guildId, userId);
         if (channelId) {
             engine.startCoachingSession(studentId, guildId, channelId);
@@ -322,16 +322,16 @@ function handleNotCoaching(studentId: string) {
             const autoconnectGuildId = facts.find(
                 (f) => f.topic.label === topics.discordAutoconnectGuild.label
             )?.value as string | undefined;
-            const autoconnectDisabled =
+            const autoconnectEnabled =
                 facts.find(
                     (f) =>
                         f.topic.label === topics.discordAutoconnectEnabled.label
-                )?.value === false;
+                )?.value !== false;
             tryAutoconnect(
                 studentId,
                 autoconnectGuildId,
                 userId,
-                autoconnectDisabled
+                autoconnectEnabled
             );
         }
     } catch (e) {}
@@ -349,6 +349,24 @@ function handleOnGsi(
         engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, live));
         engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
         analytics.trackGsiVersion(studentId, gsiVersion);
+
+        if (!engine.getFactValue(studentId, topics.discordSubscriptionTopic)) {
+            const userId = engine.getFactValue(studentId, topics.discordUserId);
+            const autoconnectGuildId = engine.getFactValue(
+                studentId,
+                topics.discordAutoconnectGuild
+            );
+            const autoconnectEnabled = engine.getFactValue(
+                studentId,
+                topics.discordAutoconnectEnabled
+            ) as boolean;
+            tryAutoconnect(
+                studentId,
+                autoconnectGuildId,
+                userId,
+                autoconnectEnabled
+            );
+        }
     } else {
         handleNotCoaching(studentId);
     }
