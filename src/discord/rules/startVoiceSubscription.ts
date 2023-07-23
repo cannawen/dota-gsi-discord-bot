@@ -1,5 +1,6 @@
 /* eslint-disable max-statements */
 /* eslint-disable max-lines-per-function */
+import analytics from "../../analytics/analytics";
 import client from "../discordClient";
 import colors from "@colors/colors";
 import engine from "../../customEngine";
@@ -10,7 +11,6 @@ import rules from "../../rules";
 import stt from "../speechToText";
 import topics from "../../topics";
 import Voice = require("@discordjs/voice");
-import analytics from "../../analytics/analytics";
 
 const emColor = colors.cyan;
 
