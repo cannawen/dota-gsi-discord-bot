@@ -32,6 +32,8 @@ const gsi = {
     alive: new Topic<boolean>("alive"),
     buybackCost: new Topic<number>("buybackCost"),
     buybackCooldown: new Topic<number>("buybackCooldown"),
+    hero: new Topic<string>("hero"),
+    level: new Topic<number>("level"),
     respawnSeconds: new Topic<number>("respawnSeconds"),
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),

@@ -3,6 +3,7 @@ import {
     plainObjectToFacts,
 } from "./engine/PersistentFactStore";
 import analytics from "./analytics/analytics";
+import discordClient from "./discord/discordClient";
 import EffectConfig from "./effects/EffectConfig";
 import effectConfig from "./effectConfigManager";
 import engine from "./customEngine";
@@ -19,7 +20,6 @@ import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
-import discordClient from "./discord/discordClient";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [

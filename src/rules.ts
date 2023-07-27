@@ -9,6 +9,7 @@ const assistant = {
     bloodGrenade: "assistant-blood_grenade",
     buyback: "assistant-buyback",
     buyDetection: "assistant-buy_detection",
+    cm20Talent: "assistant-cm-20-talent",
     emptyInventory: "assistant-empty_inventory",
     freeFortification: "assistant-free_fortification",
     glhf: "assistant-glhf",
