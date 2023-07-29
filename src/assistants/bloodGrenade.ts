@@ -44,7 +44,10 @@ export default [
                 trigger: [hasBloodGrenadeTopic],
                 when: ([has]) => !has,
                 then: () =>
-                    new Fact(topics.configurableEffect, "buy a blood grenade"),
+                    new Fact(
+                        topics.configurableEffect,
+                        "resources/audio/blood-grenade.mp3"
+                    ),
             }),
         ].map((rule) =>
             conditionalEveryIntervalSeconds(

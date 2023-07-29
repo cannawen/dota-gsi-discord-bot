@@ -58,6 +58,12 @@ function roshLocation(daytime: boolean) {
     return daytime ? "bottom" : "top";
 }
 
+function roshAliveMessage(daytime: boolean) {
+    return daytime
+        ? "resources/audio/rosh-bottom.mp3"
+        : "resources/audio/rosh-top.mp3";
+}
+
 /**
  * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
  */
@@ -68,10 +74,7 @@ const aliveMessageRules = [
         given: [allRoshanDeathTimesTopic],
         when: (_, [deathTimes]) => deathTimes.length === 0,
         then: ([daytime]) =>
-            new Fact(
-                roshanAliveMessageTopic,
-                `Roshan is alive ${roshLocation(daytime)}`
-            ),
+            new Fact(roshanAliveMessageTopic, roshAliveMessage(daytime)),
     }),
     new Rule({
         label: "killed once before",
@@ -224,13 +227,10 @@ export default [
     new Rule({
         label: "when rosh is guaranteed to be up, play reminder",
         trigger: [topics.time],
-        given: [topics.roshanAliveTime],
+        given: [topics.roshanAliveTime, topics.daytime],
         when: ([time], [aliveTime]) => time === aliveTime,
-        then: () =>
-            new Fact(
-                topics.configurableEffect,
-                "resources/audio/rosh-alive.mp3"
-            ),
+        then: (_, [_aliveTime, daytime]) =>
+            new Fact(topics.configurableEffect, roshAliveMessage(daytime)),
     }),
     new Rule({
         label: "when asked what roshan status is, respond with status",

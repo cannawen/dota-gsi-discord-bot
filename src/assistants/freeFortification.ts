@@ -21,6 +21,8 @@ const t1FreeFortWarnedAlready = new Topic<boolean>("t1FreeFortWarnedAlready");
 const t2FreeFortWarnedAlready = new Topic<boolean>("t2FreeFortWarnedAlready");
 const t3FreeFortWarnedAlready = new Topic<boolean>("t3FreeFortWarnedAlready");
 
+const freeFortAudio = "resources/audio/free-fort.mp3";
+
 export default [
     new Rule({
         label: "free fort for t1",
@@ -32,7 +34,7 @@ export default [
                 mid < TOWER_HEALTH_WARN_THRESHOLD ||
                 bot < TOWER_HEALTH_WARN_THRESHOLD),
         then: () => [
-            new Fact(topics.configurableEffect, "free fort"),
+            new Fact(topics.configurableEffect, freeFortAudio),
             new Fact(t1FreeFortWarnedAlready, true),
         ],
     }),
@@ -46,7 +48,7 @@ export default [
                 mid < TOWER_HEALTH_WARN_THRESHOLD ||
                 bot < TOWER_HEALTH_WARN_THRESHOLD),
         then: () => [
-            new Fact(topics.configurableEffect, "free fort"),
+            new Fact(topics.configurableEffect, freeFortAudio),
             new Fact(t2FreeFortWarnedAlready, true),
         ],
     }),
@@ -60,7 +62,7 @@ export default [
                 mid < TOWER_HEALTH_WARN_THRESHOLD ||
                 bot < TOWER_HEALTH_WARN_THRESHOLD),
         then: () => [
-            new Fact(topics.configurableEffect, "free fort"),
+            new Fact(topics.configurableEffect, freeFortAudio),
             new Fact(t3FreeFortWarnedAlready, true),
         ],
     }),
