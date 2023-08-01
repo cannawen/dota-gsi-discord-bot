@@ -18,6 +18,7 @@ export class DiscordClient {
 
     public start() {
         this.setupInteractions();
+        this.setupVoiceStatusUpdates();
         this.client.on(Events.Error, (error) => {
             log.error("discord", "%s", error);
         });
@@ -120,6 +121,20 @@ export class DiscordClient {
                     content: `Unable to handle command ${commandName}. Please let us know you encountered this error with /feedback`,
                     ephemeral: true,
                 });
+            }
+        });
+    }
+
+    private setupVoiceStatusUpdates() {
+        this.client.on(Events.VoiceStateUpdate, (old, newVoiceStatus) => {
+            if (newVoiceStatus.channelId !== null) return;
+
+            const channelMembers = old.channel?.members;
+            const bot = channelMembers?.find(
+                (m) => m.id === process.env.DISCORD_APPLICATION_ID
+            );
+            if (channelMembers?.size === 1 && bot !== undefined) {
+                engine.deleteSessionForGuild(bot.guild.id);
             }
         });
     }

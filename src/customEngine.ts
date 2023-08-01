@@ -115,6 +115,14 @@ export class CustomEngine extends Engine {
         this.set(db, new Fact(topics.discordGuildChannelId, channelId || null));
     }
 
+    public deleteSessionForGuild(guildId: string) {
+        [...this.sessions.values()].forEach((factStore) => {
+            if (factStore.get(topics.discordGuildId) === guildId) {
+                this.deleteSession(factStore.get(topics.studentId)!);
+            }
+        });
+    }
+
     public deleteSession(studentId: string) {
         const db = this.sessions.get(studentId);
         if (db) {
