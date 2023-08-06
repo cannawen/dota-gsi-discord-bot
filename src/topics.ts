@@ -34,6 +34,8 @@ const gsi = {
     buybackCooldown: new Topic<number>("buybackCooldown"),
     hero: new Topic<string>("hero"),
     level: new Topic<number>("level"),
+    mana: new Topic<number>("mana"),
+    maxMana: new Topic<number>("maxMana"),
     respawnSeconds: new Topic<number>("respawnSeconds"),
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),

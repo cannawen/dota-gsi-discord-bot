@@ -16,6 +16,8 @@ export default new Rule({
                 new Fact(topics.buybackCooldown, hero.buybackCooldown),
                 new Fact(topics.hero, hero.name),
                 new Fact(topics.level, hero.level),
+                new Fact(topics.mana, hero.mana),
+                new Fact(topics.maxMana, hero.maxMana),
                 new Fact(topics.respawnSeconds, hero.respawnSeconds),
             ];
         }

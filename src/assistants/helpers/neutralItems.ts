@@ -63,9 +63,6 @@ function isNeutralItem(name: string) {
 
 export default {
     tierTimeInfo,
-    philosophersStone: "item_philosophers_stone",
-    pirateHat: "item_pirate_hat",
-    trustyShovel: "item_trusty_shovel",
     nameToTier,
     timeToTier,
     isItemAppropriateForTime,

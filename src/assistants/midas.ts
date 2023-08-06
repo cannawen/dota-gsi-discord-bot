@@ -3,9 +3,8 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
-import Item from "../gsi-data-classes/Item";
-import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -19,19 +18,12 @@ export const configInfo = new ConfigInfo(
 
 const REMINDER_INTERVAL = 15;
 
-function midasIsCastable(items: PlayerItems): boolean {
-    return (
-        [...items.inventory, ...items.backpack]
-            .filter((item): item is Item => item !== null)
-            .find((item) => item!.id === "item_hand_of_midas")?.cooldown === 0
-    );
-}
-
 export default [
     new Rule({
         label: "reminder to use midas",
         trigger: [topics.alive, topics.items],
-        when: ([alive, items]) => midasIsCastable(items) && alive,
+        when: ([alive, items]) =>
+            helper.hasCastableItem(items, "item_hand_of_midas") && alive,
         then: () =>
             new Fact(topics.configurableEffect, "resources/audio/midas.mp3"),
     }),

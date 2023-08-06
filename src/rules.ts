@@ -15,6 +15,7 @@ const assistant = {
     glhf: "assistant-glhf",
     goldReminder: "assistant-gold",
     lotus: "assistant-lotus",
+    arcaneBoots: "assistant-mana_boots",
     midas: "assistant-midas",
     neutralItemDigReminder: "assistant-neutral_item-dig",
     neutralItemReminder: "assistant-neutral_item",

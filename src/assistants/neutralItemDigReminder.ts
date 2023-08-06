@@ -3,10 +3,8 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/neutralItems";
+import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
-import Item from "../gsi-data-classes/Item";
-import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -18,41 +16,19 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-const VALID_NEUTRAL_ARRAY = [helper.trustyShovel, helper.pirateHat];
 const TIME_BETWEEN_REMINDERS = 15;
 
-function validNeutralItem(item: Item | null): boolean {
-    if (!item) {
-        return false;
-    }
-    return VALID_NEUTRAL_ARRAY.reduce(
-        (memo, validId) => memo || item.id === validId,
-        false
-    );
-}
-
-function canCast(item: Item | null): boolean {
-    if (!item) {
-        return false;
-    }
-    return item.cooldown === 0;
-}
-
-function hasValidItem(items: PlayerItems) {
-    return (
-        [...items.backpack, items.neutral]
-            .filter(validNeutralItem)
-            .filter(canCast).length > 0
-    );
-}
-export default [
-    new Rule({
-        label: "reminder to dig trusty shovel or pirate hat",
-        trigger: [topics.alive, topics.items],
-        when: ([alive, items]) => hasValidItem(items) && alive,
-        then: () => new Fact(topics.configurableEffect, "dig"),
-    }),
-]
+export default ["item_trusty_shovel", "item_pirate_hat"]
+    .map(
+        (itemId) =>
+            new Rule({
+                label: `reminder to dig ${itemId}`,
+                trigger: [topics.alive, topics.items],
+                when: ([alive, items]) =>
+                    helper.hasCastableItem(items, itemId) && alive,
+                then: () => new Fact(topics.configurableEffect, "dig"),
+            })
+    )
     .map((rule) =>
         conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )

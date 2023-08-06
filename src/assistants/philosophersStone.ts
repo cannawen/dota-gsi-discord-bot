@@ -29,12 +29,12 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
 function hasPhilosophersStone(items: PlayerItems): boolean {
     const stone = [...items.backpack, ...items.stash, items.neutral]
         .filter((item) => item !== null)
-        .find((item) => item!.id === helper.philosophersStone);
+        .find((item) => item!.id === "item_philosophers_stone");
     return stone !== undefined;
 }
 
 function holdingPhilosophersStone(items: PlayerItems): boolean {
-    return items.neutral?.id === helper.philosophersStone;
+    return items.neutral?.id === "item_philosophers_stone";
 }
 
 export default [

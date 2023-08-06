@@ -4,8 +4,7 @@ import topicManager from "../topicManager";
 import topics from "../../topics";
 
 /**
- * When `condition` is true, applies `rule.then` between `start` and `end` time (inclusive)
- * every `interval` seconds. The first time `condition` is met, the `rule.then` is not applied
+ * The first time `rule.when` is met, the `rule.then` is not applied
  * to give the user one `interval` time of grace before we start reminding them
  */
 export default function conditionalEveryIntervalSeconds(
