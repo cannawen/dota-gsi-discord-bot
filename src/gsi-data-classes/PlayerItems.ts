@@ -34,6 +34,12 @@ export default class PlayerItems {
         ];
     }
 
+    public findItem(itemId: string): Item | undefined {
+        return this.allItems()
+            .filter((item): item is Item => item !== null)
+            .find((item) => item!.id === itemId);
+    }
+
     static create(items: DeepReadonly<gsi.IItemContainer>) {
         const inventoryAndBackpack = items.slot.map(Item.create);
         return new PlayerItems(

@@ -11,19 +11,23 @@ const itemNames = new Map<string, string>(Object.entries(items));
 export default class Item {
     public readonly id: string;
     public readonly name: string;
-    public readonly cooldown?: number;
-    public readonly charges?: number;
+
+    public readonly canCast: boolean | undefined;
+    public readonly cooldown: number | undefined;
+    public readonly charges: number | undefined;
 
     public constructor(
         id: string,
-        name?: string,
-        cooldown?: number,
-        charges?: number
+        name?: string | undefined,
+        cooldown?: number | undefined,
+        charges?: number | undefined,
+        canCast?: boolean | undefined
     ) {
         this.id = id;
         this.name = name || id;
         this.cooldown = cooldown;
         this.charges = charges;
+        this.canCast = canCast;
     }
 
     static create(item: DeepReadonly<gsi.IItem> | null) {
@@ -32,7 +36,8 @@ export default class Item {
                 item.name,
                 itemNames.get(item.name),
                 item.cooldown,
-                item.charges
+                item.charges,
+                item.canCast
             );
         }
         return null;

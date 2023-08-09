@@ -18,7 +18,7 @@ const TRUSTY_SHOVEL = new PlayerItems(
     [],
     [],
     null,
-    new Item("item_trusty_shovel", "Trusty Shovel", 0)
+    new Item("item_trusty_shovel", "Trusty Shovel", undefined, undefined, true)
 );
 
 const PIRATE_HAT = new PlayerItems(
@@ -26,7 +26,7 @@ const PIRATE_HAT = new PlayerItems(
     [],
     [],
     null,
-    new Item("item_pirate_hat", "Pirate Hat", 0)
+    new Item("item_pirate_hat", "Pirate Hat", undefined, undefined, true)
 );
 
 const SHOVEL_ON_COOLDOWN = new PlayerItems(
@@ -34,12 +34,20 @@ const SHOVEL_ON_COOLDOWN = new PlayerItems(
     [],
     [],
     null,
-    new Item("item_trusty_shovel", "Trusty Shovel", 1)
+    new Item("item_trusty_shovel", "Trusty Shovel", undefined, undefined, false)
 );
 
 const SHOVEL_ON_COOLDOWN_IN_BACKPACK = new PlayerItems(
     [],
-    [new Item("item_trusty_shovel", "Trusty Shovel", 1)],
+    [
+        new Item(
+            "item_trusty_shovel",
+            "Trusty Shovel",
+            undefined,
+            undefined,
+            false
+        ),
+    ],
     [],
     null,
     null
@@ -47,7 +55,15 @@ const SHOVEL_ON_COOLDOWN_IN_BACKPACK = new PlayerItems(
 
 const SHOVEL_READY_IN_BACKPACK = new PlayerItems(
     [],
-    [new Item("item_trusty_shovel", "Trusty Shovel", 0)],
+    [
+        new Item(
+            "item_trusty_shovel",
+            "Trusty Shovel",
+            undefined,
+            undefined,
+            true
+        ),
+    ],
     [],
     null,
     null

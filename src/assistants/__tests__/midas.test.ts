@@ -3,30 +3,30 @@ import PlayerItems from "../../gsi-data-classes/PlayerItems";
 import rule from "../midas";
 import rules from "../../rules";
 
-const MIDAS_CAN_CAST = new PlayerItems(
-    [new Item("item_hand_of_midas", "Hand of Midas", 0)],
+const MIDAS_2_CHARGES = new PlayerItems(
+    [new Item("item_hand_of_midas", "Hand of Midas", undefined, 2, true)],
     [],
     [],
     null,
     null
 );
-const MIDAS_CAN_CAST_BACKPACK = new PlayerItems(
+const MIDAS_2_CHARGES_BACKPACK = new PlayerItems(
     [],
-    [new Item("item_hand_of_midas", "Hand of Midas", 0)],
-    [],
-    null,
-    null
-);
-const MIDAS_ON_COOLDOWN = new PlayerItems(
-    [new Item("item_hand_of_midas", "Hand of Midas", 10)],
-    [],
+    [new Item("item_hand_of_midas", "Hand of Midas", undefined, 2, true)],
     [],
     null,
     null
 );
-const MIDAS_ON_COOLDOWN_BACKPACK = new PlayerItems(
+const MIDAS_ONE_CHARGE = new PlayerItems(
+    [new Item("item_hand_of_midas", "Hand of Midas", undefined, 1, true)],
     [],
-    [new Item("item_hand_of_midas", "Hand of Midas", 10)],
+    [],
+    null,
+    null
+);
+const MIDAS_0_CHARGES_BACKPACK = new PlayerItems(
+    [],
+    [new Item("item_hand_of_midas", "Hand of Midas", undefined, 0, true)],
     [],
     null,
     null
@@ -44,7 +44,7 @@ const params = {
     time: 100,
     alive: true,
     inGame: true,
-    items: MIDAS_CAN_CAST,
+    items: MIDAS_2_CHARGES,
 };
 
 describe("midas assistant", () => {
@@ -69,7 +69,7 @@ describe("midas assistant", () => {
                         rule,
                         {
                             ...params,
-                            items: MIDAS_CAN_CAST_BACKPACK,
+                            items: MIDAS_2_CHARGES_BACKPACK,
                             time: 130,
                         },
                         fifteenSecondsAfterState
@@ -94,7 +94,7 @@ describe("midas assistant", () => {
                 test("should not remind about midas", () => {
                     const firstSeenMidasState = getResults(rule, {
                         ...params,
-                        items: MIDAS_ON_COOLDOWN,
+                        items: MIDAS_ONE_CHARGE,
                     });
                     expect(firstSeenMidasState).not.toContainAudioEffect();
                     const fifteenSecondsAfterState = getResults(
@@ -102,7 +102,7 @@ describe("midas assistant", () => {
                         {
                             ...params,
                             time: 115,
-                            items: MIDAS_ON_COOLDOWN,
+                            items: MIDAS_ONE_CHARGE,
                         },
                         firstSeenMidasState
                     );
@@ -112,7 +112,7 @@ describe("midas assistant", () => {
                         {
                             ...params,
                             time: 130,
-                            items: MIDAS_ON_COOLDOWN_BACKPACK,
+                            items: MIDAS_0_CHARGES_BACKPACK,
                         },
                         fifteenSecondsAfterState
                     );

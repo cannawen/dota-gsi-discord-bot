@@ -3,7 +3,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -25,7 +24,7 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
                 label: `reminder to dig ${itemId}`,
                 trigger: [topics.alive, topics.items],
                 when: ([alive, items]) =>
-                    helper.hasCastableItem(items, itemId) && alive,
+                    alive && items.findItem(itemId)?.canCast,
                 then: () => new Fact(topics.configurableEffect, "dig"),
             })
     )

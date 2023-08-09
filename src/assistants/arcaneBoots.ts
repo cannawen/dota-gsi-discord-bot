@@ -3,7 +3,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/items";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -25,7 +24,7 @@ export default [
         given: [topics.alive, topics.mana, topics.maxMana],
         when: ([items], [alive, mana, maxMana]) =>
             alive &&
-            helper.hasCastableItem(items, "item_arcane_boots") &&
+            items.findItem("item_arcane_boots")?.canCast &&
             maxMana - mana >= MANA_RESTORED_ON_CAST,
         then: () => new Fact(topics.configurableEffect, "arcane boots"),
     }),
