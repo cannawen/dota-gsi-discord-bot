@@ -15,18 +15,38 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-const REMINDER_INTERVAL = 15;
+const REMINDER_INTERVAL_1_CHARGE = 30;
+const REMINDER_INTERVAL_2_CHARGE = 15;
 
 export default [
-    new Rule({
-        label: "reminder to use midas",
-        trigger: [topics.alive, topics.items],
-        when: ([alive, items]) =>
-            alive && items.findItem("item_hand_of_midas")?.charges === 2,
-        then: () =>
-            new Fact(topics.configurableEffect, "resources/audio/midas.mp3"),
-    }),
+    conditionalEveryIntervalSeconds(
+        REMINDER_INTERVAL_1_CHARGE,
+        new Rule({
+            label: "reminder to use midas (1 charge)",
+            trigger: [topics.alive, topics.items],
+            when: ([alive, items]) =>
+                alive && items.findItem("item_hand_of_midas")?.charges === 1,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/midas.mp3"
+                ),
+        })
+    ),
+    conditionalEveryIntervalSeconds(
+        REMINDER_INTERVAL_2_CHARGE,
+        new Rule({
+            label: "reminder to use midas (2 charge)",
+            trigger: [topics.alive, topics.items],
+            when: ([alive, items]) =>
+                alive && items.findItem("item_hand_of_midas")?.charges === 2,
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "resources/audio/midas.mp3"
+                ),
+        })
+    ),
 ]
-    .map((rule) => conditionalEveryIntervalSeconds(REMINDER_INTERVAL, rule))
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map(inGame);

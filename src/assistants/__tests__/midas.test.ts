@@ -90,8 +90,8 @@ describe("midas assistant", () => {
                     ).not.toContainAudioEffect();
                 });
             });
-            describe("midas on cooldown", () => {
-                test("should not remind about midas", () => {
+            describe("midas has one charge cooldown", () => {
+                test("should remind about midas after 30 seconds", () => {
                     const firstSeenMidasState = getResults(rule, {
                         ...params,
                         items: MIDAS_ONE_CHARGE,
@@ -116,7 +116,7 @@ describe("midas assistant", () => {
                         },
                         fifteenSecondsAfterState
                     );
-                    expect(thirtySecondsAfterState).not.toContainAudioEffect();
+                    expect(thirtySecondsAfterState).toContainAudioEffect();
                 });
             });
         });
