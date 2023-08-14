@@ -36,125 +36,55 @@ const lastRoshDeathTimeTopic = topicManager.createTopic<number>(
     }
 );
 
-const roshanAliveMessageTopic = topicManager.createTopic<string>(
-    "roshanAliveMessageTopic",
-    {
-        persistAcrossRestarts: true,
-    }
-);
-const roshanStatusMessageTopic = topicManager.createTopic<string>(
-    "roshanStatusMessageTopic",
-    {
-        defaultValue: "Roshan is alive",
-        persistAcrossRestarts: true,
-    }
-);
-
 function isRoshStatusRequest(message: string) {
     return message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null;
 }
 
-function roshLocation(daytime: boolean) {
-    return daytime ? "bottom" : "top";
+function roshanMessage(
+    allRoshDeathTimes: number[],
+    currentTime: number,
+    daytime: boolean,
+    currentlyInGame: boolean
+) {
+    const deathTime = allRoshDeathTimes.at(-1);
+    const status = roshHelper.getStatus(
+        currentlyInGame,
+        currentTime,
+        deathTime
+    );
+    const roshLocation = daytime ? "bottom" : "top";
+    switch (status) {
+        case Status.ALIVE: {
+            let dropString = "aegis";
+            if (allRoshDeathTimes.length === 1) {
+                dropString += " and cheese";
+            }
+            if (allRoshDeathTimes.length > 1) {
+                if (daytime) {
+                    dropString += ", cheese, and aghanim's scepter";
+                } else {
+                    dropString += ", cheese, and refresher shard";
+                }
+            }
+            return `alive ${roshLocation} with ${dropString}`;
+        }
+        case Status.MAYBE_ALIVE:
+            return `${roshHelper.percentChanceRoshanIsAlive(
+                currentTime,
+                deathTime!
+            )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
+                roshHelper.maximumSpawnTime(deathTime!)
+            )}`;
+        case Status.DEAD:
+            return `minimum ${timeHelper.secondsToTtsTimeString(
+                roshHelper.minimuSpawnTime(deathTime!)
+            )}`;
+        case Status.NOT_IN_A_GAME:
+            return "game has not started";
+        default:
+            return "unknown";
+    }
 }
-
-function roshAliveMessage(daytime: boolean) {
-    return daytime
-        ? "resources/audio/rosh-bottom.mp3"
-        : "resources/audio/rosh-top.mp3";
-}
-
-/**
- * Sets roshanAliveMessageTopic based on how many times we have killed Roshan
- */
-const aliveMessageRules = [
-    new Rule({
-        label: "never killed before",
-        trigger: [topics.daytime],
-        given: [allRoshanDeathTimesTopic],
-        when: (_, [deathTimes]) => deathTimes.length === 0,
-        then: ([daytime]) =>
-            new Fact(roshanAliveMessageTopic, roshAliveMessage(daytime)),
-    }),
-    new Rule({
-        label: "killed once before",
-        trigger: [allRoshanDeathTimesTopic, topics.daytime],
-        when: ([deathTimes]) => deathTimes.length === 1,
-        then: ([_, daytime]) =>
-            new Fact(
-                roshanAliveMessageTopic,
-                `Roshan is alive ${roshLocation(
-                    daytime
-                )}. Will drop aegis and cheese`
-            ),
-    }),
-    new Rule({
-        label: "killed twice or more, day time",
-        trigger: [allRoshanDeathTimesTopic, topics.daytime],
-        when: ([deathTimes, daytime]) => deathTimes.length > 1 && daytime,
-        then: ([_, daytime]) =>
-            new Fact(
-                roshanAliveMessageTopic,
-                `Roshan is alive ${roshLocation(
-                    daytime
-                )}. Will drop aegis, cheese, and aghanim's blessing`
-            ),
-    }),
-    new Rule({
-        label: "killed twice or more, night time",
-        trigger: [allRoshanDeathTimesTopic, topics.daytime],
-        when: ([deathTimes, daytime]) => deathTimes.length > 1 && !daytime,
-        then: ([_, daytime]) =>
-            new Fact(
-                roshanAliveMessageTopic,
-                `Roshan is alive ${roshLocation(
-                    daytime
-                )}. Will drop aegis, cheese, and refresher shard`
-            ),
-    }),
-];
-
-/**
- * Sets roshanStatus based on if rosh is dead or alive (
- */
-const statusMessageRules = [
-    ...aliveMessageRules,
-    new Rule({
-        label: "rosh is dead",
-        trigger: [topics.roshanStatus],
-        given: [topics.roshanMaybeAliveTime],
-        when: ([status]) => status === Status.DEAD,
-        then: (_, [maybeAliveTime]) =>
-            new Fact(
-                roshanStatusMessageTopic,
-                `minimum ${timeHelper.secondsToTtsTimeString(maybeAliveTime)}`
-            ),
-    }),
-    new Rule({
-        label: "rosh may be alive",
-        trigger: [
-            topics.roshanStatus,
-            topics.roshanPercentChanceAlive,
-            topics.daytime,
-        ],
-        given: [topics.roshanAliveTime],
-        when: ([status]) => status === Status.MAYBE_ALIVE,
-        then: ([_, percentChance, daytime], [aliveTime]) =>
-            new Fact(
-                roshanStatusMessageTopic,
-                `${percentChance} percent ${roshLocation(
-                    daytime
-                )}. maximum ${timeHelper.secondsToTtsTimeString(aliveTime)}`
-            ),
-    }),
-    new Rule({
-        label: "roshan is alive",
-        trigger: [topics.roshanStatus, roshanAliveMessageTopic],
-        when: ([status]) => status === Status.ALIVE,
-        then: ([_, aliveMessage]) =>
-            new Fact(roshanStatusMessageTopic, aliveMessage),
-    }),
-];
 
 export default [
     new Rule({
@@ -167,7 +97,6 @@ export default [
                 roshHelper.percentChanceRoshanIsAlive(time, deathTime)
             ),
     }),
-    ...statusMessageRules,
     new Rule({
         label: "when we get an event that says rosh is killed, add time to allRoshanDeathTimesTopic array",
         trigger: [topics.event],
@@ -203,7 +132,7 @@ export default [
     }),
 
     new Rule({
-        label: "current roshan status",
+        label: "save current roshan status",
         trigger: [topics.inGame, topics.time],
         given: [lastRoshDeathTimeTopic],
         then: ([inGame, time], [deathTime]) =>
@@ -227,18 +156,38 @@ export default [
     new Rule({
         label: "when rosh is guaranteed to be up, play reminder",
         trigger: [topics.time],
-        given: [topics.roshanAliveTime, topics.daytime],
+        given: [
+            topics.roshanAliveTime,
+            topics.daytime,
+            allRoshanDeathTimesTopic,
+        ],
         when: ([time], [aliveTime]) => time === aliveTime,
         then: (_, [_aliveTime, daytime]) =>
-            new Fact(topics.configurableEffect, roshAliveMessage(daytime)),
-    }),
-    new Rule({
-        label: "when asked what roshan status is, respond with status",
-        trigger: [topics.lastDiscordUtterance],
-        given: [roshanStatusMessageTopic],
-        when: ([utterance]) => isRoshStatusRequest(utterance),
-        then: (_, [message]) => new Fact(topics.configurableEffect, message),
+            new Fact(
+                topics.configurableEffect,
+                daytime
+                    ? "resources/audio/rosh-bottom.mp3"
+                    : "resources/audio/rosh-top.mp3"
+            ),
     }),
 ]
     .map(inGame)
+    .concat([
+        new Rule({
+            label: "when asked what roshan status is, respond with status",
+            trigger: [topics.lastDiscordUtterance],
+            given: [
+                allRoshanDeathTimesTopic,
+                topics.time,
+                topics.daytime,
+                topics.inGame,
+            ],
+            when: ([utterance]) => isRoshStatusRequest(utterance),
+            then: (_, [allDeathTimes, time, daytime, currentlyInGame]) =>
+                new Fact(
+                    topics.configurableEffect,
+                    roshanMessage(allDeathTimes, time, daytime, currentlyInGame)
+                ),
+        }),
+    ])
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
