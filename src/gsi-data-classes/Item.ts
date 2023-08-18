@@ -12,9 +12,9 @@ export default class Item {
     public readonly id: string;
     public readonly name: string;
 
-    public readonly canCast: boolean | undefined;
     public readonly cooldown: number | undefined;
     public readonly charges: number | undefined;
+    public readonly canCast: boolean | undefined;
 
     public constructor(
         id: string,
