@@ -25,6 +25,14 @@ function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     }
 }
 
+function numberOfPeopleConnected(guildId: string, channelId: string): number {
+    return Array.from(engine.getSessions().values()).filter(
+        (db) =>
+            Engine.get(db, topics.discordGuildId) === guildId &&
+            Engine.get(db, topics.discordGuildChannelId) === channelId
+    ).length;
+}
+
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
@@ -63,7 +71,7 @@ export class CustomEngine extends Engine {
         }
     }
 
-    // eslint-disable-next-line max-statements
+    // eslint-disable-next-line max-statements, max-lines-per-function
     public startCoachingSession(
         studentId: string,
         guildIdIn?: string,
@@ -71,6 +79,17 @@ export class CustomEngine extends Engine {
     ) {
         let guildId = guildIdIn;
         let channelId = channelIdIn;
+
+        if (
+            !(
+                guildId &&
+                channelId &&
+                numberOfPeopleConnected(guildId, channelId) === 0
+            )
+        ) {
+            guildId = undefined;
+            channelId = undefined;
+        }
 
         // TODO there may be something better than straight up deleting and re-creating the entire session
         const oldDb = this.sessions.get(studentId);

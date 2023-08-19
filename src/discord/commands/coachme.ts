@@ -27,19 +27,11 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     if (!guildId || !channelId) {
         message = `${message}\n\nWARNING: The bot could not find a voice channel to join (but your private coaching tips will still work). Please join a voice channel and try /coachme again`;
     }
-    if (
-        guildId &&
-        channelId &&
-        helpers.numberOfPeopleConnected(guildId, channelId) === 0
-    ) {
-        engine.startCoachingSession(
-            helpers.studentId(interaction),
-            guildId,
-            channelId
-        );
-    } else {
-        engine.startCoachingSession(helpers.studentId(interaction));
-    }
+    engine.startCoachingSession(
+        helpers.studentId(interaction),
+        guildId || undefined,
+        channelId
+    );
     interaction.reply({
         content: message,
         ephemeral: true,
