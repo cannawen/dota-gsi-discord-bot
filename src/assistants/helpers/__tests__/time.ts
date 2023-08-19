@@ -3,8 +3,8 @@ import sut from "../time";
 describe("time helpers", () => {
     describe("seconds to time string", () => {
         test("it formats properly", () => {
-            expect(sut.secondsToTimeString(0)).toBe("00:00");
-            expect(sut.secondsToTimeString(60 * 60)).toBe("1:00:00");
+            expect(sut.secondsToMinuteString(0)).toBe("0:00");
+            expect(sut.secondsToMinuteString(60 * 60)).toBe("60:00");
         });
     });
     describe("seconds to TTS time string", () => {

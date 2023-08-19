@@ -26,7 +26,7 @@ export default new Rule({
             log.info(
                 "discord",
                 "%s - Playing %s for student %s",
-                helper.secondsToTimeString(time || 0),
+                helper.secondsToMinuteString(time || 0),
                 emColor(filePath),
                 studentId?.substring(0, 10)
             );

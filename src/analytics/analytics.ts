@@ -40,7 +40,7 @@ function trackAudio(
 ) {
     mixpanel?.track("audio", {
         distinct_id: studentId,
-        gametime: time ? timeHelper.secondsToTimeString(time) : undefined,
+        gametime: time ? timeHelper.secondsToMinuteString(time) : undefined,
         audio: fileName,
         type: publicAudio ? "public" : "private",
     });

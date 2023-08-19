@@ -189,7 +189,7 @@ router.get("/coach/:studentId/poll/audio", (req, res) => {
         log.info(
             "effect",
             "%s - Playing private audio %s for %s",
-            helper.secondsToTimeString(time),
+            helper.secondsToMinuteString(time),
             nextAudio.magenta,
             studentId.substring(0, 10)
         );
@@ -219,7 +219,7 @@ function roshNumbers(studentId: string) {
         topics.roshanAliveTime,
     ]
         .map((topic) => engine.getFactValue(studentId, topic))
-        .map((time) => helper.secondsToTimeString(time!))
+        .map((time) => helper.secondsToMinuteString(time!))
         .join(" - ");
 }
 
