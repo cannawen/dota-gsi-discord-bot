@@ -1,10 +1,10 @@
+import analytics from "../analytics/analytics";
 import Fact from "../engine/Fact";
 import log from "../log";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 import Voice = require("@discordjs/voice");
-import analytics from "../analytics/analytics";
 
 export default new Rule({
     label: rules.effect.playInterruptingAudio,
@@ -19,7 +19,7 @@ export default new Rule({
             log.info(
                 "discord",
                 "Playing interrupting audio %s for student %s",
-                file.magenta,
+                file.cyan,
                 studentId?.substring(0, 10)
             );
             analytics.trackAudio(studentId, time, file, true);
