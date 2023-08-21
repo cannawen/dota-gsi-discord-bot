@@ -55,18 +55,18 @@ function roshanMessage(
     const roshLocation = daytime ? "bottom" : "top";
     switch (status) {
         case Status.ALIVE: {
-            let dropString = "aegis";
+            let dropString = "";
             if (allRoshDeathTimes.length === 1) {
-                dropString += " and cheese";
+                dropString += " with cheese";
             }
             if (allRoshDeathTimes.length > 1) {
                 if (daytime) {
-                    dropString += ", cheese, and aghanim's scepter";
+                    dropString += " with cheese and aghanim's scepter";
                 } else {
-                    dropString += ", cheese, and refresher shard";
+                    dropString += " with cheese and refresher shard";
                 }
             }
-            return `alive ${roshLocation} with ${dropString}`;
+            return `alive ${roshLocation}${dropString}`;
         }
         case Status.MAYBE_ALIVE:
             return `${roshHelper.percentChanceRoshanIsAlive(
