@@ -13,102 +13,102 @@ export default new Rule({
         if (buildings?.radiant) {
             return [
                 new Fact(
-                    topics.t1Top,
+                    topics.t1TopHealth,
                     buildings?.radiant.dota_goodguys_tower1_top?.health
                 ),
                 new Fact(
-                    topics.t2Top,
+                    topics.t2TopHealth,
                     buildings?.radiant.dota_goodguys_tower2_top?.health
                 ),
                 new Fact(
-                    topics.t3Top,
+                    topics.t3TopHealth,
                     buildings?.radiant.dota_goodguys_tower3_top?.health
                 ),
                 new Fact(
-                    topics.t4Top,
+                    topics.t4TopHealth,
                     buildings?.radiant.dota_goodguys_tower4_top?.health
                 ),
                 new Fact(
-                    topics.t1Mid,
+                    topics.t1MidHealth,
                     buildings?.radiant.dota_goodguys_tower1_mid?.health
                 ),
                 new Fact(
-                    topics.t2Mid,
+                    topics.t2MidHealth,
                     buildings?.radiant.dota_goodguys_tower2_mid?.health
                 ),
                 new Fact(
-                    topics.t3Mid,
+                    topics.t3MidHealth,
                     buildings?.radiant.dota_goodguys_tower3_mid?.health
                 ),
                 new Fact(
-                    topics.t1Bot,
+                    topics.t1BotHealth,
                     buildings?.radiant.dota_goodguys_tower1_bot?.health
                 ),
                 new Fact(
-                    topics.t2Bot,
+                    topics.t2BotHealth,
                     buildings?.radiant.dota_goodguys_tower2_bot?.health
                 ),
                 new Fact(
-                    topics.t3Bot,
+                    topics.t3BotHealth,
                     buildings?.radiant.dota_goodguys_tower3_bot?.health
                 ),
                 new Fact(
-                    topics.t4Bot,
+                    topics.t4BotHealth,
                     buildings?.radiant.dota_goodguys_tower4_bot?.health
                 ),
                 new Fact(
-                    topics.ancient,
+                    topics.ancientHealth,
                     buildings?.radiant.dota_goodguys_fort?.health
                 ),
             ];
         } else if (buildings?.dire) {
             return [
                 new Fact(
-                    topics.t1Top,
+                    topics.t1TopHealth,
                     buildings?.dire.dota_badguys_tower1_top?.health
                 ),
                 new Fact(
-                    topics.t2Top,
+                    topics.t2TopHealth,
                     buildings?.dire.dota_badguys_tower2_top?.health
                 ),
                 new Fact(
-                    topics.t3Top,
+                    topics.t3TopHealth,
                     buildings?.dire.dota_badguys_tower3_top?.health
                 ),
                 new Fact(
-                    topics.t4Top,
+                    topics.t4TopHealth,
                     buildings?.dire.dota_badguys_tower4_top?.health
                 ),
                 new Fact(
-                    topics.t1Mid,
+                    topics.t1MidHealth,
                     buildings?.dire.dota_badguys_tower1_mid?.health
                 ),
                 new Fact(
-                    topics.t2Mid,
+                    topics.t2MidHealth,
                     buildings?.dire.dota_badguys_tower2_mid?.health
                 ),
                 new Fact(
-                    topics.t3Mid,
+                    topics.t3MidHealth,
                     buildings?.dire.dota_badguys_tower3_mid?.health
                 ),
                 new Fact(
-                    topics.t1Bot,
+                    topics.t1BotHealth,
                     buildings?.dire.dota_badguys_tower1_bot?.health
                 ),
                 new Fact(
-                    topics.t2Bot,
+                    topics.t2BotHealth,
                     buildings?.dire.dota_badguys_tower2_bot?.health
                 ),
                 new Fact(
-                    topics.t3Bot,
+                    topics.t3BotHealth,
                     buildings?.dire.dota_badguys_tower3_bot?.health
                 ),
                 new Fact(
-                    topics.t4Bot,
+                    topics.t4BotHealth,
                     buildings?.dire.dota_badguys_tower4_bot?.health
                 ),
                 new Fact(
-                    topics.ancient,
+                    topics.ancientHealth,
                     buildings?.dire.dota_badguys_fort?.health
                 ),
             ];

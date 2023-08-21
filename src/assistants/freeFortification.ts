@@ -26,7 +26,7 @@ const freeFortAudio = "resources/audio/free-fort.mp3";
 export default [
     new Rule({
         label: "free fort for t1",
-        trigger: [topics.t1Top, topics.t1Mid, topics.t1Bot],
+        trigger: [topics.t1TopHealth, topics.t1MidHealth, topics.t1BotHealth],
         given: [t1FreeFortWarnedAlready],
         when: ([top, mid, bot], [warnedAlready]) =>
             !warnedAlready &&
@@ -40,7 +40,7 @@ export default [
     }),
     new Rule({
         label: "free fort for t2",
-        trigger: [topics.t2Top, topics.t2Mid, topics.t2Bot],
+        trigger: [topics.t2TopHealth, topics.t2MidHealth, topics.t2BotHealth],
         given: [t2FreeFortWarnedAlready],
         when: ([top, mid, bot], [warnedAlready]) =>
             !warnedAlready &&
@@ -54,7 +54,7 @@ export default [
     }),
     new Rule({
         label: "free fort for t3",
-        trigger: [topics.t3Top, topics.t3Mid, topics.t3Bot],
+        trigger: [topics.t3TopHealth, topics.t3MidHealth, topics.t3BotHealth],
         given: [t3FreeFortWarnedAlready],
         when: ([top, mid, bot], [warnedAlready]) =>
             !warnedAlready &&

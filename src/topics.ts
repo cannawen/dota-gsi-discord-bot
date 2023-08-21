@@ -12,19 +12,19 @@ import Voice from "@discordjs/voice";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
-    // building
-    t1Top: new Topic<number>("t1Top"),
-    t2Top: new Topic<number>("t2Top"),
-    t3Top: new Topic<number>("t3Top"),
-    t4Top: new Topic<number>("t4Top"),
-    t1Mid: new Topic<number>("t1Mid"),
-    t2Mid: new Topic<number>("t2Mid"),
-    t3Mid: new Topic<number>("t3Mid"),
-    t1Bot: new Topic<number>("t1Bot"),
-    t2Bot: new Topic<number>("t2Bot"),
-    t3Bot: new Topic<number>("t3Bot"),
-    t4Bot: new Topic<number>("t4Bot"),
-    ancient: new Topic<number>("ancient"),
+    // building healths
+    t1TopHealth: new Topic<number>("t1TopHealth"),
+    t2TopHealth: new Topic<number>("t2TopHealth"),
+    t3TopHealth: new Topic<number>("t3TopHealth"),
+    t4TopHealth: new Topic<number>("t4TopHealth"),
+    t1MidHealth: new Topic<number>("t1MidHealth"),
+    t2MidHealth: new Topic<number>("t2MidHealth"),
+    t3MidHealth: new Topic<number>("t3MidHealth"),
+    t1BotHealth: new Topic<number>("t1BotHealth"),
+    t2BotHealth: new Topic<number>("t2BotHealth"),
+    t3BotHealth: new Topic<number>("t3BotHealth"),
+    t4BotHealth: new Topic<number>("t4BotHealth"),
+    ancientHealth: new Topic<number>("ancientHealth"),
 
     // events
     event: new Topic<DeepReadonly<Event>>("event"),
