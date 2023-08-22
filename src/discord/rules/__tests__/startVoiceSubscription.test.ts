@@ -17,6 +17,7 @@ describe("startVoiceSubscription", () => {
         let audioPlayer: Voice.AudioPlayer;
         beforeEach(() => {
             result = getResults(rule, {
+                discordAudioEnabled: true,
                 discordGuildChannelId: "channelId",
                 discordGuildId: "guildId",
                 studentId: "studentId",
