@@ -25,14 +25,6 @@ function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     }
 }
 
-function numberOfPeopleConnected(guildId: string, channelId: string): number {
-    return Array.from(engine.getSessions().values()).filter(
-        (db) =>
-            Engine.get(db, topics.discordGuildId) === guildId &&
-            Engine.get(db, topics.discordGuildChannelId) === channelId
-    ).length;
-}
-
 export class CustomEngine extends Engine {
     private sessions: Map<string, PersistentFactStore> = new Map();
 
@@ -80,23 +72,13 @@ export class CustomEngine extends Engine {
         let guildId = guildIdIn;
         let channelId = channelIdIn;
 
-        if (
-            !(
-                guildId &&
-                channelId &&
-                numberOfPeopleConnected(guildId, channelId) === 0
-            )
-        ) {
-            guildId = undefined;
-            channelId = undefined;
-        }
-
-        // TODO there may be something better than straight up deleting and re-creating the entire session
         const oldDb = this.sessions.get(studentId);
+        const db = oldDb || new PersistentFactStore();
+
         if (oldDb) {
             log.info(
                 "app",
-                "Deleting old coaching session for student %s",
+                "Updating discord channel info for student %s",
                 studentId.substring(0, 10)
             );
             guildId = guildId || oldDb.get(topics.discordGuildId) || undefined;
@@ -104,30 +86,27 @@ export class CustomEngine extends Engine {
                 channelId ||
                 oldDb.get(topics.discordGuildChannelId) ||
                 undefined;
-            this.deleteSession(studentId);
+        } else {
+            log.info(
+                "app",
+                "Start coaching student %s",
+                studentId.substring(0, 10)
+            );
+            const data = getSavedDataOrDeleteDataIfInvalid(studentId);
+
+            // Set default config and overwrite any with saved configs
+            effectConfig.defaultConfigFacts().map((fact) => this.set(db, fact));
+            if (data) {
+                data.map((fact) => this.set(db, fact));
+            }
+
+            // Create new db for student
+            this.set(db, new Fact(topics.studentId, studentId));
+            this.set(db, new Fact(topics.timestamp, time.nowUnix()));
+
+            // Add to engine's active sessions
+            this.sessions.set(studentId, db);
         }
-
-        log.info(
-            "app",
-            "Start coaching student %s",
-            studentId.substring(0, 10)
-        );
-
-        // Create new db for student
-        const db = new PersistentFactStore();
-        this.set(db, new Fact(topics.studentId, studentId));
-        this.set(db, new Fact(topics.timestamp, time.nowUnix()));
-
-        const data = getSavedDataOrDeleteDataIfInvalid(studentId);
-
-        // Set default config and overwrite any with saved configs
-        effectConfig.defaultConfigFacts().map((fact) => this.set(db, fact));
-        if (data) {
-            data.map((fact) => this.set(db, fact));
-        }
-
-        // Add to engine's active sessions
-        this.sessions.set(studentId, db);
 
         // explicitly set null to propogate to discordAudioEnabled state downstream
         this.set(db, new Fact(topics.discordGuildId, guildId || null));
