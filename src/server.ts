@@ -296,16 +296,44 @@ function parseGsiFileVersionFromAuth(auth: string) {
     }
 }
 
-function tryAutoconnect(
+function handleCoaching(
     studentId: string,
-    guildId: string | undefined,
-    userId: string | undefined,
-    autoconnectEnabled: boolean
+    auth: string,
+    gsiData: GsiData,
+    live: boolean
 ) {
-    if (guildId && userId && autoconnectEnabled) {
-        const channelId = discordClient.findChannelUserIsIn(guildId, userId);
-        if (channelId) {
-            engine.startCoachingSession(studentId, guildId, channelId);
+    const gsiVersion = parseGsiFileVersionFromAuth(auth);
+    engine.setFact(studentId, new Fact(topics.allData, gsiData));
+    engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, live));
+    engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
+    analytics.trackGsiVersion(studentId, gsiVersion);
+
+    if (!engine.getFactValue(studentId, topics.discordSubscriptionTopic)) {
+        const userId = engine.getFactValue(studentId, topics.discordUserId);
+        const autoconnectGuildId = engine.getFactValue(
+            studentId,
+            topics.discordAutoconnectGuild
+        );
+        const autoconnectEnabled = engine.getFactValue(
+            studentId,
+            topics.discordAutoconnectEnabled
+        ) as boolean;
+
+        if (autoconnectGuildId && userId && autoconnectEnabled) {
+            const channelId = discordClient.findChannelUserIsIn(
+                autoconnectGuildId,
+                userId
+            );
+            if (channelId) {
+                engine.setFact(
+                    studentId,
+                    new Fact(topics.discordGuildId, autoconnectGuildId)
+                );
+                engine.setFact(
+                    studentId,
+                    new Fact(topics.discordGuildChannelId, channelId)
+                );
+            }
         }
     }
 }
@@ -327,12 +355,20 @@ function handleNotCoaching(studentId: string) {
                     (f) =>
                         f.topic.label === topics.discordAutoconnectEnabled.label
                 )?.value !== false;
-            tryAutoconnect(
-                studentId,
-                autoconnectGuildId,
-                userId,
-                autoconnectEnabled
-            );
+
+            if (autoconnectGuildId && userId && autoconnectEnabled) {
+                const channelId = discordClient.findChannelUserIsIn(
+                    autoconnectGuildId,
+                    userId
+                );
+                if (channelId) {
+                    engine.startCoachingSession(
+                        studentId,
+                        autoconnectGuildId,
+                        channelId
+                    );
+                }
+            }
         }
     } catch (e) {}
 }
@@ -344,29 +380,7 @@ function handleOnGsi(
     live: boolean
 ) {
     if (engine.isCoaching(studentId)) {
-        const gsiVersion = parseGsiFileVersionFromAuth(auth);
-        engine.setFact(studentId, new Fact(topics.allData, gsiData));
-        engine.setFact(studentId, new Fact(topics.gsiEventsFromLiveGame, live));
-        engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
-        analytics.trackGsiVersion(studentId, gsiVersion);
-
-        if (!engine.getFactValue(studentId, topics.discordSubscriptionTopic)) {
-            const userId = engine.getFactValue(studentId, topics.discordUserId);
-            const autoconnectGuildId = engine.getFactValue(
-                studentId,
-                topics.discordAutoconnectGuild
-            );
-            const autoconnectEnabled = engine.getFactValue(
-                studentId,
-                topics.discordAutoconnectEnabled
-            ) as boolean;
-            tryAutoconnect(
-                studentId,
-                autoconnectGuildId,
-                userId,
-                autoconnectEnabled
-            );
-        }
+        handleCoaching(studentId, auth, gsiData, live);
     } else {
         handleNotCoaching(studentId);
     }
