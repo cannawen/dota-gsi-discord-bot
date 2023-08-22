@@ -96,11 +96,13 @@ function onPlayerStateChange(
 export default new Rule({
     label: rules.discord.startVoiceSubscription,
     trigger: [
+        topics.discordAudioEnabled,
         topics.discordGuildId,
         topics.discordGuildChannelId,
         topics.studentId,
     ],
-    then: ([guildId, channelId, studentId]) => {
+    when: ([enabled]) => enabled,
+    then: ([_, guildId, channelId, studentId]) => {
         if (guildId === null || channelId === null) {
             return;
         }

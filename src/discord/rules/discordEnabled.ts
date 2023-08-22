@@ -1,3 +1,4 @@
+import discordHelpers from "../discordHelpers";
 import Fact from "../../engine/Fact";
 import Rule from "../../engine/Rule";
 import topics from "../../topics";
@@ -10,7 +11,9 @@ export default [
         then: ([guildId, channelId]) => [
             new Fact(
                 topics.discordAudioEnabled,
-                guildId !== null && channelId !== null
+                guildId !== null &&
+                    channelId !== null &&
+                    discordHelpers.numberOfPeopleConnected(guildId) === 1
             ),
             new Fact(topics.updateFrontend, true),
         ],
