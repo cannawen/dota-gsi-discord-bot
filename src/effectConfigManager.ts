@@ -24,18 +24,6 @@ function getDefaultConfigInfo(): ConfigInfo[] {
 }
 
 const defaultConfigInfo = getDefaultConfigInfo();
-defaultConfigInfo.map((configInfo) => {
-    const topic = topicManager.findTopic<EffectConfig>(
-        configInfo.ruleIndentifier
-    );
-    engine.register(
-        new Rule({
-            label: `update frontend when ${configInfo.ruleIndentifier} config is changed`,
-            trigger: [topic],
-            then: () => new Fact(topics.updateFrontend, true),
-        })
-    );
-});
 
 function effectFromString(effect: string) {
     switch (effect) {
@@ -57,11 +45,24 @@ function effectFromString(effect: string) {
     }
 }
 
+let onceToken = true;
+
 function defaultConfigFacts(): Fact<EffectConfig | undefined>[] {
     return defaultConfigInfo.map((configInfo) => {
         const topic = topicManager.findTopic<EffectConfig>(
             configInfo.ruleIndentifier
         );
+
+        if (onceToken) {
+            onceToken = false;
+            engine.register(
+                new Rule({
+                    label: `update frontend when ${configInfo.ruleIndentifier} config is changed`,
+                    trigger: [topic],
+                    then: () => new Fact(topics.updateFrontend, true),
+                })
+            );
+        }
         topic.defaultValue = configInfo.defaultConfig;
         return new Fact(topic, undefined);
     });
