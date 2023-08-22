@@ -308,7 +308,10 @@ function handleCoaching(
     engine.setFact(studentId, new Fact(topics.gsiVersion, gsiVersion));
     analytics.trackGsiVersion(studentId, gsiVersion);
 
-    if (!engine.getFactValue(studentId, topics.discordSubscriptionTopic)) {
+    if (
+        !engine.getFactValue(studentId, topics.discordGuildId) ||
+        !engine.getFactValue(studentId, topics.discordGuildChannelId)
+    ) {
         const userId = engine.getFactValue(studentId, topics.discordUserId);
         const autoconnectGuildId = engine.getFactValue(
             studentId,
