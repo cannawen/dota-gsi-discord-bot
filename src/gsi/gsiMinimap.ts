@@ -66,11 +66,19 @@ export default [
         then: (_, [heroes, myTeam]) => [
             new Fact(
                 topics.allFriendlyHeroes,
-                new Set([...heroes].filter((hero) => hero.team === myTeam))
+                new Set(
+                    ([...heroes] as MinimapElement[])
+                        .filter((hero) => hero.team === myTeam)
+                        .map((minimapElement) => minimapElement.unitName)
+                )
             ),
             new Fact(
                 topics.allEnemyHeroes,
-                new Set([...heroes].filter((hero) => hero.team !== myTeam))
+                new Set(
+                    ([...heroes] as MinimapElement[])
+                        .filter((hero) => hero.team !== myTeam)
+                        .map((minimapElement) => minimapElement.unitName)
+                )
             ),
         ],
     }),
