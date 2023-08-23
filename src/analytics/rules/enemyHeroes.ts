@@ -8,8 +8,8 @@ export default [
         label: "analytics/enemy_heroes_time",
         trigger: [topics.allEnemyHeroes],
         given: [topics.time],
-        then: (_, [time]) => {
-            analytics.mixpanel?.track("enemy heroes", { time });
+        then: ([heroes], [time]) => {
+            analytics.mixpanel?.track("enemy heroes", { heroes, time });
         },
     }),
 ].map(isLiveGame);
