@@ -14,7 +14,7 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PRIVATE
 );
 
-const REMINDER_INTERVAL_SECONDS = 10;
+const REMINDER_INTERVAL_SECONDS = 30;
 const MANA_RESTORED_ON_CAST = 175;
 
 export default [
