@@ -48,24 +48,27 @@ function effectFromString(effect: string) {
 let onceToken = true;
 
 function defaultConfigFacts(): Fact<EffectConfig | undefined>[] {
-    return defaultConfigInfo.map((configInfo) => {
+    const configFacts = defaultConfigInfo.map((configInfo) => {
         const topic = topicManager.findTopic<EffectConfig>(
             configInfo.ruleIndentifier
         );
-
-        if (onceToken) {
-            onceToken = false;
+        topic.defaultValue = configInfo.defaultConfig;
+        return new Fact(topic, undefined);
+    });
+    if (onceToken) {
+        onceToken = false;
+        configFacts.forEach((fact) => {
+            const topic = fact.topic;
             engine.register(
                 new Rule({
-                    label: `update frontend when ${configInfo.ruleIndentifier} config is changed`,
+                    label: `update frontend when ${topic.label} config is changed`,
                     trigger: [topic],
                     then: () => new Fact(topics.updateFrontend, true),
                 })
             );
-        }
-        topic.defaultValue = configInfo.defaultConfig;
-        return new Fact(topic, undefined);
-    });
+        });
+    }
+    return configFacts;
 }
 
 export default {
