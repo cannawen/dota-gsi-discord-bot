@@ -65,7 +65,10 @@ export default [
         label: "voice command to let the bot know there is an invis enemy",
         trigger: [topics.lastDiscordUtterance],
         when: ([utterance]) => isInvisNotificationUtterance(utterance),
-        then: () => new Fact(hasInvisEnemyTopic, true),
+        then: () => [
+            new Fact(hasInvisEnemyTopic, true),
+            new Fact(topics.playInterruptingAudioFile, "OK"),
+        ],
     }),
 ]
     .concat(
@@ -74,10 +77,7 @@ export default [
                 label: "set state if there is an invis enemy mid-game",
                 trigger: [topics.allEnemyHeroes],
                 when: ([heroes]) => hasInvisHero(heroes),
-                then: () => [
-                    new Fact(hasInvisEnemyTopic, true),
-                    new Fact(topics.playInterruptingAudioFile, "OK"),
-                ],
+                then: () => new Fact(hasInvisEnemyTopic, true),
             }),
         ].map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
     )
