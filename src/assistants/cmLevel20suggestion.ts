@@ -14,16 +14,25 @@ export const configInfo = new ConfigInfo(
 );
 
 const attackSpeedUsefulAgainst = [
+    "npc_dota_hero_ancient_apparition",
+    "npc_dota_hero_clinkz",
+    "npc_dota_hero_rattletrap",
+    "npc_dota_hero_grimstroke",
     "npc_dota_hero_gyrocopter",
     "npc_dota_hero_keeper_of_the_light",
     "npc_dota_hero_lich",
     "npc_dota_hero_phoenix",
     "npc_dota_hero_pugna",
+    "npc_dota_hero_shadow_shaman",
+    "npc_dota_hero_techies",
+    "npc_dota_hero_tidehunter",
+    "npc_dota_hero_undying",
     "npc_dota_hero_venomancer",
+    "npc_dota_hero_weaver",
 ];
 
-function hasEnemyWhereAttackSpeedIsUseful(enemies: string[]) {
-    return enemies.reduce(
+function hasEnemyWhereAttackSpeedIsUseful(enemies: Set<string>) {
+    return [...enemies].reduce(
         (memo, enemy) => memo || attackSpeedUsefulAgainst.includes(enemy),
         false
     );
