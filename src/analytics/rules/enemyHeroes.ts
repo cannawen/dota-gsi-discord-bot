@@ -7,9 +7,13 @@ export default [
     new Rule({
         label: "analytics/enemy_heroes_time",
         trigger: [topics.allEnemyHeroes],
-        given: [topics.time],
-        then: ([heroes], [time]) => {
-            analytics.mixpanel?.track("enemy heroes", { heroes, time });
+        given: [topics.time, topics.studentId],
+        then: ([heroes], [time, studentId]) => {
+            analytics.mixpanel?.track("enemy heroes", {
+                distinct_id: studentId,
+                heroes: [...heroes],
+                time: time || "no time available",
+            });
         },
     }),
 ].map(isLiveGame);
