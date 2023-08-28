@@ -26,13 +26,6 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
     "remindedAlreadyThisDeathCycleTopic"
 );
 
-function hasPhilosophersStone(items: PlayerItems): boolean {
-    const stone = [...items.backpack, ...items.stash, items.neutral]
-        .filter((item) => item !== null)
-        .find((item) => item!.id === "item_philosophers_stone");
-    return stone !== undefined;
-}
-
 function holdingPhilosophersStone(items: PlayerItems): boolean {
     return items.neutral?.id === "item_philosophers_stone";
 }
@@ -41,7 +34,8 @@ export default [
     new Rule({
         label: "set state that we have seen a philosopher's stone before",
         trigger: [topics.items],
-        when: ([items]) => hasPhilosophersStone(items),
+        when: ([items]) =>
+            items.findItem("item_philosophers_stone") !== undefined,
         then: () => new Fact(seenPhilosophersStoneTopic, true),
     }),
     new Rule({
