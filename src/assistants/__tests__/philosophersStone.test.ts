@@ -96,6 +96,19 @@ describe("philosophers stone assistant, in game", () => {
                     "you can hold the philosopher's stone"
                 );
             });
+            describe("still dead but we have already reminded about the stone", () => {
+                test("do not remind", () => {
+                    const results = getResults(
+                        rule,
+                        {
+                            ...params,
+                            respawnSeconds: 29,
+                        },
+                        deadSeenStoneBeforeState
+                    );
+                    expect(results).not.toContainAudioEffect();
+                });
+            });
             describe("almost respawn and holding stone", () => {
                 describe("neutral item is appropriate for time", () => {
                     test("do not remind to return stone", () => {
