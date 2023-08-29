@@ -12,7 +12,7 @@ export default [
             analytics.mixpanel?.track("enemy heroes", {
                 distinct_id: studentId,
                 heroes: heroes,
-                time: time || "no time available",
+                gameTime: time || "no time available",
             });
         },
     }),
