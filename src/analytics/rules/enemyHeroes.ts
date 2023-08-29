@@ -9,6 +9,13 @@ export default [
         trigger: [topics.allEnemyHeroes],
         given: [topics.time, topics.studentId],
         then: ([heroes], [time, studentId]) => {
+            console.log(
+                `enemy heroes at time ${time} for student ${studentId.substring(
+                    0,
+                    10
+                )}`
+            );
+            console.log(heroes);
             analytics.mixpanel?.track("enemy heroes", {
                 distinct_id: studentId,
                 heroes: [...heroes],
