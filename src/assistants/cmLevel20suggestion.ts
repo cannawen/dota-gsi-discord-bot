@@ -34,8 +34,8 @@ const attackSpeedUsefulAgainst = [
     "npc_dota_hero_weaver",
 ];
 
-function hasEnemyWhereAttackSpeedIsUseful(enemies: Set<string>) {
-    return [...enemies].reduce(
+function hasEnemyWhereAttackSpeedIsUseful(enemies: string[]) {
+    return enemies.reduce(
         (memo, enemy) => memo || attackSpeedUsefulAgainst.includes(enemy),
         false
     );

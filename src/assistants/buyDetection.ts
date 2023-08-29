@@ -42,7 +42,7 @@ function hasDetection(items: PlayerItems): boolean {
     );
 }
 
-function hasInvisHero(heroes: Set<string>): boolean {
+function hasInvisHero(heroes: string[]): boolean {
     return [
         "npc_dota_hero_bounty_hunter",
         "npc_dota_hero_clinkz",
@@ -53,11 +53,7 @@ function hasInvisHero(heroes: Set<string>): boolean {
         "npc_dota_hero_sand_king",
         "npc_dota_hero_templar_assassin",
         "npc_dota_hero_weaver",
-    ].reduce((memo, hero) => memo || heroes.has(hero), false);
-}
-
-function isInvisNotificationUtterance(utterance: string): boolean {
-    return utterance.match(/^invisible enemy$/) !== null;
+    ].reduce((memo, hero) => memo || heroes.includes(hero), false);
 }
 
 export default [

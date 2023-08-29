@@ -1,4 +1,3 @@
-import { DeepReadonly } from "ts-essentials";
 import Fact from "../engine/Fact";
 import GsiData from "./GsiData";
 import MinimapElement from "../gsi-data-classes/MinimapElement";
@@ -8,13 +7,11 @@ import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 const minimapUnitsTopic =
-    topicManager.createTopic<DeepReadonly<Set<MinimapElement>>>(
-        "minimapUnitsTopic"
-    );
+    topicManager.createTopic<MinimapElement[]>("minimapUnitsTopic");
 
-const allHeroesOnMinimapTopic = topicManager.createTopic<
-    DeepReadonly<Set<string>>
->("allHeroesOnMinimapTopic");
+const allHeroesOnMinimapTopic = topicManager.createTopic<MinimapElement[]>(
+    "allHeroesOnMinimapTopic"
+);
 
 const allTenHeroesOnMapForTheFirstTimeTopic = topicManager.createTopic<boolean>(
     "allTenHeroesOnMapForTheFirstTimeTopic"
@@ -30,20 +27,33 @@ export default [
                 return [
                     new Fact(
                         minimapUnitsTopic,
-                        new Set(minimap.map((e) => MinimapElement.create(e)))
+                        minimap.map((e) => MinimapElement.create(e))
                     ),
                 ];
             }
         },
     }),
     new Rule({
-        label: "all current heroes from minimap",
+        label: "all unique current heroes from minimap",
         trigger: [minimapUnitsTopic],
         then: ([elements]) => {
-            const heroes = [...elements].filter((element) =>
-                (element.unitName as string)?.match(/^npc_dota_hero/)
-            );
-            return new Fact(allHeroesOnMinimapTopic, new Set(heroes));
+            // We get multiple of the same hero from minimap GSI data
+            // So not sure how to determine which x/y location is "correct"
+            // See https://github.com/cannawen/dota-gsi-discord-bot/issues/135 for details
+            const heroes = (elements as MinimapElement[])
+                .filter((element) =>
+                    (element.unitName as string)?.match(/^npc_dota_hero/)
+                )
+                .reduce((memo, hero) => {
+                    const heroAlreadyExists = memo.find(
+                        (memoHero) => memoHero.unitName === hero.unitName
+                    );
+                    if (!heroAlreadyExists) {
+                        memo.push(hero);
+                    }
+                    return memo;
+                }, [] as MinimapElement[]);
+            return new Fact(allHeroesOnMinimapTopic, heroes);
         },
     }),
 
@@ -51,10 +61,9 @@ export default [
         label: "set state when we see ten heroes on map for the first time and 5 of them are dire",
         trigger: [allHeroesOnMinimapTopic],
         when: ([heroes]) =>
-            heroes.size === 10 &&
-            ([...heroes] as MinimapElement[]).filter(
-                (hero) => hero.team === "dire"
-            ).length === 5,
+            heroes.length === 10 &&
+            (heroes as MinimapElement[]).filter((hero) => hero.team === "dire")
+                .length === 5,
         then: () => new Fact(allTenHeroesOnMapForTheFirstTimeTopic, true),
     }),
 
@@ -66,19 +75,15 @@ export default [
         then: (_, [heroes, myTeam]) => [
             new Fact(
                 topics.allFriendlyHeroes,
-                new Set(
-                    ([...heroes] as MinimapElement[])
-                        .filter((hero) => hero.team === myTeam)
-                        .map((minimapElement) => minimapElement.unitName)
-                )
+                (heroes as MinimapElement[])
+                    .filter((hero) => hero.team === myTeam)
+                    .map((minimapElement) => minimapElement.unitName)
             ),
             new Fact(
                 topics.allEnemyHeroes,
-                new Set(
-                    ([...heroes] as MinimapElement[])
-                        .filter((hero) => hero.team !== myTeam)
-                        .map((minimapElement) => minimapElement.unitName)
-                )
+                (heroes as MinimapElement[])
+                    .filter((hero) => hero.team !== myTeam)
+                    .map((minimapElement) => minimapElement.unitName)
             ),
         ],
     }),
