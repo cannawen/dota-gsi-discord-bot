@@ -5,6 +5,7 @@ import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
+import inGame from "../engine/rules/inGame";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.cm20Talent,
@@ -40,17 +41,22 @@ function hasEnemyWhereAttackSpeedIsUseful(enemies: Set<string>) {
     );
 }
 
-export default configurable(
-    configInfo.ruleIndentifier,
-    new Rule({
-        label: "Suggest level 20 attack speed talent when playing CM when useful",
-        trigger: [topics.level],
-        given: [topics.hero, topics.allEnemyHeroes],
-        when: ([level], [hero, enemies]) =>
-            level === 20 &&
-            hero === "npc_dota_hero_crystal_maiden" &&
-            hasEnemyWhereAttackSpeedIsUseful(enemies),
-        then: () =>
-            new Fact(topics.configurableEffect, "consider attack speed talent"),
-    })
+export default inGame(
+    configurable(
+        configInfo.ruleIndentifier,
+        new Rule({
+            label: "Suggest level 20 attack speed talent when playing CM when useful",
+            trigger: [topics.level],
+            given: [topics.hero, topics.allEnemyHeroes],
+            when: ([level], [hero, enemies]) =>
+                level === 20 &&
+                hero === "npc_dota_hero_crystal_maiden" &&
+                hasEnemyWhereAttackSpeedIsUseful(enemies),
+            then: () =>
+                new Fact(
+                    topics.configurableEffect,
+                    "consider attack speed talent"
+                ),
+        })
+    )
 );
