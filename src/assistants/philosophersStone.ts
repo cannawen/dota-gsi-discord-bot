@@ -26,8 +26,8 @@ const remindedAlreadyThisDeathCycleTopic = topicManager.createTopic<boolean>(
     "remindedAlreadyThisDeathCycleTopic"
 );
 
-function holdingPhilosophersStone(items: PlayerItems): boolean {
-    return items.neutral?.id === "item_philosophers_stone";
+function holdingPhilosophersStone(items: PlayerItems | undefined): boolean {
+    return items?.neutral?.id === "item_philosophers_stone";
 }
 
 export default [
