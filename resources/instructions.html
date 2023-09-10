@@ -37,7 +37,10 @@
             <li>Make sure you are on <b>General</b> on the left sidebar</li>
             <li>Add <b>-gamestateintegration</b> to the launch options</li>
             <li>Click on <b>Installed Files</b> on the left sidebar</li>
-            <li>Click <b>Browse...</b> to open up the dota install folder</li>
+            <li>
+                Click <b>Browse...</b> to open up the dota install folder in
+                your file explorer
+            </li>
             <li>Navigate into the <b>game/dota/cfg</b> folder</li>
             <li>
                 If it does not already exist, create a new folder called
@@ -60,8 +63,8 @@
             </li>
             <li>
                 This is turned off by default, and needs your explicit opt-in.
-                If you would like to enable this, go to any channel, type
-                <b>/voice</b> and select the <b>True</b> option
+                If you would like to enable this, go to any discord channel,
+                type <b>/voice</b> and select the <b>True</b> option
             </li>
         </ul>
         <h1>How to start Dota Coach</h1>
@@ -90,25 +93,34 @@
         </ol>
         <ul>
             <li>
-                The next time you start a game, the bot will search for you in
-                your last known guild and autoconnect to the voice channel you
-                are in (so you do not need to do /coachme)
-            </li>
-            <li>You can change your default guild with /autoconnectdefault</li>
-            <li>
-                Use the <b>/autoconnect False</b> command to stop the bot from
-                autoconnecting (you can still start the bot using /coachme)
-            </li>
-            <li>
                 You can configure each assistant to be public (played through
                 discord to everyone in the voice channel), private (played
                 through website to only you), or disabled
             </li>
             <li>
                 Starting the coach mid-game is not fully supported. Roshan
-                status may be incorrect, and the bot may start playing old
-                audio. If this happens, there is a "stop all audio" button at
-                the bottom of the page.
+                status may be incorrect.
+            </li>
+        </ul>
+        <h2>Autoconnect to your discord voice channel</h2>
+        <ul>
+            <li>
+                The first time you do a <b>/coachme</b>, the bot sets that
+                discord guild your "default guild"
+            </li>
+            <li>
+                The next time you start a game in your default guild, the bot
+                will autoconnect to the voice channel you are in (so you do not
+                need to do /coachme)
+            </li>
+            <li>
+                You can change your default guild with
+                <b>/autoconnectdefault</b>
+            </li>
+            <li>
+                Use the <b>/autoconnect False</b> command to stop the bot from
+                autoconnecting (you can still manually start the bot using
+                <b>/coachme</b>)
             </li>
         </ul>
         <h2>Using the coach without Discord</h2>
@@ -167,5 +179,10 @@
                 wonky behaviour
             </li>
         </ul>
+        <h1>
+            Help improve the bot by using the /feedback discord command or
+            joining the conversation in the
+            <a href="https://discord.gg/wQkkMJf7Aj">Discord community</a>!
+        </h1>
     </body>
 </html>
