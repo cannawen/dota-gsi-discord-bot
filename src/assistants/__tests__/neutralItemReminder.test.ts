@@ -115,7 +115,7 @@ describe("neutralItemReminder", () => {
             });
         });
         describe("is one tier below", () => {
-            test("do not remind", () => {
+            test("remind to get a better neutral", () => {
                 const state1 = getResults(rule, {
                     ...params,
                     time: 28 * 60, // Tier 3 zone
@@ -130,7 +130,7 @@ describe("neutralItemReminder", () => {
                     },
                     state1
                 );
-                expect(state2).not.toContainAudioEffect();
+                expect(state2).toContainAudioEffect();
             });
         });
         describe("is 2 tiers below", () => {

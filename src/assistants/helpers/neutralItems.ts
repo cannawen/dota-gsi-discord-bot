@@ -52,9 +52,8 @@ function isItemAppropriateForTime(id: string | undefined, time: number) {
     if (itemTier === Tier.UNUSED_TOKEN || itemTier === Tier.UNKNOWN) {
         return false;
     }
-    // Appropriate item when matching time tier or 1 below
-    const timeTier = timeToTier(time);
-    return itemTier >= timeTier - 1;
+    // Appropriate item when matching time tier
+    return itemTier >= timeToTier(time);
 }
 
 function isNeutralItem(name: string) {
