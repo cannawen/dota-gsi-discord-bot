@@ -1,3 +1,4 @@
+import alive from "../engine/rules/alive";
 import betweenSeconds from "../engine/rules/betweenSeconds";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
@@ -39,4 +40,5 @@ export default [
     .map((rule) =>
         betweenSeconds(NEUTRAL_ITEM_REMINDER_START_TIME, undefined, rule)
     )
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map(alive);

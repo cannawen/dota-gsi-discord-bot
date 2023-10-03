@@ -1,3 +1,4 @@
+import alive from "../engine/rules/alive";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
@@ -22,9 +23,8 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
         (itemId) =>
             new Rule({
                 label: `reminder to dig ${itemId}`,
-                trigger: [topics.alive, topics.items],
-                when: ([alive, items]) =>
-                    alive && items.findItem(itemId)?.canCast,
+                trigger: [topics.items],
+                when: ([items]) => items.findItem(itemId)?.canCast,
                 then: () => new Fact(topics.configurableEffect, "dig"),
             })
     )
@@ -32,4 +32,5 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
         conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
     .map(inGame)
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map(alive);

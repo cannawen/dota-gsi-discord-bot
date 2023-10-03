@@ -1,3 +1,4 @@
+import alive from "../engine/rules/alive";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
@@ -23,9 +24,9 @@ export default [
         REMINDER_INTERVAL_1_CHARGE,
         new Rule({
             label: "reminder to use midas (1 charge)",
-            trigger: [topics.alive, topics.items],
-            when: ([alive, items]) =>
-                alive && items.findItem("item_hand_of_midas")?.charges === 1,
+            trigger: [topics.items],
+            when: ([items]) =>
+                items.findItem("item_hand_of_midas")?.charges === 1,
             then: () =>
                 new Fact(
                     topics.configurableEffect,
@@ -37,9 +38,9 @@ export default [
         REMINDER_INTERVAL_2_CHARGE,
         new Rule({
             label: "reminder to use midas (2 charge)",
-            trigger: [topics.alive, topics.items],
-            when: ([alive, items]) =>
-                alive && items.findItem("item_hand_of_midas")?.charges === 2,
+            trigger: [topics.items],
+            when: ([items]) =>
+                items.findItem("item_hand_of_midas")?.charges === 2,
             then: () =>
                 new Fact(
                     topics.configurableEffect,
@@ -49,4 +50,5 @@ export default [
     ),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(inGame);
+    .map(inGame)
+    .map(alive);
