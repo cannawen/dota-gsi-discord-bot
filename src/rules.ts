@@ -14,6 +14,7 @@ const assistant = {
     freeFortification: "assistant-free_fortification",
     glhf: "assistant-glhf",
     goldReminder: "assistant-gold",
+    joke: "assistant-joke",
     lotus: "assistant-lotus",
     arcaneBoots: "assistant-mana_boots",
     midas: "assistant-midas",
