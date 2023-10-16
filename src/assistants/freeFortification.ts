@@ -13,8 +13,8 @@ const TOWER_HEALTH_WARN_THRESHOLD = 700;
 export const configInfo = new ConfigInfo(
     rules.assistant.freeFortification,
     "Free fortification",
-    `Reminds you to use your free fort when your tower is below ${TOWER_HEALTH_WARN_THRESHOLD}hp (does not know if you actually have a fort available). Requires v2+ of the GSI config file`,
-    EffectConfig.PUBLIC_INTERRUPTING
+    `Reminds you to use your free fort when your tower is below ${TOWER_HEALTH_WARN_THRESHOLD}hp (beta feature - does not know if you actually have a fort available). Requires v2+ of the GSI config file`,
+    EffectConfig.NONE
 );
 
 const t1FreeFortWarnedAlready = new Topic<boolean>("t1FreeFortWarnedAlready");
