@@ -20,6 +20,7 @@ const TWO_WARDS = new PlayerItems(
 );
 
 const params = {
+    customGameName: "",
     [rules.assistant.wards]: "PRIVATE",
     inGame: true,
     time: 1000,

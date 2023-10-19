@@ -2,6 +2,7 @@ import rule from "../runeBounty";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.runeBounty]: "PRIVATE",
     inGame: true,
     time: 0,

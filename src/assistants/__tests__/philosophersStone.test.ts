@@ -26,6 +26,7 @@ const HAS_PHILOSOPHERS_STONE_NEUTRAL = new PlayerItems(
 );
 
 const params = {
+    customGameName: "",
     [rules.assistant.philosophersStone]: "PRIVATE",
     items: HAS_PHILOSOPHERS_STONE_NEUTRAL,
     inGame: true,

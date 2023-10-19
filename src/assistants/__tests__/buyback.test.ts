@@ -2,6 +2,7 @@ import rule from "../buyback";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.buyback]: "PRIVATE",
     inGame: true,
     buybackCooldown: 0,

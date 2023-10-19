@@ -40,6 +40,7 @@ const NO_MIDAS = new PlayerItems(
 );
 
 const params = {
+    customGameName: "",
     [rules.assistant.midas]: "PRIVATE",
     time: 100,
     alive: true,

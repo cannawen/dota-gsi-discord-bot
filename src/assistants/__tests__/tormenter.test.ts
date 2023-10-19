@@ -5,6 +5,7 @@ let params: any;
 describe("tormenter", () => {
     beforeEach(() => {
         params = {
+            customGameName: "",
             [rules.assistant.tormenter]: "PUBLIC",
             inGame: true,
             time: 0,

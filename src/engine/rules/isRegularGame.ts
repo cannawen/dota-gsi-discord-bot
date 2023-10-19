@@ -7,12 +7,12 @@ import topics from "../../topics";
 export default function isRegularGame(rule: Rule) {
     return new Rule({
         label: rule.label,
-        trigger: [topics.customGameName, ...rule.trigger],
-        given: rule.given,
+        trigger: rule.trigger,
+        given: [topics.customGameName, ...rule.given],
         when: (trigger, given) =>
-            trigger.shift()?.length === 0 && rule.when(trigger, given),
+            given.shift()?.length === 0 && rule.when(trigger, given),
         then: (trigger, given) => {
-            trigger.shift();
+            given.shift();
             return rule.then(trigger, given);
         },
     });

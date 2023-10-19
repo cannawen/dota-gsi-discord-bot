@@ -2,6 +2,7 @@ import rule from "../runePower";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.runePower]: "PRIVATE",
     inGame: true,
 };

@@ -2,6 +2,7 @@ import rule from "../runeWater";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.runeWater]: "PRIVATE",
     inGame: true,
 };

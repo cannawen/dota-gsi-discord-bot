@@ -4,6 +4,7 @@ import roshanRules from "../roshan";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.roshan]: "PUBLIC",
     inGame: true,
     time: 100,

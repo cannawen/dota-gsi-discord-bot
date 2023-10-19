@@ -3,6 +3,7 @@ import rule from "../goldReminder";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.goldReminder]: "PRIVATE",
     inGame: true,
     buybackCost: 0,

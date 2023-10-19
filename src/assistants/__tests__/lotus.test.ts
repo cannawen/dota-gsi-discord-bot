@@ -2,6 +2,7 @@ import rule from "../lotus";
 import rules from "../../rules";
 
 const params = {
+    customGameName: "",
     [rules.assistant.lotus]: "PUBLIC",
     inGame: true,
     time: 3 * 60 - 15,

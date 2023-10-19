@@ -70,6 +70,7 @@ const SHOVEL_READY_IN_BACKPACK = new PlayerItems(
 );
 
 const params = {
+    customGameName: "",
     [rules.assistant.neutralItemDigReminder]: "PRIVATE",
     alive: true,
     inGame: true,

@@ -8,6 +8,7 @@ describe("random item", () => {
 
     test("responds you should buy an item", () => {
         const results = getResults(rule, {
+            customGameName: "",
             [rules.assistant.randomItem]: "PUBLIC",
             lastDiscordUtterance: "what should I buy with 570 gold",
         });

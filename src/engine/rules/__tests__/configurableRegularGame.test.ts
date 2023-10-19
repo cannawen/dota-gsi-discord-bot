@@ -17,25 +17,34 @@ const rule = configurableRegularGame(
 describe("configurable", () => {
     beforeEach(() => {});
     test("PRIVATE", () => {
-        const results = getResults(rule, { ruleId: EffectConfig.PRIVATE });
+        const results = getResults(rule, {
+            customGameName: "",
+            ruleId: EffectConfig.PRIVATE,
+        });
         expect(results).toContainFact("playPrivateAudio", "foo.mp3");
     });
     test("PUBLIC", () => {
-        const results = getResults(rule, { ruleId: EffectConfig.PUBLIC });
+        const results = getResults(rule, {
+            customGameName: "",
+            ruleId: EffectConfig.PUBLIC,
+        });
         expect(results).toContainFact("playPublicAudio", "foo.mp3");
     });
     test("PUBLIC_INTERRUPTING", () => {
         const results = getResults(rule, {
+            customGameName: "",
             ruleId: EffectConfig.PUBLIC_INTERRUPTING,
         });
         expect(results).toContainFact("playInterruptingAudioFile", "foo.mp3");
     });
     test("NONE", () => {
-        const results = getResults(rule, { ruleId: EffectConfig.NONE });
+        const results = getResults(rule, {
+            customGameName: "",
+            ruleId: EffectConfig.NONE,
+        });
         expect(results).not.toContainTopic("playPrivateAudio");
         expect(results).not.toContainTopic("playPublicAudio");
         expect(results).not.toContainTopic("playInterruptingAudioFile");
-        expect(results).toHaveLength(1);
         expect(results).toContainFact("ruleId", EffectConfig.NONE);
     });
 });

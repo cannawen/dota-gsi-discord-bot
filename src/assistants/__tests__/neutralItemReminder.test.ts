@@ -23,6 +23,7 @@ const HAS_TIER_2_NEUTRAL_ITEM = new PlayerItems(
 ) as DeepReadonly<PlayerItems>;
 
 const params = {
+    customGameName: "",
     alive: true,
     inGame: true,
     [rules.assistant.neutralItemReminder]: "PRIVATE",
