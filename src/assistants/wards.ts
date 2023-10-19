@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -38,7 +38,7 @@ const lastWardCountTopic = topicManager.createTopic<number>(
  * The app may not know your ward count has increased.
  */
 export default inGame(
-    configurable(
+    configurableRegularGame(
         configInfo.ruleIndentifier,
         new Rule({
             label: "reminder to buy wards if you have not done so recently",

@@ -1,6 +1,6 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -151,7 +151,7 @@ export default [
             multiplier(discretionaryGold, increment),
         then: ([gold]) => new Fact(lastRemindedGoldTopic, gold),
     }),
-    configurable(
+    configurableRegularGame(
         configInfo.ruleIndentifier,
         new Rule({
             label: "If we increase gold past a multiplier threshold, save the gold amount and warn the user if it has been over a minute since our last reminder",

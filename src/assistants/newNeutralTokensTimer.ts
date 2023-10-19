@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./helpers/neutralItems";
@@ -18,7 +18,7 @@ export const configInfo = new ConfigInfo(
 export default helper.tierTimeInfo.map((time) =>
     atMinute(
         time,
-        configurable(
+        configurableRegularGame(
             configInfo.ruleIndentifier,
             new Rule({
                 label: "reminder that new neutral tokens are out",

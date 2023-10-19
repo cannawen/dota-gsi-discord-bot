@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
@@ -17,7 +17,7 @@ export const configInfo = new ConfigInfo(
 export default [2, 4].map((time) =>
     atMinute(
         time,
-        configurable(
+        configurableRegularGame(
             configInfo.ruleIndentifier,
             new Rule({
                 label: "water rune reminder at 2:00 and 4:00",

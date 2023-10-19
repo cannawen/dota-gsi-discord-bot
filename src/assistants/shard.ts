@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
@@ -18,7 +18,7 @@ const SHARD_SPAWN_MINUTE = 15;
 
 export default atMinute(
     SHARD_SPAWN_MINUTE,
-    configurable(
+    configurableRegularGame(
         configInfo.ruleIndentifier,
         new Rule({
             label: "shard reminder at 15:00",

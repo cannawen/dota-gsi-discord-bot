@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
@@ -43,4 +43,4 @@ export default [
                 JOKES[Math.floor(Math.random() * JOKES.length)]
             ),
     }),
-].map((rule) => configurable(configInfo.ruleIndentifier, rule));
+].map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule));

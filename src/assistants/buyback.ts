@@ -1,6 +1,6 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -33,7 +33,7 @@ export default [
                 new Fact(hasGoldForBuybackTopic, gold >= cost),
         })
     ),
-    configurable(
+    configurableRegularGame(
         configInfo.ruleIndentifier,
         new Rule({
             label: "warn if you have buyback cooldown available but do not have buyback due to gold",

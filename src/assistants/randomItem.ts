@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import fs from "fs";
@@ -39,7 +39,7 @@ function whatShouldIBuy(message: string) {
     return message.match(/^what (items? )?(do|should) I (buy|get)$/i) !== null;
 }
 
-export default configurable(
+export default configurableRegularGame(
     configInfo.ruleIndentifier,
     new Rule({
         label: "random item suggestion",

@@ -48,6 +48,7 @@ export default new Rule({
                 ...getTimeFacts(time, map.clockTime),
                 new Fact(topics.daytime, map.dayTime),
                 new Fact(topics.paused, map.paused),
+                new Fact(topics.customGameName, map.customgamename),
             ];
         }
     },

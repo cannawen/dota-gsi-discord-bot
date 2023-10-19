@@ -1,7 +1,7 @@
 import alive from "../engine/rules/alive";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -49,6 +49,6 @@ export default [
         })
     ),
 ]
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule))
     .map(inGame)
     .map(alive);

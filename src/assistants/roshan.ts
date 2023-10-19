@@ -1,6 +1,6 @@
 import roshHelper, { Status } from "./helpers/roshan";
 import ConfigInfo from "../ConfigInfo";
-import configurable from "../engine/rules/configurable";
+import configurableRegularGame from "../engine/rules/configurableRegularGame";
 import EffectConfig from "../effects/EffectConfig";
 import { EventType } from "../gsi-data-classes/Event";
 import Fact from "../engine/Fact";
@@ -190,4 +190,4 @@ export default [
                 ),
         }),
     ])
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
+    .map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule));

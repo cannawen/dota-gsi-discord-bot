@@ -1,11 +1,11 @@
-import configurable from "../configurable";
+import configurableRegularGame from "../configurableRegularGame";
 import EffectConfig from "../../../effects/EffectConfig";
 import Fact from "../../Fact";
 import Rule from "../../Rule";
 import topicManager from "../../topicManager";
 import topics from "../../../topics";
 
-const rule = configurable(
+const rule = configurableRegularGame(
     "ruleId",
     new Rule({
         label: "test",

@@ -40,6 +40,7 @@ const gsi = {
     // items
     items: new Topic<DeepReadonly<PlayerItems>>("items"),
     // map
+    customGameName: new Topic<string>("customGameName"),
     daytime: new Topic<boolean>("daytime"),
     inGame: new PersistentTopic<boolean>("inGame", {
         persistAcrossGames: true,
