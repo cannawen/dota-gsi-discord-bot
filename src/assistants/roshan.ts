@@ -40,6 +40,25 @@ function isRoshStatusRequest(message: string) {
     return message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null;
 }
 
+function dropString(roshDeaths: number, daytime: boolean | undefined) {
+    let dropString = "";
+    if (roshDeaths === 1) {
+        dropString += " with cheese";
+    }
+    if (roshDeaths > 1) {
+        if (daytime === undefined) {
+            dropString += " with cheese and refresher or aghanim's";
+        }
+        if (daytime === true) {
+            dropString += " with cheese and aghanim's";
+        }
+        if (daytime === false) {
+            dropString += " with cheese and refresher";
+        }
+    }
+    return dropString;
+}
+
 function roshanMessage(
     allRoshDeathTimes: number[],
     currentTime: number,
@@ -55,18 +74,10 @@ function roshanMessage(
     const roshLocation = daytime ? "bottom" : "top";
     switch (status) {
         case Status.ALIVE: {
-            let dropString = "";
-            if (allRoshDeathTimes.length === 1) {
-                dropString += " with cheese";
-            }
-            if (allRoshDeathTimes.length > 1) {
-                if (daytime) {
-                    dropString += " with cheese and aghanim's scepter";
-                } else {
-                    dropString += " with cheese and refresher shard";
-                }
-            }
-            return `alive ${roshLocation}${dropString}`;
+            return `alive ${roshLocation}${dropString(
+                allRoshDeathTimes.length,
+                daytime
+            )}`;
         }
         case Status.MAYBE_ALIVE:
             return `${roshHelper.percentChanceRoshanIsAlive(
@@ -74,11 +85,11 @@ function roshanMessage(
                 deathTime!
             )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.maximumSpawnTime(deathTime!)
-            )}`;
+            )}${dropString(allRoshDeathTimes.length, undefined)}`;
         case Status.DEAD:
             return `minimum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.minimuSpawnTime(deathTime!)
-            )}`;
+            )}${dropString(allRoshDeathTimes.length, undefined)}`;
         case Status.NOT_IN_A_GAME:
             return "game has not started";
         default:
