@@ -20,6 +20,7 @@ import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
+import Topic from "./engine/Topic";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [
@@ -223,6 +224,12 @@ function roshNumbers(studentId: string) {
         .join(" - ");
 }
 
+function countdownToTime(studentId: string, roshTimeTopic: Topic<number>) {
+    const currentTime = engine.getFactValue(studentId, topics.time)!;
+    const spawnTime = engine.getFactValue(studentId, roshTimeTopic)!;
+    return helper.secondsToMinuteString(spawnTime - currentTime);
+}
+
 function roshanMessage(studentId: string) {
     const status = engine.getFactValue(studentId, topics.roshanStatus);
     switch (status) {
@@ -234,9 +241,15 @@ function roshanMessage(studentId: string) {
             return `${engine.getFactValue(
                 studentId,
                 topics.roshanPercentChanceAlive
-            )}% alive     ${roshNumbers(studentId)}`;
+            )}% alive    ${roshNumbers(studentId)} (${countdownToTime(
+                studentId,
+                topics.roshanAliveTime
+            )} until maximum spawn)`;
         case Status.DEAD:
-            return `Dead     ${roshNumbers(studentId)}`;
+            return `Dead     ${roshNumbers(studentId)} (${countdownToTime(
+                studentId,
+                topics.roshanMaybeAliveTime
+            )} until mimimum spawn)`;
         default:
             return "Unknown";
     }
