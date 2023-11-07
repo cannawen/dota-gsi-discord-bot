@@ -132,11 +132,11 @@ export default [
                 roshHelper.aegisExpiryTime(deathTime)
             ),
             new Fact(
-                topics.roshanMaybeAliveTime,
+                topics.roshanMinimumSpawnTime,
                 roshHelper.minimuSpawnTime(deathTime)
             ),
             new Fact(
-                topics.roshanAliveTime,
+                topics.roshanMaximumSpawnTime,
                 roshHelper.maximumSpawnTime(deathTime)
             ),
         ],
@@ -156,8 +156,8 @@ export default [
     new Rule({
         label: "when rosh may be up, play reminder",
         trigger: [topics.time],
-        given: [topics.roshanMaybeAliveTime],
-        when: ([time], [maybeAliveTime]) => time === maybeAliveTime,
+        given: [topics.roshanMinimumSpawnTime],
+        when: ([time], [minimumSpawnTime]) => time === minimumSpawnTime,
         then: () =>
             new Fact(
                 topics.configurableEffect,
@@ -168,11 +168,11 @@ export default [
         label: "when rosh is guaranteed to be up, play reminder",
         trigger: [topics.time],
         given: [
-            topics.roshanAliveTime,
+            topics.roshanMaximumSpawnTime,
             topics.daytime,
             allRoshanDeathTimesTopic,
         ],
-        when: ([time], [aliveTime]) => time === aliveTime,
+        when: ([time], [maximumSpawnTime]) => time === maximumSpawnTime,
         then: (_, [_aliveTime, daytime]) =>
             new Fact(
                 topics.configurableEffect,

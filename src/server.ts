@@ -216,8 +216,8 @@ router.get("/coach/:studentId/poll/config", (req, res) => {
 function roshNumbers(studentId: string) {
     return [
         topics.roshanAegisExpiryTime,
-        topics.roshanMaybeAliveTime,
-        topics.roshanAliveTime,
+        topics.roshanMinimumSpawnTime,
+        topics.roshanMaximumSpawnTime,
     ]
         .map((topic) => engine.getFactValue(studentId, topic))
         .map((time) => helper.secondsToMinuteString(time!))
@@ -243,12 +243,12 @@ function roshanMessage(studentId: string) {
                 topics.roshanPercentChanceAlive
             )}% alive    ${roshNumbers(studentId)} (${countdownToTime(
                 studentId,
-                topics.roshanAliveTime
+                topics.roshanMaximumSpawnTime
             )} until maximum spawn)`;
         case Status.DEAD:
             return `Dead     ${roshNumbers(studentId)} (${countdownToTime(
                 studentId,
-                topics.roshanMaybeAliveTime
+                topics.roshanMinimumSpawnTime
             )} until mimimum spawn)`;
         default:
             return "Unknown";

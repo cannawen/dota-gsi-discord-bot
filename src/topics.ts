@@ -151,12 +151,18 @@ const sharedGameState = {
         "roshanAegisExpiryTime",
         { persistAcrossRestarts: true }
     ),
-    roshanMaybeAliveTime: new PersistentTopic<number>("roshanMaybeAliveTime", {
-        persistAcrossRestarts: true,
-    }),
-    roshanAliveTime: new PersistentTopic<number>("roshanAliveTime", {
-        persistAcrossRestarts: true,
-    }),
+    roshanMinimumSpawnTime: new PersistentTopic<number>(
+        "roshanMinimumSpawnTime",
+        {
+            persistAcrossRestarts: true,
+        }
+    ),
+    roshanMaximumSpawnTime: new PersistentTopic<number>(
+        "roshanMaximumSpawnTime",
+        {
+            persistAcrossRestarts: true,
+        }
+    ),
     roshanPercentChanceAlive: new PersistentTopic<number>(
         "roshanPercentAlive",
         { persistAcrossRestarts: true }
