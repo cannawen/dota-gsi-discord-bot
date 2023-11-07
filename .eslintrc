@@ -39,7 +39,7 @@
         "jest/valid-expect": "error",
         // no-loops plugin rules
         "no-loops/no-loops": "warn",
-        //t ypescript
+        // typescript
         "@typescript-eslint/no-empty-function": "warn",
         "@typescript-eslint/no-shadow": "warn",
         "@typescript-eslint/no-unused-vars": [
