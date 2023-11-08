@@ -40,23 +40,23 @@ function isRoshStatusRequest(message: string) {
     return message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null;
 }
 
-function dropString(roshDeaths: number, daytime: boolean | undefined) {
+function dropString(roshDeaths: number[], daytime: boolean) {
     let dropString = "";
-    if (roshDeaths === 1) {
+    if (roshDeaths.length === 1) {
         dropString += " with cheese";
     }
-    if (roshDeaths > 1) {
-        if (daytime === undefined) {
-            dropString += " with cheese and refresher or aghanim's";
-        }
+    if (roshDeaths.length > 1) {
         if (daytime === true) {
             dropString += " with cheese and aghanim's";
-        }
-        if (daytime === false) {
+        } else {
             dropString += " with cheese and refresher";
         }
     }
     return dropString;
+}
+
+function roshanNumberString(roshDeaths: number[]) {
+    return `roshan number ${roshDeaths.length + 1}`;
 }
 
 function roshanMessage(
@@ -75,7 +75,7 @@ function roshanMessage(
     switch (status) {
         case Status.ALIVE: {
             return `alive ${roshLocation}${dropString(
-                allRoshDeathTimes.length,
+                allRoshDeathTimes,
                 daytime
             )}`;
         }
@@ -85,11 +85,11 @@ function roshanMessage(
                 deathTime!
             )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.maximumSpawnTime(deathTime!)
-            )}${dropString(allRoshDeathTimes.length, undefined)}`;
+            )} ${roshanNumberString(allRoshDeathTimes)}`;
         case Status.DEAD:
             return `minimum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.minimuSpawnTime(deathTime!)
-            )}${dropString(allRoshDeathTimes.length, undefined)}`;
+            )} ${roshanNumberString(allRoshDeathTimes)}`;
         case Status.NOT_IN_A_GAME:
             return "game has not started";
         default:
