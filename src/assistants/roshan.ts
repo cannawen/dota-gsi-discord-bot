@@ -18,17 +18,6 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-/**
- * Keeps an array of all the times that roshan has fallen
- */
-const allRoshanDeathTimesTopic = topicManager.createTopic<number[]>(
-    "allRoshanDeathTimesTopic",
-    {
-        defaultValue: [],
-        persistAcrossRestarts: true,
-    }
-);
-
 const lastRoshDeathTimeTopic = topicManager.createTopic<number>(
     "lastRoshDeathTimeTopic",
     {
@@ -111,15 +100,15 @@ export default [
     new Rule({
         label: "when we get an event that says rosh is killed, add time to allRoshanDeathTimesTopic array",
         trigger: [topics.event],
-        given: [topics.time, allRoshanDeathTimesTopic],
+        given: [topics.time, topics.allRoshanDeathTimes],
         when: ([event]) => event.type === EventType.RoshanKilled,
         then: (_, [time, deathTimes]) =>
-            new Fact(allRoshanDeathTimesTopic, [...deathTimes, time]),
+            new Fact(topics.allRoshanDeathTimes, [...deathTimes, time]),
     }),
 
     new Rule({
         label: "last roshan death time from array of all roshan death times",
-        trigger: [allRoshanDeathTimesTopic],
+        trigger: [topics.allRoshanDeathTimes],
         then: ([deathTimes]) =>
             new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
     }),
@@ -170,7 +159,7 @@ export default [
         given: [
             topics.roshanMaximumSpawnTime,
             topics.daytime,
-            allRoshanDeathTimesTopic,
+            topics.allRoshanDeathTimes,
         ],
         when: ([time], [maximumSpawnTime]) => time === maximumSpawnTime,
         then: (_, [_aliveTime, daytime]) =>
@@ -188,7 +177,7 @@ export default [
             label: "when asked what roshan status is, respond with status",
             trigger: [topics.lastDiscordUtterance],
             given: [
-                allRoshanDeathTimesTopic,
+                topics.allRoshanDeathTimes,
                 topics.time,
                 topics.daytime,
                 topics.inGame,

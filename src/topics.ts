@@ -143,6 +143,13 @@ const discord = {
 };
 
 const sharedGameState = {
+    allRoshanDeathTimes: new PersistentTopic<number[]>(
+        "allRoshanDeathTimesTopic",
+        {
+            defaultValue: [],
+            persistAcrossRestarts: true,
+        }
+    ),
     roshanStatus: new PersistentTopic<Status>("roshanStatus", {
         defaultValue: Status.NOT_IN_A_GAME,
         persistAcrossRestarts: true,

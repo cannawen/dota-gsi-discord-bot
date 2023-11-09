@@ -232,13 +232,16 @@ function countdownToTime(studentId: string, roshTimeTopic: Topic<number>) {
 
 function roshanMessage(studentId: string) {
     const status = engine.getFactValue(studentId, topics.roshanStatus);
+    const roshNumberString = `#${
+        engine.getFactValue(studentId, topics.allRoshanDeathTimes)!.length + 1
+    }`;
     switch (status) {
         case Status.NOT_IN_A_GAME:
-            return "Not in a game";
+            return "- Not in a game";
         case Status.ALIVE:
-            return "Alive";
+            return `${roshNumberString} Alive`;
         case Status.MAYBE_ALIVE:
-            return `${engine.getFactValue(
+            return `${roshNumberString} ${engine.getFactValue(
                 studentId,
                 topics.roshanPercentChanceAlive
             )}% alive    ${roshNumbers(studentId)} (${countdownToTime(
@@ -246,12 +249,14 @@ function roshanMessage(studentId: string) {
                 topics.roshanMaximumSpawnTime
             )} until maximum spawn)`;
         case Status.DEAD:
-            return `Dead     ${roshNumbers(studentId)} (${countdownToTime(
+            return `${roshNumberString} Dead     ${roshNumbers(
+                studentId
+            )} (${countdownToTime(
                 studentId,
                 topics.roshanMinimumSpawnTime
             )} until mimimum spawn)`;
         default:
-            return "Unknown";
+            return "- Unknown";
     }
 }
 
@@ -426,7 +431,7 @@ gsiParser.events.on(gsi.Dota2Event.Dota2State, (data: gsi.IDota2StateEvent) => {
 // If we are looking at a replay or as an observer,
 // run all logic on the items of one of the players only (from 0-9)
 // needs to be 6 for mitmproxy die-respawn-dig_canna to run properly
-const playerId = 0;
+const playerId = 8;
 gsiParser.events.on(
     gsi.Dota2Event.Dota2ObserverState,
     (data: gsi.IDota2ObserverStateEvent) => {
