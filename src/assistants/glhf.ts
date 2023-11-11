@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
@@ -13,7 +13,7 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-export default configurableRegularGame(
+export default configurable(
     configInfo.ruleIndentifier,
     new Rule({
         label: "says gl hf when game starts",

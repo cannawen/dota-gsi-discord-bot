@@ -1,6 +1,6 @@
 import atMinute from "../engine/rules/atMinute";
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -29,4 +29,4 @@ export default [
     ),
 ]
     .map(inGame)
-    .map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule));
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));

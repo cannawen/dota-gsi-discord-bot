@@ -1,7 +1,7 @@
 import alive from "../engine/rules/alive";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -32,5 +32,5 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
         conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
     .map(inGame)
-    .map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule))
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map(alive);

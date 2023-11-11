@@ -1,7 +1,7 @@
 import betweenSeconds from "../engine/rules/betweenSeconds";
 import conditionalEveryIntervalSeconds from "../engine/rules/conditionalEveryIntervalSeconds";
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import inGame from "../engine/rules/inGame";
@@ -37,7 +37,7 @@ export default [
     }),
     conditionalEveryIntervalSeconds(
         WARN_ABOUT_TP_INTERVAL,
-        configurableRegularGame(
+        configurable(
             configInfo.ruleIndentifier,
             new Rule({
                 label: "remind you to buy a teleport scroll when should buy state set to true",

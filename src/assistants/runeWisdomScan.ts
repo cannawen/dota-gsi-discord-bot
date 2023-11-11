@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
 import Fact from "../engine/Fact";
@@ -34,5 +34,5 @@ export default [
         })
     ),
 ]
-    .map((rule) => configurableRegularGame(configInfo.ruleIndentifier, rule))
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
     .map(inGame);

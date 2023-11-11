@@ -1,5 +1,5 @@
 import ConfigInfo from "../ConfigInfo";
-import configurableRegularGame from "../engine/rules/configurableRegularGame";
+import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import Rule from "../engine/Rule";
@@ -42,7 +42,7 @@ function hasEnemyWhereAttackSpeedIsUseful(enemies: string[]) {
 }
 
 export default inGame(
-    configurableRegularGame(
+    configurable(
         configInfo.ruleIndentifier,
         new Rule({
             label: "Suggest level 20 attack speed talent when playing CM when useful",
