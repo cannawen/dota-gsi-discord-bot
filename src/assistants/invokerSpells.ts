@@ -14,13 +14,13 @@ export const configInfo = new ConfigInfo(
 );
 
 export default [
-    ["w w w", "emp"],
+    ["w w w", ["emp", "bmp"]],
     ["q w w", "tornado"],
     ["w w e", "alacrity"],
     ["q q w", "ghost walk"],
     ["q w e", "deafening blast"],
     ["w! e! e", ["chaos meteor", "meatball", "meteor"]],
-    ["q q q", "cold snap"],
+    ["q q q", ["cold snap", "code snap"]],
     ["q q e", "ice wall"],
     [
         "q! e! e",
@@ -29,6 +29,8 @@ export default [
             "forest spirits?",
             "george spirits?",
             "ford spirits?",
+            "footsteps",
+            "porch spirits",
         ],
     ],
     ["e! e! e", ["sun strike", "cataclysm", "send straight", "sunstroke"]],
