@@ -3,7 +3,7 @@ import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import everyIntervalSeconds from "../engine/rules/everyIntervalSeconds";
 import Fact from "../engine/Fact";
-import inGame from "../engine/rules/inGame";
+import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -35,4 +35,4 @@ export default [
     ),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(inGame);
+    .map(inRegularGame);

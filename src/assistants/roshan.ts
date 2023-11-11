@@ -4,7 +4,7 @@ import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import { EventType } from "../gsi-data-classes/Event";
 import Fact from "../engine/Fact";
-import inGame from "../engine/rules/inGame";
+import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import timeHelper from "./helpers/time";
@@ -171,7 +171,6 @@ export default [
             ),
     }),
 ]
-    .map(inGame)
     .concat([
         new Rule({
             label: "when asked what roshan status is, respond with status",
@@ -190,4 +189,5 @@ export default [
                 ),
         }),
     ])
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map(inRegularGame);

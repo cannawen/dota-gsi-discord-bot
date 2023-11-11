@@ -3,6 +3,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -14,19 +15,21 @@ export const configInfo = new ConfigInfo(
     EffectConfig.NONE
 );
 
-export default [2, 4].map((time) =>
-    atMinute(
-        time,
-        configurable(
-            configInfo.ruleIndentifier,
-            new Rule({
-                label: "water rune reminder at 2:00 and 4:00",
-                then: () =>
-                    new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/rune-water.mp3"
-                    ),
-            })
+export default [2, 4]
+    .map((time) =>
+        atMinute(
+            time,
+            configurable(
+                configInfo.ruleIndentifier,
+                new Rule({
+                    label: "water rune reminder at 2:00 and 4:00",
+                    then: () =>
+                        new Fact(
+                            topics.configurableEffect,
+                            "resources/audio/rune-water.mp3"
+                        ),
+                })
+            )
         )
     )
-);
+    .map(inRegularGame);
