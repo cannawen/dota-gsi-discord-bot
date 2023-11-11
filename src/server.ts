@@ -18,9 +18,9 @@ import log from "./log";
 import path from "path";
 import persistence from "./persistence";
 import { Status } from "./assistants/helpers/roshan";
+import Topic from "./engine/Topic";
 import topicManager from "./engine/topicManager";
 import topics from "./topics";
-import Topic from "./engine/Topic";
 
 const defaultConfigInfo = Object.fromEntries(
     effectConfig.defaultConfigInfo.map((configInfo) => [
