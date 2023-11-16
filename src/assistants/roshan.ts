@@ -44,10 +44,6 @@ function dropString(roshDeaths: number[], daytime: boolean) {
     return dropString;
 }
 
-function roshanNumberString(roshDeaths: number[]) {
-    return `roshan number ${roshDeaths.length + 1}`;
-}
-
 function roshanMessage(
     allRoshDeathTimes: number[],
     currentTime: number,
@@ -74,11 +70,11 @@ function roshanMessage(
                 deathTime!
             )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.maximumSpawnTime(deathTime!)
-            )} ${roshanNumberString(allRoshDeathTimes)}`;
+            )}`;
         case Status.DEAD:
             return `minimum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.minimuSpawnTime(deathTime!)
-            )} ${roshanNumberString(allRoshDeathTimes)}`;
+            )}`;
         case Status.NOT_IN_A_GAME:
             return "game has not started";
         default:
