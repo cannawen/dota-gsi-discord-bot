@@ -10,7 +10,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.invoker,
     "Invoker voice commands",
     "Say the name of an invoker spell, and the bot will respond with the required orbs to invoke it",
-    EffectConfig.PUBLIC
+    EffectConfig.NONE
 );
 
 export default [
@@ -19,7 +19,7 @@ export default [
     ["w w e", "alacrity"],
     ["q q w", "ghost walk"],
     ["q w e", "deafening blast"],
-    ["w! e! e", ["chaos meteor", "meatball", "meteor"]],
+    ["w! e! e", ["chaos meteor", "meteor"]],
     ["q q q", ["cold snap", "code snap"]],
     ["q q e", "ice wall"],
     [
