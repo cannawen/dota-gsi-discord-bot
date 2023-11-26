@@ -18,7 +18,9 @@ export default function conditionalEveryIntervalSeconds(
         label: rule.label,
         trigger: [topics.time, ...rule.trigger],
         given: [reminderTopic, ...rule.given],
-        when: (trigger, given) => {
+        when: (t, g) => {
+            const trigger = [...t];
+            const given = [...g];
             const time = trigger.shift();
             const lastRemindedTime = given.shift();
             if (lastRemindedTime === undefined) {
@@ -31,7 +33,10 @@ export default function conditionalEveryIntervalSeconds(
                 return isReminderTime;
             }
         },
-        then: (trigger, given) => {
+        then: (t, g) => {
+            const trigger = [...t];
+            const given = [...g];
+
             const time = trigger.shift();
             const lastRemindedTime = given.shift();
 

@@ -20,7 +20,8 @@ export default function everyIntervalSeconds(
             label: rule.label,
             trigger: [topics.time, ...rule.trigger],
             given: rule.given,
-            when: (trigger, given) => {
+            when: (t, given) => {
+                const trigger = [...t];
                 const time = trigger.shift();
                 return (
                     // If time is a multiple of interval
@@ -28,7 +29,8 @@ export default function everyIntervalSeconds(
                     rule.when(trigger, given)
                 );
             },
-            then: (trigger, given) => {
+            then: (t, given) => {
+                const trigger = [...t];
                 trigger.shift();
                 return rule.thenArray(trigger, given);
             },

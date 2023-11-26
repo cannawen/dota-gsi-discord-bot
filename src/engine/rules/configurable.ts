@@ -22,14 +22,16 @@ export default function configurable(configTopicString: string, rule: Rule) {
         label: rule.label,
         trigger: rule.trigger,
         given: [configTopic, ...rule.given],
-        when: (trigger, given) => {
+        when: (trigger, g) => {
+            const given = [...g];
             const config = given.shift();
             if (config === EffectConfig.NONE) {
                 return false;
             }
             return rule.when(trigger, given);
         },
-        then: (trigger, given) => {
+        then: (trigger, g) => {
+            const given = [...g];
             const config: EffectConfig = given.shift();
             const effect = configToEffectTopic[config];
             if (effect) {

@@ -11,9 +11,12 @@ export default function inRegularGame(rule: Rule) {
             label: rule.label,
             trigger: rule.trigger,
             given: [topics.customGameName, ...rule.given],
-            when: (trigger, given) =>
-                given.shift()?.length === 0 && rule.when(trigger, given),
-            then: (trigger, given) => {
+            when: (trigger, g) => {
+                const given = [...g];
+                return given.shift()?.length === 0 && rule.when(trigger, given);
+            },
+            then: (trigger, g) => {
+                const given = [...g];
                 given.shift();
                 return rule.then(trigger, given);
             },

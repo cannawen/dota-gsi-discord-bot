@@ -16,7 +16,8 @@ export default function betweenSeconds(
         label: inGameRule.label,
         trigger: [topics.time, ...inGameRule.trigger],
         given: inGameRule.given,
-        when: (trigger, given) => {
+        when: (t, given) => {
+            const trigger = [...t];
             const time = trigger.shift();
             if (min && time < min) {
                 return false;
@@ -26,7 +27,8 @@ export default function betweenSeconds(
             }
             return inGameRule.when(trigger, given);
         },
-        then: (trigger, given) => {
+        then: (t, given) => {
+            const trigger = [...t];
             trigger.shift();
             return inGameRule.then(trigger, given);
         },
