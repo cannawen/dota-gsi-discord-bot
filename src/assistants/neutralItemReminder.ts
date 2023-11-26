@@ -34,11 +34,11 @@ export default [
         },
     }),
 ]
-    .map((rule) =>
-        conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
-    )
+    .map(alive)
     .map((rule) =>
         betweenSeconds(NEUTRAL_ITEM_REMINDER_START_TIME, undefined, rule)
     )
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(alive);
+    .map((rule) =>
+        conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
+    )
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));

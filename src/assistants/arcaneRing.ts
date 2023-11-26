@@ -29,8 +29,8 @@ export default [
         then: () => new Fact(topics.configurableEffect, "arcane ring"),
     }),
 ]
+    .map(alive)
     .map((rule) =>
         conditionalEveryIntervalSeconds(REMINDER_INTERVAL_SECONDS, rule)
     )
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(alive);
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));

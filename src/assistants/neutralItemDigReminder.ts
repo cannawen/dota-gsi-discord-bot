@@ -28,9 +28,9 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
                 then: () => new Fact(topics.configurableEffect, "dig"),
             })
     )
+    .map(alive)
+    .map(inGame)
     .map((rule) =>
         conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
     )
-    .map(inGame)
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(alive);
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));

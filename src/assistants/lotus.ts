@@ -31,6 +31,7 @@ export default [
     }),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map(inRegularGame)
     .map((rule) =>
         everyIntervalSeconds(
             LOTUS_START_WARNING_TIME,
@@ -38,5 +39,4 @@ export default [
             LOTUS_SPAWN_INTERVAL,
             rule
         )
-    )
-    .map(inRegularGame);
+    );

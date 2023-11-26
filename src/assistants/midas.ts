@@ -49,6 +49,6 @@ export default [
         })
     ),
 ]
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
+    .map(alive)
     .map(inGame)
-    .map(alive);
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
