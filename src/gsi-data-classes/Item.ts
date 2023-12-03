@@ -30,7 +30,7 @@ export default class Item {
     static create(item: DeepReadonly<gsi.IItem> | null) {
         if (item) {
             const name = helper.itemIdsToNames.get(item.name) || item.name;
-            const cost = helper.itemCosts.find(([n, _]) => n === name)?.[1];
+            const cost = helper.itemNamesToCosts.get(name);
 
             return new Item(
                 item.name,

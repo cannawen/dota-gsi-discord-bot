@@ -28,6 +28,9 @@ function whatShouldIBuy(message: string) {
     return message.match(/^what (items? )?(do|should) I (buy|get)$/i) !== null;
 }
 
+// [["Observer Ward", 0], ["Sentry Ward", 50], ...]
+const items: Array<[string, number]> = [...helper.itemNamesToCosts];
+
 export default configurable(
     configInfo.ruleIndentifier,
     new Rule({
@@ -35,19 +38,17 @@ export default configurable(
         trigger: [topics.lastDiscordUtterance],
         then: ([message]) => {
             if (whatShouldIBuy(message)) {
-                const randomIndex = Math.floor(
-                    Math.random() * helper.itemCosts.length
-                );
+                const randomIndex = Math.floor(Math.random() * items.length);
                 return new Fact(
                     topics.configurableEffect,
-                    `Buy a ${helper.itemCosts[randomIndex][0]}`
+                    `Buy a ${items[randomIndex][0]}`
                 );
             }
             const cost = randomItemCost(message);
             if (cost === undefined) {
                 return;
             }
-            const sortedItems = helper.itemCosts.sort(
+            const sortedItems = items.sort(
                 ([_nameA, costA], [_nameB, costB]) =>
                     Math.abs(costA - cost) - Math.abs(costB - cost)
             );

@@ -13,16 +13,7 @@ function hasSmallItem(items: PlayerItems): boolean {
     );
 }
 
-// [["Observer Ward", 0], ["Sentry Ward", 50], ...]
-const itemCosts: Array<[string, number]> = Object.entries(
-    JSON.parse(
-        fs.readFileSync(
-            path.join(__dirname, "../../../resources/itemCosts.json"),
-            "utf8"
-        )
-    )
-);
-
+// {"item_ward_observer": "Observer Ward", "item_ward_sentry": "Sentry Ward"}
 const itemIdsToNames = new Map<string, string>(
     Object.entries(
         JSON.parse(
@@ -34,9 +25,21 @@ const itemIdsToNames = new Map<string, string>(
     )
 );
 
+// {"Observer Ward": 0, "Sentry Ward": 50, ...}
+const itemNamesToCosts = new Map<string, number>(
+    Object.entries(
+        JSON.parse(
+            fs.readFileSync(
+                path.join(__dirname, "../../../resources/itemCosts.json"),
+                "utf8"
+            )
+        )
+    )
+);
+
 export default {
     hasOpenSlot,
     hasSmallItem,
-    itemCosts,
     itemIdsToNames,
+    itemNamesToCosts,
 };
