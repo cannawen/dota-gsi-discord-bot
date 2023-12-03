@@ -17,7 +17,7 @@ function hasSmallItem(items: PlayerItems): boolean {
 const itemCosts: Array<[string, number]> = Object.entries(
     JSON.parse(
         fs.readFileSync(
-            path.join(__dirname, "../../resources/itemCosts.json"),
+            path.join(__dirname, "../../../resources/itemCosts.json"),
             "utf8"
         )
     )
