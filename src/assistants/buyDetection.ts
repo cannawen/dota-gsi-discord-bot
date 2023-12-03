@@ -4,6 +4,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
@@ -23,13 +24,6 @@ const hasInvisEnemyTopic =
 
 const TIME_BETWEEN_REMINDERS = 120;
 const START_REMINDER_TIME = 16 * 60 + 30;
-
-function hasOpenSlot(items: PlayerItems): boolean {
-    const inventorySlots = items.inventory.filter(
-        (item) => item === null
-    ).length;
-    return inventorySlots > 0;
-}
 
 function hasDetection(items: PlayerItems): boolean {
     return (
@@ -58,14 +52,12 @@ function hasInvisHero(heroes: string[]): boolean {
 
 export default [
     new Rule({
-        label: "set state if there is an invis enemy mid-game",
+        label: "set state if there is an invis enemy",
         trigger: [topics.allEnemyHeroes],
         when: ([heroes]) => hasInvisHero(heroes),
         then: () => new Fact(hasInvisEnemyTopic, true),
     }),
 ]
-    .map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
-
     .concat(
         [
             new Rule({
@@ -73,7 +65,9 @@ export default [
                 trigger: [topics.items],
                 given: [hasInvisEnemyTopic],
                 when: ([items], [invisEnemy]) =>
-                    invisEnemy && hasOpenSlot(items) && !hasDetection(items),
+                    invisEnemy &&
+                    helper.hasOpenSlot(items) &&
+                    !hasDetection(items),
                 then: () =>
                     new Fact(topics.configurableEffect, "buy detection"),
             }),
@@ -82,4 +76,5 @@ export default [
         )
     )
     .map(inGame)
+    .map((rule) => betweenSeconds(START_REMINDER_TIME, undefined, rule))
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));

@@ -3,6 +3,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
 import neutralHelpers from "./helpers/neutralItems";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
@@ -19,24 +20,22 @@ export const configInfo = new ConfigInfo(
 
 const TIME_BETWEEN_REMINDERS = 30;
 
-function canMoveItemFromBackpackToInventory(items: PlayerItems): boolean {
+function usableItemInBackpack(items: PlayerItems): boolean {
     const itemsInBackpack = items.backpack.filter(
         (item) =>
             item !== null &&
             !neutralHelpers.isNeutralItem(item.id) &&
             item.id.match(/recipe/) === null
     ).length;
-    const inventorySlots = items.inventory.filter(
-        (item) => item === null
-    ).length;
-    return inventorySlots > 0 && itemsInBackpack > 0;
+    return itemsInBackpack > 0;
 }
 
 export default [
     new Rule({
         label: "reminder to move item from backpack to inventory",
         trigger: [topics.items],
-        when: ([items]) => canMoveItemFromBackpackToInventory(items),
+        when: ([items]) =>
+            usableItemInBackpack(items) && helper.hasOpenSlot(items),
         then: () =>
             new Fact(topics.configurableEffect, "move item to inventory"),
     }),
