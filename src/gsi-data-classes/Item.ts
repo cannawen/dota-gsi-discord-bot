@@ -1,6 +1,7 @@
 import { DeepReadonly } from "ts-essentials";
 import fs from "fs";
 import gsi from "node-gsi";
+import helper from "../assistants/helpers/items";
 import path from "path";
 
 const items = JSON.parse(
@@ -15,29 +16,38 @@ export default class Item {
     public readonly cooldown: number | undefined;
     public readonly charges: number | undefined;
     public readonly canCast: boolean | undefined;
+    public readonly cost: number | undefined;
 
     public constructor(
         id: string,
         name?: string | undefined,
         cooldown?: number | undefined,
         charges?: number | undefined,
-        canCast?: boolean | undefined
+        canCast?: boolean | undefined,
+        cost?: number | undefined
     ) {
         this.id = id;
         this.name = name || id;
         this.cooldown = cooldown;
         this.charges = charges;
         this.canCast = canCast;
+        this.cost = cost;
     }
 
     static create(item: DeepReadonly<gsi.IItem> | null) {
         if (item) {
+            const name = itemNames.get(item.name);
+            const cost = helper.itemCosts.find(
+                ([name, _]) => name === this.name
+            )?.[1];
+
             return new Item(
                 item.name,
-                itemNames.get(item.name),
+                name,
                 item.cooldown,
                 item.charges,
-                item.canCast
+                item.canCast,
+                cost
             );
         }
         return null;

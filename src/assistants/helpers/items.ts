@@ -3,10 +3,14 @@ import path from "path";
 import PlayerItems from "../../gsi-data-classes/PlayerItems";
 
 function hasOpenSlot(items: PlayerItems): boolean {
-    const inventorySlots = items.inventory.filter(
-        (item) => item === null
-    ).length;
-    return inventorySlots > 0;
+    return items.inventory.filter((item) => item === null).length > 0;
+}
+
+function hasSmallItem(items: PlayerItems): boolean {
+    return (
+        items.inventory.filter((item) => item?.cost && item.cost < 500).length >
+        0
+    );
 }
 
 // [["Observer Ward", 0], ["Sentry Ward", 50], ...]
@@ -21,5 +25,6 @@ const itemCosts: Array<[string, number]> = Object.entries(
 
 export default {
     hasOpenSlot,
+    hasSmallItem,
     itemCosts,
 };

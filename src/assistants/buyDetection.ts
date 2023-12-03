@@ -66,7 +66,7 @@ export default [
                 given: [hasInvisEnemyTopic],
                 when: ([items], [invisEnemy]) =>
                     invisEnemy &&
-                    helper.hasOpenSlot(items) &&
+                    (helper.hasOpenSlot(items) || helper.hasSmallItem(items)) &&
                     !hasDetection(items),
                 then: () =>
                     new Fact(topics.configurableEffect, "buy detection"),
