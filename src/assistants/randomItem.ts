@@ -2,8 +2,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import fs from "fs";
-import path from "path";
+import helper from "./helpers/items";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -13,16 +12,6 @@ export const configInfo = new ConfigInfo(
     "Random item suggestions",
     'Responds to discord command "What should I buy with x gold" or "What should I buy" (patch 7.33d)',
     EffectConfig.PUBLIC
-);
-
-// [["Observer Ward", 0], ["Sentry Ward", 50], ...]
-const itemCosts: Array<[string, number]> = Object.entries(
-    JSON.parse(
-        fs.readFileSync(
-            path.join(__dirname, "../../resources/itemCosts.json"),
-            "utf8"
-        )
-    )
 );
 
 function randomItemCost(message: string) {
@@ -47,18 +36,18 @@ export default configurable(
         then: ([message]) => {
             if (whatShouldIBuy(message)) {
                 const randomIndex = Math.floor(
-                    Math.random() * itemCosts.length
+                    Math.random() * helper.itemCosts.length
                 );
                 return new Fact(
                     topics.configurableEffect,
-                    `Buy a ${itemCosts[randomIndex][0]}`
+                    `Buy a ${helper.itemCosts[randomIndex][0]}`
                 );
             }
             const cost = randomItemCost(message);
             if (cost === undefined) {
                 return;
             }
-            const sortedItems = itemCosts.sort(
+            const sortedItems = helper.itemCosts.sort(
                 ([_nameA, costA], [_nameB, costB]) =>
                     Math.abs(costA - cost) - Math.abs(costB - cost)
             );
