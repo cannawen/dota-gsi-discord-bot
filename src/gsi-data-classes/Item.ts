@@ -1,13 +1,6 @@
 import { DeepReadonly } from "ts-essentials";
-import fs from "fs";
 import gsi from "node-gsi";
 import helper from "../assistants/helpers/items";
-import path from "path";
-
-const items = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "../../resources/items.json"), "utf8")
-);
-const itemNames = new Map<string, string>(Object.entries(items));
 
 export default class Item {
     public readonly id: string;
@@ -36,7 +29,7 @@ export default class Item {
 
     static create(item: DeepReadonly<gsi.IItem> | null) {
         if (item) {
-            const name = itemNames.get(item.name) || item.name;
+            const name = helper.itemIdsToNames.get(item.name) || item.name;
             const cost = helper.itemCosts.find(([n, _]) => n === name)?.[1];
 
             return new Item(

@@ -23,8 +23,20 @@ const itemCosts: Array<[string, number]> = Object.entries(
     )
 );
 
+const itemIdsToNames = new Map<string, string>(
+    Object.entries(
+        JSON.parse(
+            fs.readFileSync(
+                path.join(__dirname, "../../../resources/items.json"),
+                "utf8"
+            )
+        )
+    )
+);
+
 export default {
     hasOpenSlot,
     hasSmallItem,
     itemCosts,
+    itemIdsToNames,
 };
