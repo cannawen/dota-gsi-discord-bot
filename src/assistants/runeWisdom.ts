@@ -27,10 +27,15 @@ export default [
         new Rule({
             label: "wisdom rune soon reminder every 7:00",
             trigger: [topics.time],
-            then: () =>
+            given: [topics.allEnemyHeroes],
+            then: (_, [enemyHeroes]) =>
                 new Fact(
                     topics.configurableEffect,
-                    "resources/audio/rune-wisdom-soon.mp3"
+                    enemyHeroes.find(
+                        (heroId: string) => heroId === "npc_dota_hero_furion"
+                    )
+                        ? "wisdom rune soon. care natures TP"
+                        : "resources/audio/rune-wisdom-soon.mp3"
                 ),
         })
     ),
