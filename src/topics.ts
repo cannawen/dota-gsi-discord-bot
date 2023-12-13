@@ -48,8 +48,11 @@ const gsi = {
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),
     // map + minimap
-    allFriendlyHeroes: new Topic<DeepReadonly<string[]>>("allFriendlyHeroes"),
-    allEnemyHeroes: new Topic<DeepReadonly<string[]>>("allEnemyHeroes"),
+    allFriendlyHeroes: new Topic<DeepReadonly<string[]>>(
+        "allFriendlyHeroes",
+        []
+    ),
+    allEnemyHeroes: new Topic<DeepReadonly<string[]>>("allEnemyHeroes", []),
     // player
     gold: new Topic<number>("gold"),
     team: new Topic<string>("team", "radiant"), // if we are an observer, default to pretending to be on radiant side
