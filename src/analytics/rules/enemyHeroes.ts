@@ -10,7 +10,7 @@ export default [
         given: [topics.time, topics.studentId],
         // Analytics being called on end game as well for unknown reasons
         // Only trigger this analytics event if we parse heroes before 10 minutes
-        when: (_, [time]) => time < 10 * 60,
+        when: ([enemies], [time]) => enemies.length > 0 && time < 10 * 60,
         then: ([heroes], [time, studentId]) => {
             analytics.mixpanel?.track("enemy heroes", {
                 distinct_id: studentId,
