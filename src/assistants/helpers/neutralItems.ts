@@ -48,9 +48,13 @@ function isItemAppropriateForTime(id: string | undefined, time: number) {
         return false;
     }
     const itemTier = nameToTier(id);
-    // Having an unused or unknown token is never appropriate
-    if (itemTier === Tier.UNUSED_TOKEN || itemTier === Tier.UNKNOWN) {
+    // Having an unused token is never appropriate
+    if (itemTier === Tier.UNUSED_TOKEN) {
         return false;
+    }
+    // Unknown tier item token is always appropriate (neutral item not categorized yet)
+    if (itemTier === Tier.UNKNOWN) {
+        return true;
     }
     // Appropriate item when matching time tier
     return itemTier >= timeToTier(time);
