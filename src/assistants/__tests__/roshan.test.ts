@@ -76,7 +76,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "resources/audio/rosh-maybe.mp3"
+                    "roshan number 2 may be alive"
                 );
             });
 
@@ -105,7 +105,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "resources/audio/rosh-bottom.mp3"
+                    "alive bottom with cheese"
                 );
             });
 

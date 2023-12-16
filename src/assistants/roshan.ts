@@ -52,14 +52,10 @@ function roshanMessage(
     allRoshDeathTimes: number[],
     currentTime: number,
     daytime: boolean,
-    currentlyInGame: boolean
+    inGame: boolean
 ) {
     const deathTime = allRoshDeathTimes.at(-1);
-    const status = roshHelper.getStatus(
-        currentlyInGame,
-        currentTime,
-        deathTime
-    );
+    const status = roshHelper.getStatus(inGame, currentTime, deathTime);
     const roshLocation = daytime ? "bottom" : "top";
     switch (status) {
         case Status.ALIVE: {
@@ -145,12 +141,12 @@ export default [
     new Rule({
         label: "when rosh may be up, play reminder",
         trigger: [topics.time],
-        given: [topics.roshanMinimumSpawnTime],
+        given: [topics.roshanMinimumSpawnTime, topics.allRoshanDeathTimes],
         when: ([time], [minimumSpawnTime]) => time === minimumSpawnTime,
-        then: () =>
+        then: (_, [_minTime, allDeathTimes]) =>
             new Fact(
                 topics.configurableEffect,
-                "resources/audio/rosh-maybe.mp3"
+                `roshan number ${allDeathTimes.length + 1} may be alive`
             ),
     }),
     new Rule({
@@ -162,15 +158,14 @@ export default [
             topics.allRoshanDeathTimes,
         ],
         when: ([time], [maximumSpawnTime]) => time === maximumSpawnTime,
-        then: (_, [_aliveTime, daytime]) =>
+        then: ([time], [_, daytime, allDeathTimes]) =>
             new Fact(
                 topics.configurableEffect,
-                daytime
-                    ? "resources/audio/rosh-bottom.mp3"
-                    : "resources/audio/rosh-top.mp3"
+                roshanMessage(allDeathTimes, time, daytime, true)
             ),
     }),
 ]
+    .map(inRegularGame)
     .concat([
         new Rule({
             label: "when asked what roshan status is, respond with status",
@@ -182,12 +177,11 @@ export default [
                 topics.inGame,
             ],
             when: ([utterance]) => isRoshStatusRequest(utterance),
-            then: (_, [allDeathTimes, time, daytime, currentlyInGame]) =>
+            then: (_, [allDeathTimes, time, daytime, inGame]) =>
                 new Fact(
                     topics.configurableEffect,
-                    roshanMessage(allDeathTimes, time, daytime, currentlyInGame)
+                    roshanMessage(allDeathTimes, time, daytime, inGame)
                 ),
         }),
     ])
-    .map((rule) => configurable(configInfo.ruleIndentifier, rule))
-    .map(inRegularGame);
+    .map((rule) => configurable(configInfo.ruleIndentifier, rule));
