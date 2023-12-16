@@ -40,9 +40,9 @@ function dropString(roshDeaths: number[], daytime: boolean) {
     }
     if (roshDeaths.length > 1) {
         if (daytime === true) {
-            dropString += " with cheese and aghanim's";
+            dropString += " with cheese and refresher";
         } else {
-            dropString += " with banner and refresher";
+            dropString += " with banner and aghanim's";
         }
     }
     return dropString;
