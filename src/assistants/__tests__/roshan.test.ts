@@ -76,7 +76,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "roshan number 2 may be alive"
+                    "roshan number 2 minimum spawn"
                 );
             });
 

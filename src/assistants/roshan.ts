@@ -146,7 +146,7 @@ export default [
         then: (_, [_minTime, allDeathTimes]) =>
             new Fact(
                 topics.configurableEffect,
-                `roshan number ${allDeathTimes.length + 1} may be alive`
+                `roshan number ${allDeathTimes.length + 1} minimum spawn`
             ),
     }),
     new Rule({
