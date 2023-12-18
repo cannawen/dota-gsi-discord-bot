@@ -161,7 +161,7 @@ export default [
         then: ([time], [_, daytime, allDeathTimes]) =>
             new Fact(
                 topics.configurableEffect,
-                roshanMessage(allDeathTimes, time, daytime, true)
+                `roshan ${roshanMessage(allDeathTimes, time, daytime, true)}`
             ),
     }),
 ]

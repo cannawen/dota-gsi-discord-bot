@@ -105,7 +105,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "alive bottom with cheese"
+                    "roshan alive bottom with cheese"
                 );
             });
 
