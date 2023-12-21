@@ -30,19 +30,22 @@ function isRoshStatusRequest(message: string) {
 }
 
 function dropString(roshDeaths: number[], daytime: boolean) {
+    const numDeaths = roshDeaths.length;
     let dropString = "";
-    if (roshDeaths.length === 1) {
+    if (numDeaths >= 1) {
+        dropString += " with ";
         if (daytime === true) {
-            dropString += " with cheese";
+            dropString += "banner";
         } else {
-            dropString += " with banner";
+            dropString += "cheese";
         }
     }
-    if (roshDeaths.length > 1) {
+    if (numDeaths >= 2) {
+        dropString += " and ";
         if (daytime === true) {
-            dropString += " with cheese and refresher";
+            dropString += "aghanim's";
         } else {
-            dropString += " with banner and aghanim's";
+            dropString += "refresher";
         }
     }
     return dropString;
