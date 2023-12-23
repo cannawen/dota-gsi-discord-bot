@@ -26,13 +26,19 @@ const TIME_BETWEEN_REMINDERS = 120;
 const START_REMINDER_TIME = 16 * 60 + 30;
 
 function hasDetection(items: PlayerItems): boolean {
+    const detection = [
+        "item_dust",
+        "item_ward_dispenser",
+        "item_ward_sentry",
+        "item_gem",
+        "item_seer_stone",
+        "item_demonicon",
+    ];
     return (
-        items.inventory.find(
-            (item) =>
-                item?.id === "item_dust" ||
-                item?.id === "item_ward_dispenser" ||
-                item?.id === "item_ward_sentry"
-        ) !== undefined
+        items.inventory
+            .map((item) => item?.id)
+            .filter((id) => id)
+            .find((id) => detection.includes(id!)) !== undefined
     );
 }
 
@@ -69,7 +75,7 @@ export default [
                     (helper.hasOpenSlot(items) || helper.hasSmallItem(items)) &&
                     !hasDetection(items),
                 then: () =>
-                    new Fact(topics.configurableEffect, "buy detection"),
+                    new Fact(topics.configurableEffect, "need detection"),
             }),
         ].map((rule) =>
             conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)
