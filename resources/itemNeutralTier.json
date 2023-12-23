@@ -12,7 +12,9 @@
         "item_trusty_shovel",
         "item_pogo_stick",
         "item_spark_of_courage",
-        "item_duelist_gloves"
+        "item_duelist_gloves",
+        "item_royal_jelly",
+        "item_safety_bubble"
     ],
     "2": [
         "item_misericorde",
@@ -29,7 +31,9 @@
         "item_vambrace",
         "item_orb_of_destruction",
         "item_vampire_fangs",
-        "item_gossamer_cape"
+        "item_gossamer_cape",
+        "item_light_collector",
+        "item_whisper_of_the_dread"
     ],
     "3": [
         "item_black_powder_bag",
@@ -44,7 +48,10 @@
         "item_titan_sliver",
         "item_dandelion_amulet",
         "item_defiant_shell",
-        "item_vindicators_axe"
+        "item_vindicators_axe",
+        "item_doubloon",
+        "item_nemesis_curse",
+        "item_craggy_coat"
     ],
     "4": [
         "item_mind_breaker",
@@ -59,7 +66,10 @@
         "item_timeless_relic",
         "item_trickster_cloak",
         "item_heavy_blade",
-        "item_martyrs_plate"
+        "item_martyrs_plate",
+        "item_ancient_guardian",
+        "item_avians_feather",
+        "item_rattlecage"
     ],
     "5": [
         "item_apex",
@@ -73,7 +83,9 @@
         "item_mirror_shield",
         "item_pirate_hat",
         "item_seer_stone",
-        "item_desolator_2"
+        "item_desolator_2",
+        "item_unwavering_condition",
+        "item_panic_button"
     ],
     "tokens": [
         "item_tier1_token",
