@@ -43,9 +43,9 @@ function dropString(roshDeaths: number[], daytime: boolean) {
     if (numDeaths >= 2) {
         dropString += " and ";
         if (daytime === true) {
-            dropString += "aghanim's";
-        } else {
             dropString += "refresher";
+        } else {
+            dropString += "aghanim's";
         }
     }
     return dropString;
