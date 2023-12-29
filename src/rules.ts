@@ -32,6 +32,7 @@ const assistant = {
     runeWisdom: "assistant-rune_wisdom",
     runeWisdomScan: "assistant-rune_wisdom_scan",
     shard: "assistant-shard",
+    timer: "assistant-timer",
     tormenter: "assistant-tormenter",
     tp: "assistant-tp",
     wards: "assistant-wards",
