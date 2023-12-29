@@ -6,6 +6,7 @@
 // ALL THE USER'S SAVED PREFERENCES WILL BE RESET
 // SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
 const assistant = {
+    arcaneBoots: "assistant-mana_boots",
     bloodGrenade: "assistant-blood_grenade",
     buyback: "assistant-buyback",
     buyDetection: "assistant-buy_detection",
@@ -17,7 +18,6 @@ const assistant = {
     invoker: "assistant-invoker",
     joke: "assistant-joke",
     lotus: "assistant-lotus",
-    arcaneBoots: "assistant-mana_boots",
     midas: "assistant-midas",
     neutralItemDigReminder: "assistant-neutral_item-dig",
     neutralItemReminder: "assistant-neutral_item",
