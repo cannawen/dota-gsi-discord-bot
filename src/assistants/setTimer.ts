@@ -67,7 +67,7 @@ export default [
         given: [topics.time, timerDataTopic],
         when: ([utterance]) =>
             utterance.match(
-                /^(set timer for \d+ seconds?)|(set \d+.seconds? timer)?$/i
+                /^(set timer for \d+ seconds?)|(set \d+.seconds? timer)$/i
             ),
         then: ([utterance], [time, currentTimers]) => [
             new Fact(topics.configurableEffect, "resources/audio/success.mp3"),
