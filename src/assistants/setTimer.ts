@@ -30,7 +30,8 @@ export default [
         label: `sets buyback timer reminder for 8 minutes in the future`,
         trigger: [topics.lastDiscordUtterance],
         given: [topics.time, timerDataTopic],
-        when: ([utterance]) => utterance.match(/^set (buy|my) ?back timer$/i),
+        when: ([utterance]) =>
+            utterance.match(/^set (buy|my|by) ?back timer$/i),
         then: (_, [time, currentTimers]) => [
             new Fact(topics.configurableEffect, "resources/audio/success.mp3"),
             new Fact(
@@ -56,7 +57,7 @@ export default [
                 timerDataTopic,
                 currentTimers.concat({
                     audio: `${utterance.match(/\d+/)[0]} minutes have passed`,
-                    time: time + utterance.match(/\d+/)[0] * 60,
+                    time: time + parseInt(utterance.match(/\d+/)[0], 10) * 60,
                 })
             ),
         ],
@@ -75,7 +76,7 @@ export default [
                 timerDataTopic,
                 currentTimers.concat({
                     audio: `${utterance.match(/\d+/)[0]} seconds have passed`,
-                    time: time + utterance.match(/\d+/)[0],
+                    time: time + parseInt(utterance.match(/\d+/)[0], 10),
                 })
             ),
         ],
