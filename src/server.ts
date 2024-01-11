@@ -157,6 +157,11 @@ router.post("/coach/:studentId/config/reset", (req, res) => {
 });
 
 router.post("/coach/:studentId/config/PRIVATE", (req, res) => {
+    engine.setFact(
+        req.params.studentId,
+        new Fact(topics.saveFactsAfterSession, false)
+    );
+
     topicManager.getConfigTopics().forEach((topic) => {
         const config = engine.getFactValue(req.params.studentId, topic);
         if (

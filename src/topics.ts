@@ -80,6 +80,15 @@ const effect = {
     // This is used as a temporary topic to be swap out by rule decorator configurable
     configurableEffect: new Topic<string>("configurableEffect"),
 
+    saveFactsAfterSession: new PersistentTopic<boolean>(
+        "saveFactsAfterSession",
+        {
+            defaultValue: true,
+            persistAcrossGames: true,
+            persistAcrossRestarts: true,
+        }
+    ),
+
     playPublicAudio: new Topic<string>("playPublicAudio"),
     publicAudioQueue: new Topic<DeepReadonly<string[]>>("publicAudioQueue", []),
 
@@ -95,7 +104,7 @@ const effect = {
 };
 
 const discord = {
-    //basic information
+    // basic information
     discordUserId: new PersistentTopic<string>("discordUserId", {
         persistForever: true,
     }),

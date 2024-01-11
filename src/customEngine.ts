@@ -13,6 +13,7 @@ import Rule from "./engine/Rule";
 import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
+import EffectConfig from "./effects/EffectConfig";
 
 function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
@@ -135,16 +136,23 @@ export class CustomEngine extends Engine {
                     topics.discordSubscriptionTopic
                 )?.connection.destroy();
             } catch (error) {}
-            const facts = factsToPlainObject(db.getPersistentForeverFacts());
-            if (Object.keys(facts).length > 0) {
-                log.debug(
-                    "app",
-                    "Saving forever facts %s for student %s",
-                    facts,
-                    studentId.substring(0, 10)
+            if (db.get(topics.saveFactsAfterSession)) {
+                const facts = factsToPlainObject(
+                    db.getPersistentForeverFacts()
                 );
+                if (Object.keys(facts).length > 0) {
+                    log.debug(
+                        "app",
+                        "Saving forever facts %s for student %s",
+                        facts,
+                        studentId.substring(0, 10)
+                    );
 
-                persistence.saveStudentData(studentId, JSON.stringify(facts));
+                    persistence.saveStudentData(
+                        studentId,
+                        JSON.stringify(facts)
+                    );
+                }
             }
             this.sessions.delete(studentId);
         }
