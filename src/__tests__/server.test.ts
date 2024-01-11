@@ -204,7 +204,11 @@ describe("server", () => {
                     .post("/coach/studentId/config/PRIVATE")
                     .expect(200, (error: any) => {
                         if (error) return done(error);
-                        expect(engine.setFact).toHaveBeenCalledTimes(2);
+                        expect(engine.setFact).toHaveBeenCalledTimes(3);
+                        expect(engine.setFact).toHaveBeenCalledWith(
+                            "studentId",
+                            new Fact(topics.saveFactsAfterSession, false)
+                        );
                         expect(engine.setFact).toHaveBeenCalledWith(
                             "studentId",
                             new Fact(configTopicTwo, EffectConfig.PRIVATE)

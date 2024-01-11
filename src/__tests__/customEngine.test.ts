@@ -174,6 +174,13 @@ describe("customEngine", () => {
                     "studentId",
                     new Fact(new Topic<string>("topic"), "world")
                 );
+                // the default value for this topic is set to true
+                // but we don't get the default value here
+                // see story #144 for details
+                sut.setFact(
+                    "studentId",
+                    new Fact(topics.saveFactsAfterSession, true)
+                );
                 sut.deleteSession("studentId");
                 expect(persistence.saveStudentData).toHaveBeenCalledWith(
                     "studentId",

@@ -13,7 +13,6 @@ import Rule from "./engine/Rule";
 import time from "./assistants/helpers/time";
 import Topic from "./engine/Topic";
 import topics from "./topics";
-import EffectConfig from "./effects/EffectConfig";
 
 function getSavedDataOrDeleteDataIfInvalid(studentId: string) {
     const savedPersistenceString = persistence.readStudentData(studentId);
