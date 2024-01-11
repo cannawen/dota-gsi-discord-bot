@@ -2,6 +2,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -39,8 +40,12 @@ export default [
         ([activeOrbs, regex]) =>
             new Rule({
                 label: `invoker spell ${activeOrbs}`,
-                trigger: [topics.lastDiscordUtterance],
-                when: ([utterance]) =>
+                trigger: [
+                    topics.lastDiscordUtterance,
+                    topics.allFriendlyHeroes,
+                ],
+                when: ([utterance, heroes]) =>
+                    heroes.includes("npc_dota_hero_invoker") &&
                     utterance.match(
                         new RegExp(
                             `^(${
@@ -52,4 +57,5 @@ export default [
                 then: () => new Fact(topics.configurableEffect, activeOrbs),
             })
     )
+    .map(inRegularGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
