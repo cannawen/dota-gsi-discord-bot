@@ -4,6 +4,7 @@ import Rule from "../Rule";
 import topicManager from "../topicManager";
 import topics from "../../topics";
 
+// NOTE: askCoachAnything has custom logic for figuring out effect because it is async
 const configToEffectTopic = {
     [EffectConfig.PUBLIC]: topics.playPublicAudio,
     [EffectConfig.PUBLIC_INTERRUPTING]: topics.playInterruptingAudioFile,

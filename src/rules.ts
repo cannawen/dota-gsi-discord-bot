@@ -7,6 +7,7 @@
 // SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
 const assistant = {
     arcaneBoots: "assistant-mana_boots",
+    askCoachAnything: "assistant-ask_coach_anything",
     bloodGrenade: "assistant-blood_grenade",
     buyback: "assistant-buyback",
     buyDetection: "assistant-buy_detection",

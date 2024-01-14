@@ -140,7 +140,7 @@ const discord = {
     discordVoiceRecognitionPermissionGranted: new PersistentTopic<boolean>(
         "discordVoiceRecognitionPermissionGranted",
         {
-            defaultValue: false,
+            defaultValue: process.env.DEFAULT_STT_ENABLED_STATE === "true",
             persistForever: true,
         }
     ),
