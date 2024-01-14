@@ -39,6 +39,10 @@ When `npm start` is run, it will first run `tsc` which will transpile typescript
 
 -   You can create a mixpanel project to track analytics for the project. Set your project token in the .env file
 
+### OpenAI's ChatGPT
+
+-   You can create an OpenAI ChatGPT API key to interact with the coach via voice. Set your secret key in the .env file
+
 ## Logging
 
 -   Use winston loggers from `log.ts`. New "labels" are created for loggers on the fly
