@@ -79,9 +79,8 @@ describe("playAudio", () => {
                 expect(tts.create).toHaveBeenCalledWith(
                     "text to speech message"
                 );
-                const axiosPromise = (tts.create as jest.Mock).mock.results[0]
-                    .value;
-                return axiosPromise.then(() => {
+                const promise = (tts.create as jest.Mock).mock.results[0].value;
+                return promise.then(() => {
                     expect(engine.setFact).toHaveBeenCalledWith(
                         "studentId",
                         new Fact(
