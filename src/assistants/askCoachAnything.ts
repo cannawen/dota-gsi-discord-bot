@@ -17,13 +17,17 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-const openAi = new OpenAi({ apiKey: process.env.CHATGPT_SECRET_KEY });
+let openAi: OpenAi | undefined;
+
+try {
+    openAi = new OpenAi({ apiKey: process.env.CHATGPT_SECRET_KEY });
+} catch (e) {}
 
 // Handling our own configuration logic instead of using configurable.ts because answer is async
 function handleQuestion(question: string, studentId: string) {
     if (question.length < 10) return;
 
-    openAi.chat.completions
+    openAi?.chat.completions
         .create({
             messages: [
                 {
