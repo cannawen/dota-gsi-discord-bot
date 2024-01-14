@@ -18,7 +18,7 @@ async function asyncCreate(ttsString: string): Promise<void> {
     // this cast to any is a bit suspect; but I think it may be the library's fault?
     const mp3: any = await openAi.audio.speech.create({
         model: "tts-1",
-        voice: "alloy",
+        voice: "onyx",
         input: ttsString,
     });
 
