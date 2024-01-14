@@ -13,9 +13,7 @@ describe("water runes, in game", () => {
                 ...params,
                 time: 2 * 60,
             });
-            expect(results).toContainAudioEffect(
-                "resources/audio/rune-water.mp3"
-            );
+            expect(results).toContainAudioEffect("water runes");
         });
     });
     describe("time 4:00", () => {
@@ -24,9 +22,7 @@ describe("water runes, in game", () => {
                 ...params,
                 time: 4 * 60,
             });
-            expect(results).toContainAudioEffect(
-                "resources/audio/rune-water.mp3"
-            );
+            expect(results).toContainAudioEffect("water runes");
         });
     });
     describe("time 6:00", () => {

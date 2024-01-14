@@ -20,11 +20,7 @@ export default [
         20,
         new Rule({
             label: rules.assistant.tormenter,
-            then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/tormenters-up.mp3"
-                ),
+            then: () => new Fact(topics.configurableEffect, "tormenter's up"),
         })
     ),
 ]

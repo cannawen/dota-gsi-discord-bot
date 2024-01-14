@@ -39,9 +39,7 @@ describe("wards, in game", () => {
                 },
                 noWardState
             );
-            expect(noWardStateLater).toContainAudioEffect(
-                "resources/audio/buy-wards.mp3"
-            );
+            expect(noWardStateLater).toContainAudioEffect("buy wards");
         });
     });
     describe("decrease in ward count", () => {
@@ -59,9 +57,7 @@ describe("wards, in game", () => {
                 },
                 twoWardState
             );
-            expect(oneWardState).toContainAudioEffect(
-                "resources/audio/buy-wards.mp3"
-            );
+            expect(oneWardState).toContainAudioEffect("buy wards");
         });
     });
     describe("increase in ward count", () => {

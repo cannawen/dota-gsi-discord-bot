@@ -64,7 +64,7 @@ describe("midas assistant", () => {
                         firstSeenMidasState
                     );
                     expect(fifteenSecondsAfterState).toContainAudioEffect(
-                        "resources/audio/midas.mp3"
+                        "midas"
                     );
                     const thirtySecondsAfterState = getResults(
                         rule,
@@ -76,7 +76,7 @@ describe("midas assistant", () => {
                         fifteenSecondsAfterState
                     );
                     expect(thirtySecondsAfterState).toContainAudioEffect(
-                        "resources/audio/midas.mp3"
+                        "midas"
                     );
                     const thirtyOneSeconsAfterState = getResults(
                         rule,

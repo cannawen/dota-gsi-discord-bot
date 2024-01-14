@@ -35,7 +35,7 @@ export default [
                         (heroId: string) => heroId === "npc_dota_hero_furion"
                     )
                         ? "wisdom rune soon. care natures TP"
-                        : "resources/audio/rune-wisdom-soon.mp3"
+                        : "wisdom rune soon"
                 ),
         })
     ),

@@ -25,10 +25,7 @@ export default inRegularGame(
             new Rule({
                 label: "shard reminder at 15:00",
                 then: () =>
-                    new Fact(
-                        topics.configurableEffect,
-                        "resources/audio/shard-available.mp3"
-                    ),
+                    new Fact(topics.configurableEffect, "shard available"),
             })
         )
     )

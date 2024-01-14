@@ -27,11 +27,7 @@ export default [
             trigger: [topics.items],
             when: ([items]) =>
                 items.findItem("item_hand_of_midas")?.charges === 1,
-            then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/midas.mp3"
-                ),
+            then: () => new Fact(topics.configurableEffect, "midas"),
         })
     ),
     conditionalEveryIntervalSeconds(
@@ -41,11 +37,7 @@ export default [
             trigger: [topics.items],
             when: ([items]) =>
                 items.findItem("item_hand_of_midas")?.charges === 2,
-            then: () =>
-                new Fact(
-                    topics.configurableEffect,
-                    "resources/audio/midas.mp3"
-                ),
+            then: () => new Fact(topics.configurableEffect, "midas"),
         })
     ),
 ]

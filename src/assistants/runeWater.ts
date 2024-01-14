@@ -24,10 +24,7 @@ export default [2, 4]
                 new Rule({
                     label: "water rune reminder at 2:00 and 4:00",
                     then: () =>
-                        new Fact(
-                            topics.configurableEffect,
-                            "resources/audio/rune-water.mp3"
-                        ),
+                        new Fact(topics.configurableEffect, "water runes"),
                 })
             )
         )

@@ -10,7 +10,7 @@ const params = {
 
 test("healing lotus, in game", () => {
     const threeMin = getResults(rule, params);
-    expect(threeMin).toContainAudioEffect("resources/audio/lotus-soon.mp3");
+    expect(threeMin).toContainAudioEffect("healing lotus soon");
     const sixMin = getResults(
         rule,
         {

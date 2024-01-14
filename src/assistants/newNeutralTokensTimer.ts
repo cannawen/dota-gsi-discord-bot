@@ -27,7 +27,7 @@ export default helper.tierTimeInfo
                     then: () =>
                         new Fact(
                             topics.configurableEffect,
-                            "resources/audio/new-neutral-tokens.mp3"
+                            "new neutral tokens"
                         ),
                 })
             )

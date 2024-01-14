@@ -23,11 +23,7 @@ export default [
     new Rule({
         label: "lotus reminder from 3:00-12:00",
         trigger: [topics.time],
-        then: () =>
-            new Fact(
-                topics.configurableEffect,
-                "resources/audio/lotus-soon.mp3"
-            ),
+        then: () => new Fact(topics.configurableEffect, "healing lotus soon"),
     }),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))
