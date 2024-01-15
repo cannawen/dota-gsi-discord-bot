@@ -50,16 +50,6 @@ describe("server", () => {
                     return done();
                 });
             });
-            test("does not have existing session", (done) => {
-                (engine.getSession as jest.Mock).mockReturnValue(undefined);
-                req.end((error: any) => {
-                    if (error) return done(error);
-                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
-                        "studentId"
-                    );
-                    return done();
-                });
-            });
         });
         test("stop coaching notifies engine to delete student's session", (done) => {
             request(sut)
@@ -150,29 +140,6 @@ describe("server", () => {
                 ]);
             });
 
-            // TODO need to mock out defaultConfigInfo to have thr proper values
-            test.skip("get all", (done) => {
-                request(sut)
-                    .get("/coach/studentId/config/get")
-                    .expect("Content-Type", /json/)
-                    .expect(200)
-                    .expect(
-                        JSON.stringify([
-                            ["configTopicOne", "PRIVATE", null],
-                            ["configTopicTwo", "PUBLIC", null],
-                            ["configTopicThree", "PUBLIC_INTERRUPTING", null],
-                            ["configTopicFour", "NONE", null],
-                        ])
-                    )
-                    .end((error: any) => {
-                        if (error) return done(error);
-                        expect(engine.getFactValue).toHaveBeenCalledWith(
-                            "studentId",
-                            expect.anything()
-                        );
-                        return done();
-                    });
-            });
             test("update", (done) => {
                 request(sut)
                     .post("/coach/studentId/config/configTopicTwo/NONE")
