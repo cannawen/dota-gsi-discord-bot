@@ -13,7 +13,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.askCoachAnything,
     "Ask Dota Coach a question",
-    'Responds to "OK/Hey Coach, <question>" (using ChatGPT)',
+    'Responds to "OK/Hey Coach, &lt;question&gt;" (using ChatGPT - answers may be incorrect)',
     EffectConfig.PUBLIC
 );
 
