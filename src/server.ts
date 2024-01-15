@@ -108,7 +108,7 @@ router.post("/coach/:studentId/start", (req, res) => {
             new Fact(topics.privateAudioQueue, undefined)
         );
     } else {
-        engine.startCoachingSession(studentId);
+        handleNotCoaching(studentId);
     }
     res.status(200).send();
 });
