@@ -29,6 +29,7 @@ const assistant = {
     roshan: "assistant-roshan",
     runeBounty: "assistant-rune_bounty",
     runePower: "assistant-rune_power",
+    runePowerWarn: "assistant-rune_power_warn",
     runeWater: "assistant-rune_water",
     runeWisdom: "assistant-rune_wisdom",
     runeWisdomScan: "assistant-rune_wisdom_scan",
