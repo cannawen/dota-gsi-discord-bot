@@ -9,6 +9,7 @@ import rules from "./rules";
 import { Status } from "./assistants/helpers/roshan";
 import Topic from "./engine/Topic";
 import Voice from "@discordjs/voice";
+import Ability from "./gsi-data-classes/Ability";
 
 const gsi = {
     allData: new Topic<DeepReadonly<GsiData>>("allData"),
@@ -26,6 +27,8 @@ const gsi = {
     t4BotHealth: new Topic<number>("t4BotHealth"),
     ancientHealth: new Topic<number>("ancientHealth"),
 
+    // abilities
+    abilities: new Topic<Ability[]>("abilities"),
     // events
     event: new Topic<DeepReadonly<Event>>("event"),
     // hero

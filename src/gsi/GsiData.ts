@@ -12,6 +12,7 @@ class GsiData {
     map?: gsi.IMap;
     minimap?: gsi.IMinimapElement[] | null;
     player?: gsi.IPlayer;
+    abilities?: gsi.IAbility[];
     provider?: gsi.IProvider;
 
     constructor(options: {
@@ -22,6 +23,7 @@ class GsiData {
         map?: gsi.IMap | null;
         minimap?: gsi.IMinimapElement[] | null;
         player?: gsi.IPlayer | null;
+        abilities?: gsi.IAbility[] | null;
         provider?: gsi.IProvider | null;
     }) {
         this.buildings = options.buildings ? options.buildings : undefined;
@@ -31,6 +33,7 @@ class GsiData {
         this.map = options.map ? options.map : undefined;
         this.minimap = options.minimap ? options.minimap : undefined;
         this.player = options.player ? options.player : undefined;
+        this.abilities = options.abilities ? options.abilities : undefined;
         this.provider = options.provider ? options.provider : undefined;
     }
 }
