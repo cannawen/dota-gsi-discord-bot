@@ -50,6 +50,16 @@ describe("server", () => {
                     return done();
                 });
             });
+            test("does not have existing session", (done) => {
+                (engine.getSession as jest.Mock).mockReturnValue(undefined);
+                req.end((error: any) => {
+                    if (error) return done(error);
+                    expect(engine.startCoachingSession).toHaveBeenCalledWith(
+                        "studentId"
+                    );
+                    return done();
+                });
+            });
         });
         test("stop coaching notifies engine to delete student's session", (done) => {
             request(sut)
