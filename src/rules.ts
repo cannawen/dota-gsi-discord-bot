@@ -37,6 +37,7 @@ const assistant = {
     tormenter: "assistant-tormenter",
     tp: "assistant-tp",
     wards: "assistant-wards",
+    wdUseQ: "assistant-wd_use_q",
 };
 
 const discord = {
