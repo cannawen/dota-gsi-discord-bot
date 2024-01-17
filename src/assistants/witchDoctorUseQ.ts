@@ -6,6 +6,7 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
+import inGame from "../engine/rules/inGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -37,6 +38,7 @@ export default [
     }),
 ]
     .map(alive)
+    .map(inGame)
     .map((rule) =>
         conditionalEveryIntervalSeconds(REMINDER_INTERVAL_SECONDS, rule)
     )
