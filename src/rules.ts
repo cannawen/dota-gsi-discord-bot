@@ -38,6 +38,7 @@ const assistant = {
     tp: "assistant-tp",
     wards: "assistant-wards",
     wdUseQ: "assistant-wd_use_q",
+    wdToggleW: "assistant-wd_toggle_w",
 };
 
 const discord = {

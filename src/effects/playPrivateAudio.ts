@@ -15,6 +15,11 @@ export default new Rule({
     trigger: [topics.playPrivateAudio],
     given: [topics.privateAudioQueue, topics.studentId],
     then: ([audio], [privateAudioQueue, studentId]) => {
+        // if the audio is already in queue, do not add it again
+        if (privateAudioQueue.includes(audio)) {
+            return;
+        }
+
         const queue = [...privateAudioQueue];
         const hardCodedFile = path.join(__dirname, "../../", audio);
         const cachedTtsFile = path.join(__dirname, "../../", tts.path(audio));
