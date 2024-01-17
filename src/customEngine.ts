@@ -135,7 +135,7 @@ export class CustomEngine extends Engine {
                     topics.discordSubscriptionTopic
                 )?.connection.destroy();
             } catch (error) {}
-            if (db.get(topics.saveFactsAfterSession)) {
+            if (Engine.get(db, topics.saveFactsAfterSession)) {
                 const facts = factsToPlainObject(
                     db.getPersistentForeverFacts()
                 );
