@@ -65,7 +65,7 @@ function roshanMessage(
             return `alive ${roshLocation}${dropString(
                 allRoshDeathTimes,
                 daytime
-            )}`;
+            )}.`;
         }
         case Status.MAYBE_ALIVE:
             return `${roshHelper.percentChanceRoshanIsAlive(
@@ -73,15 +73,15 @@ function roshanMessage(
                 deathTime!
             )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.maximumSpawnTime(deathTime!)
-            )}`;
+            )}.`;
         case Status.DEAD:
             return `minimum ${timeHelper.secondsToTtsTimeString(
                 roshHelper.minimuSpawnTime(deathTime!)
-            )}`;
+            )}.`;
         case Status.NOT_IN_A_GAME:
-            return "game has not started";
+            return "game has not started.";
         default:
-            return "unknown";
+            return "unknown.";
     }
 }
 
@@ -149,7 +149,7 @@ export default [
         then: (_, [_minTime, allDeathTimes]) =>
             new Fact(
                 topics.configurableEffect,
-                `roshan number ${allDeathTimes.length + 1} minimum spawn`
+                `roshan number ${allDeathTimes.length + 1} minimum spawn.`
             ),
     }),
     new Rule({

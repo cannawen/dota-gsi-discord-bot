@@ -43,7 +43,7 @@ export default [
                 label: "remind you to buy a teleport scroll when should buy state set to true",
                 trigger: [shouldBuyTeleportTopic],
                 when: ([shouldBuy]) => shouldBuy,
-                then: () => new Fact(topics.configurableEffect, "Buy a TP"),
+                then: () => new Fact(topics.configurableEffect, "Buy a TP."),
             })
         )
     ),

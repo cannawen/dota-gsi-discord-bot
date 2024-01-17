@@ -54,7 +54,7 @@ export default [
         then: () => [
             new Fact(
                 topics.configurableEffect,
-                "you can hold the philosopher's stone"
+                "you can hold the philosopher's stone."
             ),
             new Fact(remindedAlreadyThisDeathCycleTopic, true),
         ],
@@ -76,7 +76,7 @@ export default [
         then: () =>
             new Fact(
                 topics.configurableEffect,
-                "you can return the philosopher's stone"
+                "you can return the philosopher's stone."
             ),
     }),
 ]

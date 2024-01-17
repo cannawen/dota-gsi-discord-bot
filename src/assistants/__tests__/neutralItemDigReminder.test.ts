@@ -137,7 +137,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainAudioEffect("dig");
+                        expect(resultAfter15Sec).toContainAudioEffect("dig.");
                     });
                     test("trusty shovel in backpack", () => {
                         const resultAfter15Sec = getResults(
@@ -149,7 +149,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainAudioEffect("dig");
+                        expect(resultAfter15Sec).toContainAudioEffect("dig.");
                     });
                     test("pirate hat in neutral slot", () => {
                         const resultAfter15Sec = getResults(
@@ -161,7 +161,7 @@ describe("neutral item dig reminder", () => {
                             },
                             seenShovelState
                         );
-                        expect(resultAfter15Sec).toContainAudioEffect("dig");
+                        expect(resultAfter15Sec).toContainAudioEffect("dig.");
                     });
                 });
                 describe("item not ready", () => {

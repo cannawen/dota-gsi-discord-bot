@@ -42,7 +42,7 @@ export default [
             then: () =>
                 new Fact(
                     topics.configurableEffect,
-                    "you do not have buyback gold"
+                    "you do not have buyback gold."
                 ),
         })
     ),

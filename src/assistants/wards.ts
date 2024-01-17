@@ -66,7 +66,7 @@ export default inRegularGame(
                     WARD_REMINDER_INTERVAL
                 ) {
                     facts.push(
-                        new Fact(topics.configurableEffect, "buy wards")
+                        new Fact(topics.configurableEffect, "buy wards.")
                     );
                     facts.push(new Fact(lastWardReminderTimeTopic, time));
                 }

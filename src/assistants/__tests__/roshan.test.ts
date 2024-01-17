@@ -31,7 +31,7 @@ describe("roshan", () => {
                 daytime: true,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainAudioEffect("alive bottom");
+            expect(results).toContainAudioEffect("alive bottom.");
         });
         test("bot should respond roshan is alive top during nightime", () => {
             const results = getResults(roshanRules, {
@@ -39,7 +39,7 @@ describe("roshan", () => {
                 daytime: false,
                 lastDiscordUtterance: "What's roshan timer",
             });
-            expect(results).toContainAudioEffect("alive top");
+            expect(results).toContainAudioEffect("alive top.");
         });
         describe("roshan killed", () => {
             let roshKilledState: Fact<unknown>[];
@@ -76,7 +76,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "roshan number 2 minimum spawn"
+                    "roshan number 2 minimum spawn."
                 );
             });
 
@@ -105,7 +105,7 @@ describe("roshan", () => {
                     roshKilledState
                 );
                 expect(results).toContainAudioEffect(
-                    "roshan alive bottom with banner"
+                    "roshan alive bottom with banner."
                 );
             });
 

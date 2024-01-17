@@ -34,8 +34,8 @@ export default [
                     enemyHeroes.find(
                         (heroId: string) => heroId === "npc_dota_hero_furion"
                     )
-                        ? "wisdom rune soon. care natures TP"
-                        : "wisdom rune soon"
+                        ? "wisdom rune soon. care natures TP."
+                        : "wisdom rune soon."
                 ),
         })
     ),
@@ -51,7 +51,7 @@ export default [
                 `${
                     Math.ceil(time / WISDOM_RUNE_SPAWN_SECONDS) *
                     WISDOM_RUNE_SAPWN_MINUTES
-                } minutes`
+                } minutes.`
             ),
     }),
 ]

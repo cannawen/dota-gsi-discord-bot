@@ -28,8 +28,8 @@ export default [
             !helper.isItemAppropriateForTime(items.neutral?.id, time),
         then: ([items]) => {
             const audio = items.neutral
-                ? "you should upgrade your neutral item"
-                : "you do not have a neutral item";
+                ? "you should upgrade your neutral item."
+                : "you do not have a neutral item.";
             return [new Fact(topics.configurableEffect, audio)];
         },
     }),

@@ -21,7 +21,7 @@ const BOUNTY_RUNE_START_REMINDING_TIME = BOUNTY_RUNE_SPAWN_INTERVAL;
 export default [
     new Rule({
         label: "bounty rune reminder every 3 minutes",
-        then: () => new Fact(topics.configurableEffect, "bounty runes"),
+        then: () => new Fact(topics.configurableEffect, "bounty runes."),
     }),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))

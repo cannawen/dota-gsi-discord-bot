@@ -22,7 +22,7 @@ describe("power runes, in game", () => {
                 ...params,
                 time: 6 * 60,
             });
-            expect(results).toContainAudioEffect("power rune");
+            expect(results).toContainAudioEffect("power rune.");
         });
     });
     describe("time 60:00", () => {
@@ -31,7 +31,7 @@ describe("power runes, in game", () => {
                 ...params,
                 time: 60 * 60,
             });
-            expect(results).toContainAudioEffect("power rune");
+            expect(results).toContainAudioEffect("power rune.");
         });
     });
 });

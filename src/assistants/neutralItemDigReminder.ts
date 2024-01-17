@@ -25,7 +25,7 @@ export default ["item_trusty_shovel", "item_pirate_hat"]
                 label: `reminder to dig ${itemId}`,
                 trigger: [topics.items],
                 when: ([items]) => items.findItem(itemId)?.canCast,
-                then: () => new Fact(topics.configurableEffect, "dig"),
+                then: () => new Fact(topics.configurableEffect, "dig."),
             })
     )
     .map(alive)

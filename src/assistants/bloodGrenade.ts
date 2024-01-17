@@ -31,7 +31,7 @@ export default [
         label: "inform user to buy a blood grenade",
         trigger: [topics.items],
         when: ([items]) => !hasBloodGrenade(items) && helper.hasOpenSlot(items),
-        then: () => new Fact(topics.configurableEffect, "buy a blood grenade"),
+        then: () => new Fact(topics.configurableEffect, "buy a blood grenade."),
     }),
 ]
     .map((rule) =>

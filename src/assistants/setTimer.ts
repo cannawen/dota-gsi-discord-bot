@@ -37,7 +37,7 @@ export default [
             new Fact(
                 timerDataTopic,
                 currentTimers.concat({
-                    audio: "buyback timer up",
+                    audio: "buyback timer up.",
                     time: time + 480,
                 })
             ),
@@ -56,7 +56,7 @@ export default [
             new Fact(
                 timerDataTopic,
                 currentTimers.concat({
-                    audio: `${utterance.match(/\d+/)[0]} minutes have passed`,
+                    audio: `${utterance.match(/\d+/)[0]} minutes have passed.`,
                     time: time + parseInt(utterance.match(/\d+/)[0], 10) * 60,
                 })
             ),
@@ -75,7 +75,7 @@ export default [
             new Fact(
                 timerDataTopic,
                 currentTimers.concat({
-                    audio: `${utterance.match(/\d+/)[0]} seconds have passed`,
+                    audio: `${utterance.match(/\d+/)[0]} seconds have passed.`,
                     time: time + parseInt(utterance.match(/\d+/)[0], 10),
                 })
             ),

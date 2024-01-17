@@ -27,7 +27,7 @@ export default [
             label: `reminder to scan wisdom rune ${WISDOM_RUNE_SCAN_WARNING_TIME} seconds prior`,
             trigger: [topics.time],
             then: () =>
-                new Fact(topics.configurableEffect, "scan for wisdom rune"),
+                new Fact(topics.configurableEffect, "scan for wisdom rune."),
         })
     ),
 ]

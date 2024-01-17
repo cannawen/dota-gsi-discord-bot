@@ -55,7 +55,7 @@ export default inGame(
             then: () =>
                 new Fact(
                     topics.configurableEffect,
-                    "consider attack speed talent"
+                    "consider attack speed talent."
                 ),
         })
     )

@@ -20,7 +20,7 @@ export default [
         20,
         new Rule({
             label: rules.assistant.tormenter,
-            then: () => new Fact(topics.configurableEffect, "tormenter's up"),
+            then: () => new Fact(topics.configurableEffect, "tormenter's up."),
         })
     ),
 ]

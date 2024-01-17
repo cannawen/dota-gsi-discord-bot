@@ -22,7 +22,7 @@ export default [
     new Rule({
         label: "power rune reminder every 2 minutes",
         trigger: [topics.time],
-        then: () => new Fact(topics.configurableEffect, "power rune"),
+        then: () => new Fact(topics.configurableEffect, "power rune."),
     }),
 ]
     .map((rule) => configurable(configInfo.ruleIndentifier, rule))

@@ -29,7 +29,7 @@ const JOKES = [
     "yo mama so fat, io can't relocate her",
     "yo mama so fat, sniper's headshot doesn't push her back",
     "yo mama so ugly, even axe refuses to call her",
-    "your KDA",
+    "your K/D/A",
 ];
 
 export default [
@@ -40,7 +40,7 @@ export default [
         then: () =>
             new Fact(
                 topics.configurableEffect,
-                JOKES[Math.floor(Math.random() * JOKES.length)]
+                `${JOKES[Math.floor(Math.random() * JOKES.length)]}.`
             ),
     }),
 ].map((rule) => configurable(configInfo.ruleIndentifier, rule));

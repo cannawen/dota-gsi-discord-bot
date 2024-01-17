@@ -52,7 +52,7 @@ describe("neutralItemReminder", () => {
                 state
             );
             expect(result).toContainAudioEffect(
-                "you do not have a neutral item"
+                "you do not have a neutral item."
             );
             const result2 = getResults(
                 rule,
@@ -63,7 +63,7 @@ describe("neutralItemReminder", () => {
                 result
             );
             expect(result2).toContainAudioEffect(
-                "you do not have a neutral item"
+                "you do not have a neutral item."
             );
         });
     });
@@ -152,7 +152,7 @@ describe("neutralItemReminder", () => {
                     state1
                 );
                 expect(state2).toContainAudioEffect(
-                    "you should upgrade your neutral item"
+                    "you should upgrade your neutral item."
                 );
             });
         });
@@ -173,7 +173,7 @@ describe("neutralItemReminder", () => {
                     state1
                 );
                 expect(state2).toContainAudioEffect(
-                    "you should upgrade your neutral item"
+                    "you should upgrade your neutral item."
                 );
             });
         });

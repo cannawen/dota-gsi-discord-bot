@@ -33,7 +33,7 @@ export default [
                         ability.cooldown === 0),
                 false
             ),
-        then: () => new Fact(topics.configurableEffect, "coconut"),
+        then: () => new Fact(topics.configurableEffect, "coconut."),
     }),
 ]
     .map(alive)

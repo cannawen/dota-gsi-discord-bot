@@ -21,6 +21,6 @@ export default configurable(
         given: [topics.time],
         when: ([inGame], [time]) => inGame && time === 0,
         then: () =>
-            new Fact(topics.configurableEffect, "good luck and have fun"),
+            new Fact(topics.configurableEffect, "good luck and have fun."),
     })
 );

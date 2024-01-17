@@ -25,7 +25,7 @@ export default inRegularGame(
             new Rule({
                 label: "shard reminder at 15:00",
                 then: () =>
-                    new Fact(topics.configurableEffect, "shard available"),
+                    new Fact(topics.configurableEffect, "shard available."),
             })
         )
     )

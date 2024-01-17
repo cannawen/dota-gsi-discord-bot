@@ -41,7 +41,7 @@ describe("bounty runes, in game", () => {
                 },
                 initial
             );
-            expect(results).toContainAudioEffect("bounty runes");
+            expect(results).toContainAudioEffect("bounty runes.");
         });
         test("60 min", () => {
             const results = getResults(
@@ -52,7 +52,7 @@ describe("bounty runes, in game", () => {
                 },
                 initial
             );
-            expect(results).toContainAudioEffect("bounty runes");
+            expect(results).toContainAudioEffect("bounty runes.");
         });
     });
 });

@@ -26,7 +26,7 @@ export default [
         when: ([items], [mana, maxMana]) =>
             items.findItem("item_arcane_boots")?.canCast &&
             maxMana - mana >= MANA_RESTORED_ON_CAST,
-        then: () => new Fact(topics.configurableEffect, "arcane boots"),
+        then: () => new Fact(topics.configurableEffect, "arcane boots."),
     }),
 ]
     .map(alive)

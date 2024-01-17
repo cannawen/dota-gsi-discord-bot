@@ -27,7 +27,7 @@ export default helper.tierTimeInfo
                     then: () =>
                         new Fact(
                             topics.configurableEffect,
-                            "new neutral tokens"
+                            "new neutral tokens."
                         ),
                 })
             )

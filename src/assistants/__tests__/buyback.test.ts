@@ -17,7 +17,7 @@ describe("buyback gold reminder in a game after 30 minutes", () => {
             test("warn if we have not warned before", () => {
                 const warningResult = getResults(rule, { ...params, gold: 99 });
                 expect(warningResult).toContainAudioEffect(
-                    "you do not have buyback gold"
+                    "you do not have buyback gold."
                 );
                 const alreadyWarned = getResults(
                     rule,

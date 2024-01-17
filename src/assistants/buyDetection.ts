@@ -75,7 +75,7 @@ export default [
                     (helper.hasOpenSlot(items) || helper.hasSmallItem(items)) &&
                     !hasDetection(items),
                 then: () =>
-                    new Fact(topics.configurableEffect, "need detection"),
+                    new Fact(topics.configurableEffect, "need detection."),
             }),
         ].map((rule) =>
             conditionalEveryIntervalSeconds(TIME_BETWEEN_REMINDERS, rule)

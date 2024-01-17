@@ -55,7 +55,7 @@ describe("tp reminder reminder", () => {
                 usedTP
             );
 
-            expect(after60Sec).toContainAudioEffect("Buy a TP");
+            expect(after60Sec).toContainAudioEffect("Buy a TP.");
         });
     });
 });

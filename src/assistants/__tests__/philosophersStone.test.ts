@@ -94,7 +94,7 @@ describe("philosophers stone assistant, in game", () => {
             });
             test("reminds", () => {
                 expect(deadSeenStoneBeforeState).toContainAudioEffect(
-                    "you can hold the philosopher's stone"
+                    "you can hold the philosopher's stone."
                 );
             });
             describe("still dead but we have already reminded about the stone", () => {
@@ -144,7 +144,7 @@ describe("philosophers stone assistant, in game", () => {
                             ]
                         );
                         expect(result).toContainAudioEffect(
-                            "you can return the philosopher's stone"
+                            "you can return the philosopher's stone."
                         );
                     });
                 });

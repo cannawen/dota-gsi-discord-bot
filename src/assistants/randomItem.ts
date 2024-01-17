@@ -41,7 +41,7 @@ export default configurable(
                 const randomIndex = Math.floor(Math.random() * items.length);
                 return new Fact(
                     topics.configurableEffect,
-                    `Buy a ${items[randomIndex][0]}`
+                    `Buy a ${items[randomIndex][0]}.`
                 );
             }
             const cost = randomItemCost(message);
@@ -56,7 +56,7 @@ export default configurable(
             const randomIndex = Math.floor(Math.random() * closestItems.length);
             return new Fact(
                 topics.configurableEffect,
-                `Buy a ${closestItems[randomIndex][0]}`
+                `Buy a ${closestItems[randomIndex][0]}.`
             );
         },
     })

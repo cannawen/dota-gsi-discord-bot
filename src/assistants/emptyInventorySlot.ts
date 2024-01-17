@@ -37,7 +37,7 @@ export default [
         when: ([items]) =>
             usableItemInBackpack(items) && helper.hasOpenSlot(items),
         then: () =>
-            new Fact(topics.configurableEffect, "move item to inventory"),
+            new Fact(topics.configurableEffect, "move item to inventory."),
     }),
 ]
     .map((rule) =>

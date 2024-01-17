@@ -212,7 +212,7 @@ describe("gold reminder", () => {
                         ...params,
                         gold: 1500,
                     });
-                    expect(results).toContainAudioEffect("spend gold");
+                    expect(results).toContainAudioEffect("spend gold.");
                 });
             });
             describe("2500 gold over", () => {
@@ -222,7 +222,7 @@ describe("gold reminder", () => {
                         gold: 2500,
                     });
                     expect(results).toContainAudioEffect(
-                        "you have a lot of gold"
+                        "you have a lot of gold."
                     );
                 });
             });
@@ -233,7 +233,7 @@ describe("gold reminder", () => {
                         gold: 2501,
                     });
                     expect(results).toContainAudioEffect(
-                        "you really have a lot of gold"
+                        "you really have a lot of gold."
                     );
                 });
             });
@@ -244,7 +244,7 @@ describe("gold reminder", () => {
                         gold: 3501,
                     });
                     expect(results).toContainAudioEffect(
-                        "you have an insane amount of gold. please stop what you are doing and spend it now"
+                        "you have an insane amount of gold. please stop what you are doing and spend it now."
                     );
                 });
             });
