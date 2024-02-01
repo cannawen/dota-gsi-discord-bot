@@ -22,7 +22,7 @@ const JOKES = [
     "yo mama so fat, she can't fit in the rosh pit",
     "yo mama so fat, when she blinks it causes an echoslam",
     "yo mama so fat, black hole doesn't effect her",
-    "yo mama so fat, she it takes two force staffs to move her",
+    "yo mama so fat, it takes two force staffs to move her",
     "yo mama so fat, everybody builds phase boots",
     "yo mama so fat, when she gets chronosphered, void has to stand outside the chrono",
     "yo mama so fat, enemy scans are always red",
