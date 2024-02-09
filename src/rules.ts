@@ -11,6 +11,7 @@ const assistant = {
     bloodGrenade: "assistant-blood_grenade",
     buyback: "assistant-buyback",
     buyDetection: "assistant-buy_detection",
+    checkEnemyInventory: "assistant-check_enemy_inventory",
     cm20Talent: "assistant-cm-20-talent",
     emptyInventory: "assistant-empty_inventory",
     freeFortification: "assistant-free_fortification",
