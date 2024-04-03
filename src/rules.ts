@@ -17,7 +17,6 @@ const assistant = {
     glhf: "assistant-glhf",
     goldReminder: "assistant-gold",
     invoker: "assistant-invoker",
-    joke: "assistant-joke",
     lotus: "assistant-lotus",
     midas: "assistant-midas",
     neutralItemDigReminder: "assistant-neutral_item-dig",
