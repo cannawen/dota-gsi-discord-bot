@@ -2,7 +2,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
@@ -10,9 +9,11 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.invoker,
     "Invoker voice commands",
-    "Say the name of an invoker spell, and the bot will respond with the required orbs to invoke it",
+    `Say "invoke <spell name>", and the bot will respond with the required orbs to invoke it`,
     EffectConfig.NONE
 );
+
+const keywords = ["invoke", "invoker", "info"];
 
 export default [
     ["w w w", ["emp", "bmp"]],
@@ -40,15 +41,11 @@ export default [
         ([activeOrbs, regex]) =>
             new Rule({
                 label: `invoker spell ${activeOrbs}`,
-                trigger: [
-                    topics.lastDiscordUtterance,
-                    topics.allFriendlyHeroes,
-                ],
-                when: ([utterance, heroes]) =>
-                    heroes.includes("npc_dota_hero_invoker") &&
+                trigger: [topics.lastDiscordUtterance],
+                when: ([utterance]) =>
                     utterance.match(
                         new RegExp(
-                            `^(${
+                            `^((${keywords.join("|")}) ${
                                 Array.isArray(regex) ? regex.join(")|(") : regex
                             })$`,
                             "i"
@@ -57,5 +54,4 @@ export default [
                 then: () => new Fact(topics.configurableEffect, activeOrbs),
             })
     )
-    .map(inRegularGame)
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
