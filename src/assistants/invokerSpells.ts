@@ -10,7 +10,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.invoker,
     "Invoker voice commands",
     `Say "invoke 'spell name'" (i.e. tornado), and the bot will respond with the required orbs to invoke it (q w w)`,
-    EffectConfig.NONE
+    EffectConfig.PUBLIC
 );
 
 const keywords = ["invoke", "invoker", "info"];
