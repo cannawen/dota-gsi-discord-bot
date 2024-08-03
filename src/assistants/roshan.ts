@@ -33,17 +33,12 @@ function dropString(roshDeaths: number[], daytime: boolean) {
     const numDeaths = roshDeaths.length;
     let dropString = "";
     if (numDeaths >= 1) {
-        dropString += " with ";
-        if (daytime === true) {
-            dropString += "banner";
-        } else {
-            dropString += "cheese";
-        }
+        dropString += " with banner";
     }
     if (numDeaths >= 2) {
         dropString += " and ";
         if (daytime === true) {
-            dropString += "refresher";
+            dropString += "refresher and cheese";
         } else {
             dropString += "aghanim's";
         }
