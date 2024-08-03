@@ -28,12 +28,12 @@
         "item_pupils_gift",
         "item_ring_of_aquila",
         "item_specialists_array",
-        "item_vambrace",
         "item_orb_of_destruction",
         "item_vampire_fangs",
         "item_gossamer_cape",
         "item_light_collector",
-        "item_whisper_of_the_dread"
+        "item_whisper_of_the_dread",
+        "item_iron_talon"
     ],
     "3": [
         "item_black_powder_bag",
@@ -41,7 +41,6 @@
         "item_cloak_of_flames",
         "item_elven_tunic",
         "item_enchanted_quiver",
-        "item_ogre_seal_totem",
         "item_paladin_sword",
         "item_psychic_headband",
         "item_quickening_charm",
@@ -51,7 +50,8 @@
         "item_vindicators_axe",
         "item_doubloon",
         "item_nemesis_curse",
-        "item_craggy_coat"
+        "item_craggy_coat",
+        "item_vambrace"
     ],
     "4": [
         "item_mind_breaker",
@@ -69,7 +69,8 @@
         "item_martyrs_plate",
         "item_ancient_guardian",
         "item_avians_feather",
-        "item_rattlecage"
+        "item_rattlecage",
+        "item_ogre_seal_totem"
     ],
     "5": [
         "item_apex",
