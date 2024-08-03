@@ -23,7 +23,6 @@ const assistant = {
     neutralItemReminder: "assistant-neutral_item",
     newNeutralTokens: "assistant-new_neutral_tokens",
     pause: "assistant-pause",
-    philosophersStone: "assistant-neutral_item-philosophers_stone_when_dead",
     randomItem: "assistant-random_item_suggestion",
     roshan: "assistant-roshan",
     runeBounty: "assistant-rune_bounty",
