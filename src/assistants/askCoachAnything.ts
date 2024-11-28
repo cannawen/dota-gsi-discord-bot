@@ -37,7 +37,7 @@ function handleQuestion(question: string, studentId: string) {
                 },
                 { role: "user", content: question },
             ],
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
         })
         .then((completion) => {
             const answer = completion.choices[0].message.content;
