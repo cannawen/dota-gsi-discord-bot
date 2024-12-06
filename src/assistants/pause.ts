@@ -10,7 +10,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.pause,
     "Pause",
-    "Plays Jeopardy music while paused",
+    "Plays music while paused",
     EffectConfig.PUBLIC_INTERRUPTING
 );
 
@@ -18,13 +18,13 @@ export default configurable(
     configInfo.ruleIndentifier,
     inGame(
         new Rule({
-            label: "play jepoardy when paused",
+            label: "play music when paused",
             trigger: [topics.paused],
             then: ([paused]) => {
                 if (paused) {
                     return new Fact(
                         topics.configurableEffect,
-                        "resources/audio/jeopardy.mp3"
+                        "resources/audio/silent-night.mp3"
                     );
                 } else {
                     return new Fact(topics.stopAudio, true);
