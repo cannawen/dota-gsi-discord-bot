@@ -8,7 +8,7 @@ let openAi: OpenAI | undefined;
 
 try {
     openAi = new OpenAI({ apiKey: process.env.CHATGPT_SECRET_KEY });
-} catch (e) {}
+} catch (e) { }
 
 const TTS_DIRECTORY = "resources/audio/tts-cache";
 if (!fs.existsSync(TTS_DIRECTORY)) {
@@ -45,7 +45,7 @@ function googleCreate(ttsString: string): Promise<void> {
 function create(ttsString: string): Promise<void> {
     log.verbose("effect", "Processing TTS string '%s'", ttsString);
 
-    return (openAi ? openAiCreate(ttsString) : googleCreate(ttsString))
+    return (/*openAi ? openAiCreate(ttsString) : */ googleCreate(ttsString))
         .then(() => {
             log.verbose(
                 "effect",
