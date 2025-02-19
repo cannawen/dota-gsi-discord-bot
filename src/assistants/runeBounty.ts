@@ -11,11 +11,11 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.runeBounty,
     "Bounty rune",
-    "Reminds you of bounty rune spawn every 3:00",
+    "Reminds you of bounty rune spawn every 4:00",
     EffectConfig.NONE
 );
 
-const BOUNTY_RUNE_SPAWN_INTERVAL = 3 * 60;
+const BOUNTY_RUNE_SPAWN_INTERVAL = 4 * 60;
 const BOUNTY_RUNE_START_REMINDING_TIME = BOUNTY_RUNE_SPAWN_INTERVAL;
 
 export default [

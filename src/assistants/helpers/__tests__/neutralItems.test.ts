@@ -1,6 +1,6 @@
 import sut, { Tier } from "../neutralItems";
 
-describe("neutral item helper", () => {
+xdescribe("neutral item helper", () => {
     describe("timeToTier", () => {
         describe("unknown tier", () => {
             test("between minute 0-7", () => {

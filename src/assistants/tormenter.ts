@@ -11,13 +11,13 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.tormenter,
     "Tormenter",
-    "Reminds you of tormenter spawn at 20:00",
+    "Reminds you of tormenter spawn at 15:00",
     EffectConfig.PUBLIC
 );
 
 export default [
     atMinute(
-        20,
+        15,
         new Rule({
             label: rules.assistant.tormenter,
             then: () => new Fact(topics.configurableEffect, "tormenter's up."),

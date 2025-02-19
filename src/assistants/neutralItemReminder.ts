@@ -13,24 +13,20 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.neutralItemReminder,
     "Neutral item reminder",
-    "Reminds you to pick up a neutral item (after 12:30) or to upgrade your neutral item if your current item is out of date",
+    "Reminds you to pick up a neutral item (after 7:30)",
     EffectConfig.PRIVATE
 );
 
 const TIME_BETWEEN_REMINDERS = 120;
-const NEUTRAL_ITEM_REMINDER_START_TIME = 10 * 60 + 30;
+const NEUTRAL_ITEM_REMINDER_START_TIME = 5 * 60 + 30;
 
 export default [
     new Rule({
-        label: "reminder to take or upgrade neutral item",
-        trigger: [topics.items, topics.time],
-        when: ([items, time]) =>
-            !helper.isItemAppropriateForTime(items.neutral?.id, time),
-        then: ([items]) => {
-            const audio = items.neutral
-                ? "you should upgrade your neutral item."
-                : "you do not have a neutral item.";
-            return [new Fact(topics.configurableEffect, audio)];
+        label: "reminder to take or neutral item",
+        trigger: [topics.items],
+        when: ([items]) => items.neutral?.id === undefined,
+        then: ([_]) => {
+            return [new Fact(topics.configurableEffect, "you do not have a neutral item.")];
         },
     }),
 ]

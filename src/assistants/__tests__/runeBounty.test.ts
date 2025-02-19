@@ -32,12 +32,12 @@ describe("bounty runes, in game", () => {
         });
     });
     describe("plays rune sound", () => {
-        test("3 min", () => {
+        test("4 min", () => {
             const results = getResults(
                 rule,
                 {
                     ...params,
-                    time: 3 * 60,
+                    time: 4 * 60,
                 },
                 initial
             );

@@ -11,8 +11,8 @@ import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.newNeutralTokens,
-    "New neutral tokens",
-    "Reminds you when new neutral tokens are spawning",
+    "Madstone cap increase",
+    "Reminds you when Madstone cap is increased",
     EffectConfig.PUBLIC
 );
 
@@ -23,11 +23,11 @@ export default helper.tierTimeInfo
             configurable(
                 configInfo.ruleIndentifier,
                 new Rule({
-                    label: "reminder that new neutral tokens are out",
+                    label: "reminder that Madstone cap is increased",
                     then: () =>
                         new Fact(
                             topics.configurableEffect,
-                            "new neutral tokens."
+                            "Madstone cap increased."
                         ),
                 })
             )

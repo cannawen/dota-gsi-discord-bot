@@ -11,7 +11,7 @@ export const enum Tier {
     UNUSED_TOKEN = 6,
 }
 
-const tierTimeInfo = [7, 17, 27, 37, 60];
+const tierTimeInfo = [5, 15, 25, 35, 60, 70];
 
 const tierToNameObject = JSON.parse(
     fs.readFileSync(
@@ -42,24 +42,6 @@ function nameToTier(name: string): Tier {
     return nameToTierObject[name] || Tier.UNKNOWN;
 }
 
-function isItemAppropriateForTime(id: string | undefined, time: number) {
-    // Having no neutral item is never appropriate
-    if (id === undefined) {
-        return false;
-    }
-    const itemTier = nameToTier(id);
-    // Having an unused token is never appropriate
-    if (itemTier === Tier.UNUSED_TOKEN) {
-        return false;
-    }
-    // Unknown tier item token is always appropriate (neutral item not categorized yet)
-    if (itemTier === Tier.UNKNOWN) {
-        return true;
-    }
-    // Appropriate item when matching time tier
-    return itemTier >= timeToTier(time);
-}
-
 function isNeutralItem(name: string) {
     return nameToTier(name) !== Tier.UNKNOWN;
 }
@@ -68,6 +50,5 @@ export default {
     tierTimeInfo,
     nameToTier,
     timeToTier,
-    isItemAppropriateForTime,
     isNeutralItem,
 };
