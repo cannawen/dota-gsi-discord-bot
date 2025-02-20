@@ -15,7 +15,7 @@ export const configInfo = new ConfigInfo(
     rules.assistant.runeWisdomScan,
     "Wisdom shrine scan",
     `Reminds you to scan on wisdom shrine ${WISDOM_SHRINE_SCAN_WARNING_TIME} seconds before spawn`,
-    EffectConfig.PUBLIC
+    EffectConfig.NONE
 );
 
 export default [
