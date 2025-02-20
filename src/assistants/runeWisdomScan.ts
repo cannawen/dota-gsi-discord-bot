@@ -8,26 +8,26 @@ import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";
 
-const WISDOM_RUNE_INTERVAL = 7 * 60;
-const WISDOM_RUNE_SCAN_WARNING_TIME = 8;
+const WISDOM_SHRINE_INTERVAL = 7 * 60;
+const WISDOM_SHRINE_SCAN_WARNING_TIME = 8;
 
 export const configInfo = new ConfigInfo(
     rules.assistant.runeWisdomScan,
-    "Wisdom rune scan",
-    `Reminds you to scan for wisdom rune ${WISDOM_RUNE_SCAN_WARNING_TIME} seconds before spawn`,
+    "Wisdom shrine scan",
+    `Reminds you to scan on wisdom shrine ${WISDOM_SHRINE_SCAN_WARNING_TIME} seconds before spawn`,
     EffectConfig.PUBLIC
 );
 
 export default [
     everyIntervalSeconds(
-        WISDOM_RUNE_INTERVAL - WISDOM_RUNE_SCAN_WARNING_TIME,
+        WISDOM_SHRINE_INTERVAL - WISDOM_SHRINE_SCAN_WARNING_TIME,
         undefined,
-        WISDOM_RUNE_INTERVAL,
+        WISDOM_SHRINE_INTERVAL,
         new Rule({
-            label: `reminder to scan wisdom rune ${WISDOM_RUNE_SCAN_WARNING_TIME} seconds prior`,
+            label: `reminder to scan wisdom shrine ${WISDOM_SHRINE_SCAN_WARNING_TIME} seconds prior`,
             trigger: [topics.time],
             then: () =>
-                new Fact(topics.configurableEffect, "scan for wisdom rune."),
+                new Fact(topics.configurableEffect, "scan on wisdom shrine."),
         })
     ),
 ]

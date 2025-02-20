@@ -10,22 +10,22 @@ import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.runeWisdom,
-    "Wisdom rune",
-    'Reminds you of wisdom rune every 7:00 starting at 6:30. Responds to voice command "next wisdom rune"',
+    "Wisdom shrine",
+    'Reminds you of wisdom shrine every 7:00 starting at 6:30. Responds to voice command "next wisdom shrine"',
     EffectConfig.PUBLIC
 );
 
-const WISDOM_RUNE_SAPWN_MINUTES = 7;
-const WISDOM_RUNE_SPAWN_SECONDS = WISDOM_RUNE_SAPWN_MINUTES * 60;
-const WISDOM_RUNE_START_WARNING_TIME = WISDOM_RUNE_SPAWN_SECONDS - 30;
+const WISDOM_SHRINE_SAPWN_MINUTES = 7;
+const WISDOM_SHRINE_SPAWN_SECONDS = WISDOM_SHRINE_SAPWN_MINUTES * 60;
+const WISDOM_SHRINE_START_WARNING_TIME = WISDOM_SHRINE_SPAWN_SECONDS - 30;
 
 export default [
     everyIntervalSeconds(
-        WISDOM_RUNE_START_WARNING_TIME,
+        WISDOM_SHRINE_START_WARNING_TIME,
         undefined,
-        WISDOM_RUNE_SPAWN_SECONDS,
+        WISDOM_SHRINE_SPAWN_SECONDS,
         new Rule({
-            label: "wisdom rune soon reminder every 7:00",
+            label: "wisdom shrine soon reminder every 7:00",
             trigger: [topics.time],
             given: [topics.allEnemyHeroes],
             then: (_, [enemyHeroes]) =>
@@ -34,13 +34,13 @@ export default [
                     enemyHeroes.find(
                         (heroId: string) => heroId === "npc_dota_hero_furion"
                     )
-                        ? "wisdom rune soon. care natures TP."
-                        : "wisdom rune soon."
+                        ? "wisdom shrine soon. care natures TP."
+                        : "wisdom shrine soon."
                 ),
         })
     ),
     new Rule({
-        label: "next wisdom rune voice command",
+        label: "next wisdom shrine voice command",
         trigger: [topics.lastDiscordUtterance],
         given: [topics.time],
         when: ([utterance]) =>
@@ -48,9 +48,8 @@ export default [
         then: (_, [time]) =>
             new Fact(
                 topics.configurableEffect,
-                `${
-                    Math.ceil(time / WISDOM_RUNE_SPAWN_SECONDS) *
-                    WISDOM_RUNE_SAPWN_MINUTES
+                `${Math.ceil(time / WISDOM_SHRINE_SPAWN_SECONDS) *
+                WISDOM_SHRINE_SAPWN_MINUTES
                 } minutes.`
             ),
     }),
