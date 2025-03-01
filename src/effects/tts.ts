@@ -45,7 +45,7 @@ function googleCreate(ttsString: string): Promise<void> {
 function create(ttsString: string): Promise<void> {
     log.verbose("effect", "Processing TTS string '%s'", ttsString);
 
-    return (openAi ? openAiCreate(ttsString) : googleCreate(ttsString))
+    return (openAi ? openAiCreate(ttsString).catch((e) => googleCreate(ttsString)) : googleCreate(ttsString))
         .then(() => {
             log.verbose(
                 "effect",
