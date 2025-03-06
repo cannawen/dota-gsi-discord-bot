@@ -10,22 +10,22 @@ export const configInfo = new ConfigInfo(
     rules.assistant.invoker,
     "Invoker voice commands",
     `Say "invoke 'spell name'" (i.e. tornado), and the bot will respond with the required orbs to invoke it (q w w)`,
-    EffectConfig.PUBLIC
+    EffectConfig.NONE
 );
 
 const keywords = ["invoke", "invoker", "info"];
 
 export default [
-    ["w w w", ["emp", "bmp"]],
-    ["q w w", "tornado"],
-    ["w w e", "alacrity"],
-    ["q q w", "ghost walk"],
-    ["q w e", "deafening blast"],
-    ["w! e! e", ["chaos meteor", "meteor"]],
-    ["q q q", ["cold snap", "code snap"]],
-    ["q q e", "ice wall"],
+    ["W. W. W.", ["emp", "bmp"]],
+    ["Q. W. W.", "tornado"],
+    ["W. W. E.", "alacrity"],
+    ["Q. Q. W.", "ghost walk"],
+    ["Q. W. E.", "deafening blast"],
+    ["W. E. E.", ["chaos meteor", "meteor"]],
+    ["Q. Q. Q.", ["cold snap", "code snap"]],
+    ["Q. Q. E.", "ice wall"],
     [
-        "q! e! e",
+        "Q. E. E.",
         [
             "forge spirits?",
             "forest spirits?",
@@ -35,7 +35,7 @@ export default [
             "porch spirits",
         ],
     ],
-    ["e! e! e", ["sun strike", "cataclysm", "send straight", "sunstroke"]],
+    ["E. E. E.", ["sun ?strike", "cataclysm", "send straight", "sunstroke", "some strike"]],
 ]
     .map(
         ([activeOrbs, regex]) =>
