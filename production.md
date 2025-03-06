@@ -1,8 +1,13 @@
 # Production
 
--   Deployed daily at 7am UTC via Github Action
+## Docker
+-   Builds docker image via GitHub Actions every time `master` is pushed
 
-## Useful fly commands
+## fly.io
+
+-   Deployed daily at 7am UTC via GitHub Actions
+
+### Useful fly commands
 
 -   `fly deploy`
 -   `fly apps restart dota-coach`
