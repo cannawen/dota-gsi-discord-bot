@@ -8,16 +8,16 @@ import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.invoker,
-    "Invoker voice commands (BETA)",
+    "Invoker voice commands",
     `Say "invoke 'spell name'" (i.e. tornado), and the bot will respond with the required orbs to invoke it (q w w)`,
-    EffectConfig.NONE
+    EffectConfig.PUBLIC
 );
 
 const keywords = ["invoke", "invoker", "info"];
 
-const W = "double you,";
-const Q = "cue,";
-const E = "E,";
+const Q = "Q";
+const W = "W";
+const E = "E";
 
 const invokerSpells: Array<[string[], string|string[]]> = [
     [[W, W, W], ["emp", "bmp"]],
@@ -43,11 +43,10 @@ const invokerSpells: Array<[string[], string|string[]]> = [
 ];
 
 export default invokerSpells
-    .map(([activeOrbs, regex]) => [activeOrbs.join(" "), regex]) 
     .map(
         ([activeOrbs, regex]) =>
             new Rule({
-                label: `invoker spell ${activeOrbs}`,
+                label: `invoker spell ${activeOrbs.join(" ")}`,
                 trigger: [topics.lastDiscordUtterance],
                 when: ([utterance]) =>
                     utterance.match(
@@ -58,7 +57,7 @@ export default invokerSpells
                             "i"
                         )
                     ),
-                then: () => new Fact(topics.configurableEffect, activeOrbs),
+                then: () => activeOrbs.map(orb => new Fact(topics.configurableEffect, orb)),
             })
     )
     .map((rule) => configurable(configInfo.ruleIndentifier, rule));
