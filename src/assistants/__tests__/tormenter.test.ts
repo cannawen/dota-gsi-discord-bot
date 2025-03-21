@@ -11,6 +11,10 @@ describe("tormenter", () => {
             time: 0,
         };
     });
+    test("warn at 14 minutes", () => {
+        const result = getResults(rule, { ...params, time: 14 * 60 });
+        expect(result).toContainAudioEffect("tormenter spawns soon.");
+    });
     test("warn at 15 minutes", () => {
         const result = getResults(rule, { ...params, time: 15 * 60 });
         expect(result).toContainAudioEffect("tormenter's up.");
