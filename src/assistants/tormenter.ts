@@ -20,14 +20,15 @@ export default [
         15,
         new Rule({
             label: rules.assistant.tormenter,
-            then: () => new Fact(topics.configurableEffect, "tormenter's up."),
+            then: () => new Fact(topics.configurableEffect, `tormenter's up.`),
         })
     ),
     atMinute(
         14,
         new Rule({
             label: rules.assistant.tormenter,
-            then: () => new Fact(topics.configurableEffect, "tormenter spawns soon."),
+            given: [topics.daytime],
+            then: (daytime) => new Fact(topics.configurableEffect, `tormenter spawns ${daytime ? "bottom" : "top"} in 1 minute.`),
         })
     ),
 ]
