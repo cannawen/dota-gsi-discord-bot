@@ -48,12 +48,12 @@ export default invokerSpells
             new Rule({
                 label: `invoker spell ${activeOrbs.join(" ")}`,
                 trigger: [topics.lastDiscordUtterance],
-                when: ([utterance]) =>
+                when: ([utterance]) => 
                     utterance.match(
                         new RegExp(
-                            `^((${keywords.join("|")}) ${
+                            `^(${keywords.join("|")}) ((${
                                 Array.isArray(regex) ? regex.join(")|(") : regex
-                            })$`,
+                            }))$`,
                             "i"
                         )
                     ),
