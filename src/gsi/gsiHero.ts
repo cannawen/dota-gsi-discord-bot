@@ -14,6 +14,8 @@ export default new Rule({
                 new Fact(topics.alive, hero.alive || false),
                 new Fact(topics.buybackCost, hero.buybackCost),
                 new Fact(topics.buybackCooldown, hero.buybackCooldown),
+                new Fact(topics.health, hero.health),
+                new Fact(topics.maxHealth, hero.maxHealth),
                 new Fact(topics.hero, hero.name),
                 new Fact(topics.level, hero.level),
                 new Fact(topics.mana, hero.mana),

@@ -35,6 +35,8 @@ const gsi = {
     alive: new Topic<boolean>("alive"),
     buybackCost: new Topic<number>("buybackCost"),
     buybackCooldown: new Topic<number>("buybackCooldown"),
+    health: new Topic<number>("health"),
+    maxHealth: new Topic<number>("maxHealth"),
     hero: new Topic<string>("hero"),
     level: new Topic<number>("level"),
     mana: new Topic<number>("mana"),
