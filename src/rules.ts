@@ -18,6 +18,7 @@ const assistant = {
     goldReminder: "assistant-gold",
     invoker: "assistant-invoker",
     lotus: "assistant-lotus",
+    manaDraught: "assistant-mana_draught",
     midas: "assistant-midas",
     neutralItemDigReminder: "assistant-neutral_item-dig",
     neutralItemReminder: "assistant-neutral_item",
