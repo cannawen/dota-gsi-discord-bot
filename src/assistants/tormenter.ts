@@ -11,20 +11,20 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.tormenter,
     "Tormenter",
-    "Reminds you of tormenter spawn at 14:00 and 15:00",
+    "Reminds you of tormenter spawn at 19:00 and 20:00",
     EffectConfig.PUBLIC
 );
 
 export default [
     atMinute(
-        15,
+        20,
         new Rule({
             label: rules.assistant.tormenter,
             then: () => new Fact(topics.configurableEffect, `tormenter's up.`),
         })
     ),
     atMinute(
-        14,
+        19,
         new Rule({
             label: rules.assistant.tormenter,
             given: [topics.daytime],
