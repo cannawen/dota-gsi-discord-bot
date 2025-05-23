@@ -11,12 +11,12 @@ describe("tormenter", () => {
             time: 0,
         };
     });
-    test("warn at 14 minutes", () => {
-        const result = getResults(rule, { ...params, time: 14 * 60 });
+    test("warn at 19 minutes", () => {
+        const result = getResults(rule, { ...params, time: 19 * 60 });
         expect(result).toContainAudioEffect("tormenter spawns bottom in 1 minute.");
     });
-    test("warn at 15 minutes", () => {
-        const result = getResults(rule, { ...params, time: 15 * 60 });
+    test("warn at 20 minutes", () => {
+        const result = getResults(rule, { ...params, time: 20 * 60 });
         expect(result).toContainAudioEffect("tormenter's up.");
     });
 });
