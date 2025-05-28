@@ -29,24 +29,14 @@ function isRoshStatusRequest(message: string) {
     return message.match(/^(what).{1,15}(status|timer?).{0,15}$/i) !== null;
 }
 
-function dropString(roshDeaths: number[], daytime: boolean) {
+function dropString(roshDeaths: number[]) {
     const numDeaths = roshDeaths.length;
     let dropString = "";
     if (numDeaths >= 1) {
-        dropString += " with "
-        if (daytime === true) {
-            dropString += "banner";
-        } else {
-            dropString += "cheese";
-        }
+        dropString += " with banner";
     }
     if (numDeaths >= 2) {
-        dropString += " and ";
-        if (daytime === true) {
-            dropString += "refresher";
-        } else {
-            dropString += "aghanim's";
-        }
+        dropString += " and cheese and refresher";
     }
     return dropString;
 }
@@ -63,8 +53,7 @@ function roshanMessage(
     switch (status) {
         case Status.ALIVE: {
             return `alive ${roshLocation}${dropString(
-                allRoshDeathTimes,
-                daytime
+                allRoshDeathTimes
             )}.`;
         }
         case Status.MAYBE_ALIVE:
