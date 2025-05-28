@@ -24,8 +24,8 @@
         <ol>
             <li>
                 <a
-                    href="https://discord.com/oauth2/authorize?client_id=DISCORD_APPLICATION_ID&permissions=36701184&scope=bot"
-                    >Add bot to your server</a
+                    href="https://discord.com/oauth2/authorize?client_id=DISCORD_APPLICATION_ID"
+                    >Add bot to your server or as an application</a
                 >
                 (or find a server that already has dota-coach added)
             </li>
@@ -140,6 +140,22 @@
                 work
             </li>
         </ul>
+        <h1>Uninstalling dota-coach</h1>
+        <ul>
+            <li>Remove bot from your discord server or discord applications</li>
+            <li>Open your Steam library</li>
+            <li>Right click Dota 2, click <b>Properties</b></li>
+            <li>Make sure you are on <b>General</b> on the left sidebar</li>
+            <li>Remove <b>-gamestateintegration</b> from the launch options (only if no other apps are using GSI)</li>
+            <li>Click on <b>Installed Files</b> on the left sidebar</li>
+            <li>
+                Click <b>Browse...</b> to open up the dota install folder in
+                your file explorer
+            </li>
+            <li>Navigate into the <b>game/dota/cfg/gamestate_integration</b> folder</li>
+            <li>Remove dota-coach's .cfg file from the folder</li>
+            <li>Restart Steam</li>
+        </ul>
         <h1>Isn't this cheating?</h1>
         This bot uses the official Dota 2 Gamestate Integration API. This is the
         same API that twitch streamers use for their overlays, and all the data
@@ -154,10 +170,10 @@
         <h1>Notes</h1>
         <ul>
             <li>
-                This bot is still in beta. A new version of the bot is deployed
-                daily at 5am Eastern, but occasional hotfixes may be pushed
-                throughout the day. If you are playing a game at this time, the
-                bot will restart and it may lead to unexpected behaviour
+                This bot is still in beta. New deploys may be pushed throughout
+                the day. If you are playing a game at this time, the bot will 
+                restart and it may lead to unexpected behaviour (i.e. the bot may 
+                have not noticed that Roshan died)
             </li>
             <li>
                 If two people use the /coachme command in the same voice
@@ -167,7 +183,8 @@
             </li>
             <li>
                 Turbo mode, custom games, or spectating a game will lead to
-                undefined behaviour. Would not recommend.
+                undefined behaviour. You can move the bot to a separate channel
+                to stop it from auto-connecting to your discord.
             </li>
             <li>
                 If you have private discord voice channels you would like to
