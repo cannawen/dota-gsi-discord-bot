@@ -13,7 +13,7 @@ import topics from "../topics";
 export const configInfo = new ConfigInfo(
     rules.assistant.neutralItemReminder,
     "Neutral item reminder",
-    "Reminds you to pick up a neutral item (after 7:30)",
+    "Reminds you to get a neutral item (after 7:30)",
     EffectConfig.PRIVATE
 );
 
@@ -22,7 +22,7 @@ const NEUTRAL_ITEM_REMINDER_START_TIME = 5 * 60 + 30;
 
 export default [
     new Rule({
-        label: "reminder to take or neutral item",
+        label: "reminder pick a neutral item",
         trigger: [topics.items],
         when: ([items]) => items.neutral?.id === undefined,
         then: ([_]) => {

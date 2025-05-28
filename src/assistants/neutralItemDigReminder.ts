@@ -11,14 +11,14 @@ import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
     rules.assistant.neutralItemDigReminder,
-    "Neutral item dig reminder",
-    "Reminds you to use your Trust Shovel or Pirate Hat",
+    "Neutral item dig reminder (Deprecated)",
+    "Reminds you to use your Trust Shovel",
     EffectConfig.PRIVATE
 );
 
 const TIME_BETWEEN_REMINDERS = 15;
 
-export default ["item_trusty_shovel", "item_pirate_hat"]
+export default ["item_trusty_shovel"]
     .map(
         (itemId) =>
             new Rule({

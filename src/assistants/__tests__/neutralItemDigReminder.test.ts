@@ -21,14 +21,6 @@ const TRUSTY_SHOVEL = new PlayerItems(
     new Item("item_trusty_shovel", "Trusty Shovel", undefined, undefined, true)
 );
 
-const PIRATE_HAT = new PlayerItems(
-    [],
-    [],
-    [],
-    null,
-    new Item("item_pirate_hat", "Pirate Hat", undefined, undefined, true)
-);
-
 const SHOVEL_ON_COOLDOWN = new PlayerItems(
     [],
     [],
@@ -145,18 +137,6 @@ describe("neutral item dig reminder", () => {
                             {
                                 ...params,
                                 items: SHOVEL_READY_IN_BACKPACK,
-                                time: 115,
-                            },
-                            seenShovelState
-                        );
-                        expect(resultAfter15Sec).toContainAudioEffect("dig.");
-                    });
-                    test("pirate hat in neutral slot", () => {
-                        const resultAfter15Sec = getResults(
-                            neutralItemRule,
-                            {
-                                ...params,
-                                items: PIRATE_HAT,
                                 time: 115,
                             },
                             seenShovelState
