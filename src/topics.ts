@@ -47,9 +47,8 @@ const gsi = {
     // map
     customGameName: new Topic<string>("customGameName"),
     daytime: new Topic<boolean>("daytime"),
-    inGame: new PersistentTopic<boolean>("inGame", {
-        persistAcrossGames: true,
-    }),
+    inGame: new PersistentTopic<boolean>("inGame"),
+    preGame: new PersistentTopic<boolean>("preGame"),
     time: new Topic<number>("time"),
     paused: new Topic<boolean>("paused"),
     // map + minimap
