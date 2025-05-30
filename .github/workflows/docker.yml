@@ -84,5 +84,5 @@ jobs:
               --azure-file-volume-account-name ${{ secrets.ACI_STORAGE_ACCOUNT_NAME }} \
               --azure-file-volume-account-key ${{ secrets.STORAGE_KEY }} \
               --azure-file-volume-mount-path ${{ secrets.MOUNT_PATH }} \
-              --environment-variables SERVER_URL='http://dotacoach.eastus.azurecontainer.io:8080' PORT='8080' HOST='0.0.0.0' GIT_REVISION=GITHUB_SHA PERSISTENCE_DATA_PATH=${{ secrets.MOUNT_PATH }} GSI_VERSION_STRING='v1' STUDENT_ID_HASH_PRIVATE_KEY='${{ secrets.STUDENT_ID_HASH_PRIVATE_KEY }}' DISCORD_APPLICATION_ID='${{ secrets.DISCORD_APPLICATION_ID }}' DISCORD_BOT_TOKEN='${{ secrets.DISCORD_BOT_TOKEN }}' MIXPANEL_PROJECT_TOKEN='${{ secrets.MIXPANEL_PROJECT_TOKEN }}' CHATGPT_SECRET_KEY='${{ secrets.CHATGPT_SECRET_KEY }}'
+              --environment-variables SERVER_URL='http://dotacoach.eastus.azurecontainer.io:8080' PORT='8080' HOST='0.0.0.0' GIT_REVISION=${{ github.sha }} PERSISTENCE_DATA_PATH=${{ secrets.MOUNT_PATH }} GSI_VERSION_STRING='v1' STUDENT_ID_HASH_PRIVATE_KEY='${{ secrets.STUDENT_ID_HASH_PRIVATE_KEY }}' DISCORD_APPLICATION_ID='${{ secrets.DISCORD_APPLICATION_ID }}' DISCORD_BOT_TOKEN='${{ secrets.DISCORD_BOT_TOKEN }}' MIXPANEL_PROJECT_TOKEN='${{ secrets.MIXPANEL_PROJECT_TOKEN }}' CHATGPT_SECRET_KEY='${{ secrets.CHATGPT_SECRET_KEY }}'
 
