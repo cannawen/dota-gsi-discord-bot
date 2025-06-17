@@ -1,6 +1,72 @@
 <html>
     <head>
         <title>Private Coaching</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 20px;
+                transition: background-color 0.3s ease, color 0.3s ease;
+                min-height: 100vh;
+            }
+            
+            .light-mode {
+                background-color: white;
+                color: black;
+            }
+            
+            .dark-mode {
+                background-color: black;
+                color: white;
+            }
+            
+            .toggle-btn {
+                padding: 12px 24px;
+                font-size: 16px;
+                border: 2px solid;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                background: transparent;
+                font-weight: bold;
+            }
+            
+            .light-mode .toggle-btn {
+                border-color: black;
+                color: black;
+            }
+            
+            .light-mode .toggle-btn:hover {
+                background-color: black;
+                color: white;
+            }
+            
+            .dark-mode .toggle-btn {
+                border-color: white;
+                color: white;
+            }
+            
+            .dark-mode .toggle-btn:hover {
+                background-color: white;
+                color: black;
+            }
+            
+            .content {
+                max-width: 800px;
+                margin: 0 auto;
+                text-align: center;
+            }
+            
+            h1 {
+                margin-bottom: 30px;
+            }
+            
+            p {
+                font-size: 18px;
+                line-height: 1.6;
+                margin: 20px 0;
+            }
+        </style>
         <script>
             let timeoutId;
             let audioElement;
@@ -161,6 +227,30 @@
             function debug_playPrivateAudio() {
                 fetch("./debug_playPrivateAudio", { method: "POST" });
             }
+            let isDarkMode = false;
+        
+        function toggleNightMode() {
+            const body = document.body;
+            const button = document.querySelector('.toggle-btn');
+            
+            if (isDarkMode) {
+                // Switch to light mode
+                body.className = 'light-mode';
+                button.innerHTML = '🌙 Enable Night Mode';
+                isDarkMode = false;
+            } else {
+                // Switch to dark mode
+                body.className = 'dark-mode';
+                button.innerHTML = '☀️ Enable Day Mode';
+                isDarkMode = true;
+            }
+        }
+
+        // Set initial mode based on system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            toggleNightMode();
+        }
+        
         </script>
     </head>
     <body onload="onLoad()">
@@ -226,6 +316,8 @@
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
         <button onClick="skywrath()">Skywrath</button>
+        <br />
+        <button class="toggle-btn" onclick="toggleNightMode()">🌙 Enable Night Mode</button>
         <br />
         <button
             onClick="stopCoaching()"
