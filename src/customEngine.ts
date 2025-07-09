@@ -176,21 +176,21 @@ const engine = new CustomEngine();
 engine.register(
     new Rule({
         label: "engine/reset_state_across_game",
-        trigger: [topics.inGame, topics.studentId],
+        trigger: [topics.inGame, topics.preGame, topics.studentId],
         given: [topics.gsiEventsFromLiveGame],
-        then: ([inGame, studentId], [live]) => {
-            if (!inGame) {
+        then: ([inGame, preGame, studentId], [live]) => {
+            if (!inGame && !preGame) {
                 engine.getSession(studentId)?.clearFactsToPrepareForNewGame();
-            }
-
-            if (live) {
-                if (inGame) {
-                    analytics.trackStartGame(studentId);
-                } else {
+                
+                if (!live) {
                     // This is a bit sketchy because we start the coaching session with inGame being false
                     // During the drafting phase or pre 0 second horn so this isn't exactly tracking the end of game
                     analytics.trackEndGame(studentId);
                 }
+            }
+
+            if (live && preGame) {
+                analytics.trackStartGame(studentId);
             }
         },
     })
