@@ -70,18 +70,31 @@ function transcribeNetworkCall(
     });
 }
 
+const activeStreams = new Map<string, Voice.AudioReceiveStream>();
+
 function transcribe(
     receiver: Voice.VoiceReceiver,
     userId: string
 ): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
+        // Clean up any existing stream for this user
+        const existingStream = activeStreams.get(userId);
+        if (existingStream) {
+            existingStream.destroy();
+            activeStreams.delete(userId);
+        }
+
         const source = receiver.subscribe(userId, {
             end: {
                 behavior: Voice.EndBehaviorType.AfterSilence,
                 duration: 300,
             },
         });
-        setTimeout(() => {
+        
+        // Track this stream
+        activeStreams.set(userId, source);
+
+        const timeout = setTimeout(() => {
             source.destroy(
                 new Error(`${userId.substring(0, 10)} talking for too long`)
             );
@@ -97,6 +110,11 @@ function transcribe(
         // https://github.com/discordjs/voice-examples/blob/main/recorder/src/createListeningStream.ts
         stream.pipeline(source, decoder, destination, (err) => {
             destination.close();
+            clearTimeout(timeout);
+            
+            // Clean up tracking
+            activeStreams.delete(userId);
+            
             if (err) {
                 reject(err);
             } else {
