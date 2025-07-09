@@ -1,5 +1,7 @@
 /* eslint-disable sort-keys */
 
+import regenReminder from "./assistants/regenReminder";
+
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 // NOTE: IF YOU CHANGE THESE STRINGS WITHOUT MIGRATION
@@ -26,6 +28,7 @@ const assistant = {
     pause: "assistant-pause",
     polliwogCharm: "assistant-polliwog_charm",
     randomHero: "assistant-random_hero",
+    regenReminder: "assistant-regen_reminder",
     roshan: "assistant-roshan",
     runeBounty: "assistant-rune_bounty",
     runePower: "assistant-rune_power",
