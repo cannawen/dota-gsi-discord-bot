@@ -40,6 +40,10 @@ export default class PlayerItems {
             .find((item) => item!.id === itemId);
     }
 
+    public hasItem(itemId: string): boolean {
+        return this.allItems().some((item) => item?.id === itemId);
+    }
+
     static create(items: DeepReadonly<gsi.IItemContainer>) {
         const inventoryAndBackpack = items.slot.map(Item.create);
         return new PlayerItems(
