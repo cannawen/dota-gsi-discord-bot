@@ -3,7 +3,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
