@@ -16,7 +16,7 @@ export const configInfo = new ConfigInfo(
     EffectConfig.NONE
 );
 
-const REGEN_REMINDER_INTERVAL = 45;
+const REGEN_REMINDER_INTERVAL = 60;
 const REGEN_REMINDER_STOP_TIME = 8 * 60
 
 function hasEnoughHealthRegen(items: PlayerItems): boolean {
