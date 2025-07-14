@@ -40,8 +40,12 @@ export default class PlayerItems {
             .find((item) => item!.id === itemId);
     }
 
+    /**
+     * Checks if the player has an item or any of its derivative items
+     * (i.e. "item_dagon_5" will match "item_dagon")
+     */
     public hasItem(itemId: string): boolean {
-        return this.allItems().some((item) => item?.id === itemId);
+        return this.allItems().some((item) => item?.id.includes(itemId));
     }
 
     static create(items: DeepReadonly<gsi.IItemContainer>) {

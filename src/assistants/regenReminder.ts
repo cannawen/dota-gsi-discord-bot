@@ -21,7 +21,7 @@ const REGEN_REMINDER_INTERVAL = 45;
 const REGEN_REMINDER_STOP_TIME = 8 * 60
 
 function hasEnoughHealthRegen(items: PlayerItems): boolean {
-    return ["item_bottle", "item_tango", "item_tango_single", "item_salve", "item_faerie_fire", "item_tranquil_boots"]
+    return ["item_bottle", "item_tango", "item_salve", "item_faerie_fire", "item_tranquil_boots"]
         .reduce((acc, itemId) => {
             return acc || items.hasItem(itemId);
         }, false);
