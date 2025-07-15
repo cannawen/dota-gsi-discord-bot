@@ -56,6 +56,22 @@
         <script>
             let timeoutId;
             let audioElement;
+            let isDarkMode = false;
+
+            function getCookie(cname) {
+                let name = cname + "=";
+                let ca = document.cookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                    let c = ca[i];
+                    while (c.charAt(0) == ' ') {
+                        c = c.substring(1);
+                    }
+                    if (c.indexOf(name) == 0) {
+                        return c.substring(name.length, c.length);
+                    }
+                }
+                return "";
+            }
 
             function pollAudio() {
                 return fetch("./poll/audio")
@@ -141,6 +157,9 @@
             }
 
             function onLoad() {
+                if (getCookie("isDarkMode") === "true") {
+                    toggleNightMode();
+                }
                 getConfig();
                 getDiscordEnabled();
             }
@@ -216,8 +235,6 @@
                 fetch("./debug_playPrivateAudio", { method: "POST" });
             }
 
-            let isDarkMode = false;
-            
             function toggleNightMode() {
                 const body = document.body;
                 const button = document.querySelector('.toggle-btn');
@@ -233,13 +250,10 @@
                     button.innerHTML = 'Enable Day Mode';
                     isDarkMode = true;
                 }
+
+                document.cookie = "isDarkMode=" + (isDarkMode ? 'true' : 'false') + ";Max-Age=34560000";
             }
 
-        // Set initial mode based on system preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            toggleNightMode();
-        }
-        
         </script>
     </head>
     <body onload="onLoad()">
