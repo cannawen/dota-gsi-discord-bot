@@ -41,6 +41,7 @@
         "mixpanel": "^0.17.0",
         "node-cron": "^3.0.2",
         "node-gsi": "github:cannawen/node-gsi#master",
+        "normalize.css": "^8.0.1",
         "openai": "^4.24.7",
         "opusscript": "^0.0.8",
         "prism-media": "^1.3.5",

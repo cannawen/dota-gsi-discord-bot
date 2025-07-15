@@ -19,36 +19,9 @@
                 background-color: black;
                 color: white;
             }
-            
-            .toggle-btn {
-                padding: 12px 24px;
-                font-size: 16px;
-                border: 2px solid;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                background: transparent;
-                font-weight: bold;
-            }
-            
-            .light-mode .toggle-btn {
-                border-color: black;
-                color: black;
-            }
-            
-            .light-mode .toggle-btn:hover {
-                background-color: black;
-                color: white;
-            }
-            
-            .dark-mode .toggle-btn {
-                border-color: white;
-                color: white;
-            }
-            
-            .dark-mode .toggle-btn:hover {
-                background-color: white;
-                color: black;
+
+            table {
+                color: #71797E;
             }
             
             .content {
@@ -65,6 +38,19 @@
                 font-size: 18px;
                 line-height: 1.6;
                 margin: 20px 0;
+            }
+
+            button {
+                background-color: #71797E;
+                border: none;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 10px;
+                text-align: center;
+                text-decoration: none;
+                display: inline-block;
+                font-size: 16px;
+                cursor: pointer;
             }
         </style>
         <script>
@@ -90,6 +76,7 @@
                         });
                     });
             }
+
             function pollConfig() {
                 return fetch("./poll/config")
                     .then((res) => res.json())
@@ -99,6 +86,7 @@
                         }
                     });
             }
+
             function pollRoshan() {
                 return fetch("./poll/roshan")
                     .then((res) => res.json())
@@ -227,24 +215,25 @@
             function debug_playPrivateAudio() {
                 fetch("./debug_playPrivateAudio", { method: "POST" });
             }
+
             let isDarkMode = false;
-        
-        function toggleNightMode() {
-            const body = document.body;
-            const button = document.querySelector('.toggle-btn');
             
-            if (isDarkMode) {
-                // Switch to light mode
-                body.className = 'light-mode';
-                button.innerHTML = '🌙 Enable Night Mode';
-                isDarkMode = false;
-            } else {
-                // Switch to dark mode
-                body.className = 'dark-mode';
-                button.innerHTML = '☀️ Enable Day Mode';
-                isDarkMode = true;
+            function toggleNightMode() {
+                const body = document.body;
+                const button = document.querySelector('.toggle-btn');
+                
+                if (isDarkMode) {
+                    // Switch to light mode
+                    body.className = 'light-mode';
+                    button.innerHTML = 'Enable Night Mode';
+                    isDarkMode = false;
+                } else {
+                    // Switch to dark mode
+                    body.className = 'dark-mode';
+                    button.innerHTML = 'Enable Day Mode';
+                    isDarkMode = true;
+                }
             }
-        }
 
         // Set initial mode based on system preference
         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -316,8 +305,8 @@
         <button onClick="resetConfig()">Reset to default config</button>
         <button onClick="stopAudio()">Stop all audio</button>
         <button onClick="skywrath()">Skywrath</button>
+        <button class="toggle-btn" onclick="toggleNightMode()">Enable Night Mode</button>
         <br />
-        <button class="toggle-btn" onclick="toggleNightMode()">🌙 Enable Night Mode</button>
         <br />
         <button
             onClick="stopCoaching()"
