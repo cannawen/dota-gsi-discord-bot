@@ -1,7 +1,5 @@
 /* eslint-disable sort-keys */
 
-import regenReminder from "./assistants/regenReminder";
-
 // Cannot add a slash if we are sending the id over to front end
 // Due to network thinking the slash is the start of a new route
 // NOTE: IF YOU CHANGE THESE STRINGS WITHOUT MIGRATION
