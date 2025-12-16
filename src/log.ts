@@ -25,9 +25,10 @@ function padTo(msg: string, length: number, truncate: boolean) {
  * @param truncate boolean: should truncate?
  * @returns padded message
  */
-function padToWithColor(msg: string, length: number, truncate: boolean) {
-    const stripped = padTo(msg.stripColors, length, truncate);
-    return msg.slice(0, 5) + stripped + "".reset;
+function padToWithColor(msg: unknown, length: number, truncate: boolean) {
+    const stingMsg = msg as string;
+    const stripped = padTo(stingMsg.stripColors, length, truncate);
+    return stingMsg.slice(0, 5) + stripped + "".reset;
 }
 
 function printFormat(
@@ -36,6 +37,7 @@ function printFormat(
 ) {
     const levelLength = 5;
     const labelLength = 9;
+    // @ts-expect-error - timestamp type not properly inferred
     const out = `${info.timestamp.gray} ${
         padToWithColor(info.level, levelLength, true).stripColors
     } ${padToWithColor(info.label, labelLength, false)} ${info.message}${

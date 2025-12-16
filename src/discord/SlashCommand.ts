@@ -1,17 +1,17 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
-    SlashCommandBuilder,
+    SlashCommandOptionsOnlyBuilder,
 } from "discord.js";
 
 export class SlashCommand {
-    public data: SlashCommandBuilder;
+    public data: SlashCommandOptionsOnlyBuilder;
     public execute: (
         interaction: ChatInputCommandInteraction<CacheType>
     ) => void;
 
     constructor(
-        data: SlashCommandBuilder,
+        data: SlashCommandOptionsOnlyBuilder,
         execute: (interaction: ChatInputCommandInteraction<CacheType>) => void
     ) {
         this.data = data;
