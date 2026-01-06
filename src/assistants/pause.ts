@@ -24,7 +24,7 @@ export default configurable(
                 if (paused) {
                     return new Fact(
                         topics.configurableEffect,
-                        "resources/audio/silent-night.mp3"
+                        "resources/audio/jeopardy.mp3"
                     );
                 } else {
                     return new Fact(topics.stopAudio, true);
