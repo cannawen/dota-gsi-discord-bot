@@ -26,7 +26,7 @@ export default [
         trigger: [topics.items],
         when: ([items]) => items.neutral?.id === undefined,
         then: ([_]) => {
-            return [new Fact(topics.configurableEffect, "neutral.mp3")];
+            return [new Fact(topics.configurableEffect, "resources/audio/neutral.mp3")];
         },
     }),
 ]

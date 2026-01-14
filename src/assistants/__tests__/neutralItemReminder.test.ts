@@ -52,7 +52,7 @@ describe("neutralItemReminder", () => {
                 state
             );
             expect(result).toContainAudioEffect(
-                "neutral.mp3"
+                "resources/audio/neutral.mp3"
             );
             const result2 = getResults(
                 rule,
@@ -63,7 +63,7 @@ describe("neutralItemReminder", () => {
                 result
             );
             expect(result2).toContainAudioEffect(
-                "neutral.mp3"
+                "resources/audio/neutral.mp3"
             );
         });
     });
