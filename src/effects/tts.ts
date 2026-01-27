@@ -45,7 +45,9 @@ function googleCreate(ttsString: string): Promise<void> {
 function create(ttsString: string): Promise<void> {
     log.verbose("effect", "Processing TTS string '%s'", ttsString);
 
-    return (openAi ? openAiCreate(ttsString).catch((e) => googleCreate(ttsString)) : googleCreate(ttsString))
+    // Try using Google TTS to see if that fixes weird audio bugs
+    // return (openAi ? openAiCreate(ttsString).catch((e) => googleCreate(ttsString)) : googleCreate(ttsString))
+    return googleCreate(ttsString)
         .then(() => {
             log.verbose(
                 "effect",
