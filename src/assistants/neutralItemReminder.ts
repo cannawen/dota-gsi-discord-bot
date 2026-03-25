@@ -5,7 +5,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/neutralItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import topics from "../topics";

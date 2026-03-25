@@ -11,7 +11,7 @@ export const enum Tier {
     UNUSED_TOKEN = 6,
 }
 
-const tierTimeInfo = [5, 15, 25, 35, 60, 70];
+const tierTimeInfo = [15, 25, 35, 60, 70];
 
 const tierToNameObject = JSON.parse(
     fs.readFileSync(

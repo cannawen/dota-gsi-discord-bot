@@ -5,7 +5,6 @@ import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
 import helper from "./helpers/items";
 import inGame from "../engine/rules/inGame";
-import neutralHelpers from "./helpers/neutralItems";
 import PlayerItems from "../gsi-data-classes/PlayerItems";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -24,7 +23,6 @@ function usableItemInBackpack(items: PlayerItems): boolean {
     const itemsInBackpack = items.backpack.filter(
         (item) =>
             item !== null &&
-            !neutralHelpers.isNeutralItem(item.id) &&
             item.id.match(/recipe/) === null
     ).length;
     return itemsInBackpack > 0;
