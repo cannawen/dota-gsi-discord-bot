@@ -8,7 +8,7 @@ const params = {
     [rules.assistant.roshan]: "PUBLIC",
     inGame: true,
     time: 100,
-    daytime: true,
+    daytime: false,
     event: undefined,
     lastDiscordUtterance: "",
 };
@@ -28,7 +28,7 @@ describe("roshan", () => {
         test("bot should respond roshan is alive bottom during daytime", () => {
             const results = getResults(roshanRules, {
                 ...params,
-                daytime: true,
+                daytime: false,
                 lastDiscordUtterance: "What's roshan timer",
             });
             expect(results).toContainAudioEffect("alive bottom.");
@@ -36,7 +36,7 @@ describe("roshan", () => {
         test("bot should respond roshan is alive top during nightime", () => {
             const results = getResults(roshanRules, {
                 ...params,
-                daytime: false,
+                daytime: true,
                 lastDiscordUtterance: "What's roshan timer",
             });
             expect(results).toContainAudioEffect("alive top.");

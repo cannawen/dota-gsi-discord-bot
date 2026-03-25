@@ -29,7 +29,7 @@ export default [
             label: rules.assistant.tormenter,
             given: [topics.daytime],
             then: (_, [daytime]) => 
-                new Fact(topics.configurableEffect, `tormenter spawns ${daytime ? "bottom" : "top"} in 1 minute.`),
+                new Fact(topics.configurableEffect, `tormenter spawns ${daytime ? "top" : "bottom"} in 1 minute.`),
         })
     ),
 ]

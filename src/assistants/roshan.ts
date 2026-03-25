@@ -49,7 +49,7 @@ function roshanMessage(
 ) {
     const deathTime = allRoshDeathTimes.at(-1);
     const status = roshHelper.getStatus(inGame, currentTime, deathTime);
-    const roshLocation = daytime ? "bottom" : "top";
+    const roshLocation = daytime ? "top" : "bottom";
     switch (status) {
         case Status.ALIVE: {
             return `alive ${roshLocation}${dropString(
