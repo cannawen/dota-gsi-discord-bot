@@ -57,7 +57,7 @@ describe("client", () => {
                 content: expect.stringContaining(
                     "Unable to handle command unknown."
                 ),
-                ephemeral: true,
+                flags: 64,
             });
         });
     });

@@ -31,6 +31,15 @@ const discordjs = {
         ClientReady: "ClientReady",
         Error: "Error",
         InteractionCreate: "InteractionCreate",
+        VoiceStateUpdate: "VoiceStateUpdate",
+    },
+    GatewayIntentBits: {
+        Guilds: 1,
+        GuildVoiceStates: 128,
+        GuildMembers: 2,
+    },
+    MessageFlags: {
+        Ephemeral: 64,
     },
     // Pretty unhappy with how we are mocking this builder
     // The addStringOption function doesn't even return a SlashCommandBuilder which is pretty sketch of the library
