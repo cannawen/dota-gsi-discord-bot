@@ -2,6 +2,7 @@ import {
     CacheType,
     ChatInputCommandInteraction,
     GuildMember,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import engine from "../../customEngine";
@@ -34,7 +35,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     );
     interaction.reply({
         content: message,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

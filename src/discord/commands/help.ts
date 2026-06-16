@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import { SlashCommand } from "../SlashCommand";
@@ -12,7 +13,7 @@ const data = new SlashCommandBuilder()
 function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
         content: `See ${process.env.SERVER_URL}/instructions for setup instructions and links to the source code and Discord community if you have any questions. Use /feedback to let us know how we can improve!\n\nCurrently running version ${process.env.GIT_REVISION}.`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

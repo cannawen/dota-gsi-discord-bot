@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import engine from "../../customEngine";
@@ -16,12 +17,12 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
         engine.deleteSession(helpers.studentId(interaction));
         interaction.reply({
             content: `Goodbye! Let us know about your coaching experience with /feedback`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     } else {
         interaction.reply({
             content: `You are not currently in a coaching session.`,
-            ephemeral: true,
+            flags: MessageFlags.Ephemeral,
         });
     }
 }

@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import discordClient from "../discordClient";
@@ -25,7 +26,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     );
     interaction.reply({
         content: `Feedback has been sent. Check the discord to see a response! https://discord.gg/wQkkMJf7Aj`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

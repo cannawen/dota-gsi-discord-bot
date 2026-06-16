@@ -2,6 +2,7 @@ import {
     AttachmentBuilder,
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import fs from "fs";
@@ -54,7 +55,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     interaction.reply({
         files: [new AttachmentBuilder(configPath)],
         content: `See ${process.env.SERVER_URL}/instructions for how to set up the bot, using the provided configuration file`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

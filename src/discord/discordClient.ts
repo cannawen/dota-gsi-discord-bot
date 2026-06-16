@@ -1,4 +1,4 @@
-import Discord, { Events } from "discord.js";
+import Discord, { Events, GatewayIntentBits, MessageFlags } from "discord.js";
 import analytics from "../analytics/analytics";
 import commands from "./commands";
 import discordHelpers from "./discordHelpers";
@@ -12,8 +12,11 @@ dotenv.config();
 
 export class DiscordClient {
     private client = new Discord.Client({
-        // eslint-disable-next-line no-magic-numbers
-        intents: [131071],
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildVoiceStates,
+            GatewayIntentBits.GuildMembers,
+        ],
     });
 
     public start() {
@@ -119,7 +122,7 @@ export class DiscordClient {
                 );
                 interaction.reply({
                     content: `Unable to handle command ${commandName}. Please let us know you encountered this error with /feedback`,
-                    ephemeral: true,
+                    flags: MessageFlags.Ephemeral,
                 });
             }
         });

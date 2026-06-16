@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import analytics from "../../analytics/analytics";
@@ -35,7 +36,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     analytics.trackVoiceEnabled(studentId, allowed);
     interaction.reply({
         content: allowed ? "Voice commands enabled" : "Voice commands disabled",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

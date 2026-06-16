@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import engine from "../../customEngine";
@@ -24,7 +25,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     );
     interaction.reply({
         content: `Set ${interaction.guild?.name} to default autoconnect guild`,
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

@@ -1,6 +1,7 @@
 import {
     CacheType,
     ChatInputCommandInteraction,
+    MessageFlags,
     SlashCommandBuilder,
 } from "discord.js";
 import engine from "../../customEngine";
@@ -33,7 +34,7 @@ function execute(interaction: ChatInputCommandInteraction<CacheType>) {
     );
     interaction.reply({
         content: enabled ? "Autoconnect enabled" : "Autoconnect disabled",
-        ephemeral: true,
+        flags: MessageFlags.Ephemeral,
     });
 }
 

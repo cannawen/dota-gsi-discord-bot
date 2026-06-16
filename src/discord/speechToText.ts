@@ -77,11 +77,11 @@ function transcribe(
     userId: string
 ): Promise<string | undefined> {
     return new Promise((resolve, reject) => {
-        // Clean up any existing stream for this user
-        const existingStream = activeStreams.get(userId);
-        if (existingStream) {
-            existingStream.destroy();
-            activeStreams.delete(userId);
+        // Skip if already transcribing for this user — re-subscribing on the same
+        // AudioReceiveStream instance piles up "end" listeners and leaks memory
+        if (activeStreams.has(userId)) {
+            resolve(undefined);
+            return;
         }
 
         const source = receiver.subscribe(userId, {
