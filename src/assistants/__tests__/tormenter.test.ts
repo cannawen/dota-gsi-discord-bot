@@ -12,16 +12,16 @@ describe("tormenter", () => {
             time: 0,
         };
     });
-    test.only("warn at 19 minutes - day time means bottom", () => {
-        const result = getResults(rule, { ...params, daytime: false, time: 19 * 60 });
+    test.only("warn at 14 minutes - day time means bottom", () => {
+        const result = getResults(rule, { ...params, daytime: false, time: 14 * 60 });
         expect(result).toContainAudioEffect("tormenter spawns bottom in 1 minute.");
     });
-    test("warn at 19 minutes - night time means top", () => {
-        const result = getResults(rule, { ...params, daytime: true, time: 19 * 60 });
+    test("warn at 14 minutes - night time means top", () => {
+        const result = getResults(rule, { ...params, daytime: true, time: 14 * 60 });
         expect(result).toContainAudioEffect("tormenter spawns top in 1 minute.");
     });
-    test("warn at 20 minutes", () => {
-        const result = getResults(rule, { ...params, time: 20 * 60 });
+    test("warn at 15 minutes", () => {
+        const result = getResults(rule, { ...params, time: 15 * 60 });
         expect(result).toContainAudioEffect("tormenter's up.");
     });
 });

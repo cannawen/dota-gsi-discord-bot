@@ -2,7 +2,7 @@
 
 Use Dota 2's Game State Integration API to make helpful announcements in a discord voice channel (wisdom rune spawning, roshan timing, etc.). Guaranteed to raise your MMR by 3154 or your money back!
 
-Lastest update for dota patch: `7.41`
+Lastest update for dota patch: `7.42`
 
 ## Using the bot
 

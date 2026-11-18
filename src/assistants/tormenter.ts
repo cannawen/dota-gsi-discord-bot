@@ -17,14 +17,14 @@ export const configInfo = new ConfigInfo(
 
 export default [
     atMinute(
-        20,
+        15,
         new Rule({
             label: rules.assistant.tormenter,
             then: () => new Fact(topics.configurableEffect, `tormenter's up.`),
         })
     ),
     atMinute(
-        19,
+        14,
         new Rule({
             label: rules.assistant.tormenter,
             given: [topics.daytime],

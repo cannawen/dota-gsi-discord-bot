@@ -3,7 +3,6 @@ import ConfigInfo from "../ConfigInfo";
 import configurable from "../engine/rules/configurable";
 import EffectConfig from "../effects/EffectConfig";
 import Fact from "../engine/Fact";
-import helper from "./helpers/neutralItems";
 import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
@@ -16,7 +15,9 @@ export const configInfo = new ConfigInfo(
     EffectConfig.PUBLIC
 );
 
-export default helper.tierTimeInfo
+const tierTimeInfo = [15, 30, 50, 65];
+
+export default tierTimeInfo
     .map((time) =>
         atMinute(
             time,
