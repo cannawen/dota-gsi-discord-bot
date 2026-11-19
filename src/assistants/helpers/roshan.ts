@@ -9,15 +9,19 @@ const AEGIS_EXPIRY_TIME = 5 * 60;
 const MINIMUM_SPAWN_TIME = 8 * 60;
 const MAXIMUM_SPAWN_TIME = 11 * 60;
 
+function respawnTimerDecreaseSeconds(deathTimes: number[]) {
+    return Math.min(3, (deathTimes.length - 1)) * 60;
+}
+
 function aegisExpiryTime(deathTimes: number[]) {
     return deathTimes.at(-1)! + AEGIS_EXPIRY_TIME;
 }
 
 function minimuSpawnTime(deathTimes: number[]) {
-    return deathTimes.at(-1)! + MINIMUM_SPAWN_TIME;
+    return deathTimes.at(-1)! + MINIMUM_SPAWN_TIME - respawnTimerDecreaseSeconds(deathTimes);
 }
 function maximumSpawnTime(deathTimes: number[]) {
-    return deathTimes.at(-1)! + MAXIMUM_SPAWN_TIME;
+    return deathTimes.at(-1)! + MAXIMUM_SPAWN_TIME - respawnTimerDecreaseSeconds(deathTimes);
 }
 
 function roshanStatusGivenTime(currentTime: number, deathTimes: number[]) {
