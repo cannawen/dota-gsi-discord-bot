@@ -8,7 +8,6 @@ import inRegularGame from "../engine/rules/inRegularGame";
 import Rule from "../engine/Rule";
 import rules from "../rules";
 import timeHelper from "./helpers/time";
-import topicManager from "../engine/topicManager";
 import topics from "../topics";
 
 export const configInfo = new ConfigInfo(
@@ -16,13 +15,6 @@ export const configInfo = new ConfigInfo(
     "Roshan timer",
     'Tracks roshan respawn time. Responds to voice command "What is rosh status/time/timer"',
     EffectConfig.PUBLIC
-);
-
-const lastRoshDeathTimeTopic = topicManager.createTopic<number>(
-    "lastRoshDeathTimeTopic",
-    {
-        persistAcrossRestarts: true,
-    }
 );
 
 function isRoshStatusRequest(message: string) {
@@ -47,8 +39,7 @@ function roshanMessage(
     daytime: boolean,
     inGame: boolean
 ) {
-    const deathTime = allRoshDeathTimes.at(-1);
-    const status = roshHelper.getStatus(inGame, currentTime, deathTime);
+    const status = roshHelper.getStatus(inGame, currentTime, allRoshDeathTimes);
     const roshLocation = daytime ? "top" : "bottom";
     switch (status) {
         case Status.ALIVE: {
@@ -59,13 +50,13 @@ function roshanMessage(
         case Status.MAYBE_ALIVE:
             return `${roshHelper.percentChanceRoshanIsAlive(
                 currentTime,
-                deathTime!
+                allRoshDeathTimes
             )} percent ${roshLocation}. maximum ${timeHelper.secondsToTtsTimeString(
-                roshHelper.maximumSpawnTime(deathTime!)
+                roshHelper.maximumSpawnTime(allRoshDeathTimes)
             )}.`;
         case Status.DEAD:
             return `minimum ${timeHelper.secondsToTtsTimeString(
-                roshHelper.minimuSpawnTime(deathTime!)
+                roshHelper.minimuSpawnTime(allRoshDeathTimes)
             )}.`;
         case Status.NOT_IN_A_GAME:
             return "game has not started.";
@@ -77,7 +68,7 @@ function roshanMessage(
 export default [
     new Rule({
         label: "percent chance roshan is alive",
-        trigger: [topics.time, topics.roshanStatus, lastRoshDeathTimeTopic],
+        trigger: [topics.time, topics.roshanStatus, topics.allRoshanDeathTimes],
         when: ([_, status]) => status === Status.MAYBE_ALIVE,
         then: ([time, _, deathTime]) =>
             new Fact(
@@ -95,26 +86,20 @@ export default [
     }),
 
     new Rule({
-        label: "last roshan death time from array of all roshan death times",
-        trigger: [topics.allRoshanDeathTimes],
-        then: ([deathTimes]) =>
-            new Fact(lastRoshDeathTimeTopic, deathTimes.at(-1)),
-    }),
-    new Rule({
         label: "set aegis expiry, minimum, and maximum rosh respawn times",
-        trigger: [lastRoshDeathTimeTopic],
-        then: ([deathTime]) => [
+        trigger: [topics.allRoshanDeathTimes],
+        then: ([deathTimes]) => [
             new Fact(
                 topics.roshanAegisExpiryTime,
-                roshHelper.aegisExpiryTime(deathTime)
+                roshHelper.aegisExpiryTime(deathTimes)
             ),
             new Fact(
                 topics.roshanMinimumSpawnTime,
-                roshHelper.minimuSpawnTime(deathTime)
+                roshHelper.minimuSpawnTime(deathTimes)
             ),
             new Fact(
                 topics.roshanMaximumSpawnTime,
-                roshHelper.maximumSpawnTime(deathTime)
+                roshHelper.maximumSpawnTime(deathTimes)
             ),
         ],
     }),
@@ -122,11 +107,11 @@ export default [
     new Rule({
         label: "save current roshan status",
         trigger: [topics.inGame, topics.time],
-        given: [lastRoshDeathTimeTopic],
-        then: ([inGame, time], [deathTime]) =>
+        given: [topics.allRoshanDeathTimes],
+        then: ([inGame, time], [deathTimes]) =>
             new Fact(
                 topics.roshanStatus,
-                roshHelper.getStatus(inGame, time, deathTime)
+                roshHelper.getStatus(inGame, time, deathTimes)
             ),
     }),
 
