@@ -5,12 +5,18 @@ export const enum Status {
     DEAD = "DEAD",
 }
 
-const AEGIS_EXPIRY_TIME = 5 * 60;
-const MINIMUM_SPAWN_TIME = 8 * 60;
-const MAXIMUM_SPAWN_TIME = 11 * 60;
+const AEGIS_EXPIRY_TIME = minutesToSeconds(5);
+const BASE_SPAWN_TIME = minutesToSeconds(8);
+const POSSIBLE_SPAWN_INTERVAL = minutesToSeconds(3);
+
+function minutesToSeconds(minutes: number) { 
+    return minutes * 60;
+}
 
 function respawnTimerDecreaseSeconds(deathTimes: number[]) {
-    return Math.min(3, (deathTimes.length - 1)) * 60;
+    const numberOfRoshansTaken = deathTimes.length;
+    const deathTimerDecreaseMinutes = Math.min(3, numberOfRoshansTaken - 1);
+    return minutesToSeconds(deathTimerDecreaseMinutes);
 }
 
 function aegisExpiryTime(deathTimes: number[]) {
@@ -18,10 +24,11 @@ function aegisExpiryTime(deathTimes: number[]) {
 }
 
 function minimuSpawnTime(deathTimes: number[]) {
-    return deathTimes.at(-1)! + MINIMUM_SPAWN_TIME - respawnTimerDecreaseSeconds(deathTimes);
+    return deathTimes.at(-1)! + BASE_SPAWN_TIME - respawnTimerDecreaseSeconds(deathTimes);
 }
+
 function maximumSpawnTime(deathTimes: number[]) {
-    return deathTimes.at(-1)! + MAXIMUM_SPAWN_TIME - respawnTimerDecreaseSeconds(deathTimes);
+    return deathTimes.at(-1)! + BASE_SPAWN_TIME + POSSIBLE_SPAWN_INTERVAL - respawnTimerDecreaseSeconds(deathTimes);
 }
 
 function roshanStatusGivenTime(currentTime: number, deathTimes: number[]) {
@@ -58,8 +65,7 @@ function percentChanceRoshanIsAlive(currentTime: number, deathTimes: number[]) {
         return 100;
     }
     return Math.round(
-        (100 * (currentTime - minimuSpawnTime(deathTimes))) /
-            (MAXIMUM_SPAWN_TIME - MINIMUM_SPAWN_TIME)
+        (100 * (currentTime - minimuSpawnTime(deathTimes))) / POSSIBLE_SPAWN_INTERVAL
     );
 }
 
