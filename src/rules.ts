@@ -5,6 +5,7 @@
 // NOTE: IF YOU CHANGE THESE STRINGS WITHOUT MIGRATION
 // ALL THE USER'S SAVED PREFERENCES WILL BE RESET
 // SO MAYBE JUST NEVER CHANGE THESE STRINGS EVER AGAIN, MMMK?
+// Also: If you delete an assistant you must delete the associated string here.
 const assistant = {
     arcaneBoots: "assistant-mana_boots",
     askCoachAnything: "assistant-ask_coach_anything",
@@ -14,15 +15,12 @@ const assistant = {
     cm20Talent: "assistant-cm-20-talent",
     emptyInventory: "assistant-empty_inventory",
     enemyInventoryCheck: "assistant-enemy_inventory_check",
-    freeFortification: "assistant-free_fortification",
     glhf: "assistant-glhf",
     goldReminder: "assistant-gold",
     invoker: "assistant-invoker",
     lotus: "assistant-lotus",
     manaDraught: "assistant-mana_draught",
     midas: "assistant-midas",
-    neutralItemDigReminder: "assistant-neutral_item-dig",
-    neutralItemReminder: "assistant-neutral_item",
     newNeutralTokens: "assistant-new_neutral_tokens",
     pause: "assistant-pause",
     polliwogCharm: "assistant-polliwog_charm",
